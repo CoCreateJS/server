@@ -17,50 +17,65 @@
  ********************************************************************************/
 
 import server from '@cocreate/cluster';
-// import AI from '@cocreate/ai';
+import config from '@cocreate/config';
+import { ObjectId } from '@cocreate/utils';
+import db from '@cocreate/db';
+import crud from '@cocreate/crud';
+import kms from '@cocreate/kms';
+import authenticate from '@cocreate/authenticate';
+import authorize from '@cocreate/authorize';
+import api from '@cocreate/api';
+import workflow from '@cocreate/workflows';
 
-async function boot() {
-    try {
-        // Apply core cluster capabilities (database, IPC, sockets, TLS, state)
-        await server.init();
+try {
+    const { server_id, host, organization_id } = await config.prompt({
+        organization_id: '',
+        host: '',
+        server_id: ''
+    });
 
-        // 1. Primary Role Execution
-        if (server.isPrimary) {
-            await import('@cocreate/cron');
-        }
+    server.id = server_id || ObjectId().toString();
+    server.host = host || null;
+    server.organization_id = organization_id || null;
 
-        // 2. Worker Role Execution (Only loads Worker modules into Worker memory)
-        if (server.isWorker) {
-            // Worker 1 specific dynamic import
-            // if (server.workerId === 1) {
-            //
-            // }
+    server.db = await db.init(server);
+    server.crud = await crud.init(server);
+    server.kms = await kms.init(server);
 
-            // Dynamic imports for all worker processes
-            // await import('@cocreate/notification');
+    server.authenticate = authenticate.init(server);
+    server.authorize = authorize;
+    server.api = await api.init(server);
+    server.workflow = await workflow.init(server);
 
-            const Users = await import('@cocreate/users');
-            await Users.init(server);
-
-            // server.ai = await AI.init(server);
-
-            // Custom edge HTTP route registered in Map (path -> handler)
-            // server.routes.set('/api/v1/health', async (req, res) => {
-            //     res.writeHead(200, { 'Content-Type': 'application/json' });
-            //     res.end(JSON.stringify({
-            //         status: 'healthy',
-            //         workerId: server.workerId,
-            //         pid: process.pid
-            //     }));
-            // });
-        }
-
-        // Initialize core cluster capabilities (database, IPC, sockets, TLS, state)
-
-    } catch (error) {
-        console.error('[@cocreate/server] Critical error during server bootstrap:', error);
-        process.exit(1);
+    if (server.isPrimary) {
+        const autoscaler = await import('@cocreate/autoscaler');
+        server.autoscaler = await autoscaler.init(server);
+        await import('@cocreate/cron');
     }
-}
 
-boot();
+    if (server.isWorker) {
+        server.telemetry = await (await import('@cocreate/telemetry')).default.init(server);
+        server.usage = await (await import('@cocreate/usage')).default.init(server);
+        server.tls = await (await import('@cocreate/tls')).default.init(server);
+        server.files = await (await import('@cocreate/file/server')).default.init(server);
+        server.mcp = await (await import('@cocreate/mcp')).default.init(server);
+        server.socket = new (await import('@cocreate/socket')).SocketServer(server);
+        await (await import('@cocreate/users')).init(server);
+
+    }
+
+    await server.init();
+
+    if (server.isWorker) {
+        server.http.listen(80, () => {
+            console.log(`[@cocreate/cluster] [WORKER ${server.workerId}] HTTP listening on ${80}`);
+        });
+
+        server.https.listen(443, () => {
+            console.log(`[@cocreate/cluster] [WORKER ${server.workerId}] HTTPS listening on ${443}`);
+        });
+    }
+} catch (error) {
+    console.error('[@cocreate/server] Critical error during server bootstrap:', error);
+    process.exit(1);
+}

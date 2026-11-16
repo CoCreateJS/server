@@ -8413,7 +8413,7 @@ function isTargetMatch(docTarget, currentTargetId) {
   if (Array.isArray(docTarget)) return docTarget.includes(currentTargetId);
   return docTarget === currentTargetId;
 }
-function mergeServerConfigs(docs = [], scope = {}) {
+function mergeConfigs(docs = [], scope = {}) {
   const consolidated = {};
   for (const doc of docs) {
     if (!doc || doc.enabled === false) continue;
@@ -8446,7 +8446,7 @@ async function query(options = {}, crud) {
   }
   const crudRequest = {
     method: "object.read",
-    array: "servers_config",
+    array: "configs",
     organization_id,
     filter: {
       query: queryFilter,
@@ -8457,7 +8457,7 @@ async function query(options = {}, crud) {
   if (crud?.send) {
     const response = await crud.send(crudRequest);
     const docs = response?.data || response?.object || [];
-    return mergeServerConfigs(docs, { cluster, server, worker });
+    return mergeConfigs(docs, { cluster, server, worker });
   }
   return {};
 }

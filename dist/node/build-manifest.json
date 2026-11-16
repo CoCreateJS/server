@@ -1,16 +1,16 @@
 {
-  "builtAt": "2026-11-15T00:32:14.312Z",
+  "builtAt": "2026-11-16T02:53:01.795Z",
   "package": "@cocreate/server",
   "packageVersion": "2.0.0",
   "node": "v24.18.0",
   "platform": "linux",
   "arch": "x64",
-  "commit": "c76c640b23e9161a9c8f2b96dc0f94d8f2b2adc0",
+  "commit": "4298e2d1e1b32551ccafd4c7cc7efa6e10266867",
   "repositories": {
     "modules.cluster": {
       "package": "@cocreate/cluster",
       "version": "3.0.1",
-      "commit": "8951c29d6f6f6946e17508a655f8851de2907d1a"
+      "commit": "5683e41eb8c6d13124df377e4de765a38b0cf0ec"
     },
     "modules.autoscaler": {
       "package": "@cocreate/autoscaler",
@@ -115,8 +115,8 @@
   },
   "files": {
     "index.js": {
-      "bytes": 1842494,
-      "sha256": "7ecaf5bbce468c31481463edc68dda326bb9f9be90f60af19fa32d777482a60e"
+      "bytes": 1876241,
+      "sha256": "c135b8e4c301029b1a75a2f38adfc65598193e4e88db5f8b80b43a761ac27b17"
     },
     "package.json": {
       "bytes": 42,
