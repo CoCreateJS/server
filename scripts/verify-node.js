@@ -11,24 +11,6 @@ const packageManifest = JSON.parse(fs.readFileSync(path.join(root, "package.json
 const { default: config } = await import(pathToFileURL(path.join(root, "CoCreate.config.js")));
 execFileSync(process.execPath, ["--check", path.join(directory, "index.js")]);
 
-const storages = fs.readdirSync(path.join(directory, "storages")).filter(file => file.endsWith(".js")).sort();
-if (!storages.length) throw new Error("No storage distributions were packaged");
-// This smoke check loads every lazy driver, each with its own cleanup listener.
-process.setMaxListeners(process.getMaxListeners() + storages.length);
-for (const file of storages) {
-    const module = await import(pathToFileURL(path.join(directory, "storages", file)));
-    if (typeof (module.default || module).send !== "function") {
-        throw new Error(`Storage distribution does not expose send(): ${file}`);
-    }
-}
-for (const file of ["index.js", "runtime.js"]) {
-    const module = await import(pathToFileURL(path.join(directory, "plugins/ai", file)));
-    if (typeof module.init !== "function" && typeof module.default?.init !== "function") {
-        throw new Error(`AI distribution does not expose init(): ${file}`);
-    }
-}
-fs.accessSync(path.join(directory, `plugins/ai/copilot-${process.platform}-${process.arch}`), fs.constants.X_OK);
-
 const files = {};
 function fingerprint(folder) {
     for (const entry of fs.readdirSync(folder, { withFileTypes: true })) {
@@ -76,4 +58,4 @@ fs.writeFileSync(path.join(directory, "build-manifest.json"), JSON.stringify({
     repositories,
     files
 }, null, 2) + "\n");
-console.log(`Verified ${packageManifest.name}@${packageManifest.version}, server syntax, ${storages.length} storage drivers, AI modules, and executable; wrote build-manifest.json.`);
+console.log(`Verified ${packageManifest.name}@${packageManifest.version}, server syntax, and configured modules; wrote build-manifest.json.`);

@@ -39,8 +39,6 @@ async function boot() {
             // Dynamic imports for all worker processes
             // await import('@cocreate/notification');
 
-            const Organizations = await import('@cocreate/organizations');
-            await Organizations.init(server);
             const Users = await import('@cocreate/users');
             await Users.init(server);
 

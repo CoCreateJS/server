@@ -25,13 +25,12 @@ jobs:
       run:
         working-directory: CoCreate-server
     steps:
-      - name: Checkout dev source and committed local distributions
+      - name: Checkout dev source and committed Server runtime
         uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           path: CoCreate-server
           fetch-depth: 0
-          lfs: true
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -40,24 +39,11 @@ jobs:
 
       - name: Verify committed local Server distribution
         run: |
-          node scripts/verify-storages.js
-          node scripts/verify-plugins.js
           node scripts/verify-node-artifact.js
           node --check dist/node/index.js
 
-      # AI's JS distribution is committed. Its native CLI must match the runner.
-      # The x64 CLI is in LFS; the missing ARM64 CLI is a pinned npm artifact.
-      - name: Assemble ARM64 native AI dependency
-        if: matrix.aws_arch == 'arm64'
-        run: |
-          npm pack @github/copilot-linux-arm64@1.0.105 --pack-destination "$RUNNER_TEMP"
-          mkdir -p "$RUNNER_TEMP/copilot-cli"
-          tar -xzf "$RUNNER_TEMP/github-copilot-linux-arm64-1.0.105.tgz" -C "$RUNNER_TEMP/copilot-cli" package/copilot
-          install -m 755 "$RUNNER_TEMP/copilot-cli/package/copilot" dist/node/plugins/ai/copilot-linux-arm64
-
       - name: Package architecture bundle
         run: |
-          test -x "dist/node/plugins/ai/copilot-linux-$(node -p 'process.arch')"
           bash scripts/package-node-archive.sh
 
       - name: Transfer architecture bundle to publisher
@@ -113,7 +99,6 @@ jobs:
               'source_sha': os.environ['GITHUB_SHA'],
               'source_run_id': os.environ['GITHUB_RUN_ID'],
               'built_at': datetime.now(timezone.utc).isoformat(),
-              'native_ai': {'x86_64': 'committed Git LFS artifact', 'arm64': '@github/copilot-linux-arm64@1.0.105'},
               'assets': assets,
           }, indent=2) + '\n')
           PY

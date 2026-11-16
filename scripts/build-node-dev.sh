@@ -52,7 +52,7 @@ fi
 cat > "${RELEASE_DIR}/RELEASE-NOTES.txt" <<EOF
 Linux ${AWS_ARCH} Node.js runtime bundle for development on AWS.
 
-Includes the packaged CoCreate Server, storage providers, and AI runtime.
+Includes the packaged CoCreate Server runtime.
 ${SOURCE_STATE}
 CoCreate Server base commit: ${SOURCE_COMMIT}.
 The SHA-256 checksum is attached as ${ARCHIVE}.sha256.

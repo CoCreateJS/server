@@ -61,7 +61,7 @@ for (const relative of listedFiles) {
     }
 }
 
-for (const required of ["index.js", "package.json", "plugins/ai/index.js", "plugins/ai/runtime.js"]) {
+for (const required of ["index.js", "package.json", "startup.js"]) {
     if (!actualFiles.has(required)) throw new Error(`Missing required Server distribution file: ${required}`);
 }
 

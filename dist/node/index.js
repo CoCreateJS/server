@@ -1,3 +1,4 @@
+import * as __WEBPACK_EXTERNAL_MODULE_node_async_hooks_1fa35564__ from "node:async_hooks";
 import * as __WEBPACK_EXTERNAL_MODULE_node_buffer_75dc2e86__ from "node:buffer";
 import * as __WEBPACK_EXTERNAL_MODULE_node_child_process_7aa195c7__ from "node:child_process";
 import * as __WEBPACK_EXTERNAL_MODULE_node_cluster_b8256ecf__ from "node:cluster";
@@ -10049,6 +10050,17 @@ function socketOnError() {
 
 /***/ },
 
+/***/ 4579
+(module, __unused_webpack_exports, __webpack_require__) {
+
+const x = (y) => {
+	const x = {}; __webpack_require__.d(x, y); return x
+} 
+const y = (x) => (() => (x))
+module.exports = x({ ["AsyncLocalStorage"]: () => (__WEBPACK_EXTERNAL_MODULE_node_async_hooks_1fa35564__.AsyncLocalStorage) });
+
+/***/ },
+
 /***/ 1786
 (module, __unused_webpack_exports, __webpack_require__) {
 
@@ -10133,7 +10145,7 @@ const x = (y) => {
 	const x = {}; __webpack_require__.d(x, y); return x
 } 
 const y = (x) => (() => (x))
-module.exports = x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_node_fs_promises_4a3ebc43__["default"]) });
+module.exports = x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_node_fs_promises_4a3ebc43__["default"]), ["link"]: () => (__WEBPACK_EXTERNAL_MODULE_node_fs_promises_4a3ebc43__.link), ["mkdir"]: () => (__WEBPACK_EXTERNAL_MODULE_node_fs_promises_4a3ebc43__.mkdir), ["readFile"]: () => (__WEBPACK_EXTERNAL_MODULE_node_fs_promises_4a3ebc43__.readFile), ["readdir"]: () => (__WEBPACK_EXTERNAL_MODULE_node_fs_promises_4a3ebc43__.readdir), ["rename"]: () => (__WEBPACK_EXTERNAL_MODULE_node_fs_promises_4a3ebc43__.rename), ["rm"]: () => (__WEBPACK_EXTERNAL_MODULE_node_fs_promises_4a3ebc43__.rm), ["unlink"]: () => (__WEBPACK_EXTERNAL_MODULE_node_fs_promises_4a3ebc43__.unlink), ["writeFile"]: () => (__WEBPACK_EXTERNAL_MODULE_node_fs_promises_4a3ebc43__.writeFile) });
 
 /***/ },
 
@@ -10177,7 +10189,7 @@ const x = (y) => {
 	const x = {}; __webpack_require__.d(x, y); return x
 } 
 const y = (x) => (() => (x))
-module.exports = x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_node_path_02319fef__["default"]) });
+module.exports = x({ ["basename"]: () => (__WEBPACK_EXTERNAL_MODULE_node_path_02319fef__.basename), ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_node_path_02319fef__["default"]), ["dirname"]: () => (__WEBPACK_EXTERNAL_MODULE_node_path_02319fef__.dirname), ["isAbsolute"]: () => (__WEBPACK_EXTERNAL_MODULE_node_path_02319fef__.isAbsolute), ["join"]: () => (__WEBPACK_EXTERNAL_MODULE_node_path_02319fef__.join), ["relative"]: () => (__WEBPACK_EXTERNAL_MODULE_node_path_02319fef__.relative), ["resolve"]: () => (__WEBPACK_EXTERNAL_MODULE_node_path_02319fef__.resolve), ["sep"]: () => (__WEBPACK_EXTERNAL_MODULE_node_path_02319fef__.sep) });
 
 /***/ },
 
@@ -10232,7 +10244,7 @@ const x = (y) => {
 	const x = {}; __webpack_require__.d(x, y); return x
 } 
 const y = (x) => (() => (x))
-module.exports = x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_node_util_1f093676__["default"]), ["promisify"]: () => (__WEBPACK_EXTERNAL_MODULE_node_util_1f093676__.promisify) });
+module.exports = x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_node_util_1f093676__["default"]), ["isDeepStrictEqual"]: () => (__WEBPACK_EXTERNAL_MODULE_node_util_1f093676__.isDeepStrictEqual), ["promisify"]: () => (__WEBPACK_EXTERNAL_MODULE_node_util_1f093676__.promisify) });
 
 /***/ },
 
@@ -11441,8 +11453,7 @@ async function readAuthorization(key, data) {
                     $or: key
                         ? [{ default: true }, { default: "true" }, { default: 1 }, { key }]
                         : [{ default: true }, { default: "true" }, { default: 1 }]
-                },
-                limit: 2
+                }
             }
         };
 
@@ -11450,15 +11461,18 @@ async function readAuthorization(key, data) {
 
         if (authRes && Array.isArray(authRes.object) && authRes.object.length) {
             const objs = authRes.object;
-            const defaultDoc = objs.find((o) => o && parseBoolean(o.default) === true) || {};
+            const defaultDocs = objs.filter((o) => o && parseBoolean(o.default) === true);
             const keyDoc = key ? objs.find((o) => o && o.key === key) : undefined;
 
-            const expandedDefault = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .dotNotationToObject */ .O)({}, defaultDoc);
-            const expandedKey = keyDoc ? (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .dotNotationToObject */ .O)({}, keyDoc) : {};
-            let authorization = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .dotNotationToObject */ .O)(expandedDefault, expandedKey);
+            // Preserve the existing override order: configured defaults overlay
+            // the supplied key. Every matching default participates in the merge.
+            let authorization = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .dotNotationToObject */ .O)(keyDoc || {}, {});
+            for (const defaultDoc of defaultDocs) {
+                authorization = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .dotNotationToObject */ .O)(defaultDoc, authorization);
+            }
 
-            // Set unique roles combination
-            const defaultRoles = defaultDoc.roles || [];
+            // Include roles from every default as well as the supplied key.
+            const defaultRoles = defaultDocs.flatMap((doc) => doc.roles || []);
             const keyRoles = (keyDoc && keyDoc.roles) || [];
             authorization.roles = Array.from(new Set([...defaultRoles, ...keyRoles]));
 
@@ -14402,24 +14416,26 @@ function sendJson(res, status, body, headers = {}) {
 /* harmony import */ var _cocreate_authenticate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1642);
 /* harmony import */ var _cocreate_authorize__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3084);
 /* harmony import */ var _cocreate_socket__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(9734);
-/* harmony import */ var _cocreate_crud__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(4323);
-/* harmony import */ var _cocreate_file_server__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(6929);
-/* harmony import */ var _cocreate_api__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(5440);
-/* harmony import */ var _cocreate_workflows__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(7606);
-/* harmony import */ var _cocreate_usage__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(5444);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(5159);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5264);
-/* harmony import */ var _getDeployment_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(1154);
-/* harmony import */ var _manager_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(6590);
-/* harmony import */ var _fetch_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(6653);
-/* harmony import */ var _http_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(6265);
-/* harmony import */ var _ipc_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(4875);
-/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(2464);
-/* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(5648);
-/* harmony import */ var _log_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(6579);
-/* harmony import */ var _apikey_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(6810);
-/* harmony import */ var _repository_index_js__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(3882);
-/* harmony import */ var _workers_js__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(5002);
+/* harmony import */ var _cocreate_mcp__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(8512);
+/* harmony import */ var _cocreate_crud__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(4323);
+/* harmony import */ var _cocreate_file_server__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(6929);
+/* harmony import */ var _cocreate_api__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5440);
+/* harmony import */ var _cocreate_workflows__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(7606);
+/* harmony import */ var _cocreate_usage__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(5444);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5159);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(5264);
+/* harmony import */ var _getDeployment_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(1154);
+/* harmony import */ var _manager_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(6590);
+/* harmony import */ var _fetch_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(6653);
+/* harmony import */ var _http_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(6265);
+/* harmony import */ var _ipc_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(4875);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(2464);
+/* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(5648);
+/* harmony import */ var _log_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(6579);
+/* harmony import */ var _apikey_js__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(6810);
+/* harmony import */ var _repository_index_js__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(3882);
+/* harmony import */ var _workers_js__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(5002);
+/* harmony import */ var _cocreate_db__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(3449);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -14471,6 +14487,8 @@ function sendJson(res, status, body, headers = {}) {
 
 
 
+
+
 /**
  * CoCreateServer orchestrates socket handling, API endpoint dispatching,
  * SSL certificates with SNI support, and mesh cluster synchronization.
@@ -14483,21 +14501,21 @@ class CoCreateServer {
     constructor() {
         this.id = process.env.SERVER_ID || null;
         this.isInitialized = false;
-        this.fetch = _fetch_js__WEBPACK_IMPORTED_MODULE_18__/* ["default"] */ .A;
+        this.fetch = _fetch_js__WEBPACK_IMPORTED_MODULE_19__/* ["default"] */ .A;
         this.responseListeners = new Map();
 
         // Dynamic route registry (Map key: route path, value: request handler callback)
         this.routes = new Map();
 
         // The local worker collection also owns its process lifecycle.
-        this.workers = new _workers_js__WEBPACK_IMPORTED_MODULE_26__/* ["default"] */ .A(this);
+        this.workers = new _workers_js__WEBPACK_IMPORTED_MODULE_27__/* ["default"] */ .A(this);
         this.cluster = _mesh_index_js__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Ay;
 
         // Directly bind cluster instance properties to parent server instance
         this.isPrimary = this.workers.isPrimary;
 
         // Initialize reactive cluster storage bound to cluster IPC promises
-        this.storage = _storage_js__WEBPACK_IMPORTED_MODULE_21__/* ["default"].init */ .A.init(this, this.workers.pendingPromises);
+        this.storage = _storage_js__WEBPACK_IMPORTED_MODULE_22__/* ["default"].init */ .A.init(this, this.workers.pendingPromises);
         this.authenticate = _cocreate_authenticate__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .A.init(this);
         this.authorize = _cocreate_authorize__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Ay;
     }
@@ -14548,9 +14566,9 @@ class CoCreateServer {
 
         this.isInitialized = true;
 
-        this.log = await _log_js__WEBPACK_IMPORTED_MODULE_23__/* ["default"].init */ .Ay.init(this);
-        this.state = await _state_js__WEBPACK_IMPORTED_MODULE_22__/* ["default"].init */ .Ay.init(this);
-        this.send = _ipc_js__WEBPACK_IMPORTED_MODULE_20__/* ["default"].init */ .A.init(this, this.workers.pendingPromises);
+        this.log = await _log_js__WEBPACK_IMPORTED_MODULE_24__/* ["default"].init */ .Ay.init(this);
+        this.state = await _state_js__WEBPACK_IMPORTED_MODULE_23__/* ["default"].init */ .Ay.init(this);
+        this.send = _ipc_js__WEBPACK_IMPORTED_MODULE_21__/* ["default"].init */ .A.init(this, this.workers.pendingPromises);
 
         const config = await _cocreate_config__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .A.prompt({
             'organization_id': '',
@@ -14565,7 +14583,7 @@ class CoCreateServer {
             if (config.server_id) {
                 this.id = config.server_id;
             } else {
-                this.id = process.env.SERVER_ID || (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_15__/* .ObjectId */ .V)().toString();
+                this.id = process.env.SERVER_ID || (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_16__/* .ObjectId */ .V)().toString();
                 await _cocreate_config__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .A.prompt({ server_id: { value: this.id } });
                 console.log(`[@cocreate/cluster] [MASTER] Generated & persisted new Server ID: ${this.id}`);
             }
@@ -14574,19 +14592,22 @@ class CoCreateServer {
             this.id = process.env.SERVER_ID;
         }
 
+        // CoCreateDB owns its directory configuration and attaches itself to this server.
+        await _cocreate_db__WEBPACK_IMPORTED_MODULE_28__/* .CoCreateDB */ .bN.init(this);
+
         // Configure the local worker collection
         this.workers.configureWorkers(_cocreate_config__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .A.get('workers'));
 
-        this.crud = await _cocreate_crud__WEBPACK_IMPORTED_MODULE_9__/* .crudServer */ .wA.init(this);
+        this.crud = await _cocreate_crud__WEBPACK_IMPORTED_MODULE_10__/* .crudServer */ .wA.init(this);
         try {
-            await _apikey_js__WEBPACK_IMPORTED_MODULE_24__/* ["default"].init */ .A.init(this);
+            await _apikey_js__WEBPACK_IMPORTED_MODULE_25__/* ["default"].init */ .A.init(this);
         } catch {
             console.error('[@cocreate/cluster] Unable to initialize the node organization API key.');
         }
         this.authenticate = _cocreate_authenticate__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .A.init(this);
-        this.api = await _cocreate_api__WEBPACK_IMPORTED_MODULE_11__/* ["default"].init */ .Ay.init(this);
-        this.workflow = await _cocreate_workflows__WEBPACK_IMPORTED_MODULE_12__/* ["default"].init */ .Ay.init(this);
-        await _manager_js__WEBPACK_IMPORTED_MODULE_17__/* ["default"].init */ .A.init(this);
+        this.api = await _cocreate_api__WEBPACK_IMPORTED_MODULE_12__/* ["default"].init */ .Ay.init(this);
+        this.workflow = await _cocreate_workflows__WEBPACK_IMPORTED_MODULE_13__/* ["default"].init */ .Ay.init(this);
+        await _manager_js__WEBPACK_IMPORTED_MODULE_18__/* ["default"].init */ .A.init(this);
         if (!this.isPrimary) await this.cluster.init(this);
 
         if (this.isPrimary) {
@@ -14602,9 +14623,9 @@ class CoCreateServer {
                 throw new Error('Unable to read the saved server deployment.');
             }
             const persistedServer = response.object[0];
-            const location = await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_14__/* .getClientInfo */ .m4)();
+            const location = await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_15__/* .getClientInfo */ .m4)();
             this.ip = location.ip;
-            this.deployment = await (0,_getDeployment_js__WEBPACK_IMPORTED_MODULE_16__/* ["default"] */ .A)(this.id, {
+            this.deployment = await (0,_getDeployment_js__WEBPACK_IMPORTED_MODULE_17__/* ["default"] */ .A)(this.id, {
                 ...persistedServer?.deployment,
                 ...this.deployment,
                 location: { ...persistedServer?.deployment?.location, ...location }
@@ -14622,7 +14643,7 @@ class CoCreateServer {
                 console.warn('[@cocreate/cluster] Could not update the worker profile:', workerResponse.error);
             await this.state.save('running');
 
-            this.repository = await _repository_index_js__WEBPACK_IMPORTED_MODULE_25__/* ["default"].init */ .A.init(this);
+            this.repository = await _repository_index_js__WEBPACK_IMPORTED_MODULE_26__/* ["default"].init */ .A.init(this);
 
             if (await this.workers.setupMasterCluster()) {
                 return this;
@@ -14639,31 +14660,32 @@ class CoCreateServer {
             }
 
             this.telemetry = await _cocreate_telemetry__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .A.init(this);
-            this.usage = await _cocreate_usage__WEBPACK_IMPORTED_MODULE_13__/* ["default"] */ .Ay.init(this);
+            this.usage = await _cocreate_usage__WEBPACK_IMPORTED_MODULE_14__/* ["default"] */ .Ay.init(this);
 
             if (!this.ip) {
-                this.ip = process.env.SERVER_IP || (await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_14__/* .getClientInfo */ .m4)()).ip;
+                this.ip = process.env.SERVER_IP || (await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_15__/* .getClientInfo */ .m4)()).ip;
             }
 
             if (!this.deployment) {
                 try {
                     this.deployment = process.env.SERVER_DEPLOYMENT
                         ? JSON.parse(process.env.SERVER_DEPLOYMENT)
-                        : await (0,_getDeployment_js__WEBPACK_IMPORTED_MODULE_16__/* ["default"] */ .A)(this.id);
+                        : await (0,_getDeployment_js__WEBPACK_IMPORTED_MODULE_17__/* ["default"] */ .A)(this.id);
                 } catch (error) {
-                    this.deployment = await (0,_getDeployment_js__WEBPACK_IMPORTED_MODULE_16__/* ["default"] */ .A)(this.id);
+                    this.deployment = await (0,_getDeployment_js__WEBPACK_IMPORTED_MODULE_17__/* ["default"] */ .A)(this.id);
                 }
             }
             if (!this.deployment.location) {
-                this.deployment.location = await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_14__/* .getClientInfo */ .m4)(this.id);
+                this.deployment.location = await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_15__/* .getClientInfo */ .m4)(this.id);
             }
 
             // Initialize certificates module on worker
             this.tls = await _cocreate_tls__WEBPACK_IMPORTED_MODULE_1__/* ["default"].init */ .Ay.init(this);
 
+            this.files = await _cocreate_file_server__WEBPACK_IMPORTED_MODULE_11__/* ["default"].init */ .A.init(this);
+            this.mcp = await _cocreate_mcp__WEBPACK_IMPORTED_MODULE_9__/* ["default"].init */ .A.init(this);
+            await _http_js__WEBPACK_IMPORTED_MODULE_20__/* ["default"] */ .A.init(this);
             this.socket = new _cocreate_socket__WEBPACK_IMPORTED_MODULE_8__/* .SocketServer */ .$e(this);
-            this.files = await _cocreate_file_server__WEBPACK_IMPORTED_MODULE_10__/* ["default"].init */ .A.init(this);
-            await _http_js__WEBPACK_IMPORTED_MODULE_19__/* ["default"] */ .A.init(this);
 
             // Publish worker active running state object to DB upon creation/startup
             await this.state.save('running');
@@ -14708,7 +14730,8 @@ class CoCreateServer {
 
 /* unused harmony export init */
 /* harmony import */ var node_cluster__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8698);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3105);
+/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4172);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3105);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -14726,6 +14749,7 @@ class CoCreateServer {
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
  ********************************************************************************/
+
 
 
 
@@ -14802,14 +14826,17 @@ function init(server, pendingPromises) {
         const targetsOtherNodes = payload.server === undefined ||
             (Array.isArray(payload.server) ? payload.server : [payload.server])
                 .some(id => String(id) !== String(server.id));
-        if (payload.serverId === server.id && targetsOtherNodes &&
+        if (!Array.isArray(payload.distributionKeys) && payload.serverId === server.id && targetsOtherNodes &&
             (payload.organization_id || payload.server !== undefined || payload.cluster !== undefined)) {
             server.cluster.send(transportEnvelope(payload));
         }
 
+        const distributionTargets = Array.isArray(payload.distributionKeys)
+            ? (0,_cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_1__/* .getDistribution */ .f)(server.workers.distribution, payload.distributionKeys) : undefined;
         const workers = targetsThisNode && !(payload.master === true && masterControls.includes(payload.method))
             ? [...server.workers.values()].filter(worker => {
                 if (!includesTarget(payload.worker, worker.id)) return false;
+                if (distributionTargets && (!/\.(create|update|delete)$/.test(payload.method) || !distributionTargets.has(worker.id))) return false;
                 if (organizationDelivery(payload)) {
                     return organizationWorkers.get(payload.organization_id)?.has(worker.id) &&
                         !(payload.serverId === server.id && payload.workerId === worker.id);
@@ -14837,7 +14864,7 @@ function init(server, pendingPromises) {
             resolveResponse(payload, server.isPrimary ? `${payload.uuid}:${worker.id}` : payload.uuid);
             return;
         }
-        payload.uuid ||= (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .uuid */ .u)();
+        payload.uuid ||= (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .uuid */ .u)();
         if (payload.broadcast === 'false') payload.broadcast = false;
         let result;
         try {
@@ -14875,7 +14902,7 @@ function init(server, pendingPromises) {
     }
 
     return function send(payload = {}) {
-        payload.uuid ||= (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .uuid */ .u)();
+        payload.uuid ||= (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .uuid */ .u)();
         if (payload.broadcast === 'false') payload.broadcast = false;
         const origin = Object.entries({ serverId: server.id, workerId: server.workerId, clusterId: server.cluster_id });
         const originatedHere = missingId(payload.serverId) || (payload.serverId === server.id &&
@@ -15351,6 +15378,7 @@ class ServerMeshInbound {
             if (!key.startsWith(`${organization_id}:`)) continue;
             clearTimeout(timer);
             this.reconnectTimers.delete(key);
+            this.mesh.discardMessageQueue(socket, 'organization closed');
             this.mesh.removeSocketFromAllOrgServers(socket);
         }
     }
@@ -15481,8 +15509,11 @@ class ServerMeshInbound {
             });
 
             ws.on('close', code => {
+                if (this.mesh.activeConnections.get(connectionKey) !== ws) return;
+                this.mesh.peerDisconnected(ws);
                 console.log(`[@cocreate/server-mesh/inbound] Inbound peer connection ${identifier} dropped.`);
                 if (this.mesh.isClosed || ws.intentionalClose || code === 1000) {
+                    this.mesh.discardMessageQueue(ws, 'connection closed');
                     this.mesh.removeSocketFromAllOrgServers(ws);
                     return;
                 }
@@ -15490,6 +15521,7 @@ class ServerMeshInbound {
                 // or that recovery window expires, without starting a second dialer.
                 const timer = setTimeout(() => {
                     this.reconnectTimers.delete(connectionKey);
+                    void this.mesh.peerUnavailable(ws, { reason: 'reconnect window expired', recoveryWaitMs: this.mesh.outboundManager.reconnectWaitMs, closeCode: code });
                     this.mesh.removeSocketFromAllOrgServers(ws);
                 }, this.mesh.outboundManager.reconnectWaitMs);
                 this.reconnectTimers.set(connectionKey, { timer, socket: ws });
@@ -15508,6 +15540,7 @@ class ServerMeshInbound {
             }
             this.mesh.activeConnections.set(connectionKey, ws);
             ws.isControlSocket = !organization_id;
+            this.mesh.flushMessageQueue(ws);
             if (ws.isControlSocket) this.mesh.syncOrganizations(ws);
         });
     }
@@ -15646,6 +15679,8 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         // Shared Connection & Multi-tenant Routing Tables
         this.activeConnections = new Map(); // organization_id/serverId -> Network Socket
         this.controlSockets = [];
+        this.pendingPeerFailures = new Map(); // retained until the workflow confirms persistence
+        this.messageQueues = new Map(); // transport scope/server ID -> serialized FIFO
         this.organizations = new Map();     // organization_id -> Network Socket[]
 
         this.isClosed = false;
@@ -15688,7 +15723,15 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         });
     }
 
+    peerDisconnected(socket) {
+        if (!socket.isControlSocket || !socket.serverId || socket.distributionDisconnected) return;
+        if (this.controlSockets.some(peer => peer !== socket && peer.serverId === socket.serverId && peer.readyState === 1)) return;
+        socket.distributionDisconnected = true;
+        this.emit('peerDisconnected', { nodeId: socket.serverId });
+    }
+
     syncOrganizations(socket) {
+        if (socket.serverId) this.emit('peerConnected', { nodeId: socket.serverId });
         for (const organization_id of this.organizations.keys()) {
             this.announceOrganization(organization_id, socket);
         }
@@ -15703,6 +15746,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         this.organizations.delete(organization_id);
         for (const ws of sockets) {
             if (ws.isControlSocket) continue;
+            this.discardMessageQueue(ws, 'organization closed');
             ws.intentionalClose = true;
             for (const [key, socket] of this.activeConnections) {
                 if (socket === ws) this.activeConnections.delete(key);
@@ -15967,7 +16011,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
  * @private
  * @environment server
  */
-    send(payload) {
+    send(payload, encoded) {
         if (!payload || typeof payload !== 'object' || !payload.method) {
             console.error("[@cocreate/server-mesh] Cannot transmit mesh payload without a defined 'method' key.");
             return;
@@ -16001,7 +16045,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
                 });
 
             const uniqueSockets = Array.from(new Set(targets));
-            this.socketSend(uniqueSockets, payload);
+            this.socketSend(uniqueSockets, payload, encoded);
         }
     }
 
@@ -16013,19 +16057,119 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
  * @private
  * @environment server
  */
-    socketSend(sockets, data) {
+    socketSend(sockets, data, encoded) {
         const targetSockets = Array.isArray(sockets) ? sockets : [sockets];
-        const dataStr = typeof data === 'string' ? data : JSON.stringify(data);
+        const dataStr = encoded ?? (typeof data === 'string' ? data : JSON.stringify(data));
 
+        if (this.isClosed) return;
+        const peers = new Set();
         for (const socket of targetSockets) {
-            try {
-                // 1 corresponds to OPEN state in WebSocket standard protocol implementations
-                if (socket && socket.readyState === 1) {
-                    socket.send(dataStr);
+            if (!socket) continue;
+            const key = this.messageQueueKey(socket);
+            if (key !== undefined && peers.has(key)) continue;
+            peers.add(key);
+            // Anonymous sockets cannot survive replacement, but can still send directly.
+            if (key === undefined) {
+                try {
+                    if (socket.readyState === 1) socket.send(dataStr);
+                } catch (err) {
+                    console.error('[@cocreate/server-mesh] Anonymous socket send failed:', err.message);
                 }
-            } catch (err) {
-                console.error(`[@cocreate/server-mesh] Error executing socketSend transaction:`, err.message);
+                continue;
             }
+            let queue = this.messageQueues.get(key);
+            if (!queue) this.messageQueues.set(key, queue = []);
+            queue.push(dataStr);
+            this.flushMessageQueue(socket);
+        }
+    }
+
+    messageQueueKey(socket) {
+        if (!socket?.serverId) return undefined;
+        return JSON.stringify([socket.isControlSocket ? 'control' : socket.organization_id || 'control', socket.serverId]);
+    }
+
+    flushMessageQueue(socket) {
+        const key = this.messageQueueKey(socket);
+        const queue = this.messageQueues.get(key);
+        if (!queue || socket.readyState !== 1) return;
+        let sent = 0;
+        try {
+            while (sent < queue.length && socket.readyState === 1) {
+                socket.send(queue[sent]);
+                sent++;
+            }
+        } catch (err) {
+            console.error('[@cocreate/server-mesh] Message retained after send failure:', socket.serverId, err.message);
+        }
+        if (sent === queue.length) this.messageQueues.delete(key);
+        else if (sent) queue.splice(0, sent);
+    }
+
+    async peerUnavailable(socket, details) {
+        const key = this.messageQueueKey(socket);
+        const queuedMessages = (this.messageQueues.get(key) || []).map(data => {
+            try { return JSON.parse(data); } catch { return data; }
+        });
+        this.messageQueues.delete(key);
+        const report = {
+            id: node_crypto__WEBPACK_IMPORTED_MODULE_1__["default"].randomUUID(),
+            serverId: socket.serverId,
+            observerId: this.server.id,
+            peerOrganizationId: socket.isControlSocket ? null : socket.organization_id,
+            remoteAddress: socket.remoteAddress || null,
+            retries: null,
+            recoveryWaitMs: null,
+            closeCode: null,
+            observedAt: new Date().toISOString(),
+            ...details,
+            queuedMessages,
+            peerReachable: [...this.activeConnections.values()].some(peer => peer !== socket && peer.serverId === socket.serverId && peer.readyState === 1)
+        };
+        this.pendingPeerFailures.set(report.id, report);
+        // Observers are optional; persistence is independent of event listeners.
+        try { this.server.emit?.('peerUnavailable', structuredClone(report)); }
+        catch (error) {
+            console.error('[@cocreate/server-mesh] peerUnavailable listener failed:', error.message);
+        }
+        return this.persistPeerFailure(report);
+    }
+
+    async persistPeerFailure(report) {
+        try {
+            if (!this.server.workflow?.run) throw new Error('Workflow service is unavailable.');
+            const result = await this.server.workflow.run({
+                method: 'workflow.peerUnavailable',
+                organization_id: this.server.organization_id,
+                host: this.server.host,
+                peerUnavailable: [{ ...structuredClone(report),
+                    peerReachable: [...this.activeConnections.values()].some(peer => peer.serverId === report.serverId && peer.readyState === 1)
+                }]
+            });
+            if (!result || result.success === false ||
+                (Array.isArray(result.error) ? result.error.length : result.error)) {
+                throw new Error('peerUnavailable workflow did not confirm persistence.');
+            }
+            this.pendingPeerFailures.delete(report.id);
+            return true;
+        } catch (error) {
+            console.error('[@cocreate/server-mesh] Peer failure report retained in memory:', {
+                serverId: report.serverId, id: report.id, length: report.queuedMessages.length,
+                error: error.message
+            });
+            return false;
+        }
+    }
+
+    discardMessageQueue(socket, reason) {
+        const key = this.messageQueueKey(socket);
+        const queue = this.messageQueues.get(key);
+        this.messageQueues.delete(key);
+        if (queue?.length) {
+            console.warn('[@cocreate/server-mesh] Discarded pending messages:', {
+                serverId: socket.serverId, organization_id: socket.isControlSocket ? undefined : socket.organization_id,
+                length: queue.length, reason
+            });
         }
     }
 
@@ -16041,7 +16185,10 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
             if (socket === ws) this.activeConnections.delete(key);
         }
         const controlIndex = this.controlSockets.indexOf(ws);
-        if (controlIndex !== -1) this.controlSockets.splice(controlIndex, 1);
+        if (controlIndex !== -1) {
+            this.controlSockets.splice(controlIndex, 1);
+            this.peerDisconnected(ws);
+        }
         for (const [orgId, sockets] of this.organizations.entries()) {
             const index = sockets.indexOf(ws);
             if (index !== -1) sockets.splice(index, 1);
@@ -16090,6 +16237,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
             }
         }
         this.activeConnections.clear();
+        this.messageQueues.clear();
 
         if (this.inboundManager) {
             await this.inboundManager.close();
@@ -16319,6 +16467,7 @@ class ServerMeshOutbound {
                 this.retryTimers.delete(connectionKey);
                 this.pruneTimers.delete(targetIp);
 
+                this.mesh.flushMessageQueue(clientSocket);
                 clientSocket.isPeer = true;
                 clientSocket.isControlSocket = !organization_id;
                 if (clientSocket.isControlSocket) {
@@ -16328,9 +16477,18 @@ class ServerMeshOutbound {
             });
 
             clientSocket.on('close', (code) => {
+                if (this.mesh.activeConnections.get(connectionKey) !== clientSocket) return;
+                this.mesh.peerDisconnected(clientSocket);
                 if (this.mesh.isClosed || clientSocket.intentionalClose || code === 1000 ||
                     (organization_id && !this.mesh.organizations.has(organization_id)) || retryCount >= maxRetries) {
                     this.retryTimers.delete(connectionKey);
+                    const exhausted = !this.mesh.isClosed && !clientSocket.intentionalClose && code !== 1000 &&
+                        (!organization_id || this.mesh.organizations.has(organization_id)) && retryCount >= maxRetries;
+                    if (exhausted) {
+                        void this.mesh.peerUnavailable(clientSocket, { reason: 'retries exhausted', retries: retryCount, closeCode: code });
+                    } else {
+                        this.mesh.discardMessageQueue(clientSocket, 'connection closed');
+                    }
                     this.mesh.removeSocketFromAllOrgServers(clientSocket);
                     return;
                 }
@@ -17086,7 +17244,10 @@ async function save(overrideStatus) {
             (Array.isArray(current.error) ? current.error.length : current.error)) {
             throw new Error('Unable to read server status before saving state.');
         }
-        if (['failed', 'terminating'].includes(current.object?.[0]?.master?.status)) return;
+        const master = current.object?.[0]?.master;
+        const recoveringMeshFailure = master?.status === 'failed' && master.failure?.source === 'mesh' &&
+            server.isPrimary && !server.state?.isShuttingDown && (!overrideStatus || overrideStatus === 'running');
+        if (master?.status === 'terminating' || (master?.status === 'failed' && !recoveringMeshFailure)) return;
     }
     if (server?.isPrimary) {
         const masterStatus = overrideStatus || (server.state?.isShuttingDown ? 'stopped' : 'running');
@@ -17815,6 +17976,7 @@ class Workers extends Map {
         this.server = server;
         this.isPrimary = node_cluster__WEBPACK_IMPORTED_MODULE_1__["default"].isPrimary;
         this.pendingPromises = new Map();
+        this.distribution = new Map();
         this.workerId = this.isPrimary ? null : (parseInt(process.env.WORKER_ID, 10) || 1);
     }
 
@@ -19560,6 +19722,9 @@ const CoCreateCRUD = {
             data.database = this.database;
         }
 
+        const forTransport = payload => payload?.method === 'object.update' && Array.isArray(payload.object)
+            ? { ...payload, object: payload.object.map(({ $update, ...changes }) => changes) }
+            : payload;
         let response;
         if (
             isBrowser && dbInstance && options.cache !== false
@@ -19572,7 +19737,7 @@ const CoCreateCRUD = {
                 (type && response?.[type]?.length)
             ) {
                 if (response?.object && response?.object[0] && response?.object[0]?.organization_id) {
-                    this.socket.send(response);
+                    this.socket.send(forTransport(response));
                     return response;
                 }
             } else if (
@@ -19585,7 +19750,7 @@ const CoCreateCRUD = {
             }
         }
 
-        return await this.socket.send(response || data);
+        return await this.socket.send(forTransport(response || data));
     },
 
     listen: function (method, callback) {
@@ -19722,7 +19887,10 @@ const CoCreateCRUD = {
                 !data.synced && this.socket.frameId === data.receiverFrameId
             ) {
                 data.synced = true;
-                await dbInstance.send({ ...data });
+                const cached = { ...data, object: data.object?.map(record => structuredClone(record)) };
+                if (data.method === 'object.update' && data.object?.some(record => record.$set || record.$unset))
+                    cached.upsert = false;
+                await dbInstance.send(cached);
                 // self.socket.sendLocalMessage(response);
             }
         }
@@ -19853,244 +20021,10 @@ if (isBrowser) {
 
 /***/ },
 
-/***/ 5320
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   c: () => (/* binding */ promptBootstrapStorage)
-/* harmony export */ });
-function parseStorage(value) {
-    let storage = value;
-    if (typeof storage === 'string') {
-        try {
-            storage = JSON.parse(storage);
-        } catch {
-            throw new Error('Bootstrap storage must be valid JSON.');
-        }
-    }
-    if (!storage || typeof storage !== 'object' || Array.isArray(storage) ||
-        typeof storage.name !== 'string' || !storage.name.trim() ||
-        typeof storage.provider !== 'string' || !storage.provider.trim()) {
-        throw new Error('Bootstrap storage must be a JSON object containing non-empty name and provider fields.');
-    }
-    return storage;
-}
-
-async function promptBootstrapStorage(Config) {
-    const { storage } = await Config.prompt({
-        storage: {
-            prompt: 'Enter storage as a valid JSON object including "name", "provider", and your provider credential fields. Example: {"name":"primary","provider":"mongodb","connectionString":"mongodb://..."}: ',
-            parse: parseStorage
-        }
-    });
-    return storage;
-}
-
-
-/***/ },
-
-/***/ 7757
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ur: () => (/* binding */ registerDriver),
-/* harmony export */   vZ: () => (/* binding */ getDriver)
-/* harmony export */ });
-/* unused harmony export importDriverModule */
-/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
-/* harmony import */ var node_fs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9627);
-/* harmony import */ var node_url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9061);
-/********************************************************************************
- * Copyright (C) 2026 CoCreate and Contributors.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- ********************************************************************************/
-
-
-
-
-
-const STORAGE_DIRS = [
-    process.env.COCREATE_STORAGE_DIR,
-    node_path__WEBPACK_IMPORTED_MODULE_0__["default"].resolve(process.cwd(), 'storages'),
-    process.argv[1]
-        ? node_path__WEBPACK_IMPORTED_MODULE_0__["default"].resolve(node_path__WEBPACK_IMPORTED_MODULE_0__["default"].dirname(process.argv[1]), 'storages')
-        : null
-].filter((directory, index, directories) =>
-    directory && directories.indexOf(directory) === index
-);
-
-// In-memory runtime cache for loaded storage driver instances
-const drivers = new Map();
-
-function logPrefix() {
-    const workerId = process.env.WORKER_ID;
-    return `[@cocreate/crud/server] ${workerId ? `[WORKER ${workerId}]` : '[MASTER]'}`;
-}
-
-/**
- * Database provider to core engine driver mappings.
- * Maps specific databases (e.g., CosmosDB, MariaDB) to their actual underlying wrapper/driver.
- */
-const PROVIDER_ALIASES = {
-    "amazon-redshift": "amazon-redshift",
-    "auroradb": "postgresql",
-    "cockroachdb": "postgresql",
-    "cosmosdb": "mongodb",
-    "documentdb": "mongodb",
-    "dqlite": "sqlite",
-    "dynamodb": "dynamodb",
-    "ferretdb": "mongodb",
-    "firestore": "firestore",
-    "mariadb": "mysql",
-    "mongodb": "mongodb",
-    "mysql": "mysql",
-    "oracledb": "mongodb",
-    "planetscale": "mysql",
-    "postgresql": "postgresql",
-    "qdrant": "qdrant",
-    "rqlite": "sqlite",
-    "sqlite": "sqlite",
-    "tidb": "mysql",
-    "timescaledb": "postgresql",
-    "turso": "sqlite",
-    "yugabytedb": "postgresql"
-};
-
-/**
- * Internal helper to safely instantiate constructor functions or resolve ESM/CJS exports.
- */
-function instantiateDriver(rawDriver) {
-    if (!rawDriver) return rawDriver;
-    let target = rawDriver;
-
-    // Handle CJS/ESM module default wrapper
-    if (target && target.default) {
-        target = target.default;
-    }
-
-    // Instantiate if it's a class or constructor function
-    if (typeof target === 'function') {
-        try {
-            return new target();
-        } catch (e) {
-            // Retain as function if constructor call fails
-            return target;
-        }
-    }
-
-    return target;
-}
-
-/**
- * Safely imports a driver module from a disk path.
- * 
- * @param {string} filePath - Absolute file path on disk
- * @returns {Promise<Object>} Instantiated driver instance
- */
-async function importDriverModule(filePath) {
-    const fileUrl = (0,node_url__WEBPACK_IMPORTED_MODULE_2__.pathToFileURL)(filePath).href;
-    // Storage drivers are extracted at runtime and therefore cannot be
-    // resolved into a static build by webpack.
-    const module = await import(/* webpackIgnore: true */ fileUrl);
-    const rawDriver = module.default || module;
-    return instantiateDriver(rawDriver);
-}
-
-/**
- * Registers a storage driver instance into the runtime cache.
- * 
- * @param {string} provider - Storage provider name (e.g., 'mongodb', 'cosmosdb')
- * @param {Object|Function} driver - Driver module instance or constructor function
- * @returns {Object} Instantiated driver instance
- */
-function registerDriver(provider, driver) {
-    if (!provider || !driver) return;
-    
-    const instance = instantiateDriver(driver);
-    const key = provider.toLowerCase();
-    
-    drivers.set(key, instance);
-
-    // If provider maps to an underlying engine alias, cache under that key as well
-    const alias = PROVIDER_ALIASES[key];
-    if (alias) {
-        drivers.set(alias, instance);
-    }
-
-    console.log(`${logPrefix()} Cached driver instance for provider "${provider}"`);
-    return instance;
-}
-
-/**
- * Resolves and returns a storage driver instance from memory cache or a storages/ directory.
- * 
- * @param {string} provider - Storage provider name (e.g. 'mongodb', 'cosmosdb')
- * @returns {Promise<Object>} Resolved storage driver instance
- */
-async function getDriver(provider) {
-    if (!provider) {
-        throw new Error('[@cocreate/crud/server] Provider name must be provided to getDriver()');
-    }
-
-    const key = provider.toLowerCase();
-    const resolvedProvider = PROVIDER_ALIASES[key] || key;
-
-    // 1. Check in-memory driver cache
-    if (drivers.has(key)) {
-        return drivers.get(key);
-    }
-    if (drivers.has(resolvedProvider)) {
-        return drivers.get(resolvedProvider);
-    }
-
-    // 2. Check configured, application, and packaged storage directories.
-    for (const storageDirectory of STORAGE_DIRS) {
-        const driverPath = node_path__WEBPACK_IMPORTED_MODULE_0__["default"].join(storageDirectory, `${resolvedProvider}.js`);
-        if (!node_fs__WEBPACK_IMPORTED_MODULE_1__["default"].existsSync(driverPath)) continue;
-
-        try {
-            const driver = await importDriverModule(driverPath);
-            registerDriver(key, driver);
-            console.log(`${logPrefix()} Loaded driver for "${provider}" (using "${resolvedProvider}") from ${driverPath}`);
-            return drivers.get(key);
-        } catch (err) {
-            console.error(`${logPrefix()} Failed to import driver from ${driverPath}:`, err.message);
-            throw err;
-        }
-    }
-
-    throw new Error(
-        `[@cocreate/crud/server] Driver for provider "${provider}" ` +
-        `(mapped to "${resolvedProvider}") was not found in: ${STORAGE_DIRS.join(', ')}`
-    );
-}
-
-/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (getDriver)));
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "ak", 0, /* binding */ drivers
-/* harmony export */ ]);
-
-
-/***/ },
-
 /***/ 944
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export GetOrganization */
-/* harmony import */ var _storageFallback_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9900);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -20107,7 +20041,6 @@ async function getDriver(provider) {
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  ********************************************************************************/
-
 
 
 class GetOrganization {
@@ -20195,14 +20128,13 @@ class GetOrganization {
 
         let query = {
             method: 'object.read',
-            database: config.organization_id,
+            storage: 'production',
+            database: 'app',
             array: 'organizations',
+            host: null,
             organization_id: config.organization_id
         };
 
-        if (this.organizations[data.organization_id]) {
-            if (!data.database) data.database = data.organization_id;
-        }
 
         if (data.organization_id) {
             query.object = [{ _id: data.organization_id }];
@@ -20230,18 +20162,10 @@ class GetOrganization {
         }
 
         let platformOrganization = organization?.object?.[0];
-        if (!platformOrganization && data.organization_id) {
-            const storage = config.bootstrapStorage || config.storage;
-            if (storage?.name && storage?.provider &&
-                (0,_storageFallback_js__WEBPACK_IMPORTED_MODULE_0__/* .resolveOrganizationStorageFallback */ .be)(config, data.organization_id)) {
-                // A registry record is optional when the organization ID is
-                // known and the existing platform storage fallback can connect.
-                // Storage selection remains the CRUD dispatcher's responsibility.
-                platformOrganization = {
-                    _id: data.organization_id,
-                    organization_id: data.organization_id
-                };
-            }
+        if (!platformOrganization && data.organization_id === config.organization_id) {
+            // The configured organization can bootstrap itself through local CRUD
+            // before its organization/key records have been created.
+            platformOrganization = { ...config, _id: config.organization_id, organization_id: config.organization_id };
         }
         if (platformOrganization) {
             const organizationId = platformOrganization._id;
@@ -20253,9 +20177,11 @@ class GetOrganization {
             try {
                 tenant = await sendFn({
                     method: 'object.read',
-                    database: organizationId,
+                    storage: 'production',
+                    database: 'app',
                     organization_id: organizationId,
                     array: 'organizations',
+                    host: null,
                     object: [{ _id: organizationId }]
                 });
             } catch (error) {
@@ -20296,120 +20222,15 @@ const getOrganizationInstance = new GetOrganization();
 
 /***/ },
 
-/***/ 7982
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   c: () => (/* binding */ getStorage)
-/* harmony export */ });
-/* harmony import */ var _getDriver_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7757);
-/********************************************************************************
- * Copyright (C) 2026 CoCreate and Contributors.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- ********************************************************************************/
-
-
-
-/**
- * Resolves the tenant bootstrap storage by default. Its assigned name resolves
- * directly; other names are resolved from the tenant's own `apis` collection.
- *
- * @param {Object} options
- * @param {Object} options.organization - Resolved organization context
- * @param {string} options.organizationId - Tenant organization identifier
- * @param {string} [options.name] - Exact requested storage name
- * @returns {Promise<Object>} Resolved tenant storage API record
- */
-async function getStorage({ organization, organizationId, name }) {
-    if (!organizationId) {
-        throw new Error("Missing an organization_id while resolving storage");
-    }
-
-    const bootstrapStorage = organization?.bootstrapStorage || organization?.storage;
-    if (!bootstrapStorage) return;
-    if (typeof bootstrapStorage !== 'object' || Array.isArray(bootstrapStorage) ||
-        !bootstrapStorage.name || !bootstrapStorage.provider) {
-        throw new Error(
-            `Bootstrap storage is not configured as a flat object with name and provider for organization "${organizationId}"`
-        );
-    }
-
-    if (!name || name === bootstrapStorage.name) {
-        return bootstrapStorage;
-    }
-
-    const query = {
-        type: "storage",
-        enabled: true,
-        name
-    };
-
-    const bootstrapDriver = await (0,_getDriver_js__WEBPACK_IMPORTED_MODULE_0__/* .getDriver */ .vZ)(bootstrapStorage.provider);
-    if (!bootstrapDriver || typeof bootstrapDriver.send !== "function") {
-        throw new Error(
-            `Storage driver for bootstrap provider "${bootstrapStorage.provider}" does not implement a send() method.`
-        );
-    }
-
-    const response = await bootstrapDriver.send({
-        method: "object.read",
-        organization_id: organizationId,
-        database: organizationId,
-        array: "apis",
-        object: [],
-        filter: {
-            query,
-            limit: 1
-        },
-        storageConfig: bootstrapStorage
-    });
-
-    const storage = response?.object?.[0];
-    if (!storage) {
-        throw new Error(
-            `Storage "${name}" was not found for organization "${organizationId}"`
-        );
-    }
-
-    if (!storage.name || !storage.provider) {
-        throw new Error(
-            `Storage API record for organization "${organizationId}" is missing name or provider`
-        );
-    }
-
-    return storage;
-}
-
-/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (getStorage)));
-
-
-/***/ },
-
 /***/ 4323
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony exports loadCrudConfig, init, getFilterCount */
 /* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9298);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2623);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(900);
-/* harmony import */ var _getOrganization_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(944);
-/* harmony import */ var _getDriver_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7757);
-/* harmony import */ var _routing_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6257);
-/* harmony import */ var _getStorage_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7982);
-/* harmony import */ var _bootstrapStorage_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5320);
-/* harmony import */ var _storageFallback_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(9900);
+/* harmony import */ var node_events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2849);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2623);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(900);
+/* harmony import */ var _getOrganization_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(944);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -20427,10 +20248,6 @@ async function getStorage({ organization, organizationId, name }) {
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
  ********************************************************************************/
-
-
-
-
 
 
 
@@ -20438,6 +20255,7 @@ async function getStorage({ organization, organizationId, name }) {
 
 
 let server = null;
+let db = null;
 /**
  *
  * @public
@@ -20460,18 +20278,6 @@ function sendToServer(data) {
     }
 }
 
-function normalizeOrganizationStorageFallback() {
-    let configuredStorageFallback = config.organizationStorageFallback;
-    if (typeof configuredStorageFallback === 'string') {
-        try {
-            configuredStorageFallback = JSON.parse(configuredStorageFallback);
-        } catch { }
-    }
-    config.organizationStorageFallback = configuredStorageFallback ?? {
-        ..._storageFallback_js__WEBPACK_IMPORTED_MODULE_8__/* .defaultOrganizationStorageFallback */ .Sk
-    };
-}
-
 /**
  * Merges module configuration and scoped platform database overrides over the
  * bootstrap configuration loaded by Config.prompt().
@@ -20487,69 +20293,44 @@ async function loadCrudConfig() {
         cluster: server?.cluster_id
     }, crudServer);
 
-    if (systemConfig) (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .dotNotationToObject */ .O)(systemConfig, config);
-    if (databaseConfig) (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .dotNotationToObject */ .O)(databaseConfig, config);
-    normalizeOrganizationStorageFallback();
-
+    if (systemConfig) (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .dotNotationToObject */ .O)(systemConfig, config);
+    if (databaseConfig) (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .dotNotationToObject */ .O)(databaseConfig, config);
     return config;
 }
 
 
 /**
  * Initializes the CrudServer module, prompts/loads configuration, and binds socket listeners.
- * Drivers are resolved strictly on demand during send() query dispatch.
+ * The DB service is bound before organization/configuration reads begin.
  *
  * @param {Object} Server - CoCreateServer instance context
+ * @param {Object} [options.config] - Supplied bootstrap configuration for noninteractive callers
  * @returns {Promise<Object>} Initialized CrudServer module API instance
  * @public
  * @environment server
  */
-async function init(Server) {
+async function init(Server, options = {}) {
     if (initialized) return crudServer;
     initialized = true;
 
-    server = Server || null;
+    server = Server || Object.assign(new node_events__WEBPACK_IMPORTED_MODULE_1__.EventEmitter(), { send: async data => data });
 
-    config = await _cocreate_config__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A.prompt({
+    config = options.config ? { ...options.config } : await _cocreate_config__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A.prompt({
         'organization_id': { prompt: 'Enter your organization_id: ' },
         'host': { prompt: 'Enter your host: ' }
     });
-    config.storage = await (0,_bootstrapStorage_js__WEBPACK_IMPORTED_MODULE_7__/* .promptBootstrapStorage */ .c)(_cocreate_config__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A);
-    const primaryStorage = config.storage;
-    normalizeOrganizationStorageFallback();
-
     if (!config.organization_id) throw new Error('Missing bootstrap organization_id.');
 
-    // Resolve the bootstrap driver before the server persists lifecycle state
-    // or forks workers. Other configured providers remain lazy-loaded.
-    await (0,_getDriver_js__WEBPACK_IMPORTED_MODULE_4__/* .getDriver */ .vZ)(primaryStorage.provider);
+    db = server.db ?? options.db;
+    if (!db || typeof db.send !== 'function')
+        throw new Error('CoCreateDB must be initialized on the server or passed to CrudServer.');
 
-    crudServer = {
-        config,
-        send,
-        getStorage,
-        /**
-         *
- * @public
- * @environment server
- */
-        getDriver: _getDriver_js__WEBPACK_IMPORTED_MODULE_4__/* .getDriver */ .vZ,
-        /**
-         *
- * @public
- * @environment server
- */
-        registerDriver: _getDriver_js__WEBPACK_IMPORTED_MODULE_4__/* .registerDriver */ .ur,
-        /**
-         *
- * @public
- * @environment server
- */
-        drivers: _getDriver_js__WEBPACK_IMPORTED_MODULE_4__/* .drivers */ .ak
-    };
+    crudServer = { config, send };
 
-    getOrganization = _getOrganization_js__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .A.init(crudServer);
+    getOrganization = _getOrganization_js__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .A.init(crudServer);
     crudServer.getOrganization = getOrganization;
+    // Logging can issue CRUD while the initial DB preload/config read is pending.
+    if (server) server.crud = crudServer;
 
     await loadCrudConfig();
 
@@ -20568,7 +20349,7 @@ async function init(Server) {
 
 /**
  * Main CRUD payload dispatcher.
- * Resolves organization context, determines target storage driver, and executes query.
+ * Resolves organization/hostname defaults and calls CoCreateDB directly.
  *
  * @param {Object} data - Request query payload
  * @returns {Promise<Object>} Processed response payload
@@ -20583,11 +20364,7 @@ async function send(data) {
             return data;
         }
 
-        if (
-            !data.host &&
-            data.organization_id === config.organization_id &&
-            !(0,_routing_js__WEBPACK_IMPORTED_MODULE_5__/* .isPlatformArray */ .T)(data.array)
-        ) {
+        if (data.host === undefined && data.organization_id === config.organization_id) {
             data.host = config.host;
         }
 
@@ -20607,77 +20384,27 @@ async function send(data) {
 
             for (let i = 0; i < host.length; i++) {
                 if (host[i].name === hostname) {
-                    if (host[i].storage) data.storage = host[i].storage;
+                    if (!data.storage && host[i].storage) data.storage = host[i].storage;
                     if (!data.database && host[i].database) data.database = host[i].database;
-                    if (host[i].array) data.array = host[i].array;
                     break;
                 }
             }
         }
 
-        // A host-specific database is honored above. Otherwise, keep each
-        // organization in its own database and avoid MongoDB's URI/test
-        // database fallback.
-        if (!data.database) {
-            data.database = data.organization_id;
-        }
+        data.storage ||= 'production';
+        data.database ||= 'app';
+
 
         const filterStartingIndex =
             data.filter?.startingIndex ?? data.filter?.index ?? 0;
 
-        const storageNames = data.storage
-            ? (Array.isArray(data.storage) ? data.storage : [data.storage])
-            : [undefined];
+        delete data.persistenceConfig;
+        data = await db.send(data, { organization });
 
-        for (let i = 0; i < storageNames.length; i++) {
-            let storage = await getStorage(
-                organization,
-                data.organization_id,
-                storageNames[i]
-            );
-
-            if (!storage) {
-                const fallback = (0,_routing_js__WEBPACK_IMPORTED_MODULE_5__/* .includesFileArray */ .n)(data.array)
-                    ? {
-                        storage: undefined,
-                        database: data.organization_id
-                    }
-                    : (0,_storageFallback_js__WEBPACK_IMPORTED_MODULE_8__/* .resolveOrganizationStorageFallback */ .be)(
-                        config,
-                        data.organization_id
-                    );
-                if (!fallback) {
-                    throw new Error(
-                        `Storage is not configured for organization "${data.organization_id}" and organization storage fallback is disabled`
-                    );
-                }
-
-                data.database = fallback.database;
-                storage = await getStorage(
-                    config,
-                    config.organization_id,
-                    fallback.storage
-                );
-                if (!storage) throw new Error("Server storage is not configured");
-            }
-
-            if (storage && storage.provider) {
-                data.storageConfig = storage;
-
-                // Each storage name resolves to one API record; the driver reads its own credentials.
-                const driver = await (0,_getDriver_js__WEBPACK_IMPORTED_MODULE_4__/* .getDriver */ .vZ)(storage.provider);
-
-                if (driver && typeof driver.send === 'function') {
-                    data = await driver.send(data);
-                } else {
-                    throw new Error(`Storage driver for provider "${storage.provider}" does not implement a send() method.`);
-                }
-            }
-        }
 
         applyFilterMetadata(data, filterStartingIndex);
 
-        delete data.storageConfig;
+        delete data.persistenceConfig;
 
         if (data.organization_id === config.organization_id &&
             requestOrganizationId !== data.organization_id) {
@@ -20693,7 +20420,7 @@ async function send(data) {
         }
         return data;
     } catch (error) {
-        delete data.storageConfig;
+        delete data.persistenceConfig;
         if (typeof errorHandler === 'function') {
             errorHandler(data, error);
         } else {
@@ -20702,19 +20429,6 @@ async function send(data) {
         sendToServer(data);
         return data;
     }
-}
-
-/**
- * Resolves the organization bootstrap storage or a named tenant API storage.
- * @public
- * @environment server
- */
-async function getStorage(organization, organizationId, name) {
-    return await (0,_getStorage_js__WEBPACK_IMPORTED_MODULE_6__/* .getStorage */ .c)({
-        organization,
-        organizationId,
-        name
-    });
 }
 
 /**
@@ -20755,7 +20469,7 @@ function applyFilterMetadata(data, startingIndex) {
     if (!Array.isArray(data[type])) return;
 
     if (data.filter.sort?.length)
-        data[type] = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .sortData */ .LT)(data[type], data.filter.sort);
+        data[type] = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .sortData */ .LT)(data[type], data.filter.sort);
 
     const count = getFilterCount(data.filter);
     if (count !== undefined) data.filter.count = count;
@@ -20767,11 +20481,7 @@ function applyFilterMetadata(data, startingIndex) {
 const serverModule = {
     init,
     config,
-    send,
-    getStorage,
-    getDriver: _getDriver_js__WEBPACK_IMPORTED_MODULE_4__/* .getDriver */ .vZ,
-    registerDriver: _getDriver_js__WEBPACK_IMPORTED_MODULE_4__/* .registerDriver */ .ur,
-    drivers: _getDriver_js__WEBPACK_IMPORTED_MODULE_4__/* .drivers */ .ak
+    send
 };
 
 
@@ -20791,84 +20501,6208 @@ const serverModule = {
 
 /***/ },
 
-/***/ 6257
+/***/ 1391
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   T: () => (/* binding */ isPlatformArray),
-/* harmony export */   n: () => (/* binding */ includesFileArray)
+/* harmony export */   YZ: () => (/* binding */ sendArray),
+/* harmony export */   bK: () => (/* binding */ materializeArray),
+/* harmony export */   eC: () => (/* binding */ ensureArray),
+/* harmony export */   lp: () => (/* binding */ adjustArrayLength)
 /* harmony export */ });
-/********************************************************************************
- * Copyright (C) 2026 CoCreate and Contributors.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- ********************************************************************************/
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3981);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5264);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2244);
+/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4811);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1150);
+/* harmony import */ var _database_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5379);
+/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2965);
 
-const platformArrays = new Set([
-    'organizations',
-    'servers',
-    'servers_usage',
-    'servers_telemetry',
-    'servers_bandwidth'
-]);
 
-function isPlatformArray(array) {
-    return platformArrays.has(array);
+
+
+
+
+
+
+const name = value => {
+    if (typeof value !== 'string' || !value.trim()) throw new TypeError('array name must be a non-empty string')
+    return value
+}
+const find = (root, index, database, value) => (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .findRecordByName */ .Tz)(index, database._id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, database._id, uuid), value)
+
+async function ensureArray(root, index, database, value, config = {}, request = {}) {
+    name(value)
+    const existing = await find(root, index, database, value)
+    if (existing) return existing
+    const id = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .ObjectId */ .V)().toString()
+    const record = { _id: id, name: value, databaseId: database._id, index: index.catalogId(database._id, id), length: 0,
+        config, created: (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .auditMetadata */ .RI)(request), updated: (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .auditMetadata */ .RI)(request) }
+    await index.ensureCatalog(database._id, id)
+    await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .createRecord */ .eC)(index, database._id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, database._id, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .newFileId */ .Ui)()), record)
+    await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_5__/* .adjustDatabaseLengths */ .MJ)(root, index, database._id, { arrays: 1 }, request)
+    return record
 }
 
-function includesFileArray(array) {
-    return array === 'files' ||
-        (Array.isArray(array) && array.includes('files'));
+async function materializeArray(root, index, database, source) {
+    name(source?.name)
+    if (source.databaseId !== database._id) throw new Error('Remote array belongs to a different database')
+    const current = await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .readRecordById */ .Sm)(index, database._id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, database._id, uuid), (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(source))
+    if (current) return (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .updateRecord */ .vL)(index, database._id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, database._id, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(current)), current, source)
+    return (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .createRecord */ .eC)(index, database._id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, database._id, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(source)), source)
+}
+
+async function adjustArrayLength(root, index, databaseId, id, delta, request = {}) {
+    const record = await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .readRecordById */ .Sm)(index, databaseId, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, databaseId, uuid), id)
+    if (!record) throw new Error(`Array not found: ${id}`)
+    if (record.length + delta < 0) throw new Error('Array length would become invalid')
+    return (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .updateRecord */ .vL)(index, databaseId, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, databaseId, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(record)), record, value => {
+        value.length += delta
+        value.updated = (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .auditMetadata */ .RI)(request)
+    })
+}
+
+async function sendArray(root, index, method, data) {
+    if (typeof data.database !== 'string' || !data.database) throw new TypeError(`array.${method} requires one database name`)
+    let database = await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .findRecordByName */ .Tz)(index, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .databaseMetadataPath */ .mL)(root, uuid), data.database)
+    if (!database && method === 'create') database = await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_5__/* .ensureDatabase */ .c_)(root, index, data.database, {}, data)
+    if (!database) {
+        if (method === 'read' || method === 'delete') return data.array = []
+        throw new Error(`Database not found: ${data.database}`)
+    }
+    const view = record => (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .identify */ .ls)({ ...record, $storage: ['db'], $database: [database.name] }, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(record))
+    if (method === 'read') return data.array = (0,_read_js__WEBPACK_IMPORTED_MODULE_6__/* .applyReadFilter */ .H)((await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .readRecords */ .T3)(index, database._id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip,
+        uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, database._id, uuid))).map(view), data, { database: data.database, array: _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip })
+    const names = data.array === undefined ? [] : Array.isArray(data.array) ? data.array : [data.array]
+    if (method === 'create' && !names.length) throw new TypeError('array.create requires an array name')
+    const results = []
+    for (const value of names) {
+        const record = method === 'create' ? await ensureArray(root, index, database, value, data.config, data) : await find(root, index, database, name(value))
+        if (!record) {
+            if (method === 'delete') continue
+            throw new Error(`Array not found: ${value}`)
+        }
+        if (method === 'update') {
+            const renamed = name(data.name ?? data.newName ?? record.name)
+            if (data.config === undefined && renamed === record.name) throw new Error('array.update requires a new name or config')
+            const collision = await find(root, index, database, renamed)
+            if (collision && collision._id !== record._id) throw new Error(`Array already exists: ${renamed}`)
+            await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .updateRecord */ .vL)(index, database._id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, database._id, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(record)), record, current => {
+                current.name = renamed
+                if (data.config) Object.assign(current.config, data.config)
+                current.updated = (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .auditMetadata */ .RI)(data)
+            })
+        }
+        if (method === 'delete') {
+            for await (const entry of index.scan(database._id, record._id, '_id', { type: 'string' })) await (0,_io_js__WEBPACK_IMPORTED_MODULE_0__.rm)((0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .objectPath */ .du)(root, database._id, record._id, entry.objectId), { force: true })
+            await index.drop(database._id, record._id)
+            await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_5__/* .adjustDatabaseLengths */ .MJ)(root, index, database._id, { arrays: -1, objects: -record.length }, data)
+            await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .deleteRecord */ .LK)(index, database._id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, database._id, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(record)), record)
+        }
+        results.push(view(record))
+    }
+    if (!['create', 'update', 'delete'].includes(method)) throw new Error(`Unsupported CRUD method: array.${method}`)
+    return data.array = results
 }
 
 
 /***/ },
 
-/***/ 9900
+/***/ 5082
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   be: () => (/* binding */ resolveOrganizationStorageFallback)
+/* harmony export */   Aq: () => (/* binding */ flushFileBytes),
+/* harmony export */   Pt: () => (/* binding */ recordFileBytes),
+/* harmony export */   os: () => (/* binding */ removeFileBytes)
 /* harmony export */ });
-/* unused harmony export ORGANIZATION_ID_DATABASE */
-const ORGANIZATION_ID_DATABASE = '$organization_id';
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2561);
 
-const defaultOrganizationStorageFallback = Object.freeze({
-    database: ORGANIZATION_ID_DATABASE
-});
 
-function resolveOrganizationStorageFallback(config, organizationId) {
-    const configuredFallback = config?.organizationStorageFallback;
-    if (configuredFallback === false) return null;
 
-    const fallback = configuredFallback ?? defaultOrganizationStorageFallback;
-    if (!fallback || typeof fallback !== 'object' || Array.isArray(fallback)) {
-        throw new Error('organizationStorageFallback must be an object or false');
+
+// Node-local bookkeeping. Never indexed, replicated, or used for splitting.
+// One sidecar per directory; a persistence pass writes each changed sidecar once.
+const pending = new Map()
+let queue = Promise.resolve()
+const inside = (root, path) => path === root || path.startsWith(root + node_path__WEBPACK_IMPORTED_MODULE_1__.sep)
+function recordFileBytes(file, bytes) {
+    file = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(file)
+    if (!file.endsWith('.json')) return
+    const directory = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.dirname)(file)
+    if (!pending.has(directory)) pending.set(directory, new Map())
+    pending.get(directory).set((0,node_path__WEBPACK_IMPORTED_MODULE_1__.basename)(file), bytes)
+}
+function removeFileBytes(path, { recursive = false } = {}) {
+    path = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(path)
+    if (recursive) for (const directory of pending.keys()) if (inside(path, directory)) pending.delete(directory)
+    recordFileBytes(path, null)
+}
+function flushFileBytes(root) {
+    root = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(root)
+    const result = queue.then(async () => {
+        for (const [directory, changes] of pending) {
+            if (!inside(root, directory)) continue
+            const batch = new Map(changes)
+            const sidecar = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.join)(directory, '.bytes')
+            let sizes
+            try { sizes = JSON.parse(await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.readFile(sidecar, 'utf8')) }
+            catch (error) { if (error.code !== 'ENOENT') throw error; sizes = {} }
+            for (const [file, bytes] of batch) {
+                if (bytes === null) delete sizes[file]
+                else sizes[file] = bytes
+            }
+            const temporary = `${sidecar}.${(0,node_crypto__WEBPACK_IMPORTED_MODULE_2__.randomUUID)()}.tmp`
+            try {
+                // A deleted directory must never be recreated by accounting.
+                await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.writeFile(temporary, JSON.stringify(sizes))
+                await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.rename(temporary, sidecar)
+            } catch (error) { if (error.code !== 'ENOENT') throw error }
+            finally { await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.rm(temporary, { force: true }) }
+            for (const [file, bytes] of batch) if (changes.get(file) === bytes) changes.delete(file)
+            if (!changes.size) pending.delete(directory)
+        }
+    })
+    queue = result.catch(() => {})
+    return result
+}
+
+
+/***/ },
+
+/***/ 5379
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MJ: () => (/* binding */ adjustDatabaseLengths),
+/* harmony export */   Me: () => (/* binding */ sendDatabase),
+/* harmony export */   bk: () => (/* binding */ materializeDatabase),
+/* harmony export */   c_: () => (/* binding */ ensureDatabase)
+/* harmony export */ });
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3981);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5264);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2244);
+/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4811);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1150);
+/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2965);
+
+
+
+
+
+
+
+const name = value => {
+    if (typeof value !== 'string' || !value.trim()) throw new TypeError('database name must be a non-empty string')
+    return value
+}
+const load = (root, index, id) => (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .readRecordById */ .Sm)(index, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .databaseMetadataPath */ .mL)(root, uuid), id)
+const find = (root, index, value) => (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .findRecordByName */ .Tz)(index, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .databaseMetadataPath */ .mL)(root, uuid), value)
+
+async function ensureDatabase(root, index, value, config = {}, request = {}) {
+    name(value)
+    const existing = await find(root, index, value)
+    if (existing) return existing
+    const id = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .ObjectId */ .V)().toString()
+    const record = { _id: id, name: value, index: index.catalogId(id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip), arrayLength: 0, objectLength: 0,
+        config, created: (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .auditMetadata */ .RI)(request), updated: (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .auditMetadata */ .RI)(request) }
+    await index.ensureCatalog(id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip)
+    return (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .createRecord */ .eC)(index, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .databaseMetadataPath */ .mL)(root, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .newFileId */ .Ui)()), record)
+}
+
+async function materializeDatabase(root, index, source) {
+    name(source?.name)
+    const current = await load(root, index, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(source))
+    if (current) return (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .updateRecord */ .vL)(index, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .databaseMetadataPath */ .mL)(root, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(current)), current, source)
+    return (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .createRecord */ .eC)(index, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .databaseMetadataPath */ .mL)(root, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(source)), source)
+}
+
+async function adjustDatabaseLengths(root, index, id, { arrays = 0, objects = 0 }, request = {}) {
+    const current = await load(root, index, id)
+    if (!current) throw new Error(`Database not found: ${id}`)
+    if (current.arrayLength + arrays < 0 || current.objectLength + objects < 0) throw new Error('Database lengths would become invalid')
+    return (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .updateRecord */ .vL)(index, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .databaseMetadataPath */ .mL)(root, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(current)), current, value => {
+        value.arrayLength += arrays
+        value.objectLength += objects
+        value.updated = (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .auditMetadata */ .RI)(request)
+    })
+}
+
+async function view(root, index, record) {
+    const arrays = await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .readRecords */ .T3)(index, record._id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, record._id, uuid))
+    // Response containers share the stored config, audit, and child values.
+    return (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .identify */ .ls)({ ...record, arrays: arrays.map(array => (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .identify */ .ls)({ ...array, $storage: ['db'], $database: [record.name] }, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(array))),
+        $storage: ['db'] }, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(record))
+}
+
+async function sendDatabase(root, index, method, data) {
+    if (method === 'read') {
+        const records = await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .readRecords */ .T3)(index, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .databaseMetadataPath */ .mL)(root, uuid))
+        const values = []
+        for (const record of records) values.push(await view(root, index, record))
+        return data.database = (0,_read_js__WEBPACK_IMPORTED_MODULE_5__/* .applyReadFilter */ .H)(values, data, { database: _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, array: _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1 })
+    }
+    const names = data.database === undefined ? [] : Array.isArray(data.database) ? data.database : [data.database]
+    if (method === 'create' && !names.length) throw new TypeError('database.create requires a database name')
+    const results = []
+    for (const value of names) {
+        const current = method === 'create' ? await ensureDatabase(root, index, value, data.config, data) : await find(root, index, name(value))
+        if (!current) {
+            if (method === 'delete') continue
+            throw new Error(`Database not found: ${value}`)
+        }
+        if (method === 'update') {
+            const renamed = name(data.name ?? data.newName ?? current.name)
+            if (data.config === undefined && renamed === current.name) throw new Error('database.update requires a new name or config')
+            const collision = await find(root, index, renamed)
+            if (collision && collision !== current && collision._id !== current._id) throw new Error(`Database already exists: ${renamed}`)
+            await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .updateRecord */ .vL)(index, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .databaseMetadataPath */ .mL)(root, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(current)), current, record => {
+                record.name = renamed
+                if (data.config) Object.assign(record.config, data.config)
+                record.updated = (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .auditMetadata */ .RI)(data)
+            })
+        }
+        const result = await view(root, index, current)
+        if (method === 'delete') {
+            for (const array of result.arrays) {
+                for await (const entry of index.scan(current._id, array._id, '_id', { type: 'string' })) await (0,_io_js__WEBPACK_IMPORTED_MODULE_0__.rm)((0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .objectPath */ .du)(root, current._id, array._id, entry.objectId), { force: true })
+                await index.drop(current._id, array._id)
+                await (0,_io_js__WEBPACK_IMPORTED_MODULE_0__.rm)((0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .arrayMetadataPath */ .Ad)(root, current._id, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(array)), { force: true })
+            }
+            await index.drop(current._id, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .ARRAY_CATALOG */ .ip)
+            await (0,_records_js__WEBPACK_IMPORTED_MODULE_3__/* .deleteRecord */ .LK)(index, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_2__/* .DATABASE_CATALOG_ARRAY */ .u1, (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .databaseMetadataPath */ .mL)(root, (0,_files_js__WEBPACK_IMPORTED_MODULE_4__/* .fileId */ .qp)(current)), current)
+        }
+        results.push(result)
+    }
+    if (!['create', 'update', 'delete'].includes(method)) throw new Error(`Unsupported CRUD method: database.${method}`)
+    return data.database = results
+}
+
+
+/***/ },
+
+/***/ 2106
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   y: () => (/* binding */ resolveDirectory)
+/* harmony export */ });
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
+
+
+/** Resolve a configured CoCreateDB directory, defaulting to the process CWD. */
+function resolveDirectory({ directory, cwd = process.cwd() } = {}) {
+    return node_path__WEBPACK_IMPORTED_MODULE_0__["default"].resolve(cwd, process.env.COCREATE_DB_DIRECTORY || directory || '.')
+}
+
+
+/***/ },
+
+/***/ 5647
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Ng: () => (/* binding */ distributionReferences),
+/* harmony export */   tm: () => (/* binding */ createDistributionIndex)
+/* harmony export */ });
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
+/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6978);
+
+
+
+const DATABASES = '__distribution_databases__'
+const ARRAYS = '__distribution_arrays__'
+const KEY = '_id'
+
+/**
+ * Create local Cluster availability indexes for entities and regular index partitions.
+ * Each mapping stores the available entity or partition path and its holder node ID.
+ */
+function createDistributionIndex({ directory, maxBytes, cache = false, nodeId: owner } = {}) {
+    const index = (0,_index_index_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Ay)({
+        flat: false,
+        directory,
+        maxBytes,
+        cache,
+        indexDirectoryName: 'distribution',
+        resolveArrayDirectory: ({ directory, database, array }) => {
+            if (database === DATABASES && array === DATABASES)
+                return (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(directory, 'databases')
+            if (array === ARRAYS)
+                return (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(directory, 'databases', database, 'arrays')
+            return (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(directory, 'databases', database, 'arrays', array)
+        }
+    })
+
+    const partitionIndex = (0,_index_index_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Ay)({
+        flat: false,
+        directory,
+        maxBytes,
+        cache,
+        resolveArrayDirectory: ({ directory }) => (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(directory, 'distribution', 'partitions')
+    })
+
+    const localized = new Map()
+    const localize = (target, database, array, key) => {
+        if (!owner) return
+        const address = JSON.stringify([database, array, key])
+        if (!localized.has(address)) {
+            const pending = (async () => {
+                const legacy = []
+                for await (const entry of target.scan(database, array, key, { type: 'string' }))
+                    if (entry.objectId !== 'local') legacy.push(entry)
+                for (const entry of legacy) {
+                    if (entry.objectId === owner) await target.create(database, array, key, entry.value, 'local')
+                    await target.delete(database, array, key, entry.value, entry.objectId)
+                }
+            })()
+            localized.set(address, pending)
+            pending.catch(() => localized.delete(address))
+        }
+        return localized.get(address)
     }
 
-    const storage = fallback.storage;
-    if (storage !== undefined && (typeof storage !== 'string' || !storage.trim())) {
-        throw new Error('organizationStorageFallback.storage must be a non-empty storage name');
+    let queue = Promise.resolve()
+    const serialize = operation => {
+        const previous = queue
+        let release
+        queue = new Promise(resolve => { release = resolve })
+        return previous.then(operation).finally(release)
     }
 
-    const configuredDatabase = fallback.database ?? ORGANIZATION_ID_DATABASE;
-    if (typeof configuredDatabase !== 'string' || !configuredDatabase.trim()) {
-        throw new Error('organizationStorageFallback.database must be a non-empty string');
+    const address = ({ databaseId, arrayId, objectId }) => {
+        if (typeof databaseId !== 'string' || !databaseId)
+            throw new TypeError('databaseId is required')
+        if (objectId !== undefined && (typeof arrayId !== 'string' || !arrayId))
+            throw new TypeError('arrayId is required for document availability')
+
+        if (objectId !== undefined) {
+            if (typeof objectId !== 'string' || !objectId)
+                throw new TypeError('objectId must be a non-empty string')
+            return { database: databaseId, array: arrayId, entityId: objectId }
+        }
+        if (arrayId !== undefined) {
+            if (typeof arrayId !== 'string' || !arrayId)
+                throw new TypeError('arrayId must be a non-empty string')
+            return { database: databaseId, array: ARRAYS, entityId: arrayId }
+        }
+        return { database: DATABASES, array: DATABASES, entityId: databaseId }
+    }
+
+    const get = async ({ databaseId, arrayId, objectId }) => {
+        const target = address({ databaseId, arrayId, objectId })
+        await localize(index, target.database, target.array, KEY)
+        const nodeIds = []
+
+        for await (const entry of index.scan(target.database, target.array, KEY, {
+            type: 'string',
+            lower: target.entityId,
+            upper: target.entityId
+        })) {
+            if (entry.value === target.entityId && (!owner || entry.objectId === 'local' || entry.objectId === owner)) nodeIds.push(owner ?? entry.objectId)
+        }
+
+        return [...new Set(nodeIds)]
+    }
+
+    const list = async ({ databaseId, arrayId } = {}) => {
+        let target
+        if (databaseId === undefined) {
+            target = { database: DATABASES, array: DATABASES }
+        } else if (arrayId === undefined) {
+            target = { database: databaseId, array: ARRAYS }
+        } else {
+            target = { database: databaseId, array: arrayId }
+        }
+
+        await localize(index, target.database, target.array, KEY)
+        const entities = new Map()
+        for await (const entry of index.scan(target.database, target.array, KEY, { type: 'string' })) {
+            if (owner && entry.objectId !== 'local' && entry.objectId !== owner) continue
+            if (!entities.has(entry.value)) entities.set(entry.value, new Set())
+            entities.get(entry.value).add(owner ?? entry.objectId)
+        }
+        return [...entities].map(([id, nodeIds]) => ({ id, nodeIds: [...nodeIds] }))
+    }
+
+    const getPartition = async partitionId => {
+        if (typeof partitionId !== 'string' || !partitionId)
+            throw new TypeError('partitionId must be a non-empty string')
+        await localize(partitionIndex, '__partitions__', 'index-files', 'partition')
+        const nodeIds = []
+        for await (const entry of partitionIndex.scan('__partitions__', 'index-files', 'partition', {
+            type: 'string', lower: partitionId, upper: partitionId
+        })) {
+            if (entry.value === partitionId && (!owner || entry.objectId === 'local' || entry.objectId === owner)) nodeIds.push(owner ?? entry.objectId)
+        }
+        return [...new Set(nodeIds)]
+    }
+
+    const listPartitions = async () => {
+        await localize(partitionIndex, '__partitions__', 'index-files', 'partition')
+        const partitions = new Map()
+        for await (const entry of partitionIndex.scan('__partitions__', 'index-files', 'partition', { type: 'string' })) {
+            if (owner && entry.objectId !== 'local' && entry.objectId !== owner) continue
+            if (!partitions.has(entry.value)) partitions.set(entry.value, new Set())
+            partitions.get(entry.value).add(owner ?? entry.objectId)
+        }
+        return [...partitions].map(([partitionId, nodeIds]) => ({ partitionId, nodeIds: [...nodeIds] }))
+    }
+
+    const updatePartition = ({ partitionId, nodeId, operation }) => serialize(async () => {
+        if (typeof partitionId !== 'string' || !partitionId)
+            throw new TypeError('partitionId must be a non-empty string')
+        if (owner && nodeId !== owner) throw new Error('Local distribution can only describe this node')
+        if (typeof nodeId !== 'string' || !nodeId)
+            throw new TypeError('nodeId must be a non-empty string')
+        if (operation !== 'add' && operation !== 'remove')
+            throw new TypeError('operation must be add or remove')
+
+        const existing = await getPartition(partitionId)
+        const hasNode = existing.includes(nodeId)
+        let changed = false
+        if (operation === 'add' && (!hasNode || owner)) {
+            await partitionIndex.create('__partitions__', 'index-files', 'partition', partitionId, owner ? 'local' : nodeId)
+            changed = !hasNode
+        } else if (operation === 'remove' && hasNode) {
+            changed = await partitionIndex.delete('__partitions__', 'index-files', 'partition', partitionId, owner ? 'local' : nodeId)
+            if (owner) changed = await partitionIndex.delete('__partitions__', 'index-files', 'partition', partitionId, owner) || changed
+        }
+        return { changed, nodeIds: await getPartition(partitionId) }
+    })
+
+    const update = ({ databaseId, arrayId, objectId, nodeId, operation }) => serialize(async () => {
+        const target = address({ databaseId, arrayId, objectId })
+        if (owner && nodeId !== owner) throw new Error('Local distribution can only describe this node')
+        if (typeof nodeId !== 'string' || !nodeId)
+            throw new TypeError('nodeId must be a non-empty string')
+        if (operation !== 'add' && operation !== 'remove')
+            throw new TypeError('operation must be add or remove')
+
+        const existing = await get({ databaseId, arrayId, objectId })
+        const hasNode = existing.includes(nodeId)
+        let changed = false
+
+        if (operation === 'add' && (!hasNode || owner)) {
+            await index.create(target.database, target.array, KEY, target.entityId, owner ? 'local' : nodeId)
+            changed = !hasNode
+        } else if (operation === 'remove' && hasNode) {
+            changed = await index.delete(target.database, target.array, KEY, target.entityId, owner ? 'local' : nodeId)
+            if (owner) changed = await index.delete(target.database, target.array, KEY, target.entityId, owner) || changed
+        }
+
+        return { changed, nodeIds: await get({ databaseId, arrayId, objectId }) }
+    })
+
+    return {
+        get,
+        list,
+        update,
+        getPartition,
+        listPartitions,
+        updatePartition,
+        clearCache: () => {
+            index.clearCache()
+            partitionIndex.clearCache()
+        }
+    }
+}
+
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (createDistributionIndex)));
+
+/** References use the same stable entity addresses as DB's node distribution. */
+function distributionReferences({ organization_id, storageFileId, databaseFileId, arrayFileId, objectIds = [], type = 'object' }, includeArray = false) {
+    if (!/^[a-f0-9]{24}$/i.test(organization_id)) return []
+    const reference = (kind, uuid) => /^[a-f0-9]{32}$/i.test(uuid) ? `${organization_id}/${kind}/${uuid}.json` : undefined
+    if (type === 'storage') return [reference('storages', storageFileId)].filter(Boolean)
+    if (type === 'database') return [reference('databases', databaseFileId), reference('storages', storageFileId)].filter(Boolean)
+    if (type === 'array') return [reference('arrays', arrayFileId), reference('databases', databaseFileId)].filter(Boolean)
+    const values = objectIds.map(uuid => reference('objects', uuid)).filter(Boolean)
+    if (includeArray || !values.length) values.push(reference('arrays', arrayFileId))
+    return [...new Set(values.filter(Boolean))]
+}
+
+
+/***/ },
+
+/***/ 2509
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   nL: () => (/* binding */ indexEntries),
+/* harmony export */   qd: () => (/* binding */ arrayDigest)
+/* harmony export */ });
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2561);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2244);
+
+
+
+// Hash terminal arrays without constructing a canonical copy of their contents.
+function arrayDigest(value) {
+    const hash = (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.createHash)('sha256')
+    const visit = item => {
+        if (Array.isArray(item)) {
+            hash.update('[')
+            for (let i = 0; i < item.length; i++) { if (i) hash.update(','); visit(item[i] ?? null) }
+            hash.update(']')
+        } else if (item && typeof item === 'object') {
+            hash.update('{')
+            let first = true
+            for (const key of Object.keys(item).sort()) {
+                if (item[key] === undefined) continue
+                if (!first) hash.update(',')
+                first = false
+                hash.update(JSON.stringify(key) + ':')
+                visit(item[key])
+            }
+            hash.update('}')
+        } else hash.update(JSON.stringify(item) ?? 'null')
+    }
+    visit(value)
+    return hash.digest('hex')
+}
+
+// Before-state consists of index keys/scalars/digests, never a document snapshot.
+function indexEntries(record) {
+    return (0,_storage_js__WEBPACK_IMPORTED_MODULE_1__/* .flattenIndexValues */ .fp)(record ?? {}).map(([key, value]) => ({ key, value,
+        type: Array.isArray(value) ? 'array' : value === null ? 'null' : typeof value,
+        indexed: Array.isArray(value) ? arrayDigest(value) : value }))
+}
+const entryKey = entry => JSON.stringify([entry.key, entry.type, entry.indexed])
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "k2", 0, /* binding */ entryKey
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 1150
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   lX: () => (/* binding */ recordPath),
+/* harmony export */   ls: () => (/* binding */ identify)
+/* harmony export */ });
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2561);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9074);
+
+
+
+
+// File identity is runtime metadata, not a field of the user's document.
+const identity = Symbol('fileId')
+const newFileId = () => (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.randomUUID)().replaceAll('-', '')
+const fileId = value => (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(value)?.[identity]
+const inheritIdentity = (source, view) => fileId(source) ? identify(view, fileId(source)) : view
+function identify(value, id) {
+    value = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(value)
+    if (!/^[a-f0-9]{32}$/i.test(id)) throw new TypeError('A UUID file ID is required')
+    Object.defineProperty(value, identity, { value: id, configurable: true })
+    return value
+}
+const fileIdFromPath = path => (0,node_path__WEBPACK_IMPORTED_MODULE_1__.basename)(path, '.json')
+function recordPath(root, type, id) {
+    if (!/^[a-f0-9]{32}$/i.test(id)) throw new TypeError('A UUID file ID is required')
+    return (0,node_path__WEBPACK_IMPORTED_MODULE_1__.join)(root, type, `${id}.json`)
+}
+
+const stableId = value => (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.createHash)('sha256').update(value.replaceAll('\\', '/')).digest('hex').slice(0, 32)
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Ak", 0, /* binding */ inheritIdentity,
+/* harmony export */   "Ui", 0, /* binding */ newFileId,
+/* harmony export */   "dD", 0, /* binding */ stableId,
+/* harmony export */   "pQ", 0, /* binding */ fileIdFromPath,
+/* harmony export */   "qp", 0, /* binding */ fileId
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 3449
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   bN: () => (/* reexport safe */ _server_js__WEBPACK_IMPORTED_MODULE_5__.bN)
+/* harmony export */ });
+/* unused harmony import specifier */ var createIndex;
+/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6978);
+/* harmony import */ var _directory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2106);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1150);
+/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5647);
+/* harmony import */ var _scoped_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2465);
+/* harmony import */ var _server_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4390);
+/* harmony import */ var _persistence_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5825);
+/********************************************************************************
+ * Copyright (C) 2023-2026 CoCreate and Contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ ********************************************************************************/
+
+// Commercial Licensing Information:
+// For commercial use of this software without the copyleft provisions of the AGPLv3,
+// you must obtain a commercial license from CoCreate LLC.
+// For details, visit <https://CoCreateJS.com/licenses/> or contact us at sales@CoCreateJS.com.
+
+
+
+
+;
+
+
+
+
+
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (createIndex)));
+
+
+/***/ },
+
+/***/ 4644
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   A: () => (/* binding */ index)
+/* harmony export */ });
+/** Dispatch CRUD envelopes to the existing index entry operations. */
+async function index(method, data, target) {
+    const entries = Array.isArray(data.index) ? data.index : [data.index ?? {}]
+    const results = []
+    for (const entry of entries) {
+        const { key, value, objectId } = entry
+        switch (method) {
+            case 'read':
+                results.push(await target.read(data.database, data.array, key))
+                break
+            case 'create':
+            case 'update':
+                await target[method](data.database, data.array, key, value, objectId, data)
+                results.push(entry)
+                break
+            case 'delete':
+                if (await target.delete(data.database, data.array, key, value, objectId, data)) results.push(entry)
+                break
+            default:
+                throw new Error(`Unsupported CRUD method: ${data.method}`)
+        }
+    }
+    data.index = results
+    return data
+}
+
+
+/***/ },
+
+/***/ 6978
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* unused harmony export createIndex */
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3981);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2244);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5663);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3105);
+/* harmony import */ var _entries_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2509);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9074);
+/* harmony import */ var _partition_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3999);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(4934);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1150);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(8247);
+/********************************************************************************
+ * Copyright (C) 2023-2026 CoCreate and Contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ ********************************************************************************/
+
+// Commercial Licensing Information:
+// For commercial use of this software without the copyleft provisions of the AGPLv3,
+// you must obtain a commercial license from CoCreate LLC.
+// For details, visit <https://CoCreateJS.com/licenses/> or contact us at sales@CoCreateJS.com.
+
+/**
+ * CoCreate Index — filesystem-backed prototype (ESM, Node.js).
+ * Logical address: database + array + key. Each key has type-specific trees.
+ * Nodes are independently stored JSON files; internal references use IDs.
+ *
+ * Prototype limitations: single-writer only; no transactional multi-file commit,
+ * locking, crash recovery, snapshots, or cross-process cache invalidation.
+ * Index values: finite numbers, strings, booleans, explicit nulls, and terminal arrays.
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+const newId = () => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .uuid */ .u)().replaceAll('-', '')
+const indexId = _files_js__WEBPACK_IMPORTED_MODULE_8__/* .stableId */ .dD
+const compare = (a, b) => a < b ? -1 : a > b ? 1 : 0
+const compareEntry = (a, b) => compare(a[0], b[0]) || compare(a[1], b[1])
+const boundary = entry => ({ value: entry[0], objectId: entry[1] })
+const tuple = item => [item.value, item.objectId]
+const typeOf = value => value === null ? 'null' :
+    Array.isArray(value) ? 'array' :
+    typeof value === 'boolean' ? 'boolean' :
+        typeof value === 'string' ? 'string' :
+            typeof value === 'number' && Number.isFinite(value) ? 'number' : null
+
+function createIndex({
+    directory = './indexes',
+    maxBytes = 128 * 1024,
+    cache: cacheEnabled = false,
+    resolveArrayDirectory,
+    indexDirectoryName = 'index',
+    indexRoot = directory,
+    flat = true,
+    onPartitionChange: partitionChange,
+    readKey,
+    readPartition
+} = {}) {
+    if (maxBytes < 512) throw new Error('maxBytes must be at least 512')
+    if (typeof indexDirectoryName !== 'string' || !indexDirectoryName || indexDirectoryName === '.' || indexDirectoryName === '..' || /[\\/\0]/.test(indexDirectoryName))
+        throw new TypeError('indexDirectoryName must be a safe directory name')
+    const base = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.resolve)(directory)
+    const origin = flat ? (0,node_path__WEBPACK_IMPORTED_MODULE_2__.resolve)(indexRoot) : base
+    const cache = cacheEnabled ? new Map() : null
+    const keyRecords = Object.create(null)
+    const reportedPartitions = new Set()
+    const onPartitionChange = partitionChange && (change => {
+        const notify = async () => {
+            try { await partitionChange(change) }
+            catch (error) { reportedPartitions.delete((0,node_path__WEBPACK_IMPORTED_MODULE_2__.join)(origin, change.path)); throw error }
+        }
+        if (!(0,_resolution_js__WEBPACK_IMPORTED_MODULE_9__/* .afterResponse */ .az)(notify)) return notify()
+    })
+    const parents = new Map()
+    let remembered = new WeakSet()
+    let changedPartitions
+    const remember = (file, node, changed = false) => {
+        if (!node || (!changed && remembered.has(node))) return node
+        remembered.add(node)
+        const dir = flat ? undefined : (0,node_path__WEBPACK_IMPORTED_MODULE_2__.join)(file, '..', '..')
+        for (const child of node.indexes ?? []) parents.set(nodeFile(dir, child.id), file)
+        if (node.kind === 'catalog')
+            for (const entry of node.entries ?? []) parents.set(nodeFile(dir, entry[2]), file)
+        ;(0,_partition_js__WEBPACK_IMPORTED_MODULE_6__/* .registerPartition */ .yp)(node, bytes => bytes > maxBytes ? splitForSend(file, node) : undefined)
+        return node
+    }
+
+    const address = (database, array) => {
+        for (const part of [database, array]) {
+            if (typeof part !== 'string' || !part || part === '.' || part === '..' || /[\\/\0]/.test(part))
+                throw new Error('Invalid database or array name')
+        }
+        if (!resolveArrayDirectory)
+            return (0,node_path__WEBPACK_IMPORTED_MODULE_2__.join)(base, encodeURIComponent(database), encodeURIComponent(array))
+
+        const customDirectory = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.resolve)(resolveArrayDirectory({
+            directory: base,
+            database,
+            array
+        }))
+        const relativeDirectory = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.relative)(base, customDirectory)
+
+        if ((0,node_path__WEBPACK_IMPORTED_MODULE_2__.isAbsolute)(relativeDirectory) || relativeDirectory === '..' || relativeDirectory.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`))
+            throw new Error('Resolved array directory must stay inside the configured directory')
+
+        return customDirectory
+    }
+
+    const indexDirectory = dir => (0,node_path__WEBPACK_IMPORTED_MODULE_2__.join)(dir, indexDirectoryName)
+    const catalogRootId = dir => flat ? indexId((0,node_path__WEBPACK_IMPORTED_MODULE_2__.relative)(origin, dir)) : 'root'
+    const nodeFile = (dir, id) => {
+        if (flat && !/^[a-f0-9]{32}$/i.test(id)) throw new TypeError('Invalid index node ID')
+        return (0,node_path__WEBPACK_IMPORTED_MODULE_2__.join)(flat ? (0,node_path__WEBPACK_IMPORTED_MODULE_2__.join)(origin, 'indexes') : indexDirectory(dir), `${id === 'root' ? 'index' : id}.json`)
+    }
+    const keyFile = (dir, key, objectId, digest) => (0,node_path__WEBPACK_IMPORTED_MODULE_2__.join)(origin, 'keys', `${indexId(JSON.stringify([catalogRootId(dir), key, objectId, digest]))}.json`)
+    const normalizedValue = (value, type = typeOf(value)) => type === 'array' ? (0,_entries_js__WEBPACK_IMPORTED_MODULE_4__/* .arrayDigest */ .qd)(value) : value
+    const writeKey = async (dir, key, value, objectId, digest) => {
+        const file = keyFile(dir, key, objectId, digest)
+        const record = { catalog: catalogRootId(dir), objectId, name: key, value: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(value) }
+        if (cacheEnabled || (0,_memory_js__WEBPACK_IMPORTED_MODULE_7__/* .memoryEnabled */ .ZL)(file)) keyRecords[file] = record
+        await (0,_storage_js__WEBPACK_IMPORTED_MODULE_1__/* .replaceJSON */ .B0)(file, record)
+    }
+    const readKeyValue = async (dir, key, objectId, digest) => {
+        const file = keyFile(dir, key, objectId, digest)
+        let record = keyRecords[file] ?? await (0,_memory_js__WEBPACK_IMPORTED_MODULE_7__/* .readMemoryJSON */ .Eh)(file)
+        if (record === undefined && readKey) {
+            record = await readKey({ path: (0,node_path__WEBPACK_IMPORTED_MODULE_2__.relative)(origin, file), catalog: catalogRootId(dir), objectId, key, digest })
+            if (record !== undefined) await (0,_storage_js__WEBPACK_IMPORTED_MODULE_1__/* .replaceJSON */ .B0)(file, record)
+        }
+        if (record?.catalog !== catalogRootId(dir) || record.objectId !== objectId || record.name !== key || !Array.isArray(record.value))
+            throw new Error(`Missing indexed key value for ${key}/${objectId}`)
+        if (cacheEnabled || (0,_memory_js__WEBPACK_IMPORTED_MODULE_7__/* .memoryEnabled */ .ZL)(file)) keyRecords[file] = record
+        return (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(record.value)
+    }
+
+    const partitionPath = file => (0,node_path__WEBPACK_IMPORTED_MODULE_2__.relative)(origin, file).split(/[\\/]/).join('/')
+
+    const reportLocalPartition = async (file, value) => {
+        if (!onPartitionChange || reportedPartitions.has(file)) return
+        await onPartitionChange({
+            path: partitionPath(file),
+            operation: 'set',
+            value: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(value),
+            acquired: true
+        })
+        reportedPartitions.add(file)
+    }
+
+    const readJSON = async file => {
+        if (cache?.has(file)) {
+            const value = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(cache.get(file))
+            await reportLocalPartition(file, value)
+            return remember(file, (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(value))
+        }
+
+        let value
+
+        value = await (0,_memory_js__WEBPACK_IMPORTED_MODULE_7__/* .readMemoryJSON */ .Eh)(file)
+        if (value === undefined) {
+            if (!readPartition) return undefined
+            value = await readPartition(partitionPath(file))
+            if (value === undefined) return undefined
+            await writeJSON(file, value, { acquired: true })
+            return (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(value)
+        }
+
+        // Both cache layers retain the same live node.
+        cache?.set(file, (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(value))
+        await reportLocalPartition(file, value)
+        return remember(file, value)
+    }
+
+    const writeJSON = async (file, value, { acquired = false, notify = true } = {}) => {
+        value = await (0,_storage_js__WEBPACK_IMPORTED_MODULE_1__/* .replaceJSON */ .B0)(file, value)
+        cache?.set(file, (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(value))
+        remember(file, value, true)
+        changedPartitions?.set(partitionPath(file), value)
+        if (notify && onPartitionChange) {
+            await onPartitionChange({
+                path: partitionPath(file),
+                operation: 'set',
+                value: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(value),
+                acquired
+            })
+            reportedPartitions.add(file)
+        }
+        return value
+    }
+
+    const normalizeLengths = node => {
+        if (!node) return node
+        if (node.length === undefined && node.count !== undefined) node.length = node.count
+        if (node.catalogLength === undefined && node.catalogCount !== undefined)
+            node.catalogLength = node.catalogCount
+        delete node.count
+        delete node.catalogCount
+        for (const child of node.indexes ?? []) normalizeLengths(child)
+        return node
+    }
+    const getNode = async (dir, id) => normalizeLengths(await readJSON(nodeFile(dir, id)))
+    const setNode = (dir, node) => {
+        if (flat) {
+            node.catalog = catalogRootId(dir)
+            if (node.id === node.catalog) node.path = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.relative)(origin, dir).split(/[\\/]/).join('/')
+        }
+        return writeJSON(nodeFile(dir, node.id), node)
+    }
+
+    const getCatalogNode = async (dir, id) => {
+        let node = normalizeLengths(await readJSON(nodeFile(dir, id)))
+
+        if (!node && id === catalogRootId(dir)) {
+            if (flat && await (0,_memory_js__WEBPACK_IMPORTED_MODULE_7__/* .readMemoryJSON */ .Eh)((0,node_path__WEBPACK_IMPORTED_MODULE_2__.join)(dir, indexDirectoryName, 'index.json')))
+                throw new Error('Nested index files require migration to the flat indexes directory')
+            return { id, kind: 'catalog', length: 0, catalogLength: 0, entries: [] }
+        }
+
+        if (id === catalogRootId(dir) && node.keys) {
+            const entries = []
+            for (const [key, branches] of Object.entries(node.keys))
+                for (const [type, rootId] of Object.entries(branches))
+                    entries.push([key, type, rootId])
+            entries.sort((a, b) => compare(a[0], b[0]) || compare(a[1], b[1]))
+            node = updateCatalogNode({ id, kind: 'catalog', length: node.length ?? 0, entries })
+        }
+
+        return node
+    }
+    const setCatalogNode = setNode
+    const deleteCatalogNode = async (dir, id) => {
+        if (id !== catalogRootId(dir)) await deleteNode(dir, id)
+    }
+
+    const deleteNode = async (dir, id) => {
+        const file = nodeFile(dir, id)
+
+        cache?.delete(file)
+        ;(0,_memory_js__WEBPACK_IMPORTED_MODULE_7__/* .removeMemoryPath */ .PD)(file)
+        reportedPartitions.delete(file)
+        parents.delete(file)
+        await (0,_io_js__WEBPACK_IMPORTED_MODULE_0__.rm)(file, { force: true })
+        if (onPartitionChange)
+            await onPartitionChange({ path: partitionPath(file), operation: 'remove' })
+    }
+
+    const resolvePartitionFile = path => {
+        if (typeof path !== 'string' || !/^indexes\/[a-f0-9]{32}\.json$/i.test(path))
+            throw new TypeError('Invalid index partition path')
+        return (0,node_path__WEBPACK_IMPORTED_MODULE_2__.join)(origin, path)
+    }
+
+
+    const ref = node => ({
+        id: node.id,
+        length: node.length,
+        first: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(node.first),
+        last: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(node.last)
+    })
+
+    const update = node => {
+        const items = node.entries ?? node.indexes
+
+        node.length = node.entries
+            ? items.length
+            : items.reduce((n, item) => n + item.length, 0)
+
+        node.first = items.length
+            ? node.entries
+                ? boundary(items[0])
+                : items[0].first
+            : null
+
+        node.last = items.length
+            ? node.entries
+                ? boundary(items.at(-1))
+                : items.at(-1).last
+            : null
+
+        return node
+    }
+
+    const compareCatalogKey = (a, b) => compare(a[0], b[0]) || compare(a[1], b[1])
+    const catalogBoundary = entry => [entry[0], entry[1]]
+    const catalogRef = node => ({
+        id: node.id,
+        length: node.catalogLength,
+        first: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(node.first),
+        last: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(node.last)
+    })
+    const updateCatalogNode = node => {
+        const items = node.entries ?? node.indexes
+        node.catalogLength = node.entries
+            ? items.length
+            : items.reduce((length, item) => length + item.length, 0)
+        node.first = items.length
+            ? node.entries ? catalogBoundary(items[0]) : items[0].first
+            : null
+        node.last = items.length
+            ? node.entries ? catalogBoundary(items.at(-1)) : items.at(-1).last
+            : null
+        return node
+    }
+
+    const splitCatalogNode = node => {
+        const property = node.entries ? 'entries' : 'indexes'
+        const items = node[property]
+        const at = Math.ceil(items.length / 2);
+
+        const moved = items.splice(at)
+        for (let i = 0; i < moved.length; i++) moved[i] = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(moved[i])
+        const sibling = { id: newId(), kind: 'catalog', [property]: moved }
+        updateCatalogNode(node)
+        updateCatalogNode(sibling)
+        return sibling
+    }
+
+    const findPosition = (items, entry, comparator) => {
+        let lo = 0
+        let hi = items.length
+
+        while (lo < hi) {
+            const mid = (lo + hi) >>> 1
+
+            if (comparator(items[mid], entry) < 0)
+                lo = mid + 1
+            else
+                hi = mid
+        }
+
+        return lo
+    }
+
+    const chooseChild = (children, entry) => {
+        // Choose first child whose last entry >= target,
+        // otherwise the last child.
+
+        let lo = 0
+        let hi = children.length
+
+        while (lo < hi) {
+            const mid = (lo + hi) >>> 1
+
+            if (compareEntry(tuple(children[mid].last), entry) < 0)
+                lo = mid + 1
+            else
+                hi = mid
+        }
+
+        return Math.min(lo, children.length - 1)
+    }
+
+    const split = node => {
+        const property = node.entries ? 'entries' : 'indexes'
+        const items = node[property]
+
+        const at = Math.ceil(items.length / 2);
+
+        const moved = items.splice(at)
+        for (let i = 0; i < moved.length; i++) moved[i] = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(moved[i])
+        const sibling = {
+            id: newId(),
+            [property]: moved
+        }
+
+        update(node)
+        update(sibling)
+
+        return sibling
+    }
+
+    const insertNode = async (dir, id, entry) => {
+        const node = await getNode(dir, id)
+
+        if (!node)
+            throw new Error(`Missing index node ${id}`)
+
+        if (node.entries) {
+            const at = findPosition(node.entries, entry, compareEntry)
+
+            if (
+                at === node.entries.length ||
+                compareEntry(node.entries[at], entry) !== 0
+            ) {
+                node.entries.splice(at, 0, entry)
+            }
+        } else {
+            const at = chooseChild(node.indexes, entry)
+
+            const children = await insertNode(
+                dir,
+                node.indexes[at].id,
+                entry
+            )
+
+            node.indexes.splice(
+                at,
+                1,
+                ...children.map(ref)
+            )
+        }
+
+        update(node)
+
+        await setNode(dir, node)
+        return [node]
+    }
+
+    const removeNode = async (dir, id, entry) => {
+        const node = await getNode(dir, id)
+
+        if (!node)
+            throw new Error(`Missing index node ${id}`)
+
+        if (node.entries) {
+            const at = findPosition(node.entries, entry, compareEntry)
+
+            if (
+                at >= node.entries.length ||
+                compareEntry(node.entries[at], entry)
+            ) {
+                return { node, removed: false }
+            }
+
+            node.entries.splice(at, 1)
+        } else {
+            const at = chooseChild(node.indexes, entry)
+
+            const result = await removeNode(
+                dir,
+                node.indexes[at].id,
+                entry
+            )
+
+            if (!result.removed)
+                return { node, removed: false }
+
+            if (result.node)
+                node.indexes[at] = ref(result.node)
+            else
+                node.indexes.splice(at, 1)
+        }
+
+        update(node)
+
+        if (!node.length) {
+            await deleteNode(dir, id)
+
+            return {
+                node: null,
+                removed: true
+            }
+        }
+
+        await setNode(dir, node)
+
+        return {
+            node,
+            removed: true
+        }
+    }
+
+    const chooseCatalogChild = (children, entry) => {
+        let lo = 0
+        let hi = children.length
+
+        while (lo < hi) {
+            const mid = (lo + hi) >>> 1
+            if (compareCatalogKey(children[mid].last, entry) < 0) lo = mid + 1
+            else hi = mid
+        }
+
+        return Math.min(lo, children.length - 1)
+    }
+
+    const insertCatalogNode = async (dir, id, entry) => {
+        const node = await getCatalogNode(dir, id)
+
+        if (!node) throw new Error(`Missing catalog node ${id}`)
+
+        if (node.entries) {
+            const key = catalogBoundary(entry)
+            const at = findPosition(node.entries, key, compareCatalogKey)
+
+            if (at < node.entries.length && compareCatalogKey(catalogBoundary(node.entries[at]), key) === 0)
+                node.entries[at] = entry
+            else
+                node.entries.splice(at, 0, entry)
+        } else {
+            const at = chooseCatalogChild(node.indexes, catalogBoundary(entry))
+            const children = await insertCatalogNode(dir, node.indexes[at].id, entry)
+            node.indexes.splice(at, 1, ...children.map(catalogRef))
+        }
+
+        updateCatalogNode(node)
+
+        await setCatalogNode(dir, node)
+        return [node]
+    }
+
+    const removeCatalogNode = async (dir, id, key) => {
+        const node = await getCatalogNode(dir, id)
+
+        if (!node) throw new Error(`Missing catalog node ${id}`)
+
+        if (node.entries) {
+            const at = findPosition(node.entries, key, compareCatalogKey)
+            if (at >= node.entries.length || compareCatalogKey(catalogBoundary(node.entries[at]), key) !== 0)
+                return { node, removed: false }
+            node.entries.splice(at, 1)
+        } else {
+            const at = chooseCatalogChild(node.indexes, key)
+            const result = await removeCatalogNode(dir, node.indexes[at].id, key)
+            if (!result.removed) return { node, removed: false }
+            if (result.node) node.indexes[at] = catalogRef(result.node)
+            else node.indexes.splice(at, 1)
+        }
+
+        updateCatalogNode(node)
+
+        if (!node.catalogLength && id !== catalogRootId(dir)) {
+            await deleteCatalogNode(dir, id)
+            return { node: null, removed: true }
+        }
+
+        await setCatalogNode(dir, node)
+        return { node, removed: true }
+    }
+
+    const setCatalogRoot = async (dir, key, type, rootId, rootNode) => {
+        const entryKey = [key, type]
+        if (rootId) {
+            const node = rootNode ?? await getNode(dir, rootId)
+            await insertCatalogNode(dir, catalogRootId(dir), [key, type, rootId, {
+                length: node.length, first: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(node.first), last: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(node.last)
+            }])
+            return
+        }
+
+        if (!await getCatalogRoot(dir, key, type)) return
+        await removeCatalogNode(dir, catalogRootId(dir), entryKey)
+
+        let current = await getCatalogNode(dir, catalogRootId(dir))
+        while (current.indexes?.length === 1) {
+            const child = await getCatalogNode(dir, current.indexes[0].id)
+            const objectLength = current.length ?? 0
+            await deleteCatalogNode(dir, child.id)
+            const property = child.entries ? 'entries' : 'indexes'
+            delete current.entries
+            delete current.indexes
+            current[property] = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(child[property])
+            current.kind = 'catalog'
+            current.length = objectLength
+            updateCatalogNode(current)
+            await setCatalogNode(dir, current)
+        }
+
+        // Keep a stable empty root after the last catalog entry is removed.
+        if (!current.catalogLength && !current.entries)
+            await setCatalogNode(dir, updateCatalogNode({
+                id: catalogRootId(dir),
+                kind: 'catalog',
+                length: current.length ?? 0,
+                entries: []
+            }))
+    }
+
+    const readLookupNode = async (file, load, nodes) => {
+        if (nodes?.has(file)) return nodes.get(file)
+        const node = await load()
+        nodes?.set(file, node)
+        return node
+    }
+
+    const getCatalogEntry = async (dir, key, type, nodes) => {
+        const read = id => readLookupNode(nodeFile(dir, id), () => getCatalogNode(dir, id), nodes)
+        const entry = [key, type]
+        let node = await read(catalogRootId(dir))
+
+        while (node) {
+            if (node.entries) {
+                const at = findPosition(node.entries, entry, compareCatalogKey)
+                return at < node.entries.length && compareCatalogKey(catalogBoundary(node.entries[at]), entry) === 0
+                    ? node.entries[at]
+                    : undefined
+            }
+            node = await read(node.indexes[chooseCatalogChild(node.indexes, entry)].id)
+        }
+    }
+
+    const getCatalogRoot = async (dir, key, type) =>
+        (await getCatalogEntry(dir, key, type))?.[2]
+
+    // Resolve statistics without loading value roots for current catalog entries.
+    // Legacy mappings are read lazily and upgraded by the next mutation.
+    const getMetadata = async (database, array, key = '_id') => {
+        const dir = address(database, array)
+        const indexes = {}
+        const visit = async node => {
+            if (node.entries) {
+                for (const entry of node.entries) {
+                    if (entry[0] !== key) continue
+                    const metadata = entry[3] ?? await getNode(dir, entry[2])
+                    if (!metadata) throw new Error(`Missing index node ${entry[2]}`)
+                    indexes[entry[1]] = { id: entry[2], length: metadata.length,
+                        first: metadata.first, last: metadata.last }
+                }
+            } else {
+                for (const child of node.indexes)
+                    if (child.first[0] <= key && child.last[0] >= key)
+                        await visit(await getCatalogNode(dir, child.id))
+            }
+        }
+        await visit(await getCatalogNode(dir, catalogRootId(dir)))
+        return { database, array, key, indexes }
+    }
+
+    const liftCatalogRoot = async (dir, root, sibling) => {
+        const property = root.entries ? 'entries' : 'indexes'
+        const left = updateCatalogNode({ id: newId(), kind: 'catalog', [property]: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(root[property]) })
+        await setCatalogNode(dir, left)
+        await setCatalogNode(dir, sibling)
+        delete root.entries
+        root.indexes = [catalogRef(left), catalogRef(sibling)]
+        updateCatalogNode(root)
+        await setCatalogNode(dir, root)
+        return root
+    }
+
+    const adjustLength = async (dir, delta) => {
+        const root = await getCatalogNode(dir, catalogRootId(dir))
+        const currentLength = Number.isSafeInteger(root.length) && root.length >= 0
+            ? root.length
+            : 0
+        root.length = Math.max(0, currentLength + delta)
+
+        await setCatalogNode(dir, root)
+    }
+
+    // Register ancestry after a cold direct partition read. Catalogs identify
+    // field roots; only a candidate root's ordered path is followed below it.
+    const findParent = async (dir, target) => {
+        const targetFile = nodeFile(dir, target.id)
+        const visitCatalog = async node => {
+            if (node.indexes) {
+                for (const child of node.indexes) {
+                    const found = await visitCatalog(await getCatalogNode(dir, child.id))
+                    if (found) return true
+                }
+            } else if (target.kind !== 'catalog') {
+                for (const entry of node.entries) {
+                    let current = await getNode(dir, entry[2])
+                    while (current) {
+                        if (current.id === target.id) return true
+                        if (!current.indexes || !target.first) break
+                        if (typeof current.first?.value !== typeof target.first.value) break
+                        current = await getNode(dir, current.indexes[chooseChild(current.indexes, tuple(target.first))].id)
+                    }
+                }
+            }
+            return parents.has(targetFile)
+        }
+        await visitCatalog(await getCatalogNode(dir, catalogRootId(dir)))
+    }
+
+    const splitForSend = async (file, node) => {
+        // Oversized indivisible values and minimum-fanout nodes are valid.
+        if (node.entries ? node.entries.length < 2 : !node.indexes || node.indexes.length < 4) return
+        const catalog = flat ? await readJSON(nodeFile(undefined, node.catalog)) : undefined
+        const dir = flat ? (0,node_path__WEBPACK_IMPORTED_MODULE_2__.resolve)(origin, catalog.path) : (0,node_path__WEBPACK_IMPORTED_MODULE_2__.join)(file, '..', '..')
+        if (flat && ((0,node_path__WEBPACK_IMPORTED_MODULE_2__.relative)(origin, dir).startsWith('..') || (0,node_path__WEBPACK_IMPORTED_MODULE_2__.isAbsolute)((0,node_path__WEBPACK_IMPORTED_MODULE_2__.relative)(origin, dir)))) throw new Error('Invalid index catalog path')
+        if (node.id !== catalogRootId(dir) && !parents.has(file)) await findParent(dir, node)
+        if (node.id !== catalogRootId(dir) && !parents.has(file)) return
+        const changes = new Map()
+        changedPartitions = changes
+        try {
+            if (node.kind === 'catalog' && node.id === catalogRootId(dir)) {
+                await liftCatalogRoot(dir, node, splitCatalogNode(node))
+            } else {
+                const sibling = node.kind === 'catalog' ? splitCatalogNode(node) : split(node)
+                await writeJSON(file, node)
+                await setNode(dir, sibling)
+                let children = [node, sibling], childFile = file
+                const ancestors = new Set()
+                while (parents.has(childFile)) {
+                    if (ancestors.has(childFile)) throw new Error(`Cyclic index parent reference: ${childFile}`)
+                    ancestors.add(childFile)
+                    const parentFile = parents.get(childFile)
+                    const parent = await readJSON(parentFile)
+                    if (!parent) throw new Error('Missing parent of index partition')
+                    if (parent.entries && parent.kind === 'catalog') {
+                        const entry = parent.entries.find(entry => nodeFile(dir, entry[2]) === childFile)
+                        if (!entry) throw new Error('Missing field root in index catalog')
+                        let root = children[0]
+                        if (children.length > 1) {
+                            root = update({ id: newId(), indexes: children.map(ref) })
+                            await setNode(dir, root)
+                        }
+                        entry[2] = root.id
+                        entry[3] = { length: root.length, first: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(root.first), last: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(root.last) }
+                    } else {
+                        const at = parent.indexes.findIndex(child => nodeFile(dir, child.id) === childFile)
+                        if (at < 0) throw new Error('Missing child in index parent')
+                        parent.indexes.splice(at, 1, ...children.map(parent.kind === 'catalog' ? catalogRef : ref))
+                    }
+                    if (parent.kind === 'catalog') updateCatalogNode(parent)
+                    else update(parent)
+                    await writeJSON(parentFile, parent)
+                    children = [parent]
+                    childFile = parentFile
+                }
+            }
+        } finally { changedPartitions = undefined }
+        return { path: partitionPath(file), partitions: [...changes].map(([path, value]) => ({ path, value })) }
+    }
+
+    const containsNode = async (dir, id, entry) => {
+        const node = await getNode(dir, id)
+
+        if (!node)
+            throw new Error(`Missing index node ${id}`)
+
+        if (node.entries) {
+            const at = findPosition(node.entries, entry, compareEntry)
+            return at < node.entries.length && compareEntry(node.entries[at], entry) === 0
+        }
+
+        const at = chooseChild(node.indexes, entry)
+        return containsNode(dir, node.indexes[at].id, entry)
+    }
+
+    const root = async (dir, key, type) => {
+        const id = await getCatalogRoot(dir, key, type)
+
+        return id
+            ? getNode(dir, id)
+            : undefined
+    }
+
+    const setRoot = setCatalogRoot
+
+    const insert = async (
+        database,
+        array,
+        key,
+        value,
+        objectId
+    ) => {
+        const type = typeOf(value)
+
+        if (!type)
+            throw new TypeError(
+                'Only finite numbers, strings, booleans, null, and arrays are indexed in this prototype'
+            )
+
+        if (typeof objectId !== 'string')
+            throw new TypeError('objectId must be a string')
+
+        const dir = address(database, array)
+        const indexedValue = normalizedValue(value, type)
+        if (type === 'array') await writeKey(dir, key, value, objectId, indexedValue)
+        const existing = await root(dir, key, type)
+
+        const entry = [indexedValue, objectId]
+        const isNewObjectId = key === '_id' && (!existing || !await containsNode(dir, existing.id, entry))
+
+        if (!existing) {
+            const node = update({
+                id: newId(),
+                entries: [entry]
+            })
+
+            await setNode(dir, node)
+            await setRoot(dir, key, type, node.id, node)
+
+            if (isNewObjectId) await adjustLength(dir, 1)
+
+            return
+        }
+
+        const nodes = await insertNode(
+            dir,
+            existing.id,
+            entry
+        )
+
+        if (nodes.length === 2) {
+            const parent = update({
+                id: newId(),
+                indexes: nodes.map(ref)
+            })
+
+            await setNode(dir, parent)
+            await setRoot(dir, key, type, parent.id, parent)
+        } else {
+            await setRoot(dir, key, type, nodes[0].id, nodes[0])
+        }
+
+        if (isNewObjectId) await adjustLength(dir, 1)
+    }
+
+    const remove = async (
+        database,
+        array,
+        key,
+        value,
+        objectId,
+        stored
+    ) => {
+        const type = stored?.type ?? typeOf(value)
+
+        if (!type) return false
+
+        const dir = address(database, array)
+        const indexedValue = stored?.indexed ?? normalizedValue(value, type)
+        const existing = await root(dir, key, type)
+
+        if (!existing) return false
+
+        const result = await removeNode(
+            dir,
+            existing.id,
+            [indexedValue, objectId]
+        )
+
+        if (!result.removed) return false
+
+        let node = result.node
+
+        while (node?.indexes?.length === 1) {
+            const old = node
+
+            node = await getNode(
+                dir,
+                node.indexes[0].id
+            )
+
+            await deleteNode(dir, old.id)
+        }
+
+        await setRoot(dir, key, type, node?.id, node)
+
+        if (type === 'array') {
+            delete keyRecords[keyFile(dir, key, objectId, indexedValue)]
+            await (0,_io_js__WEBPACK_IMPORTED_MODULE_0__.rm)(keyFile(dir, key, objectId, indexedValue), { force: true }).catch(() => {})
+        }
+
+        if (key === '_id') await adjustLength(dir, -1)
+
+        return true
+    }
+
+    const scanNode = async function* (
+        dir,
+        node,
+        reverse,
+        range
+    ) {
+        if (node.entries) {
+            const entries = node.entries
+            const position = (value, afterEquals) => {
+                let lo = 0
+                let hi = entries.length
+                while (lo < hi) {
+                    const mid = (lo + hi) >>> 1
+                    if (entries[mid][0] < value || afterEquals && entries[mid][0] === value) lo = mid + 1
+                    else hi = mid
+                }
+                return lo
+            }
+            // Binary seeking is valid within a homogeneous ordered branch.
+            // Retain filtering below for callers supplying cross-type bounds.
+            const sameType = value => entries.length && typeof value === typeof entries[0][0]
+            const start = range.lower !== undefined && sameType(range.lower)
+                ? position(range.lower, range.lowerOpen) : 0
+            const end = range.upper !== undefined && sameType(range.upper)
+                ? position(range.upper, !range.upperOpen) : entries.length
+            for (let i = reverse ? end - 1 : start; reverse ? i >= start : i < end; i += reverse ? -1 : 1) {
+                const entry = entries[i]
+                const value = entry[0]
+                if (range.lower !== undefined && (
+                    value < range.lower || (range.lowerOpen && value === range.lower)
+                )) continue
+                if (range.upper !== undefined && (
+                    value > range.upper || (range.upperOpen && value === range.upper)
+                )) continue
+                yield entry
+            }
+        } else {
+            const children = node.indexes
+            for (let i = reverse ? children.length - 1 : 0; reverse ? i >= 0 : i < children.length; i += reverse ? -1 : 1) {
+                const child = children[i]
+                if (range.lower !== undefined && (
+                    child.last.value < range.lower || (range.lowerOpen && child.last.value === range.lower)
+                )) continue
+                if (range.upper !== undefined && (
+                    child.first.value > range.upper || (range.upperOpen && child.first.value === range.upper)
+                )) continue
+                yield* scanNode(
+                    dir,
+                    await getNode(dir, child.id),
+                    reverse,
+                    range
+                )
+            }
+        }
+    }
+
+    const scan = async function* (
+        database,
+        array,
+        key = '_id',
+        {
+            type,
+            reverse = false,
+            limit = Infinity,
+            lower,
+            upper,
+            lowerOpen = false,
+            upperOpen = false
+        } = {}
+    ) {
+        const dir = address(database, array)
+
+        const types = type
+            ? [type]
+            : ['array', 'boolean', 'null', 'number', 'string']
+
+        if (reverse)
+            types.reverse()
+
+        let emitted = 0
+
+        const scanRange = currentType => ({
+            lower: lower === undefined ? undefined : normalizedValue(lower, currentType),
+            upper: upper === undefined ? undefined : normalizedValue(upper, currentType),
+            lowerOpen,
+            upperOpen
+        })
+
+        for (const currentType of types) {
+            const id = await getCatalogRoot(dir, key, currentType)
+
+            if (!id) continue
+
+            const node = await getNode(dir, id)
+
+            for await (
+                const entry of scanNode(dir, node, reverse, scanRange(currentType))
+            ) {
+                if (emitted++ >= limit) return
+
+                yield {
+                    value: currentType === 'array'
+                        ? await readKeyValue(dir, key, entry[1], entry[0])
+                        : entry[0],
+                    objectId: entry[1]
+                }
+            }
+        }
+    }
+
+    const locatePartition = async (database, array, key, value, objectId, nodes, stored) => {
+        const type = stored?.type ?? typeOf(value)
+        if (!type) return undefined
+
+        const dir = address(database, array)
+        const indexedValue = stored?.indexed ?? normalizedValue(value, type)
+        const rootId = (await getCatalogEntry(dir, key, type, nodes))?.[2]
+        const read = id => readLookupNode(nodeFile(dir, id), () => getNode(dir, id), nodes)
+        let node = rootId ? await read(rootId) : undefined
+        if (!node) return undefined
+
+        const entry = [indexedValue, objectId]
+        while (node) {
+            if (node.entries) {
+                const at = findPosition(node.entries, entry, compareEntry)
+                if (at >= node.entries.length || compareEntry(node.entries[at], entry) !== 0)
+                    return undefined
+                return partitionPath(nodeFile(dir, node.id))
+            }
+            node = await read(node.indexes[chooseChild(node.indexes, entry)].id)
+        }
+        return undefined
     }
 
     return {
-        storage,
-        database: configuredDatabase === ORGANIZATION_ID_DATABASE
-            ? organizationId
-            : configuredDatabase
-    };
+        catalogId: (database, array) => catalogRootId(address(database, array)),
+        async ensureCatalog(database, array) {
+            const dir = address(database, array)
+            return setCatalogNode(dir, await getCatalogNode(dir, catalogRootId(dir)))
+        },
+        getMetadata,
+        async drop(database, array) {
+            const dir = address(database, array)
+            const visited = new Set()
+            const remove = async (id, key, type) => {
+                if (visited.has(id)) return
+                visited.add(id)
+                const file = nodeFile(dir, id)
+                const node = normalizeLengths(cache?.get(file) ?? await (0,_memory_js__WEBPACK_IMPORTED_MODULE_7__/* .readMemoryJSON */ .Eh)(file))
+                for (const child of node?.indexes ?? []) await remove(child.id, key, type)
+                if (node?.kind === 'catalog') for (const entry of node.entries ?? []) await remove(entry[2], entry[0], entry[1])
+                else if (type === 'array') for (const [digest, uuid] of node?.entries ?? []) {
+                    const file = keyFile(dir, key, uuid, digest)
+                    delete keyRecords[file]
+                    await (0,_io_js__WEBPACK_IMPORTED_MODULE_0__.rm)(file, { force: true })
+                }
+                await deleteNode(dir, id)
+            }
+            await remove(catalogRootId(dir))
+        },
+
+        // Logical access: database + array + key.
+
+        read: async (
+            database,
+            array,
+            key = '_id'
+        ) => {
+            const dir = address(database, array)
+            const indexes = {}
+
+            for (const type of ['array', 'boolean', 'null', 'number', 'string']) {
+                const id = await getCatalogRoot(dir, key, type)
+                if (id) indexes[type] = await getNode(dir, id)
+            }
+
+            return {
+                database,
+                array,
+                key,
+                indexes
+            }
+        },
+
+        // Insert one key/value/objectId index entry. Update currently uses the
+        // same insertion behavior; remove an old value with delete() first.
+
+        create: insert,
+        update: insert,
+
+        delete: remove,
+        removeIndexed: (database, array, entry, objectId) => remove(database, array, entry.key, entry.value, objectId, entry),
+
+        locatePartition,
+        locateIndexedPartitions: async (database, array, entries, objectId) => {
+            const nodes = new Map(), paths = new Set()
+            for (const entry of entries) {
+                if (entry.key === '_id') continue
+                const path = await locatePartition(database, array, entry.key, entry.value, objectId, nodes, entry)
+                if (path) paths.add(path)
+            }
+            return paths
+        },
+
+        // Memoize addresses during a lookup; values remain live cached nodes.
+        locatePartitions: async (database, array, entries, objectId) => {
+            const nodes = new Map()
+            const paths = new Set()
+            for (const [key, value] of entries) {
+                const path = await locatePartition(database, array, key, value, objectId, nodes)
+                if (path) paths.add(path)
+            }
+            return paths
+        },
+
+        scan,
+
+        readPartition: async path => {
+            const file = resolvePartitionFile(path)
+            try {
+                return remember(file, await (0,_memory_js__WEBPACK_IMPORTED_MODULE_7__/* .readMemoryJSON */ .Eh)(file))
+            } catch (error) {
+                if (error.code === 'ENOENT') return undefined
+                throw error
+            }
+        },
+
+        applyPartition: async (path, value) => {
+            const file = resolvePartitionFile(path)
+            if (!value || typeof value !== 'object' || Array.isArray(value) || typeof value.id !== 'string')
+                throw new TypeError('Index partition must be a JSON index node')
+            const expectedId = !flat && path.split('/').at(-1) === 'index.json' ? 'root' : path.split('/').at(-1).slice(0, -5)
+            if (value.id !== expectedId)
+                throw new Error('Index partition ID does not match its path')
+            return writeJSON(file, value, { notify: false })
+        },
+
+        removePartition: async path => {
+            const file = resolvePartitionFile(path)
+            cache?.delete(file)
+            ;(0,_memory_js__WEBPACK_IMPORTED_MODULE_7__/* .removeMemoryPath */ .PD)(file)
+            await (0,_io_js__WEBPACK_IMPORTED_MODULE_0__.rm)(file, { force: true })
+        },
+
+        // Lower-level node access stays internal
+        // to the implementation.
+
+        clearCache: () => { cache?.clear(); for (const file of Object.keys(keyRecords)) delete keyRecords[file]; parents.clear(); remembered = new WeakSet() }
+    }
+}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createIndex);
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__,
+/* harmony export */   "k0", 0, /* binding */ indexId
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 3981
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Ck: () => (/* binding */ mkdir),
+/* harmony export */   Cy: () => (/* binding */ readdir),
+/* harmony export */   rm: () => (/* binding */ rm),
+/* harmony export */   y1: () => (/* binding */ unlink)
+/* harmony export */ });
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
+/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5634);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4934);
+/* harmony import */ var _bytes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5082);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8247);
+
+
+
+
+
+
+
+
+async function mkdir(path, options) {
+    if (!(0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .memoryOnly */ .sz)(path) && !(0,_persistence_js__WEBPACK_IMPORTED_MODULE_2__/* .persistenceFor */ .z)(path)) return node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.mkdir(path, options)
+}
+async function rm(path, options = {}) {
+    ;(0,_resolution_js__WEBPACK_IMPORTED_MODULE_5__/* .forgetResolvedPath */ .nY)((0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(path), options.recursive)
+    const store = (0,_persistence_js__WEBPACK_IMPORTED_MODULE_2__/* .persistenceFor */ .z)(path)
+    if ((0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .memoryOnly */ .sz)(path)) return (0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .markMemoryRemoval */ .Tp)(path)
+    if (store) return store.remove(path, options)
+    await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.rm(path, options)
+    ;(0,_bytes_js__WEBPACK_IMPORTED_MODULE_4__/* .removeFileBytes */ .os)(path, options)
+    await (0,_bytes_js__WEBPACK_IMPORTED_MODULE_4__/* .flushFileBytes */ .Aq)((0,node_path__WEBPACK_IMPORTED_MODULE_1__.join)(path, '..'))
+    ;(0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .removeMemoryPath */ .PD)(path)
+}
+async function unlink(path) {
+    if ((0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .memoryOnly */ .sz)(path) || (0,_persistence_js__WEBPACK_IMPORTED_MODULE_2__/* .persistenceFor */ .z)(path)) return rm(path, { force: true })
+    await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.unlink(path)
+    ;(0,_bytes_js__WEBPACK_IMPORTED_MODULE_4__/* .removeFileBytes */ .os)(path)
+    await (0,_bytes_js__WEBPACK_IMPORTED_MODULE_4__/* .flushFileBytes */ .Aq)((0,node_path__WEBPACK_IMPORTED_MODULE_1__.join)(path, '..'))
+}
+async function readdir(path, options) {
+    if (!(0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .memoryOnly */ .sz)(path) && !(0,_persistence_js__WEBPACK_IMPORTED_MODULE_2__/* .persistenceFor */ .z)(path)) return node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.readdir(path, options)
+    path = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(path)
+    const entries = new Map()
+    try {
+        if ((0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .memoryOnly */ .sz)(path)) throw Object.assign(new Error('Memory-only directory'), { code: 'ENOENT' })
+        for (const entry of await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.readdir(path, { withFileTypes: true }))
+            if (!(0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .memoryRemoved */ .Ei)((0,node_path__WEBPACK_IMPORTED_MODULE_1__.join)(path, entry.name))) entries.set(entry.name, entry)
+    } catch (error) { if (error.code !== 'ENOENT') throw error }
+    for (const [file, value] of (0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .memoryEntries */ ._X)(path)) {
+        if (value === undefined) continue
+        const parts = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.relative)(path, file).split(node_path__WEBPACK_IMPORTED_MODULE_1__.sep)
+        const name = parts[0]
+        if (!name) continue
+        entries.set(name, { name, isDirectory: () => parts.length > 1, isFile: () => parts.length === 1 })
+    }
+    return options?.withFileTypes ? [...entries.values()] : [...entries.keys()]
+}
+
+
+/***/ },
+
+/***/ 4934
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DZ: () => (/* binding */ memoryStats),
+/* harmony export */   Eh: () => (/* binding */ readMemoryJSON),
+/* harmony export */   Ei: () => (/* binding */ memoryRemoved),
+/* harmony export */   PD: () => (/* binding */ removeMemoryPath),
+/* harmony export */   Tp: () => (/* binding */ markMemoryRemoval),
+/* harmony export */   ZL: () => (/* binding */ memoryEnabled),
+/* harmony export */   _X: () => (/* binding */ memoryEntries),
+/* harmony export */   br: () => (/* binding */ writeMemoryJSON),
+/* harmony export */   nD: () => (/* binding */ enableMemoryCache),
+/* harmony export */   sz: () => (/* binding */ memoryOnly)
+/* harmony export */ });
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9074);
+
+
+
+
+const roots = new Set()
+const volatileRoots = new Set()
+const files = new Map()
+const removed = new Set()
+const pinned = new Set()
+let generation = 0
+const inside = (root, file) => file === root || file.startsWith(root + node_path__WEBPACK_IMPORTED_MODULE_1__.sep)
+
+/** Enable read-through caching without enumerating or reading stored files. */
+function enableMemoryCache(directory, { memoryOnly = false } = {}) {
+    roots.add((0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(directory))
+    if (memoryOnly) volatileRoots.add((0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(directory))
+}
+
+function memoryOnly(file) {
+    file = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(file)
+    for (const root of volatileRoots) if (inside(root, file)) return true
+    return false
+}
+
+function memoryEnabled(file) {
+    file = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(file)
+    for (const root of roots) if (inside(root, file)) return true
+    return false
+}
+
+async function readMemoryJSON(file) {
+    file = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(file)
+    if (files.has(file)) return (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(files.get(file))
+    if (memoryRemoved(file)) return undefined
+    if (memoryOnly(file)) return undefined
+    const observedGeneration = generation
+    try {
+        const value = JSON.parse(await (0,node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.readFile)(file, 'utf8'))
+        if (memoryEnabled(file) && observedGeneration === generation) {
+            files.set(file, value)
+            return (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(value)
+        }
+        return (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(value)
+    } catch (error) { if (error.code === 'ENOENT') return undefined; throw error }
+}
+
+function writeMemoryJSON(file, value) {
+    generation++
+    file = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(file)
+    if (memoryEnabled(file)) {
+        const previous = files.get(file)
+        value = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(value)
+        if (previous && value && typeof previous === 'object' && typeof value === 'object' && Array.isArray(previous) === Array.isArray(value))
+            value = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .replaceLive */ .L9)(previous, value)
+        files.set(file, value)
+        return value
+    }
+    return (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(value)
+}
+
+function removeMemoryPath(path) {
+    generation++
+    path = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(path)
+    for (const file of files.keys()) if (inside(path, file) && !pinned.has(file)) {
+        files.delete(file)
+    }
+}
+
+function memoryStats(directory) {
+    const root = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(directory)
+    const entries = [...files].filter(([file, value]) => value !== undefined && inside(root, file))
+    return { files: entries.length, serializedBytes: entries.reduce((sum, [, value]) => sum + Buffer.byteLength(JSON.stringify(value)), 0) }
+}
+
+// Cache reads and queued work share the owned value.
+const peekMemoryJSON = file => files.get((0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(file))
+const pinMemoryPath = file => pinned.add((0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(file))
+const unpinMemoryPath = file => pinned.delete((0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(file))
+function memoryEntries(directory) {
+    const root = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(directory)
+    return [...files].filter(([file]) => inside(root, file))
+}
+function memoryRemoved(file) {
+    file = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(file)
+    if (files.has(file)) return files.get(file) === undefined
+    for (const path of removed) if (inside(path, file)) return true
+    return false
+}
+function markMemoryRemoval(path) {
+    generation++
+    path = (0,node_path__WEBPACK_IMPORTED_MODULE_1__.resolve)(path)
+    for (const file of files.keys()) if (inside(path, file)) {
+        files.delete(file)
+    }
+    removed.add(path)
+    files.set(path, undefined)
 }
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "Sk", 0, /* binding */ defaultOrganizationStorageFallback
+/* harmony export */   "Kc", 0, /* binding */ pinMemoryPath,
+/* harmony export */   "TS", 0, /* binding */ peekMemoryJSON,
+/* harmony export */   "Vc", 0, /* binding */ unpinMemoryPath
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 9074
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   L9: () => (/* binding */ replaceLive),
+/* harmony export */   nY: () => (/* binding */ prepareMutation)
+/* harmony export */ });
+/* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4472);
+
+
+// Internal records and index nodes have one owner and are passed by reference.
+const targets = new WeakMap()
+const live = value => targets.get(value) ?? value
+
+function replaceLive(target, source) {
+    target = live(target)
+    source = live(source)
+    if (target === source) return target
+    for (const key of Object.keys(target)) if (!Object.hasOwn(source, key)) delete target[key]
+    for (const key of Object.keys(source)) target[key] = live(source[key])
+    if (Array.isArray(target)) target.length = source.length
+    return target
+}
+
+/** Validate with the shared update utility before attaching any changes.
+ * The view retains only changed property slots, not copies of objects or nodes.
+ */
+function prepareMutation(record) {
+    const slots = new WeakMap(), views = new WeakMap(), actions = []
+    const changes = target => {
+        if (!slots.has(target)) slots.set(target, new Map())
+        return slots.get(target)
+    }
+    const get = (target, key) => {
+        const change = slots.get(target)?.get(key)
+        return change ? change.deleted ? undefined : change.value : target[key]
+    }
+    const stage = (target, key, value, deleted = false) => {
+        changes(target).set(key, { value, deleted })
+        actions.push({ target, key, value, deleted })
+    }
+    const view = value => {
+        value = live(value)
+        if (!value || typeof value !== 'object') return value
+        if (views.has(value)) return views.get(value)
+        const proxy = new Proxy(value, {
+            get: (target, key) => view(get(target, key)),
+            has: (target, key) => slots.get(target)?.has(key) ? !slots.get(target).get(key).deleted : key in target,
+            ownKeys(target) {
+                const keys = new Set(Reflect.ownKeys(target))
+                for (const [key, change] of slots.get(target) ?? []) {
+                    if (change.deleted) keys.delete(key)
+                    else keys.add(key)
+                }
+                return [...keys]
+            },
+            getOwnPropertyDescriptor(target, key) {
+                const change = slots.get(target)?.get(key)
+                if (!change) return Object.getOwnPropertyDescriptor(target, key)
+                if (change.deleted) return undefined
+                return { ...(Object.getOwnPropertyDescriptor(target, key) ?? { configurable: true, enumerable: true, writable: true }), value: change.value }
+            },
+            set(target, key, value) {
+                value = live(value)
+                const current = get(target, key)
+                if (Object.is(current, value) && (Object.hasOwn(target, key) || slots.get(target)?.has(key))) return true
+                if (Array.isArray(current) && Array.isArray(value)) {
+                    const array = view(current)
+                    for (let i = 0; i < value.length; i++) array[i] = live(value[i])
+                    array.length = value.length
+                    return true
+                }
+                if (Array.isArray(target)) {
+                    if (key === 'length') {
+                        for (let i = Number(value); i < get(target, 'length'); i++) stage(target, String(i), undefined, true)
+                    } else if (/^(0|[1-9]\d*)$/.test(String(key)) && Number(key) >= get(target, 'length'))
+                        stage(target, 'length', Number(key) + 1)
+                }
+                stage(target, key, value)
+                return true
+            },
+            deleteProperty(target, key) {
+                if (key in target || slots.get(target)?.has(key)) {
+                    stage(target, key, undefined, true)
+                }
+                return true
+            }
+        })
+        targets.set(proxy, value)
+        views.set(value, proxy)
+        return proxy
+    }
+    return { value: view(record), get changed() {
+        return actions.some(({ target, key }) => {
+            const change = slots.get(target).get(key)
+            return change.deleted ? Object.hasOwn(target, key) :
+                !Object.hasOwn(target, key) || !(0,node_util__WEBPACK_IMPORTED_MODULE_0__.isDeepStrictEqual)(target[key], change.value)
+        })
+    }, commit() {
+        for (const { target, key, value, deleted } of actions)
+            if (deleted) Reflect.deleteProperty(target, key)
+            else Reflect.set(target, key, value)
+    } }
+}
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "VD", 0, /* binding */ live
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 2001
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   r: () => (/* binding */ createDB)
+/* harmony export */ });
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1150);
+/* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(257);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3981);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5264);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9487);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(900);
+/* harmony import */ var _array_index_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(1391);
+/* harmony import */ var _database_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5379);
+/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6978);
+/* harmony import */ var _peers_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(7432);
+/* harmony import */ var _index_crud_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(4644);
+/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5647);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(2244);
+/* harmony import */ var _query_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(7961);
+/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(2965);
+/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(4811);
+/* harmony import */ var _entries_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(2509);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(9074);
+/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(5634);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(4934);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(8247);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function errorHandler(data, error) {
+    if (!Array.isArray(data.error)) data.error = data.error === undefined ? [] : [data.error]
+    const errors = error?.errors ?? error?.message ?? error
+    data.error.push(...(Array.isArray(errors) ? errors : [errors]))
+    data.success = false
+    return data
+}
+
+const isObjectId = value => typeof value === 'string' && /^[0-9a-f]{24}$/i.test(value)
+
+function tagRecord(record, request) {
+    record = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_18__/* .live */ .VD)(record)
+    record.$storage ??= ['db']
+    record.$database ??= [request.database ?? request.organization_id]
+    record.$array ??= [request.array]
+    return record
+}
+
+// Preserve the request's update syntax and operands; do not diff the final record.
+function createUpdatePatch(input, request) {
+    if (Object.hasOwn(input, '$update')) return input.$update
+    if (Object.hasOwn(request, '$update')) return request.$update
+    const patch = {}, removed = {}
+    for (const [operator, values] of Object.entries(request)) {
+        if (!operator.startsWith('$') || !values || typeof values !== 'object') continue
+        for (const [path, value] of Object.entries(values)) patch[`${operator}.${path}`] = value
+    }
+    for (const [key, value] of Object.entries(input)) {
+        if (['_id', 'filter', '$storage', '$database', '$array', '$bytes'].includes(key)) continue
+        if (value === undefined && !key.startsWith('$')) removed[key] = true
+        else patch[key] = value
+    }
+    if (Object.keys(removed).length) patch.$unset = { ...removed, ...patch.$unset }
+    return patch
+}
+
+function applyObjectUpdate(current, patch, audit) {
+    const plan = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_18__/* .prepareMutation */ .nY)(current)
+    const updated = plan.value
+    if ((0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_5__/* .createUpdate */ ._W)(updated, patch) === false)
+        throw new Error('Shared update utility could not apply the requested update')
+    if (updated._id !== current._id) throw new Error('object._id cannot be changed')
+    if (updated.created?.on !== current.created?.on)
+        throw new Error('object.created.on cannot be changed')
+    if (audit) (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .setPath */ .SO)(updated, 'updated', audit)
+    return plan
+}
+
+// Delivery views do not attach transport metadata to the persisted document.
+function updateReply(record, patch) {
+    return (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .identify */ .ls)({ ...record, $update: patch }, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record))
+}
+const peerUpdate = (record, patch) => (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .identify */ .ls)({ _id: record._id, $update: patch, updated: record.updated }, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record))
+
+/**
+ * Create a filesystem-backed CoCreateDB instance.
+ * The configured directory contains database/array index files and object JSON files.
+ */
+function createDB({
+    directory = './storage', indexRoot = directory, indexScope = 'standalone', managedRoot = false, maxIndexBytes = 128 * 1024, cache = false, memoryCache = false,
+    nodeId, distributionAdapter, peerReader, peerDistribution, partitionAdapter, documentMutationAdapter,
+    writeBehind = false, memoryOnly = false, disk = true, sharedPersistence, scheduleIndexing = operation => operation(), onIndexed, persistenceOptions = {}
+} = {}) {
+    const root = (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(directory)
+    const namespace = (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, 'catalogs', indexScope)
+    const peers = (0,_peers_js__WEBPACK_IMPORTED_MODULE_10__/* .createPeerDistribution */ .pr)(nodeId)
+    const adapters = (0,_peers_js__WEBPACK_IMPORTED_MODULE_10__/* .createDistributionAdapters */ .Lc)(nodeId, peers)
+    distributionAdapter = { ...adapters.distributionAdapter, ...distributionAdapter }
+    partitionAdapter = { ...adapters.partitionAdapter, ...partitionAdapter }
+    if (memoryCache || memoryOnly || disk === false) (0,_memory_js__WEBPACK_IMPORTED_MODULE_20__/* .enableMemoryCache */ .nD)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(indexRoot), { memoryOnly: memoryOnly || disk === false })
+    const deferred = writeBehind || memoryOnly || disk === false
+    const deletedObjects = new Map()
+    const getDeletion = async (database, array, id) => {
+        const path = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectDeletionPath */ .Jv)(root, database, array, id)
+        if (!deletedObjects.has(path)) deletedObjects.set(path, await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .readJSON */ .TQ)(path))
+        return deletedObjects.get(path)
+    }
+    const deletionMarker = object => ({ _id: object._id, fileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object), created: { on: object.created?.on }, deleted: { on: new Date().toISOString() } })
+    const markDeleted = async (database, array, object) => {
+        const path = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectDeletionPath */ .Jv)(root, database, array, object._id)
+        const marker = deletionMarker(object)
+        await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .replaceJSON */ .B0)(path, marker)
+        deletedObjects.set(path, marker)
+    }
+    const clearDeletion = async (database, array, id) => {
+        const path = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectDeletionPath */ .Jv)(root, database, array, id)
+        if (await getDeletion(database, array, id)) await (0,_io_js__WEBPACK_IMPORTED_MODULE_3__.rm)(path, { force: true })
+        deletedObjects.set(path, undefined)
+    }
+    const staleGeneration = (incoming, marker) => marker &&
+        (!incoming.created?.on || !marker.created?.on || incoming.created.on <= marker.created.on)
+    const pendingIndexes = new Map()
+    const documentRevisions = new Map()
+    let indexTimer, indexScheduled = false, indexError, closing = false
+    const persistence = memoryOnly || disk === false ? undefined : sharedPersistence ?? (writeBehind ? (0,_persistence_js__WEBPACK_IMPORTED_MODULE_19__/* .createPersistence */ .A)({
+        ...persistenceOptions, directory: (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(indexRoot), canFlush: () => pendingIndexes.size === 0
+    }) : undefined)
+    const requestIndexing = (delay = 0) => {
+        if (indexScheduled || closing || !pendingIndexes.size) return
+        indexScheduled = true
+        indexTimer = setTimeout(() => {
+            indexTimer = undefined
+            Promise.resolve().then(() => scheduleIndexing(processPendingIndexes)).catch(error => {
+                indexError = error
+            }).finally(() => {
+                indexScheduled = false
+                if (pendingIndexes.size && !indexError) requestIndexing()
+                else if (!pendingIndexes.size) persistence?.schedule()
+            })
+        }, delay)
+        indexTimer.unref?.()
+    }
+    const queueIndex = (database, array, before, object, publish = true, createdOn, update, actions = []) => {
+        const path = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object))
+        const objectId = object._id
+        let entry = pendingIndexes.get(path)
+        if (!entry) {
+            entry = { database, array, objectId, fileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object), indexed: before ?? [], createdOn, revision: 0, publish, holders: new Set(), updates: [], actions: [] }
+            pendingIndexes.set(path, entry)
+        }
+        entry.revision = (documentRevisions.get(path) ?? 0) + 1
+        documentRevisions.set(path, entry.revision)
+        entry.publish ||= publish
+        entry.resolved = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_21__/* .currentResolution */ .mM)()
+        entry.actions.push(...actions)
+        if (update) entry.updates.push(update)
+        requestIndexing()
+    }
+    const processPendingIndexes = async () => {
+        const release = persistence?.hold()
+        try {
+            for (const [path, entry] of pendingIndexes) {
+                const processing = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_21__/* .currentResolution */ .mM)()
+                const resolved = entry.resolved && processing && processing !== entry.resolved
+                    ? { ...processing, catalogs: entry.resolved.catalogs, files: entry.resolved.files } : entry.resolved
+                await (0,_resolution_js__WEBPACK_IMPORTED_MODULE_21__/* .withResolution */ .Hy)(async () => {
+                    const revision = entry.revision
+                    const indexedBefore = entry.indexed
+                    try {
+                        if (typeof entry.indexed === 'function') entry.indexed = entry.indexed()
+                        // Read acquisition notices precede the indexes built from it.
+                        // Both stages publish through this backend transaction's outbox.
+                        while (entry.resolved?.background?.length) {
+                            await entry.resolved.background[0]()
+                            entry.resolved.background.shift()
+                        }
+                        while (entry.actions.length) {
+                            await entry.actions[0]()
+                            entry.actions.shift()
+                        }
+                        const latest = await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .readJSON */ .TQ)(path)
+                        const after = (0,_entries_js__WEBPACK_IMPORTED_MODULE_17__/* .indexEntries */ .nL)(latest)
+                        for (const holder of await captureEntryHolders(entry.database, entry.array, entry.indexed, entry.fileId)) entry.holders.add(holder)
+                        await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .reconcileEntrySets */ .oP)(storageIndex, entry.database, entry.array, entry.fileId, entry.indexed, after)
+                        entry.indexed = after
+                        if (latest)
+                            for (const holder of await captureObjectHolders(entry.database, entry.array, latest)) entry.holders.add(holder)
+                        const operation = !latest ? 'remove' : entry.createdOn && entry.createdOn === latest.created?.on ? 'update' : 'set'
+                        const updates = entry.updates.slice()
+                        if (operation === 'update') {
+                            // Index reconciliation can coalesce; incremental operations cannot.
+                            for (const update of updates) {
+                                if (entry.publish) await publishObjectMutation(operation, entry.database, entry.array, update, entry.holders, latest.created?.on)
+                                await onIndexed?.({ ...await resolveDistributionIds({ databaseId: entry.database, arrayId: entry.array }), objectId: entry.fileId,
+                                    revision, operation, object: updateReply(latest, update.$update) })
+                            }
+                        } else {
+                            const object = latest ?? entry.removed
+                            if (entry.publish && object)
+                                await publishObjectMutation(operation, entry.database, entry.array, object, entry.holders, latest?.created?.on)
+                            await onIndexed?.({ ...await resolveDistributionIds({ databaseId: entry.database, arrayId: entry.array }), objectId: entry.fileId, revision, operation, object: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_18__/* .live */ .VD)(object) })
+                        }
+                        entry.updates.splice(0, updates.length)
+                        if (entry.revision === revision) pendingIndexes.delete(path)
+                    } catch (error) {
+                        indexError = error
+                        storageIndex.clearCache()
+                        distributionIndex.clearCache()
+                        entry.indexed = indexedBefore
+                        throw error
+                    }
+                }, resolved)
+            }
+            indexError = undefined
+        } finally { release?.() }
+    }
+    const flushIndexes = async () => {
+        if (indexTimer) { clearTimeout(indexTimer); indexTimer = undefined; indexScheduled = false }
+        await processPendingIndexes()
+    }
+    const flush = async () => { await flushIndexes(); await persistence?.flush() }
+    let ready
+    const storageIndex = (0,_index_index_js__WEBPACK_IMPORTED_MODULE_9__/* ["default"] */ .Ay)({
+        directory: root,
+        indexRoot,
+        maxBytes: maxIndexBytes,
+        cache,
+        resolveArrayDirectory: ({ directory, database, array }) => {
+            if (database === _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii && array === _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1)
+                return (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(namespace, 'databases')
+            if (array === _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip)
+                return (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseDirectory */ .fI)(namespace, database), 'arrays')
+            return (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .arrayDirectory */ .Ve)(namespace, database, array)
+        },
+        readPartition: path => partitionAdapter?.read?.(path),
+        readKey: async ({ path, catalog, objectId, key, digest }) => {
+            for (const type of ['objects', 'arrays', 'databases', 'storages']) {
+                const record = await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .readJSON */ .TQ)((0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .recordPath */ .lX)(root, type, objectId))
+                const value = key.split('.').reduce((value, part) => value?.[part], record)
+                if (Array.isArray(value) && (0,_entries_js__WEBPACK_IMPORTED_MODULE_17__/* .arrayDigest */ .qd)(value) === digest) return { catalog, objectId, name: key, value }
+            }
+            if (peerReader) for (const nodeId of (peerDistribution ?? peers).findFile(objectId)) {
+                const record = await peerReader({ nodeId, type: 'key', fileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileIdFromPath */ .pQ)(path) })
+                if (record?.catalog === catalog && record.objectId === objectId && record.name === key &&
+                    Array.isArray(record.value) && (0,_entries_js__WEBPACK_IMPORTED_MODULE_17__/* .arrayDigest */ .qd)(record.value) === digest) return record
+            }
+        },
+        onPartitionChange: change => {
+            if (!nodeId) return
+            const payload = { ...change, nodeId }
+            return partitionAdapter?.onLocalChange
+                ? partitionAdapter.onLocalChange(payload, updateLocalPartition)
+                : updateLocalPartition({
+                    partitionId: change.path,
+                    nodeId,
+                    operation: change.operation === 'remove' ? 'remove' : 'add'
+                })
+        }
+    })
+    ready = managedRoot ? storageIndex.ensureCatalog(_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1) : (0,_root_js__WEBPACK_IMPORTED_MODULE_2__/* .ensureRoot */ .RP)(root, storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1, 'databases')
+    // send() awaits this promise; keep initialization rejection attached until then.
+    ready.catch(() => {})
+    const distributionIndex = (0,_distribution_js__WEBPACK_IMPORTED_MODULE_12__/* .createDistributionIndex */ .tm)({
+        directory: (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, 'distribution', indexScope),
+        nodeId,
+        maxBytes: maxIndexBytes,
+        cache
+    })
+
+    const readDatabase = id => (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .readRecordById */ .Sm)(storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseMetadataPath */ .mL)(root, uuid), id)
+    const readArray = (database, id) => (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .readRecordById */ .Sm)(storageIndex, database, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .arrayMetadataPath */ .Ad)(root, database, uuid), id)
+    const resolvedScope = ({ database, array }) => {
+        const db = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_21__/* .resolvedCatalog */ .Up)(storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1)?.names[database]
+        const dataset = db && (0,_resolution_js__WEBPACK_IMPORTED_MODULE_21__/* .resolvedCatalog */ .Up)(storageIndex, db._id, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip)?.names[array]
+        return { databaseId: db?._id, arrayId: dataset?._id, databaseFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(db), arrayFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(dataset),
+            databaseIndex: db?.index, arrayIndex: dataset?.index }
+    }
+    const resolveDistributionIds = async ({ database, databaseId, array, arrayId, objectId }) => {
+        const db = databaseId ? await readDatabase(databaseId) : database ? await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(storageIndex,
+            _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1, id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseMetadataPath */ .mL)(root, id), database) : undefined
+        databaseId = db?._id ?? databaseId
+        const dataset = arrayId ? await readArray(databaseId, arrayId) : array && databaseId ? await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(storageIndex,
+            databaseId, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip, id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .arrayMetadataPath */ .Ad)(root, databaseId, id), array) : undefined
+        if (objectId && !/^[a-f0-9]{32}$/i.test(objectId) && dataset) {
+            for await (const entry of storageIndex.scan(databaseId, dataset._id, '_id', { type: 'string', lower: objectId, upper: objectId }))
+                if (entry.value === objectId) { objectId = entry.objectId; break }
+        }
+        return { databaseId, arrayId: dataset?._id ?? arrayId, objectId, databaseFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(db) ?? await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .recordReference */ .dW)(storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1, databaseId),
+            arrayFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(dataset) ?? (databaseId ? await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .recordReference */ .dW)(storageIndex, databaseId, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip, dataset?._id ?? arrayId) : undefined),
+            databaseIndex: db?.index, arrayIndex: dataset?.index }
+    }
+
+    const updateLocalDistribution = payload => distributionIndex.update(payload)
+    const getLocalDistribution = payload => distributionIndex.get(payload)
+    const listLocalDistribution = payload => distributionIndex.list(payload)
+    const updateLocalPartition = payload => distributionIndex.updatePartition(payload)
+    const getLocalPartition = partitionId => distributionIndex.getPartition(partitionId)
+    const listLocalPartitions = () => distributionIndex.listPartitions()
+
+    const updateDistribution = async request => {
+        const ids = await resolveDistributionIds(request)
+        const payload = { ...ids, nodeId: request.nodeId, operation: request.operation }
+        return distributionAdapter?.update
+            ? distributionAdapter.update(payload, updateLocalDistribution)
+            : updateLocalDistribution(payload)
+    }
+
+    const getDistribution = async request => {
+        const ids = await resolveDistributionIds(request)
+        return distributionAdapter?.get
+            ? distributionAdapter.get(ids, getLocalDistribution)
+            : getLocalDistribution(ids)
+    }
+
+    const listDistribution = async request => distributionAdapter?.list
+        ? distributionAdapter.list(request, listLocalDistribution)
+        : listLocalDistribution(request)
+
+    const updatePartition = payload => partitionAdapter?.update
+        ? partitionAdapter.update(payload, updateLocalPartition)
+        : updateLocalPartition(payload)
+
+    const getPartitionHolders = partitionId => partitionAdapter?.get
+        ? partitionAdapter.get(partitionId, getLocalPartition)
+        : getLocalPartition(partitionId)
+
+    const listPartitions = () => partitionAdapter?.list
+        ? partitionAdapter.list(listLocalPartitions)
+        : listLocalPartitions()
+
+    const markLocalPartition = async ({ path, operation, value, acquired = false, replicated = false }) => {
+        if (!nodeId) return
+        const payload = { partitionId: path, nodeId, operation: operation === 'remove' ? 'remove' : 'add' }
+        if (partitionAdapter?.onLocalChange)
+            return partitionAdapter.onLocalChange({ ...payload, path, operation, value, acquired, replicated }, updateLocalPartition)
+        return updateLocalPartition(payload)
+    }
+
+    const applyIndexPartition = async (path, value, { replicated = false } = {}) => {
+        const node = await storageIndex.applyPartition(path, value)
+        await markLocalPartition({ path, operation: 'set', value: node, acquired: !replicated, replicated })
+        return node
+    }
+
+    const removeIndexPartition = async (path, { replicated = false } = {}) => {
+        await storageIndex.removePartition(path)
+        await markLocalPartition({ path, operation: 'remove', acquired: !replicated, replicated })
+    }
+
+    const markLocalAvailability = async (ids, operation) => {
+        if (!nodeId) return
+        if ((0,_resolution_js__WEBPACK_IMPORTED_MODULE_21__/* .afterResponse */ .az)(() => markLocalAvailability(ids, operation))) return
+        const payload = { ...ids, ...await resolveDistributionIds(ids), nodeId, operation }
+        if (distributionAdapter?.onLocalChange)
+            return distributionAdapter.onLocalChange(payload, updateLocalDistribution)
+        return updateLocalDistribution(payload)
+    }
+
+    const localObjectIds = async (databaseId, arrayId) => {
+        const ids = []
+        for await (const entry of storageIndex.scan(databaseId, arrayId, '_id', { type: 'string' }))
+            ids.push(entry.objectId)
+        return ids
+    }
+
+    const captureObjectHolders = async (database, array, object) => {
+        const holders = new Set()
+        if (!documentMutationAdapter?.publish) return holders
+        const entries = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .flattenIndexValues */ .fp)(object).filter(([key]) => key !== '_id')
+        const paths = await storageIndex.locatePartitions(database, array, entries, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object))
+        for (const path of paths)
+            for (const holder of await getPartitionHolders(path)) holders.add(holder)
+        return holders
+    }
+
+    const captureEntryHolders = async (database, array, entries, objectId) => {
+        const holders = new Set()
+        if (!documentMutationAdapter?.publish) return holders
+        for (const path of await storageIndex.locateIndexedPartitions(database, array, entries, objectId))
+            for (const holder of await getPartitionHolders(path)) holders.add(holder)
+        return holders
+    }
+
+    const publishObjectMutation = async (operation, databaseId, arrayId, object, holders, createdOn) => {
+        if (!documentMutationAdapter?.publish || !holders.size) return
+        const database = await readDatabase(databaseId), array = await readArray(databaseId, arrayId)
+        await documentMutationAdapter.publish({
+            operation,
+            databaseId,
+            arrayId,
+            object: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_18__/* .live */ .VD)(object),
+            fileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object),
+            ...(createdOn ? { createdOn } : {}),
+            database: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_18__/* .live */ .VD)(database), databaseFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(database),
+            array: (0,_mutation_js__WEBPACK_IMPORTED_MODULE_18__/* .live */ .VD)(array), arrayFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(array),
+            targets: [...holders].filter(id => id !== nodeId)
+        })
+    }
+
+    const prepareAvailabilityRemoval = async entities => {
+        const changed = []
+        try {
+            for (const entity of entities) {
+                const result = await markLocalAvailability(entity, 'remove')
+                if (result?.changed) changed.push(entity)
+            }
+            return changed
+        } catch (error) {
+            for (const entity of changed.reverse())
+                await markLocalAvailability(entity, 'add').catch(() => {})
+            throw error
+        }
+    }
+
+    const restoreAvailability = async entities => {
+        for (const entity of entities)
+            await markLocalAvailability(entity, 'add')
+    }
+
+    const createObjects = async (request, database, array, { publishMutation = true, acquired = false } = {}) => {
+        const values = request.object === undefined
+            ? []
+            : Array.isArray(request.object) ? request.object : [request.object]
+        const created = []
+
+        for (const input of values) {
+            if (!input || typeof input !== 'object' || Array.isArray(input))
+                throw new TypeError('object.create expects an object or an array of objects')
+
+            const object = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .normalizeObject */ .Fl)(input)
+            const objectId = object._id ?? (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_4__/* .ObjectId */ .V)().toString()
+
+            if (typeof objectId !== 'string' || !/^[0-9a-fA-F]{24}$/.test(objectId))
+                throw new TypeError('object._id must be a 24-character hexadecimal ObjectId')
+
+            object._id = objectId.toLowerCase()
+            if (request.organization_id && !Object.hasOwn(object, 'organization_id'))
+                object.organization_id = request.organization_id
+
+            if (await readLocalObject(database, array, object._id)) throw new Error(`Object already exists: ${object._id}`)
+            if (!(0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object)) (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .identify */ .ls)(object, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .newFileId */ .Ui)())
+            const audit = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .auditMetadata */ .RI)(request)
+            const deletion = await getDeletion(database, array, object._id)
+            if (deletion) {
+                const previous = Date.parse(deletion.created?.on)
+                object.created = { ...audit, on: new Date(Math.max(Date.now(), Number.isFinite(previous) ? previous + 1 : 0)).toISOString() }
+            }
+            object.created ??= { ...audit }
+            object.updated ??= { ...audit }
+
+            const file = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object))
+            if (deferred) {
+                await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .writeExclusiveJSON */ .mz)(file, object)
+                deletedObjects.set((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectDeletionPath */ .Jv)(root, database, array, object._id), undefined)
+                queueIndex(database, array, undefined, object, publishMutation, undefined, undefined, [
+                    ...(deletion ? [() => (0,_io_js__WEBPACK_IMPORTED_MODULE_3__.rm)((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectDeletionPath */ .Jv)(root, database, array, object._id), { force: true })] : []),
+                    ...(!acquired ? [
+                        () => (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .adjustArrayLength */ .lp)(root, storageIndex, database, array, 1, request),
+                        () => (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .adjustDatabaseLengths */ .MJ)(root, storageIndex, database, { objects: 1 }, request)
+                    ] : []),
+                    () => markLocalAvailability({ databaseId: database }, 'add'),
+                    () => markLocalAvailability({ databaseId: database, arrayId: array }, 'add'),
+                    () => markLocalAvailability({ databaseId: database, arrayId: array, objectId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object) }, 'add')
+                ])
+                created.push(tagRecord(object, request))
+                continue
+            }
+            let wroteObject = false
+            let arrayLengthUpdated = false
+            let databaseLengthUpdated = false
+
+            try {
+                await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .createRecord */ .eC)(storageIndex, database, array, file, object)
+                wroteObject = true
+                await clearDeletion(database, array, object._id)
+                if (!acquired) await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .adjustArrayLength */ .lp)(root, storageIndex, database, array, 1, request)
+                arrayLengthUpdated = !acquired
+                if (!acquired) await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .adjustDatabaseLengths */ .MJ)(root, storageIndex, database, { objects: 1 }, request)
+                databaseLengthUpdated = !acquired
+            } catch (error) {
+                if (databaseLengthUpdated)
+                    await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .adjustDatabaseLengths */ .MJ)(root, storageIndex, database, { objects: -1 }, request).catch(() => {})
+                if (arrayLengthUpdated)
+                    await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .adjustArrayLength */ .lp)(root, storageIndex, database, array, -1, request).catch(() => {})
+                if (wroteObject)
+                    await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .deleteRecord */ .LK)(storageIndex, database, array, file, object).catch(() => {})
+                if (deletion) {
+                    await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .replaceJSON */ .B0)((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectDeletionPath */ .Jv)(root, database, array, object._id), deletion)
+                    deletedObjects.set((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectDeletionPath */ .Jv)(root, database, array, object._id), deletion)
+                }
+                throw error
+            }
+
+            created.push(tagRecord(object, request))
+            if (publishMutation) {
+                const holders = await captureObjectHolders(database, array, object)
+                await publishObjectMutation('set', database, array, object, holders)
+            }
+        }
+
+        return created
+    }
+
+    const readLocalObject = async (database, array, id) => {
+        for (const pending of pendingIndexes.values())
+            if (pending.database === database && pending.array === array && pending.objectId === id) {
+                const record = await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .readJSON */ .TQ)((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, pending.fileId))
+                if (record) return record
+            }
+        return (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .readRecordById */ .Sm)(storageIndex, database, array, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, uuid), id)
+    }
+
+    const hydrateObjects = async (request, records) => {
+        if (!Array.isArray(records)) throw new TypeError('Persistence hydration requires complete objects')
+        for (const record of records) {
+            if (!record || !isObjectId(record._id)) throw new TypeError('Hydrated objects require an ObjectId')
+            if (record.organization_id && String(record.organization_id) !== request.organization_id)
+                throw new Error('Hydrated object belongs to a different organization')
+        }
+        if (!records.length) return
+        const database = await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .ensureDatabase */ .c_)(root, storageIndex, request.database, {}, request)
+        const array = await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .ensureArray */ .eC)(root, storageIndex, database, request.array, {}, request)
+        for (const record of records) {
+            record._id = record._id.toLowerCase()
+            for (const key of ['created', 'updated'])
+                if (record[key]?.on instanceof Date) record[key].on = record[key].on.toISOString()
+            // A stale provider response cannot overwrite local state or resurrect
+            // a deleted lifetime. Acquisition is not a new create notification.
+            if (await readLocalObject(database._id, array._id, record._id) ||
+                await getDeletion(database._id, array._id, record._id)) continue
+            await createObjects({ ...request, method: 'object.create', object: record }, database._id, array._id,
+                { publishMutation: false })
+            if (!deferred) {
+                await markLocalAvailability({ databaseId: database._id }, 'add')
+                await markLocalAvailability({ databaseId: database._id, arrayId: array._id }, 'add')
+                await markLocalAvailability({ databaseId: database._id, arrayId: array._id, objectId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record) }, 'add')
+            }
+        }
+        // Pending memory records already satisfy reads; indexing is backend work.
+        if (!deferred) await flushIndexes()
+    }
+
+    const readLocalEntity = async ({ type, databaseId, arrayId, objectId, fileId: uuid }) => {
+        if (type === 'key') {
+            const value = await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .readJSON */ .TQ)((0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .recordPath */ .lX)(root, 'keys', uuid))
+            return value && (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .identify */ .ls)(value, uuid)
+        }
+        if (type === 'database') return readDatabase(uuid ?? databaseId)
+        if (type === 'array') return readArray(databaseId, uuid ?? arrayId)
+        if (type === 'object') return readLocalObject(databaseId, arrayId, uuid ?? objectId)
+        throw new TypeError('Peer fetch type must be key, database, array, or object')
+    }
+
+    const applyReplicatedObjectMutation = async ({ operation, database, array, object, fileId: uuid, databaseFileId, arrayFileId, createdOn, serverId, upsert = false }) => {
+        if (!['set', 'update', 'remove'].includes(operation) || !object || !isObjectId(object._id))
+            throw new TypeError('Invalid replicated object mutation')
+        const databaseId = database?._id
+        const arrayId = array?._id
+        if (!isObjectId(databaseId) || !isObjectId(arrayId) || database._id !== databaseId || array._id !== arrayId)
+            throw new TypeError('Replicated object mutation requires database and array metadata')
+
+        ;(0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .identify */ .ls)(database, databaseFileId ?? (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(database))
+        ;(0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .identify */ .ls)(array, arrayFileId ?? (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(array))
+        ;(0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .identify */ .ls)(object, uuid ?? (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object))
+        let current = await readLocalObject(databaseId, arrayId, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object))
+        if (current && (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(current) !== (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object) && operation !== 'set') return false
+        const deletion = await getDeletion(databaseId, arrayId, object._id)
+        if (operation === 'update') {
+            if (deletion || (createdOn && current?.created?.on && createdOn !== current.created.on)) return false
+            if (current) {
+                const plan = applyObjectUpdate(current, object.$update, object.updated)
+                plan.commit()
+            } else {
+                if (!peerReader || !serverId) throw new Error(`Cannot apply an update without the base object: ${object._id}`)
+                // The publishing node's snapshot already includes this operation.
+                current = await peerReader({ nodeId: serverId, type: 'object', databaseId, arrayId, objectId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object), fileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object) })
+                if (!current || current._id !== object._id || (createdOn && current.created?.on !== createdOn)) return false
+            }
+        }
+        if (operation === 'set' && !upsert && (staleGeneration(object, deletion) ||
+            (current?.created?.on && object.created?.on && object.created.on < current.created.on))) return false
+        if (operation === 'remove' && !current && staleGeneration(object, deletion)) return false
+        if (operation === 'remove' && current?.created?.on && object.created?.on && current.created.on !== object.created.on) return false
+        await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .materializeDatabase */ .bk)(root, storageIndex, database)
+        await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .materializeArray */ .bK)(root, storageIndex, database, array)
+        const file = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, databaseId, arrayId, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object))
+        if (operation === 'remove') {
+            await markDeleted(databaseId, arrayId, object)
+            ;(0,_memory_js__WEBPACK_IMPORTED_MODULE_20__/* .removeMemoryPath */ .PD)(file)
+            await (0,_io_js__WEBPACK_IMPORTED_MODULE_3__.rm)(file, { force: true })
+        }
+        else {
+            await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .replaceJSON */ .B0)(file, operation === 'update' ? current : object)
+            await clearDeletion(databaseId, arrayId, object._id)
+        }
+
+        await markLocalAvailability({ databaseId }, 'add')
+        await markLocalAvailability({ databaseId, arrayId }, 'add')
+        await markLocalAvailability({ databaseId, arrayId, objectId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object) }, operation === 'remove' ? 'remove' : 'add')
+        return true
+    }
+
+    const acquireEntity = async (type, databaseId, arrayId, objectId) => {
+        if (!peerReader) return undefined
+        const ids = await resolveDistributionIds({ databaseId, arrayId, objectId })
+        const refs = type === 'database'
+            ? await getDistribution({ databaseId })
+            : type === 'array'
+                ? await getDistribution({ databaseId, arrayId })
+                : await getDistribution({ databaseId, arrayId, objectId })
+
+        for (const remoteNodeId of refs) {
+            if (remoteNodeId === nodeId) continue
+            try {
+                const record = await peerReader({
+                    nodeId: remoteNodeId,
+                    type,
+                    databaseId,
+                    arrayId,
+                    objectId: ids.objectId ?? objectId,
+                    fileId: type === 'database' ? ids.databaseFileId : type === 'array' ? ids.arrayFileId : /^[a-f0-9]{32}$/i.test(ids.objectId ?? '') ? ids.objectId : undefined
+                })
+                if ((type === 'object' && (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record) === objectId) || record?._id === (type === 'database' ? databaseId : type === 'array' ? arrayId : objectId))
+                    return record
+            } catch { /* Try the next available holder. */ }
+        }
+        return undefined
+    }
+
+    const materializeDatabaseFromPeer = async (databaseId, source) => {
+        const record = source ?? await acquireEntity('database', databaseId)
+        if (!record) return undefined
+        const database = await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .materializeDatabase */ .bk)(root, storageIndex, record)
+        await markLocalAvailability({ databaseId }, 'add')
+        return database
+    }
+
+    const materializeArrayFromPeer = async (database, arrayId, source) => {
+        const record = source ?? await acquireEntity('array', database._id, arrayId)
+        if (!record) return undefined
+        const array = await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .materializeArray */ .bK)(root, storageIndex, database, record)
+        await markLocalAvailability({ databaseId: database._id }, 'add')
+        await markLocalAvailability({ databaseId: database._id, arrayId }, 'add')
+        return array
+    }
+
+    const resolveDatabaseFromPeers = async name => {
+        for (const { id, nodeIds } of await listDistribution()) {
+            if (!isObjectId(id)) continue
+            if (await readDatabase(id)) continue
+            for (const remoteNodeId of nodeIds) {
+                if (remoteNodeId === nodeId || !peerReader) continue
+                try {
+                    const record = await peerReader({ nodeId: remoteNodeId, type: 'database', databaseId: id })
+                    if (record?.name !== name || record?._id !== id) continue
+                    return await materializeDatabaseFromPeer(id, record)
+                } catch { /* Try another holder for this database ID. */ }
+            }
+        }
+        return undefined
+    }
+
+    const resolveArrayFromPeers = async (database, name) => {
+        for (const { id, nodeIds } of await listDistribution({ databaseId: database._id })) {
+            if (!isObjectId(id)) continue
+            if (await readArray(database._id, id)) continue
+            for (const remoteNodeId of nodeIds) {
+                if (remoteNodeId === nodeId || !peerReader) continue
+                try {
+                    const record = await peerReader({
+                        nodeId: remoteNodeId,
+                        type: 'array',
+                        databaseId: database._id,
+                        arrayId: id
+                    })
+                    if (record?.name !== name || record?._id !== id) continue
+                    return await materializeArrayFromPeer(database, id, record)
+                } catch { /* Try another holder for this array ID. */ }
+            }
+        }
+        return undefined
+    }
+
+    const resolveAllDatabasesFromPeers = async () => {
+        for (const { id } of await listDistribution())
+            if (isObjectId(id) && !(await readDatabase(id)))
+                await materializeDatabaseFromPeer(id)
+    }
+
+    const resolveAllArraysFromPeers = async database => {
+        for (const { id } of await listDistribution({ databaseId: database._id }))
+            if (isObjectId(id) && !(await readArray(database._id, id)))
+                await materializeArrayFromPeer(database, id)
+    }
+
+    const acquisitionPromises = new Map()
+    const materializeObjectFromPeer = async (databaseId, arrayId, objectId, request = {}) => {
+        const key = `${databaseId}/${arrayId}/${objectId}`
+        if (acquisitionPromises.has(key)) return acquisitionPromises.get(key)
+        const promise = (async () => {
+            const existing = await readLocalObject(databaseId, arrayId, objectId)
+            if (existing) return existing
+            const record = await acquireEntity('object', databaseId, arrayId, objectId)
+            if (!record || staleGeneration(record, await getDeletion(databaseId, arrayId, objectId))) return undefined
+
+            try {
+                await createObjects({
+                    ...request,
+                    method: 'object.create',
+                    database: request.database,
+                    array: request.array,
+                    object: record
+                }, databaseId, arrayId, { publishMutation: false, acquired: true })
+            } catch (error) {
+                const concurrent = await readLocalObject(databaseId, arrayId, objectId)
+                if (!concurrent) throw error
+                return concurrent
+            }
+
+            if (!deferred) {
+                await markLocalAvailability({ databaseId }, 'add')
+                await markLocalAvailability({ databaseId, arrayId }, 'add')
+                await markLocalAvailability({ databaseId, arrayId, objectId }, 'add')
+            }
+            return record
+        })()
+        acquisitionPromises.set(key, promise)
+        try {
+            return await promise
+        } finally {
+            acquisitionPromises.delete(key)
+        }
+    }
+
+    const loadObject = async (database, array, objectId, request = {}) => {
+        const object = await readLocalObject(database, array, objectId)
+        if (object) return object
+        if ((/^[a-f0-9]{32}$/i.test(objectId) && pendingIndexes.has((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, objectId))))
+            throw new Error(`Object file not found: ${objectId}`)
+        const acquired = await materializeObjectFromPeer(database, array, objectId, request)
+        if (acquired) return acquired
+        throw new Error(`Object file not found: ${objectId}`)
+    }
+
+    const selectObjects = async (database, array, query, request = {}) => {
+        const hydrated = new Map()
+        const readForPlanning = async objectId => {
+            if (hydrated.has(objectId)) return hydrated.get(objectId)
+            const object = (/^[a-f0-9]{32}$/i.test(objectId) && pendingIndexes.has((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, objectId)))
+                ? await readLocalObject(database, array, objectId)
+                : await loadObject(database, array, objectId, request)
+            hydrated.set(objectId, object)
+            return object
+        }
+        const { ids } = await (0,_query_js__WEBPACK_IMPORTED_MODULE_14__/* .queryIndexCandidates */ .FP)(storageIndex, database, array, query, {
+            readObject: readForPlanning
+        })
+        const objects = []
+
+        const candidates = new Set(ids)
+        for (const entry of pendingIndexes.values())
+            if (entry.database === database && entry.array === array) candidates.add(entry.fileId)
+        for (const objectId of candidates) {
+            const path = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, objectId)
+            const pending = pendingIndexes.has(path)
+            if (pending && !(await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .readJSON */ .TQ)(path))) continue
+            const object = pending ? await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .readJSON */ .TQ)(path) : hydrated.get(objectId) ?? await loadObject(database, array, objectId, request)
+            if ((0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_6__/* .queryData */ .VR)(object, query)) objects.push(object)
+        }
+
+        return objects
+    }
+
+    const readObjects = async (request, database, array) => {
+        const query = (0,_query_js__WEBPACK_IMPORTED_MODULE_14__/* .normalizeQuery */ .GC)(request)
+        const requestedId = query._id
+        const requestedIds = typeof requestedId === 'string'
+            ? [requestedId]
+            : requestedId && typeof requestedId === 'object' && !Array.isArray(requestedId)
+                ? requestedId.$eq ? [requestedId.$eq]
+                    : Array.isArray(requestedId.$in) ? requestedId.$in : []
+                : []
+        for (const objectId of requestedIds)
+            if (typeof objectId === 'string' && /^[0-9a-f]{24}$/i.test(objectId))
+                if (!(/^[a-f0-9]{32}$/i.test(objectId) && pendingIndexes.has((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, objectId.toLowerCase()))))
+                    await materializeObjectFromPeer(database, array, objectId.toLowerCase(), request)
+
+        const objects = await selectObjects(database, array, query, request)
+        return (0,_read_js__WEBPACK_IMPORTED_MODULE_15__/* .applyReadFilter */ .H)(objects, request, {
+            database: request.database ?? request.organization_id,
+            array: request.array,
+            query
+        }).map(object => tagRecord(object, request))
+    }
+
+    const updateObjects = async (request, database, array) => {
+        const inputs = request.object === undefined
+            ? Object.hasOwn(request, '$update') ? [{}] : []
+            : Array.isArray(request.object) ? request.object : [request.object]
+
+        if (!inputs.length)
+            throw new Error('object.update requires object data')
+
+        const createFromUpdate = async input => {
+            const patch = createUpdatePatch(input, request)
+            const record = input._id === undefined ? {} : { _id: input._id }
+            if ((0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_5__/* .createUpdate */ ._W)(record, patch) === false)
+                throw new Error('Shared update utility could not apply the requested update')
+            const records = await createObjects({ ...request, method: 'object.create', object: record }, database, array)
+            return records.map(record => updateReply(record, patch))
+        }
+        const identified = inputs.filter(input => input && typeof input === 'object' && input._id)
+        const targets = []
+
+        if (identified.length) {
+            if (identified.length !== inputs.length)
+                throw new Error('Each object in a multi-object update must include _id')
+
+            for (const input of identified) {
+                const objectId = String(input._id).toLowerCase()
+                const deletion = await getDeletion(database, array, objectId)
+                const current = deletion ? undefined : await readLocalObject(database, array, objectId) ??
+                    await materializeObjectFromPeer(database, array, objectId, request)
+
+                if (!current) {
+                    if (request.upsert && inputs.length === 1)
+                        return createFromUpdate(input)
+
+                    throw new Error(`Object file not found: ${objectId}`)
+                }
+
+                targets.push({ current, input })
+            }
+        } else {
+            if (!request.filter?.query)
+                throw new Error('object.update requires object._id or filter.query')
+            if (inputs.length !== 1)
+                throw new Error('A filtered update accepts one update object')
+
+            const query = (0,_query_js__WEBPACK_IMPORTED_MODULE_14__/* .normalizeQuery */ .GC)(request)
+            const currentObjects = await selectObjects(database, array, query, request)
+            for (const current of currentObjects)
+                targets.push({ current, input: inputs[0] })
+        }
+
+        if (!targets.length && request.upsert) {
+            if (inputs.length !== 1)
+                throw new Error('An upsert accepts one object')
+            return createFromUpdate(inputs[0])
+        }
+
+        const updatedObjects = []
+
+        for (const { current, input } of targets) {
+            const before = (0,_entries_js__WEBPACK_IMPORTED_MODULE_17__/* .indexEntries */ .nL)(current)
+            const createdOn = current.created?.on
+            const patch = createUpdatePatch(input, request)
+            const mutation = applyObjectUpdate(current, patch, (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .auditMetadata */ .RI)(request))
+            const changed = mutation.changed
+            mutation.commit()
+            const updated = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_18__/* .live */ .VD)(current)
+            if (deferred) {
+                if (changed) {
+                    await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .replaceJSON */ .B0)((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(current)), updated)
+                    queueIndex(database, array, before, current, true, createdOn, peerUpdate(updated, patch))
+                }
+                updatedObjects.push(updateReply(tagRecord(updated, request), patch))
+                continue
+            }
+            const after = (0,_entries_js__WEBPACK_IMPORTED_MODULE_17__/* .indexEntries */ .nL)(updated)
+            const beforeKeys = new Set(before.map(_entries_js__WEBPACK_IMPORTED_MODULE_17__/* .entryKey */ .k2)), afterKeys = new Set(after.map(_entries_js__WEBPACK_IMPORTED_MODULE_17__/* .entryKey */ .k2))
+            const changedKeys = new Set()
+            for (const entry of before) if (!afterKeys.has((0,_entries_js__WEBPACK_IMPORTED_MODULE_17__/* .entryKey */ .k2)(entry))) changedKeys.add(entry.key)
+            for (const entry of after) if (!beforeKeys.has((0,_entries_js__WEBPACK_IMPORTED_MODULE_17__/* .entryKey */ .k2)(entry))) changedKeys.add(entry.key)
+            if (changedKeys.size) {
+                const holders = await captureEntryHolders(database, array, before, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(current))
+                await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .reconcileEntrySets */ .oP)(storageIndex, database, array, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(current), before, after)
+                await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .replaceJSON */ .B0)((0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(current)), updated)
+                for (const holder of await captureObjectHolders(database, array, updated)) holders.add(holder)
+                await publishObjectMutation('update', database, array, peerUpdate(updated, patch), holders, updated.created?.on)
+            }
+            updatedObjects.push(updateReply(tagRecord(updated, request), patch))
+        }
+
+        return updatedObjects
+    }
+
+    const deleteObjects = async (request, database, array) => {
+        const inputs = request.object === undefined
+            ? []
+            : Array.isArray(request.object) ? request.object : [request.object]
+        const identified = inputs
+            .filter(input => input && typeof input === 'object' && input._id)
+            .map(input => String(input._id).toLowerCase())
+        let objects
+
+        if (identified.length) {
+            objects = []
+            for (const objectId of new Set(identified))
+                objects.push(await loadObject(database, array, objectId))
+        } else {
+            const query = (0,_query_js__WEBPACK_IMPORTED_MODULE_14__/* .normalizeQuery */ .GC)(request)
+            if (!(0,_query_js__WEBPACK_IMPORTED_MODULE_14__/* .hasQueryConditions */ .PW)(query))
+                throw new Error('object.delete requires object._id or a query filter')
+                objects = await selectObjects(database, array, query, request)
+        }
+
+        const deleted = []
+
+        for (const object of objects) {
+            const holders = deferred ? new Set() : await captureObjectHolders(database, array, object)
+            const file = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectPath */ .du)(root, database, array, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object))
+            if (deferred) {
+                const marker = deletionMarker(object)
+                const markerPath = (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .objectDeletionPath */ .Jv)(root, database, array, object._id)
+                await (0,_io_js__WEBPACK_IMPORTED_MODULE_3__.rm)(file, { force: true })
+                deletedObjects.set(markerPath, marker)
+                queueIndex(database, array, () => (0,_entries_js__WEBPACK_IMPORTED_MODULE_17__/* .indexEntries */ .nL)(object), object, true, object.created?.on, undefined, [
+                    () => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .replaceJSON */ .B0)(markerPath, marker),
+                    () => (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .adjustArrayLength */ .lp)(root, storageIndex, database, array, -1, request),
+                    () => (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .adjustDatabaseLengths */ .MJ)(root, storageIndex, database, { objects: -1 }, request),
+                    () => markLocalAvailability({ databaseId: database, arrayId: array, objectId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object) }, 'remove')
+                ])
+                pendingIndexes.get(file).removed = object
+                deleted.push(tagRecord(object, request))
+                continue
+            }
+            let arrayLengthUpdated = false
+            let databaseLengthUpdated = false
+
+            try {
+                await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .deleteRecord */ .LK)(storageIndex, database, array, file, object)
+                await markDeleted(database, array, object)
+                await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .adjustArrayLength */ .lp)(root, storageIndex, database, array, -1, request)
+                arrayLengthUpdated = true
+                await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .adjustDatabaseLengths */ .MJ)(root, storageIndex, database, { objects: -1 }, request)
+                databaseLengthUpdated = true
+            } catch (error) {
+                if (databaseLengthUpdated)
+                    await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .adjustDatabaseLengths */ .MJ)(root, storageIndex, database, { objects: 1 }, request).catch(() => {})
+                if (arrayLengthUpdated)
+                    await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .adjustArrayLength */ .lp)(root, storageIndex, database, array, 1, request).catch(() => {})
+                if (!(await (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .readJSON */ .TQ)(file)))
+                    await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .createRecord */ .eC)(storageIndex, database, array, file, object).catch(() => {})
+                await clearDeletion(database, array, object._id)
+                throw error
+            }
+
+            deleted.push(tagRecord(object, request))
+            await publishObjectMutation('remove', database, array, object, holders)
+        }
+
+        return deleted
+    }
+
+    const readIndex = async (method, database, array, key = '_id') => {
+        await ready
+        const databaseRecord = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+            storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1,
+            id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseMetadataPath */ .mL)(root, id), database
+        )
+        const databaseId = databaseRecord?._id
+        if (!databaseId) return { database, array, key, indexes: {} }
+        const arrayRecord = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+            storageIndex, databaseId, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip,
+            id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .arrayMetadataPath */ .Ad)(root, databaseId, id), array
+        )
+        const arrayId = arrayRecord?._id
+        if (!arrayId) return { database, array, key, indexes: {} }
+        return { ...(await storageIndex[method](databaseId, arrayId, key)), database, array }
+    }
+
+    const index = {
+        read: (database, array, key) => readIndex('read', database, array, key),
+        getMetadata: (database, array, key) => readIndex('getMetadata', database, array, key),
+        create: async (database, array, key, value, objectId, request = {}) => {
+            await ready
+            const databaseMetadata = await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .ensureDatabase */ .c_)(root, storageIndex, database, {}, request)
+            const arrayMetadata = await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .ensureArray */ .eC)(root, storageIndex, databaseMetadata, array, {}, request)
+            let existing = false
+            if (key === '_id') {
+                for await (const entry of storageIndex.scan(databaseMetadata._id, arrayMetadata._id, key))
+                    if (entry.value === value && entry.objectId === objectId) existing = true
+            }
+            await storageIndex.create(databaseMetadata._id, arrayMetadata._id, key, value, objectId)
+            if (key === '_id' && !existing) {
+                let arrayLengthUpdated = false
+                try {
+                    await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .adjustArrayLength */ .lp)(root, storageIndex, databaseMetadata._id, arrayMetadata._id, 1, request)
+                    arrayLengthUpdated = true
+                    await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .adjustDatabaseLengths */ .MJ)(root, storageIndex, databaseMetadata._id, { objects: 1 }, request)
+                } catch (error) {
+                    if (arrayLengthUpdated)
+                        await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .adjustArrayLength */ .lp)(root, storageIndex, databaseMetadata._id, arrayMetadata._id, -1, request).catch(() => {})
+                    await storageIndex.delete(databaseMetadata._id, arrayMetadata._id, key, value, objectId).catch(() => {})
+                    throw error
+                }
+            }
+        },
+        delete: async (database, array, key, value, objectId, request = {}) => {
+            await ready
+            const databaseRecord = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+                storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1,
+                id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseMetadataPath */ .mL)(root, id), database
+            )
+            const databaseId = databaseRecord?._id
+            if (!databaseId) return false
+            const arrayRecord = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+                storageIndex, databaseId, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip,
+                id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .arrayMetadataPath */ .Ad)(root, databaseId, id), array
+            )
+            const arrayId = arrayRecord?._id
+            if (!arrayId) return false
+            const removed = await storageIndex.delete(databaseId, arrayId, key, value, objectId)
+            if (removed && key === '_id') {
+                let arrayLengthUpdated = false
+                try {
+                    await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .adjustArrayLength */ .lp)(root, storageIndex, databaseId, arrayId, -1, request)
+                    arrayLengthUpdated = true
+                    await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .adjustDatabaseLengths */ .MJ)(root, storageIndex, databaseId, { objects: -1 }, request)
+                } catch (error) {
+                    if (arrayLengthUpdated)
+                        await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .adjustArrayLength */ .lp)(root, storageIndex, databaseId, arrayId, 1, request).catch(() => {})
+                    await storageIndex.create(databaseId, arrayId, key, value, objectId).catch(() => {})
+                    throw error
+                }
+            }
+            return removed
+        },
+        scan: async function* (database, array, key = '_id', options = {}) {
+            await ready
+            const databaseRecord = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+                storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1,
+                id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseMetadataPath */ .mL)(root, id), database
+            )
+            const databaseId = databaseRecord?._id
+            if (!databaseId) return
+            const arrayRecord = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+                storageIndex, databaseId, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip,
+                id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .arrayMetadataPath */ .Ad)(root, databaseId, id), array
+            )
+            const arrayId = arrayRecord?._id
+            if (!arrayId) return
+            yield* storageIndex.scan(databaseId, arrayId, key, options)
+        },
+        clearCache: () => storageIndex.clearCache()
+    }
+
+    index.update = index.create
+    for (const method of ['read', 'getMetadata', 'create', 'update', 'delete']) {
+        const operation = index[method]
+        index[method] = (...args) => (0,_resolution_js__WEBPACK_IMPORTED_MODULE_21__/* .withResolution */ .Hy)(() => operation(...args))
+    }
+
+    const api = {
+        index,
+        async dropIndexes() {
+            const records = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .readRecords */ .T3)(storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1, uuid => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseMetadataPath */ .mL)(root, uuid))
+            await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .sendDatabase */ .Me)(root, storageIndex, 'delete', { database: records.map(value => value.name) })
+            await storageIndex.drop(_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1)
+        },
+        resolveDistributionIds,
+        resolvedScope,
+        updateDistribution,
+        getDistribution,
+        listDistribution,
+        distribution: { local: distributionIndex, peers },
+        updatePartition,
+        getPartitionHolders,
+        listPartitions,
+        readIndexPartition: path => storageIndex.readPartition(path),
+        applyIndexPartition,
+        removeIndexPartition,
+        readLocalEntity,
+        hydrateObjects,
+        applyReplicatedObjectMutation,
+        clearDistributionCache: () => distributionIndex.clearCache(),
+        ready,
+        memoryStats: () => (0,_memory_js__WEBPACK_IMPORTED_MODULE_20__/* .memoryStats */ .DZ)(root),
+        persistenceStats: () => ({ ...persistence?.stats(), pendingIndexes: pendingIndexes.size, indexError: indexError?.message }),
+        flushIndexes,
+        holdPersistence: () => persistence?.hold(),
+        flushPersistence: () => persistence?.flush(),
+        flush,
+        async close() {
+            closing = true
+            await flush()
+            if (!sharedPersistence) await persistence?.close()
+        },
+        async send(request) {
+            await ready
+            const release = persistence?.hold()
+            const response = { ...request }
+            // Operators belong to request processing, including when no record matches.
+            if (request?.method === 'object.update')
+                for (const key of Object.keys(response)) if (key.startsWith('$') && key !== '$update') delete response[key]
+
+            try {
+                if (!request || typeof request.method !== 'string')
+                    throw new TypeError('CRUD request must include a method')
+
+                const [type, method] = request.method.split('.')
+                if (deferred && method === 'delete' && ['database', 'array'].includes(type)) await flushIndexes()
+
+                if (!['create', 'read', 'update', 'delete'].includes(method))
+                    throw new Error(`Unsupported CRUD method: ${request.method}`)
+
+                if (type === 'index') {
+                    await (0,_index_crud_js__WEBPACK_IMPORTED_MODULE_11__/* ["default"] */ .A)(method, response, index)
+                    response.success = true
+                    return response
+                }
+
+                if (deferred && method === 'delete' && ['database', 'array'].includes(type)) await flushIndexes()
+
+                if (type === 'database') {
+                    if (method === 'read') await resolveAllDatabasesFromPeers()
+                    let removedAvailability = []
+                    if (method === 'delete' && nodeId) {
+                        const names = request.database === undefined
+                            ? []
+                            : Array.isArray(request.database) ? request.database : [request.database]
+                        const entities = []
+                        for (const name of names) {
+                            const database = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+                                storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1,
+                                id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseMetadataPath */ .mL)(root, id), name
+                            )
+                            if (!database) continue
+                            const arrays = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .readRecords */ .T3)(
+                                storageIndex, database._id, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip,
+                                id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .arrayMetadataPath */ .Ad)(root, database._id, id)
+                            )
+                            for (const array of arrays) {
+                                for (const objectId of await localObjectIds(database._id, array._id))
+                                    entities.push({ databaseId: database._id, arrayId: array._id, objectId })
+                                entities.push({ databaseId: database._id, arrayId: array._id })
+                            }
+                            entities.push({ databaseId: database._id })
+                        }
+                        removedAvailability = await prepareAvailabilityRemoval(entities)
+                    }
+
+                    try {
+                        await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .sendDatabase */ .Me)(root, storageIndex, method, response)
+                    } catch (error) {
+                        await restoreAvailability(removedAvailability).catch(() => {})
+                        throw error
+                    }
+                    if (method === 'create') {
+                        for (const database of response.database)
+                            await markLocalAvailability({ databaseId: database._id }, 'add')
+                    }
+                    response.success = true
+                    return response
+                }
+
+                if (type === 'array') {
+                    if (method === 'read') {
+                        const databaseName = request.database
+                        let databaseRecord = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+                            storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1,
+                            id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseMetadataPath */ .mL)(root, id), databaseName
+                        )
+                        if (!databaseRecord) databaseRecord = await resolveDatabaseFromPeers(databaseName)
+                        if (databaseRecord) await resolveAllArraysFromPeers(databaseRecord)
+                    }
+                    let removedAvailability = []
+                    if (method === 'delete' && nodeId) {
+                        const databaseName = request.database
+                        const database = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+                            storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1,
+                            id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseMetadataPath */ .mL)(root, id), databaseName
+                        )
+                        const names = request.array === undefined
+                            ? []
+                            : Array.isArray(request.array) ? request.array : [request.array]
+                        const entities = []
+                        if (database) {
+                            for (const name of names) {
+                                const array = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+                                    storageIndex, database._id, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip,
+                                    id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .arrayMetadataPath */ .Ad)(root, database._id, id), name
+                                )
+                                if (!array) continue
+                                for (const objectId of await localObjectIds(database._id, array._id))
+                                    entities.push({ databaseId: database._id, arrayId: array._id, objectId })
+                                entities.push({ databaseId: database._id, arrayId: array._id })
+                            }
+                        }
+                        removedAvailability = await prepareAvailabilityRemoval(entities)
+                    }
+
+                    try {
+                        await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .sendArray */ .YZ)(root, storageIndex, method, response)
+                    } catch (error) {
+                        await restoreAvailability(removedAvailability).catch(() => {})
+                        throw error
+                    }
+                    if (method === 'create') {
+                        for (const array of response.array) {
+                            await markLocalAvailability({ databaseId: array.databaseId }, 'add')
+                            await markLocalAvailability({ databaseId: array.databaseId, arrayId: array._id }, 'add')
+                        }
+                    }
+                    response.success = true
+                    return response
+                }
+
+                if (type !== 'object')
+                    throw new Error(`Unsupported CRUD method: ${request.method}`)
+
+                const databaseName = request.database ?? request.organization_id
+                const arrayName = request.array
+
+                if (Array.isArray(databaseName) || Array.isArray(arrayName))
+                    throw new TypeError('This filesystem prototype accepts one database and one array per request')
+
+                if (typeof databaseName !== 'string' || !databaseName.trim())
+                    throw new TypeError('object CRUD requires a database name')
+                if (typeof arrayName !== 'string' || !arrayName.trim())
+                    throw new TypeError('object CRUD requires an array name')
+
+                let databaseMetadata = await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+                    storageIndex, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG */ .ii, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .DATABASE_CATALOG_ARRAY */ .u1,
+                    id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .databaseMetadataPath */ .mL)(root, id), databaseName
+                )
+
+                if (method === 'read' && !databaseMetadata)
+                    databaseMetadata = await resolveDatabaseFromPeers(databaseName)
+
+                if (method === 'create' || (method === 'update' && request.upsert))
+                    databaseMetadata = await (0,_database_index_js__WEBPACK_IMPORTED_MODULE_8__/* .ensureDatabase */ .c_)(root, storageIndex, databaseName, {}, request)
+
+                let arrayMetadata = databaseMetadata
+                    ? await (0,_records_js__WEBPACK_IMPORTED_MODULE_16__/* .findRecordByName */ .Tz)(
+                        storageIndex, databaseMetadata._id, _storage_js__WEBPACK_IMPORTED_MODULE_13__/* .ARRAY_CATALOG */ .ip,
+                        id => (0,_storage_js__WEBPACK_IMPORTED_MODULE_13__/* .arrayMetadataPath */ .Ad)(root, databaseMetadata._id, id), arrayName
+                    )
+                    : undefined
+
+                if (method === 'read' && databaseMetadata && !arrayMetadata)
+                    arrayMetadata = await resolveArrayFromPeers(databaseMetadata, arrayName)
+
+                if (method === 'create' || (method === 'update' && request.upsert))
+                    arrayMetadata = await (0,_array_index_js__WEBPACK_IMPORTED_MODULE_7__/* .ensureArray */ .eC)(root, storageIndex, databaseMetadata, arrayName, {}, request)
+
+                if (!databaseMetadata || !arrayMetadata) {
+                    response.database = databaseName
+                    response.array = arrayName
+                    response.object = []
+                    response.success = true
+                    return response
+                }
+
+                const databaseId = databaseMetadata._id
+                const arrayId = arrayMetadata._id
+
+                response.database = databaseName
+                response.array = arrayName
+                if (method === 'create') {
+                    response.object = await createObjects(request, databaseId, arrayId)
+                    if (!deferred) for (const object of response.object) {
+                        await markLocalAvailability({ databaseId }, 'add')
+                        await markLocalAvailability({ databaseId, arrayId }, 'add')
+                        await markLocalAvailability({ databaseId, arrayId, objectId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object) }, 'add')
+                    }
+                }
+                else if (method === 'read') response.object = await readObjects(request, databaseId, arrayId)
+                else if (method === 'update') {
+                    response.object = await updateObjects(request, databaseId, arrayId)
+                }
+                else {
+                    response.object = await deleteObjects(request, databaseId, arrayId)
+                    if (!deferred) for (const object of response.object)
+                        await markLocalAvailability({ databaseId, arrayId, objectId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(object) }, 'remove')
+                }
+                response.success = true
+                return response
+            } catch (error) {
+                return errorHandler(response, error)
+            } finally { release?.() }
+        }
+    }
+    const send = api.send
+    api.send = request => (0,_resolution_js__WEBPACK_IMPORTED_MODULE_21__/* .withResolution */ .Hy)(() => send(request))
+    return api
+}
+
+
+/***/ },
+
+/***/ 3999
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   XA: () => (/* binding */ encodePartitionEnvelope)
+/* harmony export */ });
+// Runtime ownership only: byte measurements are never attached to index nodes.
+const partitions = new WeakMap()
+const registerPartition = (node, split) => partitions.set(node, split)
+const splitSerializedPartition = (node, bytes) => partitions.get(node)?.(bytes)
+
+// Encode the node once, then insert that exact encoding into the routing frame.
+// Routing metadata is not part of the preferred index-node byte target.
+function encodePartitionEnvelope({ value, ...routing }) {
+    const node = JSON.stringify(value)
+    const header = JSON.stringify(routing)
+    return { encoded: `${header.slice(0, -1)}${header.length > 2 ? ',' : ''}"value":${node}}`, bytes: Buffer.byteLength(node) }
+}
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "ZU", 0, /* binding */ splitSerializedPartition,
+/* harmony export */   "yp", 0, /* binding */ registerPartition
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 7432
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Lc: () => (/* binding */ createDistributionAdapters),
+/* harmony export */   Qo: () => (/* binding */ mergeDistributionLists),
+/* harmony export */   pr: () => (/* binding */ createPeerDistribution)
+/* harmony export */ });
+const entityKey = value => JSON.stringify([
+    value.organization_id, value.storageId, value.databaseId, value.arrayId, value.objectId
+])
+
+function mergeDistributionLists(local, peers, key = 'id') {
+    const values = new Map()
+    for (const item of [...local, ...peers]) {
+        const previous = values.get(item[key])
+        values.set(item[key], { ...item, nodeIds: [...new Set([...(previous?.nodeIds ?? []), ...item.nodeIds])].sort() })
+    }
+    return [...values.values()]
+}
+
+/** Local updates use the file-backed index; peer updates stay in memory. */
+function createDistributionAdapters(nodeId, peers) {
+    const update = (payload, apply) => !nodeId || payload.nodeId === nodeId ? apply(payload) : peers.update(payload)
+    return {
+        distributionAdapter: {
+            update,
+            get: async (payload, read) => [...new Set([...await read(payload), ...peers.get(payload)])].sort(),
+            list: async (payload, read) => mergeDistributionLists(await read(payload), peers.list(payload))
+        },
+        partitionAdapter: {
+            update,
+            get: async (path, read) => [...new Set([...await read(path), ...peers.getPartition(path)])].sort(),
+            list: async read => mergeDistributionLists(await read(), peers.listPartitions(), 'partitionId')
+        }
+    }
+}
+
+/** Peer inventories belong only to this process, never to the file/index store. */
+function createPeerDistribution(localId) {
+    const inventories = new Map()
+    const retiredSessions = new Map()
+    const disconnected = new Set()
+    const inventory = nodeId => {
+        if (!inventories.has(nodeId)) inventories.set(nodeId, { entities: new Map(), partitions: new Set() })
+        return inventories.get(nodeId)
+    }
+    const update = value => {
+        if (value.nodeId === localId) return { changed: false, nodeIds: [] }
+        const peer = inventory(value.nodeId)
+        const key = value.partitionId ?? entityKey(value)
+        const entries = value.partitionId ? peer.partitions : peer.entities
+        const had = entries.has(key)
+        if (value.operation === 'remove') entries.delete(key)
+        else if (value.partitionId) entries.add(key)
+        else entries.set(key, value)
+        return { changed: had !== entries.has(key), nodeIds: value.partitionId ? getPartition(key) : get(value) }
+    }
+    const get = value => {
+        const key = entityKey(value)
+        return [...inventories].filter(([, peer]) => peer.entities.has(key)).map(([id]) => id)
+    }
+    const getPartition = path => [...inventories].filter(([, peer]) => peer.partitions.has(path)).map(([id]) => id)
+    const list = (scope = {}) => {
+        const result = new Map()
+        for (const [nodeId, peer] of inventories) for (const value of peer.entities.values()) {
+            if (!value.databaseId) continue
+            if (value.organization_id !== scope.organization_id || value.storageId !== scope.storageId) continue
+            if (scope.databaseId !== undefined && value.databaseId !== scope.databaseId) continue
+            if (scope.arrayId !== undefined && value.arrayId !== scope.arrayId) continue
+            if (scope.databaseId === undefined && value.arrayId !== undefined) continue
+            if (scope.databaseId !== undefined && scope.arrayId === undefined && (value.arrayId === undefined || value.objectId !== undefined)) continue
+            if (scope.arrayId !== undefined && value.objectId === undefined) continue
+            const id = scope.arrayId !== undefined ? value.objectId : scope.databaseId !== undefined ? value.arrayId : value.databaseId
+            if (!result.has(id)) result.set(id, new Set())
+            result.get(id).add(nodeId)
+        }
+        return [...result].map(([id, nodes]) => ({ id, nodeIds: [...nodes] }))
+    }
+    return {
+        get, list, getPartition, update, updatePartition: update,
+        listPartitions: () => {
+            const result = new Map()
+            for (const [nodeId, peer] of inventories) for (const partitionId of peer.partitions) {
+                if (!result.has(partitionId)) result.set(partitionId, [])
+                result.get(partitionId).push(nodeId)
+            }
+            return [...result].map(([partitionId, nodeIds]) => ({ partitionId, nodeIds }))
+        },
+        replace(nodeId, snapshot, session, revision = 0) {
+            if (nodeId === localId) return false
+            if (disconnected.has(nodeId)) return false
+            if (retiredSessions.get(nodeId)?.has(session)) return false
+            const previous = inventories.get(nodeId)
+            if (previous && previous.session === session && previous.revision > revision) return false
+            if (previous?.session && previous.session !== session) {
+                if (!retiredSessions.has(nodeId)) retiredSessions.set(nodeId, new Set())
+                retiredSessions.get(nodeId).add(previous.session)
+            }
+            inventories.set(nodeId, {
+                entities: new Map(snapshot.entities.map(value => [entityKey(value), { ...value, nodeId }])),
+                partitions: new Set(snapshot.partitions.map(value => value.partitionId)), session, revision
+            })
+            return true
+        },
+        change(value, session, revision) {
+            if (disconnected.has(value.nodeId)) return false
+            if (value.nodeId === localId || retiredSessions.get(value.nodeId)?.has(session)) return false
+            const peer = inventories.get(value.nodeId)
+            if (peer && peer.session === session && peer.revision >= revision) return false
+            if (peer?.session && session && peer.session !== session) return false
+            update(value)
+            Object.assign(inventory(value.nodeId), { session, revision })
+            return true
+        },
+        remove: nodeId => {
+            disconnected.add(nodeId)
+            return inventories.delete(nodeId)
+        },
+        connect: nodeId => disconnected.delete(nodeId),
+        findScope(organization, storage) {
+            for (const peer of inventories.values()) for (const value of peer.entities.values())
+                if (value.organization_id === organization && value.storage === storage) return value
+        },
+        findFile(uuid) {
+            const nodes = []
+            for (const [nodeId, peer] of inventories) {
+                for (const value of peer.entities.values()) {
+                    if ([value.objectId, value.databaseFileId, value.arrayFileId, value.storageFileId].includes(uuid)) {
+                        nodes.push(nodeId)
+                        break
+                    }
+                }
+            }
+            return nodes
+        }
+    }
+}
+
+
+/***/ },
+
+/***/ 5634
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   A: () => (/* binding */ createPersistence),
+/* harmony export */   z: () => (/* binding */ persistenceFor)
+/* harmony export */ });
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2561);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5663);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4934);
+/* harmony import */ var _bytes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5082);
+
+
+
+
+
+
+
+const stores = new Map()
+const inside = (root, path) => path === root || path.startsWith(root + node_path__WEBPACK_IMPORTED_MODULE_2__.sep)
+function persistenceFor(path) {
+    path = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.resolve)(path)
+    for (const [root, store] of stores) if (inside(root, path)) return store
+}
+
+/** One sequential write-behind queue. Entries retain addresses, never serialized transactions. */
+function createPersistence({ directory, canFlush = () => true, storage, write, retryMs = 1000, debounceMs = 25, maxWaitMs = 1000 }) {
+    if (![retryMs, debounceMs, maxWaitMs].every(value => Number.isFinite(value) && value >= 0) || maxWaitMs < debounceMs)
+        throw new TypeError('Persistence delays must be finite non-negative numbers; maxWaitMs must cover debounceMs')
+    const root = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.resolve)(directory)
+    if (stores.has(root)) throw new Error(`Persistence already initialized for ${root}`)
+    ;(0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .enableMemoryCache */ .nD)(root)
+    const dirty = new Map()
+    let revision = 0, holds = 0, running, timer, closed = false, lastError
+    const schedule = delay => {
+        if (closed || timer || running || holds || !dirty.size || !canFlush()) return
+        if (delay === undefined) {
+            let earliest = Infinity
+            for (const entry of dirty.values()) earliest = Math.min(earliest, entry.dueAt)
+            delay = Math.max(0, earliest - Date.now())
+        }
+        timer = setTimeout(() => {
+            timer = undefined
+            flush(false).catch(error => {
+                lastError = error
+                schedule(retryMs)
+            })
+        }, delay)
+        timer.unref?.()
+    }
+    const stage = (path, operation, options = {}) => {
+        if (closed) throw new Error('Persistence is closed')
+        path = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.resolve)(path)
+        if (operation === 'remove' && options.recursive) {
+            for (const key of dirty.keys()) if (inside(path, key)) { dirty.delete(key); (0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .unpinMemoryPath */ .Vc)(key) }
+        }
+        const firstDirty = dirty.get(path)?.firstDirty ?? Date.now()
+        const dueAt = Math.min(Date.now() + debounceMs, firstDirty + maxWaitMs)
+        dirty.set(path, { revision: ++revision, operation, options, firstDirty, dueAt })
+        ;(0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .pinMemoryPath */ .Kc)(path)
+        schedule()
+    }
+    const writeDisk = write ?? (async ({ path, operation, value, options }) => {
+        if (operation === 'remove') {
+            await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.rm(path, { ...options, force: true })
+            ;(0,_bytes_js__WEBPACK_IMPORTED_MODULE_4__/* .removeFileBytes */ .os)(path, options)
+            return
+        }
+        await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.mkdir((0,node_path__WEBPACK_IMPORTED_MODULE_2__.dirname)(path), { recursive: true })
+        const temp = `${path}.${(0,node_crypto__WEBPACK_IMPORTED_MODULE_1__.randomUUID)()}.tmp`
+        try {
+            const encoded = JSON.stringify(value)
+            await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.writeFile(temp, encoded)
+            await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.rename(temp, path)
+            ;(0,_bytes_js__WEBPACK_IMPORTED_MODULE_4__/* .recordFileBytes */ .Pt)(path, Buffer.byteLength(encoded))
+        } finally { await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.rm(temp, { force: true }) }
+    })
+    async function flush(force = true) {
+        if (running) {
+            await running
+            if (force && dirty.size) return flush(true)
+            return
+        }
+        if (holds || !canFlush()) {
+            if (force) throw new Error('Indexing or a memory transaction is still pending')
+            return
+        }
+        if (timer) { clearTimeout(timer); timer = undefined }
+        running = (async () => {
+            while (dirty.size && !holds && canFlush()) {
+                let eligible
+                for (const [path, entry] of dirty) {
+                    if (!force && entry.dueAt > Date.now()) continue
+                    let blocked = false
+                    for (let parent = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.dirname)(path); inside(root, parent); parent = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.dirname)(parent)) {
+                        const ancestor = dirty.get(parent)
+                        if (ancestor?.operation === 'remove' && ancestor.options.recursive) { blocked = true; break }
+                        if (parent === root) break
+                    }
+                    if (!blocked) { eligible = [path, entry]; break }
+                }
+                if (!eligible) break
+                const [path, entry] = eligible
+                // Keep the DB-owned value reference. Encoders own serialization;
+                // a newer staged revision must remain dirty after this acknowledgment.
+                const value = (0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .peekMemoryJSON */ .TS)(path)
+                const item = { path, ...entry, value }
+                await writeDisk(item)
+                if (storage) await storage({ ...item, path: (0,node_path__WEBPACK_IMPORTED_MODULE_2__.relative)(root, path).split(node_path__WEBPACK_IMPORTED_MODULE_2__.sep).join('/'), value })
+                if (dirty.get(path) === entry) { dirty.delete(path); (0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .unpinMemoryPath */ .Vc)(path) }
+                lastError = undefined
+            }
+            await (0,_bytes_js__WEBPACK_IMPORTED_MODULE_4__/* .flushFileBytes */ .Aq)(root)
+        })()
+        try { await running }
+        catch (error) { lastError = error; throw error }
+        finally {
+            running = undefined
+            schedule(lastError ? retryMs : undefined)
+        }
+    }
+    const store = {
+        root,
+        stageJSON(path, value) { path = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.resolve)(path); (0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .writeMemoryJSON */ .br)(path, value); stage(path, 'set') },
+        remove(path, options) {
+            path = (0,node_path__WEBPACK_IMPORTED_MODULE_2__.resolve)(path)
+            ;(0,_memory_js__WEBPACK_IMPORTED_MODULE_3__/* .markMemoryRemoval */ .Tp)(path)
+            stage(path, 'remove', options)
+        },
+        hold() { holds++; return () => { holds--; schedule() } },
+        schedule,
+        flush,
+        stats: () => ({ pending: dirty.size, writing: Boolean(running), error: lastError?.message }),
+        async close() {
+            await flush()
+            if (dirty.size) throw new Error('Persistence still has pending writes')
+            closed = true
+            if (timer) clearTimeout(timer)
+            stores.delete(root)
+        }
+    }
+    stores.set(root, store)
+    return store
+}
+
+
+/***/ },
+
+/***/ 3131
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Sy: () => (/* binding */ getPersistenceDriver)
+/* harmony export */ });
+/* unused harmony exports persistenceDrivers, registerPersistenceDriver */
+/* harmony import */ var node_fs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9627);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
+/* harmony import */ var node_url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9061);
+
+
+
+
+const directories = [
+    process.env.COCREATE_PERSISTENCE_DIR,
+    process.env.COCREATE_STORAGE_DIR,
+    ...['persistences', 'storages'].flatMap(name => [
+        node_path__WEBPACK_IMPORTED_MODULE_1__["default"].resolve(process.cwd(), name),
+        process.argv[1] ? node_path__WEBPACK_IMPORTED_MODULE_1__["default"].resolve(node_path__WEBPACK_IMPORTED_MODULE_1__["default"].dirname(process.argv[1]), name) : null
+    ])
+].filter((directory, index, all) => directory && all.indexOf(directory) === index)
+
+const aliases = {
+    auroradb: 'postgresql', cockroachdb: 'postgresql', cosmosdb: 'mongodb',
+    documentdb: 'mongodb', dqlite: 'sqlite', ferretdb: 'mongodb', mariadb: 'mysql',
+    oracledb: 'mongodb', planetscale: 'mysql', tidb: 'mysql', timescaledb: 'postgresql',
+    turso: 'sqlite', yugabytedb: 'postgresql'
+}
+
+const persistenceDrivers = new Map()
+
+function instantiate(module) {
+    let driver = module?.default ?? module
+    if (typeof driver === 'function') {
+        try { driver = new driver() }
+        catch { /* A callable driver may not be a constructor. */ }
+    }
+    return driver
+}
+
+function registerPersistenceDriver(provider, driver) {
+    if (!provider || !driver) return
+    const key = provider.toLowerCase()
+    const instance = instantiate(driver)
+    persistenceDrivers.set(key, instance)
+    persistenceDrivers.set(aliases[key] || key, instance)
+    return instance
+}
+
+/** Load a persistence driver from the runtime cache or a persistences directory. */
+async function getPersistenceDriver(provider) {
+    if (typeof provider !== 'string' || !provider.trim())
+        throw new Error('A persistence provider name is required.')
+
+    const key = provider.trim().toLowerCase()
+    const resolved = aliases[key] || key
+    if (persistenceDrivers.has(key)) return persistenceDrivers.get(key)
+    if (persistenceDrivers.has(resolved)) return persistenceDrivers.get(resolved)
+
+    for (const directory of directories) {
+        const file = node_path__WEBPACK_IMPORTED_MODULE_1__["default"].join(directory, `${resolved}.js`)
+        if (!node_fs__WEBPACK_IMPORTED_MODULE_0__["default"].existsSync(file)) continue
+        const module = await import(/* webpackIgnore: true */ (0,node_url__WEBPACK_IMPORTED_MODULE_2__.pathToFileURL)(file).href)
+        const driver = registerPersistenceDriver(key, module)
+        if (typeof driver?.send !== 'function')
+            throw new Error(`Persistence driver "${provider}" must implement send().`)
+        return driver
+    }
+
+    throw new Error(`Persistence driver "${provider}" was not found in: ${directories.join(', ')}`)
+}
+
+
+/***/ },
+
+/***/ 3720
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Z: () => (/* binding */ localReadRequest),
+/* harmony export */   j: () => (/* binding */ persistenceReadRequest)
+/* harmony export */ });
+/* harmony import */ var _query_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7961);
+
+
+// Copy request/view containers only; database-owned values remain live internally.
+function localReadRequest(request) {
+    const filter = value => value && ({ ...value,
+        ...(value.storages ? { storages: value.storages.map(item => ({ ...item })) } : {}) })
+    const selector = value => value && typeof value === 'object'
+        ? { ...value, ...(value.filter ? { filter: filter(value.filter) } : {}) } : value
+    return { ...request,
+        ...(request.filter ? { filter: filter(request.filter) } : {}),
+        ...(request.object ? { object: Array.isArray(request.object) ? request.object.map(selector) : selector(request.object) } : {}) }
+}
+
+function persistenceReadRequest(request) {
+    const result = localReadRequest(request)
+    const selectors = Array.isArray(request.object) ? request.object : [request.object]
+    const explicitQuery = request.filter?.query ?? request.object?.filter?.query
+    const query = explicitQuery !== undefined ? (0,_query_js__WEBPACK_IMPORTED_MODULE_0__/* .normalizeQuery */ .GC)({ ...request, filter: { query: explicitQuery } }) : (selectors.length > 1
+        ? { $or: selectors.map(object => (0,_query_js__WEBPACK_IMPORTED_MODULE_0__/* .normalizeQuery */ .GC)({ ...request, object })) }
+        : (0,_query_js__WEBPACK_IMPORTED_MODULE_0__/* .normalizeQuery */ .GC)(request))
+    result.filter ??= result.object?.filter ?? {}
+    result.filter.query = query
+    // No document values/updated metadata go to the legacy adapter: a read must
+    // never enter its old source-object synchronization/write path.
+    result.object = []
+    const complete = filter => {
+        if (!filter) return
+        // Hydrate complete documents and enough of the ordered prefix for the
+        // original local read to apply its own offset and projection once.
+        const offset = filter.startingIndex ?? filter.index ?? 0
+        if (filter.limit) filter.limit += offset
+        delete filter.key
+        delete filter.storages
+        delete filter.count
+        filter.index = 0
+        filter.startingIndex = 0
+    }
+    complete(result.filter)
+    return result
+}
+
+
+/***/ },
+
+/***/ 5825
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SV: () => (/* binding */ sendPersistence),
+/* harmony export */   Sy: () => (/* reexport safe */ _driver_js__WEBPACK_IMPORTED_MODULE_0__.Sy),
+/* harmony export */   oO: () => (/* binding */ getPersistence)
+/* harmony export */ });
+/* harmony import */ var _driver_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3131);
+/* harmony import */ var _response_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(102);
+
+
+
+/**
+ * Resolve a named persistence from an organization's configured API records.
+ * Missing or unknown names use the organization's bootstrap persistence.
+ */
+async function getPersistence({ organization, organizationId, name, bootstrapPersistence } = {}) {
+    if (!organizationId)
+        throw new Error('Missing an organization_id while resolving persistence.')
+
+    const bootstrap = [organization?.bootstrapPersistence, organization?.persistence,
+        organization?.bootstrapStorage, organization?.storage].find(value =>
+        value && typeof value === 'object' && !Array.isArray(value)) || bootstrapPersistence
+    if (!bootstrap) return
+    if (typeof bootstrap !== 'object' || Array.isArray(bootstrap) || !bootstrap.name || !bootstrap.provider)
+        throw new Error(`Bootstrap persistence is not configured with name and provider for organization "${organizationId}".`)
+
+    if (!name || name === bootstrap.name) return bootstrap
+
+    const driver = await (0,_driver_js__WEBPACK_IMPORTED_MODULE_0__/* .getPersistenceDriver */ .Sy)(bootstrap.provider)
+    const response = await driver.send({
+        method: 'object.read',
+        organization_id: organizationId,
+        database: organizationId,
+        array: 'apis',
+        object: [],
+        filter: { query: { type: 'persistence', enabled: true, name }, limit: 1 },
+        persistenceConfig: bootstrap
+    })
+
+    const persistence = response?.object?.[0]
+    return persistence?.name && persistence?.provider ? persistence : bootstrap
+}
+
+/** Send a CoCreate envelope to its selected provider, falling back to bootstrap. */
+async function sendPersistence(data, { organization, organizationId = data?.organization_id, bootstrapPersistence } = {}) {
+    const persistence = await getPersistence({
+        organization,
+        organizationId,
+        name: data?.persistence,
+        bootstrapPersistence
+    })
+    if (!persistence) throw new Error(`No persistence is configured for organization "${organizationId}".`)
+
+    const driver = await (0,_driver_js__WEBPACK_IMPORTED_MODULE_0__/* .getPersistenceDriver */ .Sy)(persistence.provider)
+    return (0,_response_js__WEBPACK_IMPORTED_MODULE_1__/* .readPersistenceResponse */ .N)(await driver.send({ ...data, persistenceConfig: persistence }), data)
+}
+
+
+
+
+/***/ },
+
+/***/ 102
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   N: () => (/* binding */ readPersistenceResponse)
+/* harmony export */ });
+function errorHandler(data) {
+    if (!Array.isArray(data.error)) data.error = data.error === undefined ? [] : [data.error]
+    // JSON parser messages can expose fragments of credential-bearing files.
+    data.error.push('Persistence returned invalid JSON.')
+    data.success = false
+    return data
+}
+
+/** Decode only serialized file values; parsed objects retain their identity. */
+function readPersistenceValue(value) {
+    const parsed = JSON.parse(value)
+    if (parsed && typeof parsed === 'object') parsed.$bytes = Buffer.byteLength(value, 'utf8')
+    return parsed
+}
+
+/** Normalize transport envelopes separately from their individual file values. */
+function readPersistenceResponse(response, data) {
+    try {
+        const raw = typeof response === 'string' ? response : undefined
+        if (raw !== undefined) response = JSON.parse(raw)
+        const values = Array.isArray(response?.persistence) ? response.persistence : undefined
+        const objects = Array.isArray(response?.object) ? response.object : undefined
+        if (values) for (const item of values)
+            if (typeof item?.value === 'string') item.value = readPersistenceValue(item.value)
+        if (objects) for (let i = 0; i < objects.length; i++)
+            if (typeof objects[i] === 'string') objects[i] = readPersistenceValue(objects[i])
+        if (raw !== undefined && !values && !objects && response && typeof response === 'object')
+            response.$bytes = Buffer.byteLength(raw, 'utf8')
+        return response
+    } catch {
+        return errorHandler(data)
+    }
+}
+
+
+/***/ },
+
+/***/ 7961
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FP: () => (/* binding */ queryIndexCandidates),
+/* harmony export */   GC: () => (/* binding */ normalizeQuery),
+/* harmony export */   PW: () => (/* binding */ hasQueryConditions)
+/* harmony export */ });
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(900);
+
+
+const typeOf = value => value === null ? 'null' :
+    Array.isArray(value) ? 'array' :
+    typeof value === 'boolean' ? 'boolean' :
+        typeof value === 'string' ? 'string' :
+            typeof value === 'number' && Number.isFinite(value) ? 'number' : null
+
+function normalizeQuery(request) {
+    const query = request.filter?.query ?? request.object?.filter?.query
+    let normalized
+
+    if (Array.isArray(query)) {
+        normalized = {
+            $and: query.map(({ key, value, operator = '$eq' }) => ({
+                [key]: { [operator]: value }
+            }))
+        }
+    } else if (query && typeof query === 'object') {
+        normalized = query
+    } else {
+        const objects = request.object === undefined
+            ? []
+            : Array.isArray(request.object) ? request.object : [request.object]
+        const first = objects[0]
+
+        if (typeof first === 'string') normalized = { _id: first }
+        else if (!first || typeof first !== 'object' || Array.isArray(first)) normalized = {}
+        else normalized = Object.fromEntries(Object.entries(first)
+            .filter(([key]) => key !== 'filter' && !key.startsWith('$')))
+    }
+
+    return request.organization_id
+        ? { ...normalized, organization_id: request.organization_id }
+        : normalized
+}
+
+function hasQueryConditions(query) {
+    return query && typeof query === 'object' && Object.keys(query).length > 0
+}
+
+const intersect = (left, right) => new Set([...left].filter(value => right.has(value)))
+const union = (left, right) => new Set([...left, ...right])
+
+/**
+ * Compile Mongo-style query conditions into candidate ObjectId sets.
+ * Unsupported predicates conservatively return the full ID universe and are
+ * checked against hydrated records by queryData.
+ */
+async function queryIndexCandidates(index, database, array, query, { readObject } = {}) {
+    const metadata = new Map()
+    const getMetadata = key => {
+        if (!metadata.has(key)) metadata.set(key, (index.getMetadata ?? index.read).call(index, database, array, key))
+        return metadata.get(key)
+    }
+    const hasArrayAncestor = async key => {
+        const parts = key.replace(/\[(\d+)\]/g, '.$1').split('.')
+        for (let i = 1; i < parts.length; i++)
+            if ((await getMetadata(parts.slice(0, i).join('.'))).indexes.array) return true
+        return false
+    }
+    let allIdsPromise
+    const allIds = () => {
+        if (!allIdsPromise) allIdsPromise = (async () => {
+            const ids = new Set()
+            for await (const entry of index.scan(database, array, '_id', { type: 'string' }))
+                ids.add(entry.objectId)
+            return ids
+        })()
+        return allIdsPromise
+    }
+
+    const all = async exact => ({ ids: new Set(await allIds()), exact })
+    const empty = exact => ({ ids: new Set(), exact })
+
+    const scan = async (key, type, predicate, range) => {
+        const root = await getMetadata(key)
+        if (!Object.keys(root.indexes).length) return all(false)
+        if (!root.indexes[type]) return empty(true)
+        const branch = root.indexes[type]
+        if (type !== 'array' && branch.first && branch.last && (
+            range?.lower !== undefined && (branch.last.value < range.lower ||
+                range.lowerOpen && branch.last.value === range.lower) ||
+            range?.upper !== undefined && (branch.first.value > range.upper ||
+                range.upperOpen && branch.first.value === range.upper)
+        )) return empty(true)
+        const ids = new Set()
+        for await (const entry of index.scan(database, array, key, { type, ...range }))
+            if (predicate(entry.value)) ids.add(entry.objectId)
+        return { ids, exact: true }
+    }
+
+    const scanArrays = async (key, predicate = () => true, range) =>
+        scan(key, 'array', predicate, range)
+
+    const equality = async (key, value, condition = { $eq: value }) => {
+        const type = typeOf(value)
+        if (!type) return all(false)
+        if (type === 'array')
+            return scanArrays(key, candidate => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)({ value: candidate }, { value: condition }))
+
+        const scalar = await scan(key, type, candidate => Object.is(candidate, value), { lower: value, upper: value })
+        const arrays = await scanArrays(key, candidate => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)({ value: candidate }, { value }))
+        return {
+            ids: union(scalar.ids, arrays.ids),
+            exact: scalar.exact && arrays.exact
+        }
+    }
+
+    const range = async (key, operator, value) => {
+        // Plain objects are not terminal value-index entries, but native JS
+        // comparisons can coerce them to strings. Do not exclude those records
+        // by treating the scalar branches as a complete candidate set.
+        if (key !== '_id' && (typeof value === 'string' || value && typeof value === 'object'))
+            return all(false)
+        const root = await getMetadata(key)
+        const matches = new Set()
+        const operators = {
+            '$gt': (candidate, query) => candidate > query,
+            '$gte': (candidate, query) => candidate >= query,
+            '$lt': (candidate, query) => candidate < query,
+            '$lte': (candidate, query) => candidate <= query
+        }
+
+        // Values are intentionally compared with JavaScript's native operators.
+        // Check every indexed type branch so coercive JS comparisons cannot be
+        // lost by restricting the scan to the query value's own type branch.
+        for (const type of Object.keys(root.indexes || {}).filter(type => type !== 'array')) {
+            // Prune only same-type numeric/string branches. Other branches retain
+            // native JS coercion semantics and must be checked without bounds.
+            const bounded = ['number', 'string'].includes(type) && typeOf(value) === type
+            const bounds = !bounded ? {} : operator === '$gt' || operator === '$gte'
+                ? { lower: value, lowerOpen: operator === '$gt' }
+                : { upper: value, upperOpen: operator === '$lt' }
+            const result = await scan(key, type, candidate => operators[operator](candidate, value), bounds)
+            for (const objectId of result.ids) matches.add(objectId)
+        }
+
+        const arrays = await scanArrays(key, candidate => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)(
+            { value: candidate },
+            { value: { [operator]: value } }
+        ))
+        for (const objectId of arrays.ids) matches.add(objectId)
+
+        return { ids: matches, exact: arrays.exact }
+    }
+
+    const combineAnd = async results => {
+        if (!results.length) return all(true)
+        results.sort((left, right) => left.ids.size - right.ids.size)
+        let result = results[0]
+        for (const next of results.slice(1)) {
+            result = { ids: intersect(result.ids, next.ids), exact: result.exact && next.exact }
+            if (!result.ids.size) break
+        }
+        return result
+    }
+
+    // Length is a conservative work estimate, not a distinct-value statistic.
+    // Array predicates inspect terminal values; prefer bounded scalar lookups.
+    const estimate = async expression => {
+        if (Array.isArray(expression)) return Math.min(Infinity, ...await Promise.all(expression.map(estimate)))
+        if (!expression || typeof expression !== 'object') return Infinity
+        const costs = []
+        for (const [key, condition] of Object.entries(expression)) {
+            if (key === '$and' && Array.isArray(condition)) costs.push(await estimate(condition))
+            else if (key === '$or' && Array.isArray(condition))
+                costs.push((await Promise.all(condition.map(estimate))).reduce((sum, cost) => sum + cost, 0))
+            else if (key.startsWith('$') || await hasArrayAncestor(key)) costs.push(Infinity)
+            else {
+                const root = await getMetadata(key)
+                const branches = Object.values(root.indexes)
+                if (!branches.length) { costs.push(Infinity); continue }
+                const operator = condition && typeof condition === 'object' && !Array.isArray(condition)
+                    ? condition : { $eq: condition }
+                if (Object.keys(operator).some(name => ['$ne', '$nin', '$not', '$exists'].includes(name))) {
+                    costs.push(Infinity)
+                    continue
+                }
+                const equalityValue = Object.hasOwn(operator, '$eq') ? operator.$eq : undefined
+                const type = typeOf(equalityValue)
+                const branch = root.indexes[type]
+                if (type && type !== 'array' && !root.indexes.array && branch?.first && branch?.last &&
+                    (equalityValue < branch.first.value || equalityValue > branch.last.value)) {
+                    costs.push(0)
+                    continue
+                }
+                // _id is unique in object arrays. Its equality bound needs at most one entry.
+                if (key === '_id' && typeof equalityValue === 'string' && !root.indexes.array) costs.push(1)
+                else costs.push(Object.entries(root.indexes).reduce((sum, [type, item]) =>
+                    sum + (item.length ?? Infinity) * (type === 'array' ? 4 : 1), 0))
+            }
+        }
+        return Math.min(Infinity, ...costs)
+    }
+
+    const compileAnd = async expressions => {
+        if (!expressions.length) return all(true)
+        const planned = await Promise.all(expressions.map(async expression => ({ expression, cost: await estimate(expression) })))
+        planned.sort((left, right) => left.cost - right.cost)
+        let result
+        for (const { expression, cost } of planned) {
+            if (result && !result.ids.size) break
+            if (result && readObject && result.ids.size <= 256 && result.ids.size * 4 < cost) {
+                for (const objectId of result.ids) {
+                    const object = await readObject(objectId)
+                    if (!object || !(0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)(object, expression)) result.ids.delete(objectId)
+                }
+            } else {
+                const next = await compileRaw(expression)
+                result = result ? await combineAnd([result, next]) : next
+            }
+        }
+        return result
+    }
+
+    const compileField = async (key, condition) => {
+        // Dotted indexes cover object leaves but not members of terminal arrays.
+        // A present dotted index must not hide matching array-backed documents.
+        if (await hasArrayAncestor(key)) return all(false)
+        if (condition === null || condition === undefined || ['string', 'number', 'boolean'].includes(typeof condition))
+            return equality(key, condition)
+        if (Array.isArray(condition)) return equality(key, condition, condition)
+        if (!condition || typeof condition !== 'object') return all(false)
+
+        const operators = Object.keys(condition).filter(operator => operator.startsWith('$'))
+        if (!operators.length) {
+            const nested = []
+            for (const [child, value] of Object.entries(condition))
+                nested.push(await compileField(`${key}.${child}`, value))
+            const result = await combineAnd(nested)
+            return { ...result, exact: false }
+        }
+
+        const results = []
+        for (const operator of operators) {
+            const value = condition[operator]
+            if (operator === '$options') continue
+
+            if (operator === '$eq') {
+                results.push(await equality(key, value))
+            } else if (operator === '$ne') {
+                const match = await equality(key, value)
+                results.push(match.exact
+                    ? { ids: new Set([...await allIds()].filter(id => !match.ids.has(id))), exact: true }
+                    : await all(false))
+            } else if (operator === '$not') {
+                const match = await compileField(key, value)
+                results.push(match.exact
+                    ? { ids: new Set([...await allIds()].filter(id => !match.ids.has(id))), exact: true }
+                    : await all(false))
+            } else if (['$gt', '$gte', '$lt', '$lte'].includes(operator)) {
+                results.push(await range(key, operator, value))
+            } else if (operator === '$in' || operator === '$nin') {
+                const choices = Array.isArray(value) ? value : [value]
+                const matches = []
+                for (const choice of choices) {
+                    const type = typeOf(choice)
+                    matches.push(type === 'array' ? empty(true) : !type ? await all(false) :
+                        await scan(key, type, candidate => Object.is(candidate, choice), { lower: choice, upper: choice }))
+                }
+                let match = matches.reduce((result, next) => ({
+                    ids: union(result.ids, next.ids),
+                    exact: result.exact && next.exact
+                }), { ids: new Set(), exact: true })
+                const arrayMatch = await scanArrays(key, candidate => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)(
+                    { value: candidate },
+                    { value: { $in: choices } }
+                ))
+                match = {
+                    ids: union(match.ids, arrayMatch.ids),
+                    exact: match.exact && arrayMatch.exact
+                }
+                results.push(operator === '$in'
+                    ? match
+                    : match.exact
+                        ? { ids: new Set([...await allIds()].filter(id => !match.ids.has(id))), exact: true }
+                        : await all(false))
+            } else if (operator === '$all' && Array.isArray(value)) {
+                results.push(await scanArrays(key, candidate => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)(
+                    { value: candidate },
+                    { value: { $all: value } }
+                )))
+            } else if (operator === '$elemMatch' || operator === '$size') {
+                results.push(await scanArrays(key, candidate => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)(
+                    { value: candidate },
+                    { value: { [operator]: value } }
+                )))
+            } else if (operator === '$exists') {
+                // Existing roots may predate presence indexes. Until an index
+                // format marker and rebuild path exists, verify against all IDs.
+                results.push(await all(false))
+            } else if (operator === '$regex') {
+                const expression = value instanceof RegExp
+                    ? new RegExp(value.source, value.flags)
+                    : new RegExp(value, condition.$options || '')
+                const scalar = await scan(key, 'string', candidate => {
+                    expression.lastIndex = 0
+                    return expression.test(candidate)
+                })
+                const arrays = await scanArrays(key, candidate => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)(
+                    { value: candidate },
+                    { value: { $regex: value, ...(condition.$options ? { $options: condition.$options } : {}) } }
+                ))
+                results.push({ ids: union(scalar.ids, arrays.ids), exact: scalar.exact && arrays.exact })
+            } else if (operator === '$mod' && Array.isArray(value) && value.length === 2 && value[0] !== 0) {
+                const scalar = await scan(key, 'number', candidate => candidate % value[0] === value[1])
+                const arrays = await scanArrays(key, candidate => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)(
+                    { value: candidate },
+                    { value: { $mod: value } }
+                ))
+                results.push({ ids: union(scalar.ids, arrays.ids), exact: scalar.exact && arrays.exact })
+            } else if (operator === '$type' && value === 'array') {
+                results.push(await scanArrays(key))
+            } else if (operator === '$type' && ['string', 'number', 'boolean', 'null', 'bool', 'int', 'long', 'double', 'decimal'].includes(value)) {
+                const type = value === 'bool' ? 'boolean' : ['int', 'long', 'double', 'decimal'].includes(value) ? 'number' : value
+                results.push(await scan(key, type, () => true))
+            } else {
+                results.push(await all(false))
+            }
+        }
+        return combineAnd(results)
+    }
+
+    const compileRaw = async expression => {
+        if (expression === undefined || expression === null) return all(true)
+        if (Array.isArray(expression)) return compileAnd(expression)
+        if (typeof expression !== 'object') return empty(true)
+        const clauses = expandAnd(expression)
+        if (clauses.length > 1) return compileAnd(clauses)
+
+        const children = []
+        for (const [key, value] of Object.entries(expression)) {
+            if (key === '$and') {
+                if (!Array.isArray(value)) return empty(true)
+                children.push(await compileAnd(value))
+            } else if (key === '$or') {
+                if (!Array.isArray(value)) return empty(true)
+                const branches = []
+                for (const clause of value) branches.push(await compileRaw(clause))
+                children.push(branches.reduce((result, next) => ({
+                    ids: union(result.ids, next.ids),
+                    exact: result.exact && next.exact
+                }), { ids: new Set(), exact: true }))
+            } else if (key === '$nor') {
+                if (!Array.isArray(value)) return empty(true)
+                const branches = []
+                for (const clause of value) branches.push(await compileRaw(clause))
+                const match = branches.reduce((result, next) => ({
+                    ids: union(result.ids, next.ids),
+                    exact: result.exact && next.exact
+                }), { ids: new Set(), exact: true })
+                children.push(match.exact
+                    ? { ids: new Set([...await allIds()].filter(id => !match.ids.has(id))), exact: true }
+                    : await all(false))
+            } else if (key === '$where' || key.startsWith('$')) {
+                children.push(await all(false))
+            } else {
+                children.push(await compileField(key, value))
+            }
+        }
+        return combineAnd(children)
+    }
+
+    const expandAnd = expression => {
+        if (Array.isArray(expression)) return expression
+        if (!expression || typeof expression !== 'object') return [expression]
+        const clauses = []
+        for (const [key, value] of Object.entries(expression)) {
+            if (key === '$and' && Array.isArray(value)) clauses.push(...value)
+            else clauses.push({ [key]: value })
+        }
+        return clauses
+    }
+
+    return compileAnd(expandAnd(query))
+}
+
+
+/***/ },
+
+/***/ 2965
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   H: () => (/* binding */ applyReadFilter)
+/* harmony export */ });
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(900);
+/* harmony import */ var _query_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7961);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9074);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1150);
+
+
+
+
+
+
+function readFilter(request) {
+    if (request.filter) return request.filter
+    if (Array.isArray(request.object)) return request.object.find(item => item?.filter)?.filter
+    return request.object?.filter
+}
+
+function readPosition(filter, database, array) {
+    if (!filter || filter.isFilter === false) return undefined
+    if (!Array.isArray(filter.storages)) filter.storages = []
+
+    let metadata = filter.storages.find(item =>
+        item.storage === 'db' && item.database === database && item.array === array
+    )
+    if (!metadata) {
+        metadata = { storage: 'db', database, array }
+        filter.storages.push(metadata)
+    }
+
+    const startingIndex = metadata.index ?? filter.startingIndex ?? filter.index ?? 0
+    if (!Number.isSafeInteger(startingIndex) || startingIndex < 0)
+        throw new TypeError('filter index must be a non-negative safe integer')
+    metadata.startingIndex = startingIndex
+    return metadata
+}
+
+function selectPath(source, target, keys) {
+    if (source === undefined) return target
+    if (!keys.length) return (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(source)
+    if (Array.isArray(source) && /^\d+$/.test(keys[0])) {
+        const index = Number(keys[0])
+        const output = Array.isArray(target) ? target : []
+        const projected = selectPath(source[index], output[index], keys.slice(1))
+        if (projected !== undefined) output[index] = projected
+        return output
+    }
+    if (Array.isArray(source))
+        return source.map((value, index) => selectPath(value, target?.[index], keys))
+    if (!source || typeof source !== 'object') return target
+
+    const [key, ...rest] = keys
+    if (!Object.hasOwn(source, key)) return target
+    const output = target && typeof target === 'object' && !Array.isArray(target) ? target : {}
+    output[key] = selectPath(source[key], output[key], rest)
+    return output
+}
+
+// Projection creates only requested view containers; unchanged values stay shared.
+function excludeView(value, paths) {
+    if (!value || typeof value !== 'object' || !paths.length) return (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(value)
+    if (Array.isArray(value)) return value.map((item, index) => {
+        const selected = paths.filter(path => !/^\d+$/.test(path[0]) || Number(path[0]) === index)
+            .map(path => /^\d+$/.test(path[0]) ? path.slice(1) : path)
+        return excludeView(item, selected)
+    })
+    const output = {}
+    for (const key of Object.keys(value)) {
+        const selected = paths.filter(path => path[0] === key)
+        if (selected.some(path => path.length === 1)) continue
+        output[key] = selected.length ? excludeView(value[key], selected.map(path => path.slice(1))) : (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(value[key])
+    }
+    return output
+}
+
+function project(record, projection) {
+    if (!projection || !Object.keys(projection).length) return record
+
+    const entries = Object.entries(projection)
+    const includes = entries.filter(([key, value]) => key !== '_id' && Boolean(value))
+    const excludes = entries.filter(([key, value]) => !value && key !== '_id')
+    const includeId = projection._id === 1 || projection._id === true
+    if (includes.length && excludes.length || includeId && excludes.length)
+        throw new TypeError('filter.key cannot mix included and excluded fields')
+
+    const isInclusion = includes.length > 0 || includeId
+    if (isInclusion) {
+        const output = {}
+        for (const [key] of includes) {
+            const [first, ...rest] = key.replace(/\[(\d+)\]/g, '.$1').split('.')
+            const projected = selectPath(record[first], output[first], rest)
+            if (projected !== undefined) output[first] = projected
+        }
+        if ((projection._id !== 0 && projection._id !== false) && record._id !== undefined)
+            output._id = record._id
+        return (0,_files_js__WEBPACK_IMPORTED_MODULE_3__/* .inheritIdentity */ .Ak)(record, output)
+    }
+
+    const paths = excludes.map(([key]) => key.replace(/\[(\d+)\]/g, '.$1').split('.'))
+    if (projection._id === 0 || projection._id === false) paths.push(['_id'])
+    return (0,_files_js__WEBPACK_IMPORTED_MODULE_3__/* .inheritIdentity */ .Ak)(record, excludeView(record, paths))
+}
+
+function normalizeSort(sort) {
+    if (!Array.isArray(sort)) return []
+    return sort
+        .filter(item => item?.key)
+        .map(item => ({
+            key: item.key,
+            direction: item.direction === 'desc' || item.direction === -1 ? 'desc' : 'asc'
+        }))
+}
+
+/** Apply the shared CoCreate read filter to one source's candidate records. */
+function applyReadFilter(records, request, { database, array, query = {} }) {
+    const filter = readFilter(request)
+    const filterQuery = (0,_query_js__WEBPACK_IMPORTED_MODULE_1__/* .normalizeQuery */ .GC)({ filter: { query: filter?.query } })
+    const matches = records.filter(record => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)(record, query) && (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .queryData */ .VR)(record, filterQuery))
+    const count = matches.length
+    const storagePosition = readPosition(filter, database, array)
+    const sorted = normalizeSort(filter?.sort).length
+        ? (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .sortData */ .LT)(matches, normalizeSort(filter.sort))
+        : matches
+    const searched = filter?.search ? sorted.filter(record => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .searchData */ .Nw)(record, filter.search)) : sorted
+    const startingIndex = storagePosition?.startingIndex ?? filter?.startingIndex ?? filter?.index ?? 0
+    const limit = filter?.limit
+    const page = searched.slice(startingIndex, limit ? startingIndex + limit : undefined)
+
+    if (storagePosition) {
+        storagePosition.count = count
+        storagePosition.index = startingIndex + page.length
+    }
+
+    return page.map(record => {
+        const result = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_2__/* .live */ .VD)(project(record, filter?.key))
+        result.$storage ??= record.$storage ?? ['db']
+        if (record.$database) result.$database = record.$database
+        if (record.$array) result.$array = record.$array
+        return result
+    })
+}
+
+
+/***/ },
+
+/***/ 4811
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LK: () => (/* binding */ deleteRecord),
+/* harmony export */   Sm: () => (/* binding */ readRecordById),
+/* harmony export */   T3: () => (/* binding */ readRecords),
+/* harmony export */   Tz: () => (/* binding */ findRecordByName),
+/* harmony export */   dW: () => (/* binding */ recordReference),
+/* harmony export */   eC: () => (/* binding */ createRecord),
+/* harmony export */   oP: () => (/* binding */ reconcileEntrySets),
+/* harmony export */   vL: () => (/* binding */ updateRecord)
+/* harmony export */ });
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3981);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2244);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4934);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(900);
+/* harmony import */ var _entries_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2509);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9074);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1150);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(8247);
+
+
+
+
+
+
+
+
+
+async function createRecord(index, database, array, file, record) {
+    (0,_files_js__WEBPACK_IMPORTED_MODULE_6__/* .identify */ .ls)(record, (0,_files_js__WEBPACK_IMPORTED_MODULE_6__/* .fileIdFromPath */ .pQ)(file))
+    await (0,_storage_js__WEBPACK_IMPORTED_MODULE_1__/* .writeExclusiveJSON */ .mz)(file, record)
+    for (const [key, value] of (0,_storage_js__WEBPACK_IMPORTED_MODULE_1__/* .flattenIndexValues */ .fp)(record))
+        await index.create(database, array, key, value, (0,_files_js__WEBPACK_IMPORTED_MODULE_6__/* .fileId */ .qp)(record))
+    return (0,_resolution_js__WEBPACK_IMPORTED_MODULE_7__/* .retainRecord */ .$b)(index, database, array, file, record)
+}
+
+async function updateRecord(index, database, array, file, current, updated) {
+    const before = (0,_entries_js__WEBPACK_IMPORTED_MODULE_4__/* .indexEntries */ .nL)(current)
+    ;(0,_resolution_js__WEBPACK_IMPORTED_MODULE_7__/* .forgetResolvedPath */ .nY)(file)
+    if (typeof updated === 'function') updated(current)
+    else (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .replaceLive */ .L9)(current, updated)
+    await reconcileEntrySets(index, database, array, (0,_files_js__WEBPACK_IMPORTED_MODULE_6__/* .fileId */ .qp)(current), before, (0,_entries_js__WEBPACK_IMPORTED_MODULE_4__/* .indexEntries */ .nL)(current))
+    await (0,_storage_js__WEBPACK_IMPORTED_MODULE_1__/* .replaceJSON */ .B0)(file, current)
+    return (0,_resolution_js__WEBPACK_IMPORTED_MODULE_7__/* .retainRecord */ .$b)(index, database, array, file, (0,_mutation_js__WEBPACK_IMPORTED_MODULE_5__/* .live */ .VD)(current))
+}
+
+async function reconcileEntrySets(index, database, array, objectId, before, after) {
+    const afterKeys = new Set(after.map(_entries_js__WEBPACK_IMPORTED_MODULE_4__/* .entryKey */ .k2))
+    const beforeKeys = new Set(before.map(_entries_js__WEBPACK_IMPORTED_MODULE_4__/* .entryKey */ .k2))
+    for (const entry of before) if (!afterKeys.has((0,_entries_js__WEBPACK_IMPORTED_MODULE_4__/* .entryKey */ .k2)(entry)))
+        await index.removeIndexed(database, array, entry, objectId)
+    for (const entry of after) if (!beforeKeys.has((0,_entries_js__WEBPACK_IMPORTED_MODULE_4__/* .entryKey */ .k2)(entry)))
+        await index.create(database, array, entry.key, entry.value, objectId)
+}
+
+async function deleteRecord(index, database, array, file, record) {
+    for (const entry of (0,_entries_js__WEBPACK_IMPORTED_MODULE_4__/* .indexEntries */ .nL)(record))
+        await index.removeIndexed(database, array, entry, (0,_files_js__WEBPACK_IMPORTED_MODULE_6__/* .fileId */ .qp)(record))
+    ;(0,_memory_js__WEBPACK_IMPORTED_MODULE_2__/* .removeMemoryPath */ .PD)(file)
+    await (0,_io_js__WEBPACK_IMPORTED_MODULE_0__.rm)(file)
+    return record
+}
+
+async function recordReference(index, database, array, id) {
+    if (typeof id !== 'string') return undefined
+    if (/^[a-f0-9]{32}$/i.test(id)) return id
+    const catalog = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_7__/* .resolvedCatalog */ .Up)(index, database, array)
+    if (catalog?.ids[id]) return catalog.ids[id]
+    for await (const entry of index.scan(database, array, '_id', { type: 'string', lower: id, upper: id }))
+        if (entry.value === id) {
+            if (catalog) catalog.ids[id] = entry.objectId
+            return entry.objectId
+        }
+}
+
+async function readRecordById(index, database, array, fileForId, id) {
+    const uuid = await recordReference(index, database, array, id)
+    if (!uuid) return undefined
+    const file = fileForId(uuid)
+    const cached = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_7__/* .currentResolution */ .mM)()?.files[file]
+    if (cached) return cached
+    const record = await (0,_storage_js__WEBPACK_IMPORTED_MODULE_1__/* .readJSON */ .TQ)(file)
+    return record && (0,_resolution_js__WEBPACK_IMPORTED_MODULE_7__/* .retainRecord */ .$b)(index, database, array, file, (0,_files_js__WEBPACK_IMPORTED_MODULE_6__/* .identify */ .ls)(record, uuid))
+}
+
+async function findRecordByName(index, database, array, fileForId, name) {
+    const record = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_7__/* .resolvedCatalog */ .Up)(index, database, array)?.names[name]
+    if (record) return record
+    for await (const entry of index.scan(database, array, 'name', { type: 'string', lower: name, upper: name })) {
+        if (entry.value !== name) continue
+        return readRecordById(index, database, array, fileForId, entry.objectId)
+    }
+}
+
+async function readRecords(index, database, array, fileForId, query = {}) {
+    const records = []
+
+    for await (const entry of index.scan(database, array, '_id', { type: 'string' })) {
+        const record = await readRecordById(index, database, array, fileForId, entry.objectId)
+        if (record && (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .queryData */ .VR)(record, query)) records.push(record)
+    }
+
+    return records
+}
+
+
+/***/ },
+
+/***/ 8247
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   $b: () => (/* binding */ retainRecord),
+/* harmony export */   Up: () => (/* binding */ resolvedCatalog),
+/* harmony export */   az: () => (/* binding */ afterResponse),
+/* harmony export */   nY: () => (/* binding */ forgetResolvedPath)
+/* harmony export */ });
+/* harmony import */ var node_async_hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4579);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1150);
+
+
+
+
+// Temporary references only. Nothing here is persisted or added to CRUD payloads.
+const requests = new node_async_hooks__WEBPACK_IMPORTED_MODULE_0__.AsyncLocalStorage()
+const currentResolution = () => requests.getStore()
+const withResolution = (operation, resolved = currentResolution()) =>
+    requests.run(resolved ?? { catalogs: [], files: Object.create(null) }, operation)
+
+function afterResponse(operation) {
+    const context = currentResolution()
+    if (!context?.reading || !context.background) return false
+    context.background.push(operation)
+    return true
+}
+
+function resolvedCatalog(index, database, array) {
+    const resolved = currentResolution()
+    if (!resolved) return
+    let catalog = resolved.catalogs.find(item => item.index === index && item.database === database && item.array === array)
+    if (!catalog) {
+        catalog = { index, database, array, ids: Object.create(null), names: Object.create(null) }
+        resolved.catalogs.push(catalog)
+    }
+    return catalog
+}
+
+function retainRecord(index, database, array, file, record) {
+    const catalog = resolvedCatalog(index, database, array)
+    if (catalog && record) {
+        catalog.ids[record._id] = (0,_files_js__WEBPACK_IMPORTED_MODULE_2__/* .fileId */ .qp)(record)
+        if (typeof record.name === 'string') catalog.names[record.name] = record
+        currentResolution().files[file] = record
+    }
+    return record
+}
+
+function forgetResolvedPath(path, recursive = false) {
+    const resolved = currentResolution()
+    if (!resolved) return
+    for (const file of recursive ? Object.keys(resolved.files) : [path]) {
+        if (file !== path && !(recursive && file.startsWith(path + node_path__WEBPACK_IMPORTED_MODULE_1__.sep))) continue
+        const record = resolved.files[file]
+        if (!record) continue
+        for (const catalog of resolved.catalogs) {
+            if (catalog.ids[record._id] === (0,_files_js__WEBPACK_IMPORTED_MODULE_2__/* .fileId */ .qp)(record)) delete catalog.ids[record._id]
+            if (catalog.names[record.name] === record) delete catalog.names[record.name]
+        }
+        delete resolved.files[file]
+    }
+}
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Hy", 0, /* binding */ withResolution,
+/* harmony export */   "mM", 0, /* binding */ currentResolution
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 257
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   RP: () => (/* binding */ ensureRoot),
+/* harmony export */   XD: () => (/* binding */ readRoot)
+/* harmony export */ });
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3981);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2244);
+
+
+
+
+const FORMAT = 'cocreate-uuid-v1'
+
+/** Refuse an old dataset before creating anything in its directory. */
+async function readRoot(directory) {
+    const root = await (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .readJSON */ .TQ)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(directory, 'root.json'))
+    if (root) {
+        if (root.format !== FORMAT) throw new Error('Unsupported database format; use a separate path or migrate the existing dataset')
+        return root
+    }
+    for (const folder of ['storages', 'databases', 'arrays', 'objects', 'indexes', 'keys', 'values', 'deleted', 'distribution']) {
+        try {
+            if ((await (0,_io_js__WEBPACK_IMPORTED_MODULE_1__/* .readdir */ .Cy)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(directory, folder))).length)
+                throw new Error('Existing database files have no UUID root.json; use a separate path or migrate the existing dataset')
+        } catch (error) { if (error.code !== 'ENOENT') throw error }
+    }
+}
+
+async function ensureRoot(directory, index, database, array, field, onChange) {
+    let root = await readRoot(directory)
+    const id = index.catalogId(database, array)
+    if (root && root[field] !== id) throw new Error('Database root does not match its catalog')
+    if (!root) {
+        root = { format: FORMAT, [field]: id }
+        await index.ensureCatalog(database, array)
+        await (0,_storage_js__WEBPACK_IMPORTED_MODULE_2__/* .replaceJSON */ .B0)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(directory, 'root.json'), root)
+        await onChange?.(root)
+    }
+    return root
+}
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "uB", 0, /* binding */ FORMAT
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 2465
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   r: () => (/* binding */ createDB)
+/* harmony export */ });
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1150);
+/* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(257);
+/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6978);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3981);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5264);
+/* harmony import */ var _object_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2001);
+/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5647);
+/* harmony import */ var _peers_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(7432);
+/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5634);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(4934);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(2244);
+/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(4811);
+/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(2965);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(8247);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function errorHandler(data, error) {
+    if (!Array.isArray(data.error)) data.error = data.error === undefined ? [] : [data.error]
+    const errors = error?.errors ?? error?.message ?? error
+    data.error.push(...(Array.isArray(errors) ? errors : [errors]))
+    data.success = false
+    return data
+}
+
+const id = (value, label) => {
+    if (typeof value !== 'string' || !/^[0-9a-f]{24}$/.test(value)) throw new TypeError(`${label} must be a 24-character hexadecimal ObjectId`)
+    return value
+}
+const name = (value, label) => {
+    if (typeof value !== 'string' || !value.trim()) throw new TypeError(`${label} must be a non-empty string`)
+    return value
+}
+const CATALOG = '__catalog__'
+const STORAGES = 'storages'
+
+/** Organization-scoped DB service. Unconfigured local data lives in process CWD. */
+function createDB(options = {}) {
+    options = { ...options }
+    const peers = options.peerDistribution ??= (0,_peers_js__WEBPACK_IMPORTED_MODULE_8__/* .createPeerDistribution */ .pr)(options.nodeId)
+    const adapters = (0,_peers_js__WEBPACK_IMPORTED_MODULE_8__/* .createDistributionAdapters */ .Lc)(options.nodeId, peers)
+    options.distributionAdapter = { ...adapters.distributionAdapter, ...options.distributionAdapter }
+    options.partitionAdapter = { ...adapters.partitionAdapter, ...options.partitionAdapter }
+    const root = (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(options.directory ?? process.cwd())
+    let queue = Promise.resolve()
+    const serialize = operation => {
+        const result = queue.then(operation)
+        queue = result.catch(() => {})
+        return result
+    }
+    const organizations = new Map()
+    const namespaces = new Map()
+    if (options.memoryCache || options.memoryOnly || options.disk === false) (0,_memory_js__WEBPACK_IMPORTED_MODULE_10__/* .enableMemoryCache */ .nD)(root, { memoryOnly: options.memoryOnly || options.disk === false })
+    const persistence = !options.memoryOnly && options.disk !== false && options.writeBehind ? (0,_persistence_js__WEBPACK_IMPORTED_MODULE_9__/* .createPersistence */ .A)({ ...options.persistenceOptions, directory: root,
+        canFlush: () => [...namespaces.values()].every(state => !state.engine.persistenceStats().pendingIndexes) }) : undefined
+    const storageFile = (organization, uuid) => (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .recordPath */ .lX)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization), 'storages', uuid)
+    const context = (organization, record) => ({ organization_id: organization, storageId: record._id, storage: record.name, storageFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record) })
+
+    const organizationState = (organization, incomingRoot) => {
+        id(organization, 'organization_id')
+        if (organizations.has(organization)) return organizations.get(organization)
+        const holders = (0,_distribution_js__WEBPACK_IMPORTED_MODULE_7__/* .createDistributionIndex */ .tm)({ directory: (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization, 'distribution', 'root'), maxBytes: options.maxIndexBytes, cache: options.cache, nodeId: options.nodeId })
+        const adapter = options.partitionAdapter
+        const qualify = path => path.startsWith(`${organization}/`) ? path : `${organization}/${path}`
+        const partitions = {
+            update: payload => adapter.update({ ...payload, partitionId: qualify(payload.partitionId ?? payload.path) }, holders.updatePartition),
+            get: path => adapter.get(qualify(path), holders.getPartition),
+            list: () => adapter.list(holders.listPartitions),
+            read: adapter.read ? path => adapter.read(qualify(path)) : undefined,
+            onLocalChange: payload => {
+                const value = { ...payload, nodeId: options.nodeId, path: qualify(payload.path ?? payload.partitionId) }
+                return adapter.onLocalChange ? adapter.onLocalChange(value, holders.updatePartition)
+                    : holders.updatePartition({ partitionId: value.path, nodeId: options.nodeId, operation: value.operation === 'remove' ? 'remove' : 'add' })
+            }
+        }
+        const index = (0,_index_index_js__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Ay)({ directory: (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization), indexRoot: (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization),
+            maxBytes: options.maxIndexBytes, cache: options.cache,
+            resolveArrayDirectory: () => (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization, 'catalogs', 'storages'),
+            readPartition: partitions.read,
+            onPartitionChange: payload => options.nodeId && partitions.onLocalChange(payload)
+        })
+        const state = { organization, index, holders, partitions }
+        state.ready = incomingRoot ? (async () => {
+            await (0,_root_js__WEBPACK_IMPORTED_MODULE_2__/* .readRoot */ .XD)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization))
+            await (0,_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .replaceJSON */ .B0)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization, 'root.json'), incomingRoot)
+            return incomingRoot
+        })() : (0,_root_js__WEBPACK_IMPORTED_MODULE_2__/* .ensureRoot */ .RP)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization), index, CATALOG, STORAGES, 'storages', value => options.onRootChange?.({ organization_id: organization, value }))
+        state.ready.catch(() => {})
+        organizations.set(organization, state)
+        return state
+    }
+    const findStorage = async (organization, storage) => {
+        name(storage, 'storage')
+        const state = organizationState(organization)
+        await state.ready
+        const { index } = state
+        const existing = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_14__/* .resolvedCatalog */ .Up)(index, CATALOG, STORAGES)?.names[storage]
+        if (existing) return existing
+        for await (const entry of index.scan(CATALOG, STORAGES, 'name', { type: 'string', lower: storage, upper: storage })) {
+            if (entry.value !== storage) continue
+            const record = await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .readRecordById */ .Sm)(index, CATALOG, STORAGES, uuid => storageFile(organization, uuid), entry.objectId)
+            if (record) return record
+            const peer = peers.findScope(organization, storage)
+            if (peer && options.peerReader) {
+                const acquired = await options.peerReader({ ...peer, type: 'storage', fileId: entry.objectId })
+                if (acquired) return (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .createRecord */ .eC)(index, CATALOG, STORAGES, storageFile(organization, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(acquired)), acquired)
+            }
+        }
+    }
+    const createStorage = async (organization, storage, request = {}, storageId, notify = true, uuid = (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .newFileId */ .Ui)()) => {
+        const existing = await findStorage(organization, storage)
+        if (existing) {
+            if (storageId && existing._id !== storageId) throw new Error('Storage name resolves to a different stable ID')
+            return existing
+        }
+        const index = organizationState(organization).index
+        const record = { _id: storageId ? id(storageId, 'storageId') : (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_5__/* .ObjectId */ .V)().toString(), name: storage, created: (0,_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .auditMetadata */ .RI)(request), updated: (0,_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .auditMetadata */ .RI)(request) }
+        record.index = (0,_index_index_js__WEBPACK_IMPORTED_MODULE_3__/* .indexId */ .k0)(`catalogs/${record._id}/databases`)
+        await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .createRecord */ .eC)(index, CATALOG, STORAGES, storageFile(organization, uuid), record)
+        await engineFor(organization, record).engine.ready
+        if (notify) await options.onStorageChange?.({ organization_id: organization, storageId: record._id, storageFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record), storage: record.name, operation: 'set', record })
+        return record
+    }
+    const engineFor = (organization, record) => {
+        const prefix = `${organization}/storages/${id(record._id, 'storageId')}/`
+        if (namespaces.has(prefix)) {
+            const existing = namespaces.get(prefix)
+            if (record.name) existing.record = record
+            return existing
+        }
+        const state = { organization, record, prefix }
+        const scope = () => context(organization, state.record)
+        const distribution = options.distributionAdapter
+        const engine = (0,_object_index_js__WEBPACK_IMPORTED_MODULE_6__/* .createDB */ .r)({ ...options, directory: (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization), indexScope: record._id, managedRoot: true,
+            indexRoot: (0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization),
+            sharedPersistence: persistence,
+            scheduleIndexing: options.scheduleIndexing ?? serialize,
+            persistenceOptions: options.persistenceOptions,
+            peerReader: options.peerReader ? payload => options.peerReader({ ...payload, ...scope() }) : undefined,
+            documentMutationAdapter: options.documentMutationAdapter ? { publish: payload => options.documentMutationAdapter.publish({ ...payload, ...scope() }) } : undefined,
+            onIndexed: options.onIndexed ? payload => options.onIndexed({ ...payload, ...scope() }) : undefined,
+            distributionAdapter: {
+                update: (payload, apply) => distribution?.update ? distribution.update({ ...payload, ...scope() }, apply) : apply(payload),
+                get: (payload, read) => distribution?.get ? distribution.get({ ...payload, ...scope() }, read) : read(payload),
+                list: (payload, read) => distribution?.list ? distribution.list({ ...payload, ...scope() }, read) : read(payload),
+                onLocalChange: (payload, apply) => distribution?.onLocalChange ? distribution.onLocalChange({ ...payload, ...scope() }, apply) : apply(payload)
+            },
+            partitionAdapter: organizationState(organization).partitions
+        })
+        state.engine = engine
+        namespaces.set(prefix, state)
+        return state
+    }
+    const byId = async payload => {
+        const organization = id(payload.organization_id, 'organization_id')
+        const storageId = id(payload.storageId, 'storageId')
+        const deleted = await (0,_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .readJSON */ .TQ)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization, 'deleted', `${(0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .stableId */ .dD)('storage:' + storageId)}.json`))
+        if (deleted) throw new Error('Storage has been deleted')
+        const state = organizationState(organization)
+        await state.ready
+        let record = await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .readRecordById */ .Sm)(state.index, CATALOG, STORAGES, uuid => storageFile(organization, uuid), payload.storageFileId ?? storageId)
+        if (!record && options.peerReader) {
+            record = await options.peerReader({ ...payload, type: 'storage', nodeId: payload.nodeId ?? payload.serverId ?? peers.findScope(organization, payload.storage)?.nodeId, fileId: payload.storageFileId })
+            if (record) await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .createRecord */ .eC)(state.index, CATALOG, STORAGES, storageFile(organization, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record)), record)
+        }
+        if (!record) throw new Error('Storage file not found')
+        return engineFor(organization, record)
+    }
+    const partitionState = path => {
+        const match = /^([a-f0-9]{24})\/(indexes\/[a-f0-9]{32}\.json)$/i.exec(path)
+        if (!match) throw new TypeError('Invalid scoped index partition path')
+        return { ...organizationState(match[1]), path: match[2] }
+    }
+    const forScope = async (scope, create = false) => {
+        const organization = id(scope.organization_id, 'organization_id')
+        const record = await findStorage(organization, name(scope.storage, 'storage')) ??
+            (create ? await createStorage(organization, scope.storage, scope) : undefined)
+        if (!record) {
+            const peer = peers.findScope(organization, scope.storage)
+            if (peer) return byId(peer)
+        }
+        return record ? engineFor(organization, record) : undefined
+    }
+    const flushIndexes = async () => { for (const state of namespaces.values()) await state.engine.flushIndexes() }
+    const api = {
+        ready: Promise.resolve({ files: 0 }),
+        async applyRoots(roots = []) {
+            for (const item of roots) {
+                const organization = id(item.organization_id, 'organization_id')
+                if (item.value?.format !== _root_js__WEBPACK_IMPORTED_MODULE_2__/* .FORMAT */ .uB || item.value.storages !== (0,_index_index_js__WEBPACK_IMPORTED_MODULE_3__/* .indexId */ .k0)('catalogs/storages'))
+                    throw new Error('Invalid organization root')
+                const state = organizationState(organization, item.value)
+                await state.ready
+                const path = `indexes/${item.value.storages}.json`
+                const local = await state.index.readPartition(path)
+                if (local && !local.catalogLength) {
+                    await state.index.removePartition(path)
+                    if (options.nodeId) await state.partitions.onLocalChange({ path, operation: 'remove', acquired: true })
+                }
+                await (0,_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .replaceJSON */ .B0)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization, 'root.json'), item.value)
+            }
+        },
+        distribution: {
+            local: {
+                async snapshot() {
+                    // Enumerate namespace catalogs and saved holder indexes, not object files.
+                    let entries = []
+                    try { entries = await (0,_io_js__WEBPACK_IMPORTED_MODULE_4__/* .readdir */ .Cy)(root) } catch (error) { if (error.code !== 'ENOENT') throw error }
+                    const ids = new Set([...organizations.keys(), ...entries.filter(value => /^[a-f0-9]{24}$/.test(value))])
+                    const entities = [], partitions = []
+                    for (const organization of ids) {
+                        const state = organizationState(organization)
+                        await state.ready
+                        for await (const entry of state.index.scan(CATALOG, STORAGES, '_id', { type: 'string' })) {
+                            const record = await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .readRecordById */ .Sm)(state.index, CATALOG, STORAGES, uuid => storageFile(organization, uuid), entry.objectId)
+                            if (record) {
+                                entities.push(context(organization, record))
+                                engineFor(organization, record)
+                            }
+                        }
+                        partitions.push(...await state.holders.listPartitions())
+                    }
+                    for (const state of namespaces.values()) {
+                        const local = state.engine.distribution.local
+                        const scope = context(state.organization, state.record)
+                        for (const database of await local.list()) {
+                            const db = await state.engine.readLocalEntity({ type: 'database', databaseId: database.id })
+                            const dbScope = { ...scope, databaseId: database.id, databaseFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(db), databaseIndex: db?.index }
+                            entities.push(dbScope)
+                            for (const array of await local.list({ databaseId: database.id })) {
+                                const metadata = await state.engine.readLocalEntity({ type: 'array', databaseId: database.id, arrayId: array.id })
+                                const arrayScope = { ...dbScope, arrayId: array.id, arrayFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(metadata), arrayIndex: metadata?.index }
+                                entities.push(arrayScope)
+                                for (const object of await local.list({ databaseId: database.id, arrayId: array.id }))
+                                    entities.push({ ...arrayScope, objectId: object.id })
+                            }
+                        }
+                    }
+                    const roots = []
+                    for (const organization of ids) roots.push({ organization_id: organization, value: await organizationState(organization).ready })
+                    return { roots, entities, partitions: partitions.map(({ partitionId }) => ({ partitionId })) }
+                }
+            },
+            peers: options.peerDistribution
+        },
+        async forScope(scope) { return (await forScope(scope))?.engine },
+        hydrateObjects: (request, records) => serialize(async () => {
+            const state = await forScope(request, records.length > 0)
+            if (state) await state.engine.hydrateObjects(request, records)
+        }),
+        memoryStats: () => (0,_memory_js__WEBPACK_IMPORTED_MODULE_10__/* .memoryStats */ .DZ)(root),
+        clearDistributionCache() {
+            for (const state of organizations.values()) state.holders.clearCache()
+            for (const state of namespaces.values()) state.engine.clearDistributionCache()
+        },
+        holdPersistence: () => persistence?.hold(),
+        persistenceStats: () => ({ ...persistence?.stats(), pendingIndexes: [...namespaces.values()].reduce((sum, state) => sum + state.engine.persistenceStats().pendingIndexes, 0) }),
+        flushIndexes: () => serialize(flushIndexes),
+        flushPersistence: () => persistence?.flush(),
+        async flush() { await api.flushIndexes(); await persistence?.flush() },
+        async close() { await api.flush(); for (const state of namespaces.values()) await state.engine.close(); await persistence?.close() },
+        async send(request) {
+            const response = { ...request }
+            if (request.method === 'object.update')
+                for (const key of Object.keys(response)) if (key.startsWith('$') && key !== '$update') delete response[key]
+            const release = persistence?.hold()
+            try {
+                const organization = id(request.organization_id, 'organization_id')
+                const storage = name(request.storage, 'storage')
+                name(request.database, 'database')
+                const [type, method] = String(request.method).split('.')
+                if (!['storage', 'database', 'array', 'index', 'object'].includes(type) || !['create', 'read', 'update', 'delete'].includes(method))
+                    throw new Error(`Unsupported CRUD method: ${request.method}`)
+                if (type === 'object') name(request.array, 'array')
+                if (type === 'storage') {
+                    const state = organizationState(organization)
+                    let record = await findStorage(organization, storage)
+                    if (method === 'create') record = await createStorage(organization, storage, request, request.storageId)
+                    else if (method === 'update') {
+                        if (!record) throw new Error('Storage not found')
+                        const renamed = name(request.name ?? request.newName, 'storage name')
+                        const conflict = await findStorage(organization, renamed)
+                        if (conflict && conflict._id !== record._id) throw new Error('Storage name already exists')
+                        record = await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .updateRecord */ .vL)(state.index, CATALOG, STORAGES, storageFile(organization, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record)), record,
+                            value => { value.name = renamed; value.updated = (0,_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .auditMetadata */ .RI)(request) })
+                        const loaded = namespaces.get(`${organization}/storages/${record._id}/`)
+                        if (loaded) loaded.record = record
+                        await options.onStorageChange?.({ ...context(organization, record), operation: 'set', record })
+                    } else if (method === 'delete') {
+                        if (record) {
+                            const loaded = engineFor(organization, record)
+                            await loaded.engine.flushIndexes()
+                            await loaded.engine.dropIndexes()
+                            await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .deleteRecord */ .LK)(state.index, CATALOG, STORAGES, storageFile(organization, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record)), record)
+                            await (0,_io_js__WEBPACK_IMPORTED_MODULE_4__.rm)(storageFile(organization, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record)), { force: true })
+                            await (0,_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .replaceJSON */ .B0)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization, 'deleted', `${(0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .stableId */ .dD)('storage:' + record._id)}.json`), { _id: record._id, name: record.name })
+                            namespaces.delete(loaded.prefix)
+                            await options.onStorageChange?.({ ...context(organization, record), operation: 'remove', record })
+                        }
+                    } else if (method !== 'read') throw new Error('Unsupported storage method')
+                    response.storage = (0,_read_js__WEBPACK_IMPORTED_MODULE_13__/* .applyReadFilter */ .H)(record ? [record] : [], request, { database: request.database, array: STORAGES, query: request.filter?.query ?? {} })
+                    for (const item of response.storage) item.$storage = [item.name]
+                    response.success = true
+                    return response
+                }
+                const state = await forScope(request, method === 'create' || (method === 'update' && request.upsert))
+                if (!state) return { ...response, [type]: [], success: true }
+                const result = await state.engine.send(request)
+                result.storageId = state.record._id
+                for (const item of Array.isArray(result[type]) ? result[type] : []) if (item.$storage) item.$storage = [storage]
+                return result
+            } catch (error) { return errorHandler(response, error) }
+            finally { release?.() }
+        },
+        async applyStorageMutation(payload) {
+            return serialize(async () => {
+                const organization = id(payload.organization_id, 'organization_id')
+                const storageId = id(payload.storageId, 'storageId')
+                const record = payload.record
+                if (!record || record._id !== storageId || !['set', 'remove'].includes(payload.operation)) throw new Error('Invalid storage mutation')
+                name(record.name, 'storage')
+                ;(0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .identify */ .ls)(record, payload.storageFileId ?? (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record))
+                const file = storageFile(organization, (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record))
+                const state = organizationState(organization)
+                await state.ready
+                const { index } = state
+                const current = await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .readRecordById */ .Sm)(index, CATALOG, STORAGES, uuid => storageFile(organization, uuid), (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(record))
+                if (payload.operation === 'remove') {
+                    const loaded = engineFor(organization, current ?? record)
+                    await loaded.engine.flushIndexes()
+                    await loaded.engine.dropIndexes()
+                    if (current) await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .deleteRecord */ .LK)(index, CATALOG, STORAGES, file, current)
+                    await (0,_io_js__WEBPACK_IMPORTED_MODULE_4__.rm)(file, { force: true })
+                    await (0,_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .replaceJSON */ .B0)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization, 'deleted', `${(0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .stableId */ .dD)('storage:' + storageId)}.json`), { _id: storageId, name: record.name })
+                    if (loaded) namespaces.delete(loaded.prefix)
+                } else {
+                    if (await (0,_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .readJSON */ .TQ)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, organization, 'deleted', `${(0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .stableId */ .dD)('storage:' + storageId)}.json`))) return false
+                    const conflict = await findStorage(organization, record.name)
+                    if (conflict && conflict._id !== storageId) throw new Error('Conflicting storage reference')
+                    if (current) await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .updateRecord */ .vL)(index, CATALOG, STORAGES, file, current, record)
+                    else await (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .createRecord */ .eC)(index, CATALOG, STORAGES, file, record)
+                    const loaded = namespaces.get(`${organization}/storages/${storageId}/`)
+                    if (loaded) loaded.record = current ?? record
+                }
+                return true
+            })
+        },
+        async updateDistribution(payload) {
+            if (options.peerDistribution && payload.nodeId !== options.nodeId) return options.peerDistribution.update(payload)
+            return (await byId(payload)).engine.updateDistribution(payload)
+        },
+        async getDistribution(payload) { return (await byId(payload)).engine.getDistribution(payload) },
+        async listDistribution(payload) { return (await byId(payload)).engine.listDistribution(payload) },
+        async readLocalEntity(payload) {
+            if (payload.type === 'key') {
+                const value = await (0,_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .readJSON */ .TQ)((0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .recordPath */ .lX)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.join)(root, id(payload.organization_id, 'organization_id')), 'keys', payload.fileId))
+                return value && (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .identify */ .ls)(value, payload.fileId)
+            }
+            if (payload.type === 'storage') {
+                const state = organizationState(id(payload.organization_id, 'organization_id'))
+                await state.ready
+                return (0,_records_js__WEBPACK_IMPORTED_MODULE_12__/* .readRecordById */ .Sm)(state.index, CATALOG, STORAGES, uuid => storageFile(payload.organization_id, uuid), payload.fileId ?? payload.storageFileId ?? payload.storageId)
+            }
+            return (await byId(payload)).engine.readLocalEntity(payload)
+        },
+        async applyReplicatedObjectMutation(payload) { return (await byId(payload)).engine.applyReplicatedObjectMutation(payload) },
+        async updatePartition(payload) {
+            if (options.peerDistribution && payload.nodeId !== options.nodeId) return options.peerDistribution.updatePartition(payload)
+            const target = partitionState(payload.partitionId ?? payload.path)
+            return target.partitions.update(payload)
+        },
+        async getPartitionHolders(path) {
+            const target = partitionState(path)
+            return target.partitions.get(path)
+        },
+        async listPartitions() {
+            const result = []
+            for (const state of organizations.values()) result.push(...await state.holders.listPartitions())
+            return (0,_peers_js__WEBPACK_IMPORTED_MODULE_8__/* .mergeDistributionLists */ .Qo)(result, peers.listPartitions(), 'partitionId')
+        },
+        async readIndexPartition(path) {
+            const target = partitionState(path)
+            await target.ready
+            return target.index.readPartition(target.path)
+        },
+        async applyIndexPartition(path, value, options) {
+            const target = partitionState(path)
+            await target.ready
+            const node = await target.index.applyPartition(target.path, value)
+            await target.partitions.onLocalChange({ path, value: node, operation: 'set', acquired: !options?.replicated, replicated: options?.replicated })
+            return node
+        },
+        async removeIndexPartition(path, options) {
+            const target = partitionState(path)
+            await target.ready
+            await target.index.removePartition(target.path)
+            await target.partitions.onLocalChange({ path, operation: 'remove', acquired: !options?.replicated, replicated: options?.replicated })
+        }
+    }
+    const send = api.send.bind(api)
+    api.send = request => serialize(() => (0,_resolution_js__WEBPACK_IMPORTED_MODULE_14__/* .withResolution */ .Hy)(async () => {
+        const [type, method] = String(request.method).split('.')
+        const fast = (options.writeBehind || options.memoryOnly || options.disk === false) && type === 'object'
+        // Resolve before deletion/rename, and after creation, using the same entity IDs as node distribution.
+        let state, ids
+        try {
+            if (type !== 'storage') {
+                state = await forScope(request)
+                if (state && !fast) ids = await state.engine.resolveDistributionIds({ database: request.database, array: request.array })
+            }
+        } catch { /* send() returns the normal validation error envelope. */ }
+        const result = await send(request)
+        delete result.distribution
+        delete result.distributionKeys
+        if (result.success !== false && !(Array.isArray(result.error) ? result.error.length : result.error)) {
+            state ??= type === 'storage' ? undefined : await forScope(request)
+            if (state && fast) ids = state.engine.resolvedScope(request)
+            else if (state && method === 'create') ids = await state.engine.resolveDistributionIds({ database: request.database, array: request.array })
+            const storageId = state?.record._id ?? result.storage?.[0]?._id
+            const address = { ...ids, organization_id: request.organization_id, storageId, type,
+                storageFileId: (0,_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp)(state?.record ?? result.storage?.[0]) }
+            const objects = value => (Array.isArray(value) ? value : [value]).map(_files_js__WEBPACK_IMPORTED_MODULE_1__/* .fileId */ .qp).filter(Boolean)
+            result.distribution = (0,_distribution_js__WEBPACK_IMPORTED_MODULE_7__/* .distributionReferences */ .Ng)({ ...address, objectIds: objects(result.object) }, Boolean(request.filter) || !objects(result.object).length)
+            result.distributionKeys = (0,_distribution_js__WEBPACK_IMPORTED_MODULE_7__/* .distributionReferences */ .Ng)({ ...address, objectIds: objects(result.object) }, method !== 'read')
+        }
+        return result
+    }))
+    api.index = Object.fromEntries(['read', 'getMetadata', 'create', 'update', 'delete'].map(method => [method, async (scope, ...args) => {
+        const state = await forScope(scope, method === 'create' || method === 'update')
+        if (!state) return undefined
+        return state.engine.index[method](...args)
+    }]))
+    api.index.clearCache = () => {
+        for (const state of organizations.values()) state.index.clearCache()
+        for (const state of namespaces.values()) state.engine.index.clearCache()
+    }
+    api.index.scan = async function* (scope, ...args) {
+        const state = await forScope(scope)
+        if (state) yield* state.engine.index.scan(...args)
+    }
+    return api
+}
+
+
+/***/ },
+
+/***/ 4390
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* unused harmony exports DB_PROVIDER, init, initLocal, initializeServerDB */
+/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4172);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9298);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1150);
+/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5647);
+/* harmony import */ var _peers_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7432);
+/* harmony import */ var _scoped_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2465);
+/* harmony import */ var _directory_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2106);
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2561);
+/* harmony import */ var _persistence_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5825);
+/* harmony import */ var _partition_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(3999);
+/* harmony import */ var _persistence_envelopes_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(3720);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8247);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function errorHandler(data, error) {
+    if (!Array.isArray(data.error)) data.error = data.error === undefined ? [] : [data.error]
+    const errors = error?.errors ?? error?.message ?? error
+    data.error.push(...(Array.isArray(errors) ? errors : [errors]))
+    data.success = false
+    return data
+}
+
+const DB_PROVIDER = 'cocreate-db'
+
+// External reads are an opt-in legacy recovery bridge, not tree persistence.
+// External writes stay disabled; authoritative indexes/files live in CoCreateDB.
+const EXTERNAL_PERSISTENCE_ENABLED = false
+const EXTERNAL_PERSISTENCE_WRITES_ENABLED = false
+
+const externalPersistence = (operation, enabled) => (...args) => {
+    if (!enabled)
+        throw new Error('External persistence is temporarily disabled.')
+    return operation(...args)
+}
+
+function attachPersistenceAPI(db, bootstrapPersistence, enabled) {
+    db.persistence = {
+        bootstrap: bootstrapPersistence,
+        enabled,
+        get: externalPersistence(_persistence_index_js__WEBPACK_IMPORTED_MODULE_8__/* .getPersistence */ .oO, enabled),
+        getDriver: externalPersistence(_persistence_index_js__WEBPACK_IMPORTED_MODULE_8__/* .getPersistenceDriver */ .Sy, enabled),
+        send: externalPersistence((request, context = {}) => {
+            if (request.method !== 'object.read') throw new Error('External recovery supports object.read only; provider writes are disabled.')
+            return (0,_persistence_index_js__WEBPACK_IMPORTED_MODULE_8__/* .sendPersistence */ .SV)((0,_persistence_envelopes_js__WEBPACK_IMPORTED_MODULE_10__/* .persistenceReadRequest */ .j)(request), { ...context, bootstrapPersistence })
+        }, enabled)
+    }
+    return db
+}
+
+async function resolveDBOptions(options = {}) {
+    const suppliedConfig = options.config || {}
+    const suppliedDBConfig = suppliedConfig.db ||
+        (Object.hasOwn(suppliedConfig, 'directory') || Object.hasOwn(suppliedConfig, 'persistence')
+            ? suppliedConfig
+            : {})
+    const shouldPrompt = options.prompt !== false
+    const promptConfig = shouldPrompt && options.directory === undefined && suppliedDBConfig.directory === undefined &&
+        !process.env.COCREATE_DB_DIRECTORY
+        ? await _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.prompt({
+            'db.directory': {
+                prompt: 'Enter the CoCreateDB directory (leave blank to use the current directory): '
+            }
+        })
+        : {};
+    const dbConfig = _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.get('db') || {}
+    const directory = (0,_directory_js__WEBPACK_IMPORTED_MODULE_6__/* .resolveDirectory */ .y)({
+        directory: options.directory ?? process.env.COCREATE_DB_DIRECTORY ??
+            suppliedDBConfig.directory ?? promptConfig.db?.directory ?? dbConfig.directory
+    })
+    const persistence = options.persistence ?? suppliedDBConfig.persistence ?? dbConfig.persistence
+    const bootstrapPersistence = options.bootstrapPersistence ?? _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.get('persistence')
+    if (persistence !== undefined && persistence !== false && (!persistence || typeof persistence !== 'object' || Array.isArray(persistence)))
+        throw new TypeError('CoCreateDB persistence configuration must be an object.')
+    const { prompt, ...runtimeOptions } = options
+    return { ...dbConfig, ...suppliedDBConfig, ...runtimeOptions, directory, persistence, bootstrapPersistence }
+}
+
+/** Initialize CoCreateDB as a Cluster-owned server module. */
+async function init(server, options = {}) {
+    if (!server?.isPrimary)
+        return initializeServerDB(server, { ...options,
+            externalPersistence: options.externalPersistence ?? _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.get('db')?.externalPersistence,
+            persistence: options.persistence ?? _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.get('db')?.persistence,
+            bootstrapPersistence: options.bootstrapPersistence ?? _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.get('persistence') })
+    return initializeServerDB(server, await resolveDBOptions(options))
+}
+
+/** Create a standalone DB service with the same DB-owned config and path rules. */
+async function initLocal(options = {}) {
+    const config = await resolveDBOptions(options)
+    if (config.persistence?.workflow)
+        throw new Error('Workflow persistence requires a Cluster server instance.')
+    const persistenceOptions = config.persistence ?? config.persistenceOptions
+    return (0,_scoped_js__WEBPACK_IMPORTED_MODULE_5__/* .createDB */ .r)({
+        ...config,
+        memoryCache: config.memoryCache ?? false,
+        ...(persistenceOptions ? {
+            writeBehind: config.writeBehind ?? true,
+            persistenceOptions
+        } : {})
+    })
+}
+
+const CoCreateDB = { init, initLocal }
+
+function idsFrom(payload) {
+    return {
+        organization_id: payload.organization_id,
+        storageId: payload.storageId,
+        storageFileId: payload.storageFileId,
+        databaseFileId: payload.databaseFileId,
+        arrayFileId: payload.arrayFileId,
+        databaseIndex: payload.databaseIndex,
+        arrayIndex: payload.arrayIndex,
+        storage: payload.storage,
+        databaseId: payload.databaseId,
+        arrayId: payload.arrayId,
+        objectId: payload.objectId,
+        nodeId: payload.nodeId,
+        operation: payload.operation
+    }
+}
+
+/** Attach the primary DB engine or a worker IPC driver. */
+function initializeServerDB(server, {
+    directory = process.env.COCREATE_DB_DIRECTORY || process.cwd(),
+    maxIndexBytes,
+    cache = false,
+    memoryCache = true,
+    memoryOnly = false,
+    disk = true,
+    externalPersistence: externalPersistenceEnabled = EXTERNAL_PERSISTENCE_ENABLED,
+    writeBehind = true,
+    persistence,
+    bootstrapPersistence,
+    persistenceWorkflow = process.env.COCREATE_DB_PERSISTENCE_WORKFLOW,
+    storageWorkflow = process.env.COCREATE_DB_STORAGE_WORKFLOW,
+    persistenceOptions = {},
+    peerTimeoutMs = 5000
+} = {}) {
+    if (!server?.id || typeof server.send !== 'function')
+        throw new TypeError('A initialized CoCreate server with an id and send() is required')
+
+    const requestPrimary = async (method, payload = {}) => {
+        try {
+            const response = await server.send({ method, ...payload, master: true, broadcast: false })
+            if (response?.success === false && !response.result)
+                return errorHandler(response, response.error === undefined ? `${method} failed` : [])
+            return response?.result
+        } catch (error) { return errorHandler({ ...payload.data }, error) }
+    }
+
+    const providerEnabled = externalPersistenceEnabled && persistence !== false && !memoryOnly
+    // Workers own only this driver: no engine, filesystem access, or payload cache.
+    if (!server.isPrimary) {
+        server.db = attachPersistenceAPI({ send: (request, context = {}) => requestPrimary('db.send', { data: request, organization: context.organization }) }, bootstrapPersistence, providerEnabled)
+        return server.db
+    }
+
+    // DB replication uses the existing control transport. Tenant identity belongs
+    // inside its scope, rather than the client-notification organization field.
+    const meshSend = async payload => {
+        const { organization_id, storageId, storage, storageFileId, ...message } = payload
+        const envelope = organization_id ? { ...message, scope: { organization_id, storageId, storage, storageFileId } } : payload
+        // Preserve the encoding through Mesh so ordinary partitions encode once.
+        // Whole documents do not use this split path.
+        if (envelope.value && ['db.partition.update', 'db.partition.response'].includes(envelope.method)) {
+            envelope.uuid ??= (0,node_crypto__WEBPACK_IMPORTED_MODULE_7__.randomUUID)()
+            const prepare = async () => {
+                const frame = (0,_partition_js__WEBPACK_IMPORTED_MODULE_9__/* .encodePartitionEnvelope */ .XA)(envelope)
+                return { ...frame, changes: await (0,_partition_js__WEBPACK_IMPORTED_MODULE_9__/* .splitSerializedPartition */ .ZU)(envelope.value, frame.bytes) }
+            }
+            const { encoded, changes } = await ((0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .currentResolution */ .mM)()?.delivering ? serializePreparation(prepare) : prepare())
+            if (changes) {
+                const prefix = envelope.path.slice(0, -changes.path.length)
+                for (const change of changes.partitions) publish({
+                    method: 'db.partition.update', server: envelope.server,
+                    serverId: server.id, operation: 'set', ...change, path: prefix + change.path
+                })
+                if (envelope.method === 'db.partition.update') return
+                // The requested address remains valid after its local split.
+                await dispatchChanges()
+                return meshSend(envelope)
+            }
+            return server.cluster.send(envelope, encoded)
+        }
+        return server.cluster.send(envelope)
+    }
+    const peers = (0,_peers_js__WEBPACK_IMPORTED_MODULE_4__/* .createPeerDistribution */ .pr)(server.id)
+    const adapters = (0,_peers_js__WEBPACK_IMPORTED_MODULE_4__/* .createDistributionAdapters */ .Lc)(server.id, peers)
+    const session = (0,node_crypto__WEBPACK_IMPORTED_MODULE_7__.randomUUID)()
+    let revision = 0
+    let db, backgroundError
+    const errorResponse = (data, error) => {
+        const response = errorHandler({ ...data }, error)
+        backgroundError = { method: data.method, error: response.error }
+        return response
+    }
+    const deliver = (data, operation) => {
+        try {
+            return Promise.resolve(operation()).then(response => {
+                if (response?.error?.length) backgroundError = { method: data.method, error: response.error }
+                return response
+            }).catch(error => errorResponse(data, error))
+        }
+        catch (error) { return Promise.resolve(errorResponse(data, error)) }
+    }
+    const peerRequests = new Map()
+    const partitionRequests = new Map()
+    let transactionQueue = Promise.resolve()
+    let deliveryQueue = Promise.resolve()
+    let messageId = 0
+    const publish = payload => {
+        const outgoing = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .currentResolution */ .mM)()?.outgoing
+        if (!outgoing) return meshSend(payload)
+        const key = payload.method === 'db.partition.update'
+            ? JSON.stringify([payload.server, payload.path, payload.organization_id, payload.storageId])
+            : ++messageId
+        outgoing.set(key, payload)
+    }
+    const dispatchChanges = async (outgoing = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .currentResolution */ .mM)()?.outgoing) => {
+        while (outgoing?.size) {
+            const [key, payload] = outgoing.entries().next().value
+            outgoing.delete(key)
+            await meshSend(payload)
+        }
+    }
+    const withPropagation = async operation => {
+        const release = db?.holdPersistence?.()
+        const messages = new Map()
+        const context = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .currentResolution */ .mM)()
+        context.outgoing = messages
+        context.beforePropagation = []
+        context.afterPropagation = []
+        context.background = writeBehind ? [] : undefined
+        try {
+            const result = await operation()
+            const complete = () => (0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .withResolution */ .Hy)(async () => {
+                context.delivering = writeBehind
+                context.reading = false
+                try {
+                    if (context.background?.length) await serializePreparation(async () => {
+                        for (const action of context.background) {
+                            try { await action() }
+                            catch (error) { errorResponse({ method: 'db.read.lifecycle' }, error) }
+                        }
+                    })
+                    for (const action of context.beforePropagation) await action()
+                    await dispatchChanges(messages)
+                    for (const action of context.afterPropagation) await action()
+                } finally { context.delivering = false }
+            }, context)
+            if (writeBehind && (messages.size || context.background.length || context.beforePropagation.length || context.afterPropagation.length)) {
+                const finish = db?.holdPersistence?.()
+                deliveryQueue = deliveryQueue.then(() => new Promise(resolve => setImmediate(resolve)))
+                    .then(complete).catch(error => errorResponse({ method: 'db.propagation' }, error)).finally(() => finish?.())
+            } else if (!writeBehind) await complete()
+            return result
+        } finally { release?.() }
+    }
+    // Splits still mutate indexes under the primary queue; network I/O does not.
+    const serializePreparation = operation => {
+        const context = (0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .currentResolution */ .mM)()
+        const result = transactionQueue.then(() => (0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .withResolution */ .Hy)(operation, context))
+        transactionQueue = result.catch(() => {})
+        return result
+    }
+    const serializeTransaction = operation => {
+        const result = transactionQueue.then(() => (0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .withResolution */ .Hy)(() => withPropagation(operation), null))
+        transactionQueue = result.catch(() => {})
+        return result
+    }
+    const serializeReplication = (data, operation) => serializeTransaction(operation)
+        .catch(error => errorResponse(data, error))
+
+    const readFromPeer = ({ nodeId, ...entity }) => {
+        if (nodeId === server.id) return db.readLocalEntity(entity)
+
+        const requestId = (0,node_crypto__WEBPACK_IMPORTED_MODULE_7__.randomUUID)()
+        const request = {
+            requesterId: server.id,
+            targetId: nodeId,
+            requestId,
+            ...entity
+        }
+        return new Promise((resolve, reject) => {
+            const timer = setTimeout(() => {
+                peerRequests.delete(requestId)
+                reject(new Error(`Peer ${nodeId} did not answer the CoCreateDB document request`))
+            }, peerTimeoutMs)
+            peerRequests.set(requestId, { nodeId, resolve, reject, timer })
+            try {
+                meshSend({
+                    method: 'db.document.request',
+                    server: nodeId,
+                    ...request
+                })
+            } catch (error) {
+                clearTimeout(timer)
+                peerRequests.delete(requestId)
+                reject(error)
+            }
+        })
+    }
+
+    const requestPartitionFromPeer = (nodeId, path) => {
+        const requestId = (0,node_crypto__WEBPACK_IMPORTED_MODULE_7__.randomUUID)()
+        return new Promise((resolve, reject) => {
+            const timer = setTimeout(() => {
+                partitionRequests.delete(requestId)
+                reject(new Error(`Peer ${nodeId} did not answer the CoCreateDB index partition request`))
+            }, peerTimeoutMs)
+            partitionRequests.set(requestId, { nodeId, resolve, reject, timer })
+            try {
+                meshSend({
+                    method: 'db.partition.request',
+                    server: nodeId,
+                    requesterId: server.id,
+                    targetId: nodeId,
+                    requestId,
+                    path
+                })
+            } catch (error) {
+                clearTimeout(timer)
+                partitionRequests.delete(requestId)
+                reject(error)
+            }
+        })
+    }
+
+    const readPartitionFromPeers = async path => {
+        const nodeIds = await db.getPartitionHolders(path)
+        for (const nodeId of nodeIds) {
+            if (nodeId === server.id) {
+                const local = await db.readIndexPartition(path)
+                if (local !== undefined) return local
+                continue
+            }
+            try {
+                const partition = await requestPartitionFromPeer(nodeId, path)
+                if (partition !== undefined) return partition
+            } catch {}
+        }
+        if (nodeIds.length)
+            throw new Error(`Index partition ${path} is advertised but no holder could provide it`)
+        return undefined
+    }
+
+    const localPartitionChange = async (payload, apply) => {
+        const partitionId = payload.path ?? payload.partitionId
+        const previous = await db.getPartitionHolders(partitionId)
+        const operation = payload.operation === 'remove' ? 'remove' : 'add'
+        const result = await apply({ partitionId, nodeId: payload.nodeId ?? server.id, operation })
+
+        if (result.changed) {
+            publish({
+                method: 'db.partition.availability',
+                session, revision: ++revision,
+                broadcast: true,
+                workers: false,
+                serverId: payload.nodeId ?? server.id,
+                partitionId,
+                operation
+            })
+        }
+
+        if (!payload.acquired && !payload.replicated) {
+            for (const nodeId of previous) {
+                if (nodeId === (payload.nodeId ?? server.id)) continue
+                publish({
+                    method: 'db.partition.update',
+                    server: nodeId,
+                    serverId: payload.nodeId ?? server.id,
+                    path: partitionId,
+                    operation: payload.operation === 'remove' ? 'remove' : 'set',
+                    value: payload.value
+                })
+            }
+        }
+        return result
+    }
+
+    const partitionAdapter = {
+        ...adapters.partitionAdapter,
+        onLocalChange: localPartitionChange,
+        read: readPartitionFromPeers
+    }
+
+    const documentMutationAdapter = {
+        publish: mutation => {
+            for (const targetId of mutation.targets) {
+                publish({
+                    method: 'db.object.mutation',
+                    server: targetId,
+                    serverId: server.id,
+                    ...mutation
+                })
+            }
+        }
+    }
+
+    const distributionAdapter = {
+        ...adapters.distributionAdapter,
+        onLocalChange: async (payload, apply) => {
+            const result = await apply(payload)
+            if (result.changed) {
+                publish({
+                    method: 'db.distribution', session, revision: ++revision, broadcast: true, workers: false,
+                    serverId: server.id, ...idsFrom(payload)
+                })
+            }
+            return result
+        }
+    }
+
+    db = (0,_scoped_js__WEBPACK_IMPORTED_MODULE_5__/* .createDB */ .r)({
+        directory,
+        maxIndexBytes,
+        cache,
+        memoryCache,
+        memoryOnly,
+        disk,
+        peerDistribution: peers,
+        nodeId: server.id,
+        distributionAdapter,
+        peerReader: readFromPeer,
+        partitionAdapter,
+        documentMutationAdapter,
+        onRootChange: payload => publish({ method: 'db.root.update', broadcast: true, workers: false, serverId: server.id, ...payload }),
+        onStorageChange: payload => publish({ method: 'db.storage.mutation', broadcast: true, workers: false, serverId: server.id, ...payload }),
+        writeBehind,
+        scheduleIndexing: serializeTransaction,
+        onIndexed: async data => {
+            const keys = (0,_distribution_js__WEBPACK_IMPORTED_MODULE_3__/* .distributionReferences */ .Ng)({ ...data, objectIds: [data.objectId] }, true)
+            const notification = { method: 'db.indexed', data, master: false, broadcast: false,
+                worker: [...(0,_cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_0__/* .getDistribution */ .f)(server.workers.distribution, keys)] }
+            ;(0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .currentResolution */ .mM)().afterPropagation.push(() => deliver(notification, () => server.send(notification)))
+        },
+        persistenceOptions: {
+            ...(persistence ?? persistenceOptions),
+            ...(( false) ? 0 : {}),
+            ...( true ? { storage: undefined } : 0)
+        }
+    })
+
+    const sendLocal = db.send.bind(db)
+    const persistenceStats = db.persistenceStats.bind(db)
+    db.persistenceStats = () => ({ ...persistenceStats(), backgroundError })
+    let closing = false
+    // Reads also queue so they cannot observe a partially updated index.
+    db.send = (request, { workerId = server.workerId, organization } = {}) => {
+        if (closing && ['create', 'update', 'delete'].includes(request?.method?.split('.')?.[1]))
+            return Promise.resolve(errorHandler({ ...request }, 'Database is closing'))
+        return serializeTransaction(async () => {
+            const [type, method] = String(request?.method || '').split('.')
+            ;(0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .currentResolution */ .mM)().reading = method === 'read'
+            let result = await sendLocal(method === 'read' ? (0,_persistence_envelopes_js__WEBPACK_IMPORTED_MODULE_10__/* .localReadRequest */ .Z)(request) : request)
+            const organizationConfig = organization || request?.organization
+            const hasProvider = providerEnabled && (request?.persistence || organizationConfig?.bootstrapPersistence ||
+                organizationConfig?.persistence || organizationConfig?.bootstrapStorage ||
+                bootstrapPersistence || _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.get('persistence'))
+            const hasLocalErrors = Array.isArray(result?.error) ? result.error.length > 0 : Boolean(result?.error)
+            if (hasProvider && type === 'object' && method === 'read' && result?.success !== false && !hasLocalErrors &&
+                !(Array.isArray(result?.[type]) && result[type].length)) {
+                const persisted = await (0,_persistence_index_js__WEBPACK_IMPORTED_MODULE_8__/* .sendPersistence */ .SV)((0,_persistence_envelopes_js__WEBPACK_IMPORTED_MODULE_10__/* .persistenceReadRequest */ .j)(request), {
+                    organization: organizationConfig,
+                    organizationId: request.organization_id,
+                    bootstrapPersistence
+                })
+                const errors = Array.isArray(persisted?.error) ? persisted.error : persisted?.error ? [persisted.error] : []
+                if (persisted?.success === false || errors.length) return errorHandler(result, errors.length ? errors : ['Persistence read failed.'])
+                await db.hydrateObjects(request, persisted?.object ?? [])
+                result = await sendLocal((0,_persistence_envelopes_js__WEBPACK_IMPORTED_MODULE_10__/* .localReadRequest */ .Z)(request))
+            }
+            if (false) // removed by dead control flow
+{}
+            if (result.distribution?.length && workerId != null) {
+                (0,_cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_0__/* .addDistribution */ .E)(server.workers.distribution, result.distribution, workerId)
+                if (request.clientId) {
+                    const message = { method: 'db.distribution.set', server: server.id, serverId: server.id,
+                        worker: workerId, master: false, broadcast: false,
+                        data: { organization_id: request.organization_id, clientId: request.clientId, distribution: result.distribution } }
+                    const register = async () => {
+                        if (workerId === server.workerId) server.emit('db.distribution.set', message)
+                        else {
+                            const registered = await server.send(message)
+                            if (registered?.success === false)
+                                throw Object.assign(new Error('Distribution registration failed'), {
+                                    errors: registered.error?.length ? registered.error : ['Distribution registration failed']
+                                })
+                        }
+                    }
+                    if (writeBehind)
+                        (0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .currentResolution */ .mM)().beforePropagation.push(() => deliver(message, register))
+                    else await register()
+                }
+            }
+            return result
+        }).catch(error => errorHandler({ ...request }, error))
+    }
+    const flushIndexesLocal = db.flushIndexes.bind(db)
+    const closeLocal = db.close.bind(db)
+    db.flush = async () => {
+        let drained
+        do {
+            await serializeTransaction(flushIndexesLocal)
+            drained = deliveryQueue
+            await drained
+        } while (db.persistenceStats().pendingIndexes || drained !== deliveryQueue)
+        await db.flushPersistence()
+    }
+    db.close = async () => {
+        closing = true
+        await db.flush()
+        // Persistence/workflow I/O must not hold the primary operation queue:
+        // the workflow service reads its configuration through CRUD itself.
+        await closeLocal()
+    }
+    if (writeBehind) {
+        server.shutdownHandlers ||= new Set()
+        server.shutdownHandlers.add(() => db.close())
+    }
+
+    server.workers ||= new Map()
+    server.workers.distribution ||= new Map()
+    attachPersistenceAPI(db, bootstrapPersistence, providerEnabled)
+    server.db = db
+
+    if (server.isPrimary) {
+        server.on('db.send', async payload => {
+            const result = await db.send(payload.data, { workerId: payload.workerId ?? server.workerId, organization: payload.organization })
+            return { ...payload, success: result.success !== false, result }
+        })
+        const localChange = async payload => {
+            const result = await db.updateDistribution(idsFrom(payload.data ?? payload))
+            if (result.changed) {
+                publish({
+                    method: 'db.distribution',
+                    session, revision: ++revision,
+                    broadcast: true,
+                    workers: false,
+                    serverId: server.id,
+                    ...idsFrom(payload.data ?? payload)
+                })
+            }
+            return { ...payload, success: true, result }
+        }
+
+        server.on('db.distribution.local', payload => serializeTransaction(() => localChange(payload)))
+        server.on('db.distribution.update', async payload => ({
+            ...payload,
+            success: true,
+            result: await serializeTransaction(() => db.updateDistribution(idsFrom(payload.data ?? payload)))
+        }))
+        server.on('db.distribution.get', async payload => ({
+            ...payload,
+            success: true,
+            result: await db.getDistribution(payload.data ?? payload)
+        }))
+        server.on('db.distribution.list', async payload => ({
+            ...payload,
+            success: true,
+            result: await db.listDistribution(payload.data ?? payload)
+        }))
+        server.on('db.partition.update', async payload => ({
+            ...payload,
+            success: true,
+            result: await serializeTransaction(() => db.updatePartition(payload.data ?? payload))
+        }))
+        server.on('db.partition.get', async payload => ({
+            ...payload,
+            success: true,
+            result: await db.getPartitionHolders((payload.data ?? payload).path)
+        }))
+        server.on('db.partition.list', async payload => ({
+            ...payload,
+            success: true,
+            result: await db.listPartitions()
+        }))
+        server.on('db.partition.local', async payload => {
+            const data = payload.data ?? payload
+            return { ...payload, success: true, result: await serializeTransaction(() => localPartitionChange(data, db.updatePartition)) }
+        })
+        server.on('db.partition.acquire', async payload => ({
+            ...payload,
+            success: true,
+            result: await readPartitionFromPeers((payload.data ?? payload).path)
+        }))
+        server.on('db.peer.fetch', async payload => {
+            const data = payload.data ?? payload
+            const record = await readFromPeer(data)
+            return { ...payload, success: true, result: record, fileId: payload.fileId ?? (0,_files_js__WEBPACK_IMPORTED_MODULE_2__/* .fileId */ .qp)(record) }
+        })
+        server.on('db.distribution', payload => serializeTransaction(() => db.updateDistribution(idsFrom(payload.data ?? payload))))
+        server.cluster.on('db.document.request', payload => {
+            payload = { ...payload, ...payload.scope }
+            if (payload.targetId !== server.id || !payload.requesterId || !payload.requestId) return
+            ;(0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .withResolution */ .Hy)(() => withPropagation(() => {
+                ;(0,_resolution_js__WEBPACK_IMPORTED_MODULE_11__/* .currentResolution */ .mM)().reading = true
+                return db.readLocalEntity(payload)
+            }), null).then(record => {
+                const response = {
+                    requesterId: payload.requesterId,
+                    responderId: server.id,
+                    requestId: payload.requestId,
+                    record, fileId: payload.fileId ?? (0,_files_js__WEBPACK_IMPORTED_MODULE_2__/* .fileId */ .qp)(record)
+                }
+                meshSend({
+                    method: 'db.document.response',
+                    server: payload.requesterId,
+                    ...response
+                })
+            }).catch(error => {
+                const response = {
+                    requesterId: payload.requesterId,
+                    responderId: server.id,
+                    requestId: payload.requestId,
+                }
+                errorHandler(response, error)
+                meshSend({
+                    method: 'db.document.response',
+                    server: payload.requesterId,
+                    ...response
+                })
+            })
+        })
+        server.cluster.on('db.document.response', payload => {
+            const pending = peerRequests.get(payload.requestId)
+            if (!pending || pending.nodeId !== payload.responderId || payload.requesterId !== server.id) return
+            peerRequests.delete(payload.requestId)
+            clearTimeout(pending.timer)
+            if (payload.error?.length) pending.reject(Object.assign(new Error('Peer request failed'), { errors: payload.error }))
+            else pending.resolve(payload.record ? (0,_files_js__WEBPACK_IMPORTED_MODULE_2__/* .identify */ .ls)(payload.record, payload.fileId) : undefined)
+        })
+        server.cluster.on('db.partition.request', payload => {
+            if (payload.targetId !== server.id || !payload.requesterId || !payload.requestId) return
+            serializeTransaction(async () => {
+                const value = await db.readIndexPartition(payload.path)
+                await meshSend({
+                    method: 'db.partition.response',
+                    server: payload.requesterId,
+                    requesterId: payload.requesterId,
+                    responderId: server.id,
+                    requestId: payload.requestId,
+                    path: payload.path,
+                    value
+                })
+            }).catch(error => {
+                meshSend(errorHandler({
+                    method: 'db.partition.response',
+                    server: payload.requesterId,
+                    requesterId: payload.requesterId,
+                    responderId: server.id,
+                    requestId: payload.requestId
+                }, error))
+            })
+        })
+        server.cluster.on('db.partition.response', payload => {
+            const pending = partitionRequests.get(payload.requestId)
+            if (!pending || pending.nodeId !== payload.responderId || payload.requesterId !== server.id) return
+            partitionRequests.delete(payload.requestId)
+            clearTimeout(pending.timer)
+            if (payload.error?.length) pending.reject(Object.assign(new Error('Peer request failed'), { errors: payload.error }))
+            else pending.resolve(payload.value)
+        })
+        server.cluster.on('db.partition.update', payload => {
+            if (payload.serverId === server.id) return
+            return serializeReplication(payload, () => payload.operation === 'remove'
+                ? db.removeIndexPartition(payload.path, { replicated: true })
+                : db.applyIndexPartition(payload.path, payload.value, { replicated: true }))
+        })
+        server.cluster.on('db.storage.mutation', payload => {
+            payload = { ...payload, ...payload.scope }
+            if (payload.serverId === server.id) return
+            return serializeReplication(payload, () => db.applyStorageMutation(payload))
+        })
+        server.cluster.on('db.object.mutation', payload => {
+            payload = { ...payload, ...payload.scope }
+            if (payload.serverId === server.id || !Array.isArray(payload.targets) || !payload.targets.includes(server.id)) return
+            return serializeTransaction(async () => {
+                const applied = await db.applyReplicatedObjectMutation(payload)
+                if (!applied) return
+                let object = payload.object
+                if (payload.operation !== 'remove') {
+                    const current = await db.readLocalEntity({ ...payload, type: 'object', databaseId: payload.database._id,
+                        arrayId: payload.array._id, objectId: payload.object._id })
+                    object = payload.operation === 'update' ? { ...current, $update: payload.object.$update } : current
+                }
+                const data = { method: 'object.' + (payload.operation === 'remove' ? 'delete' : payload.operation === 'update' ? 'update' : 'create'),
+                    organization_id: payload.organization_id, storage: payload.storage, database: payload.database.name, array: payload.array.name,
+                    object: [object], success: true, master: false, broadcast: false, server: server.id }
+                data.distributionKeys = (0,_distribution_js__WEBPACK_IMPORTED_MODULE_3__/* .distributionReferences */ .Ng)({ ...payload, databaseId: payload.database._id, arrayId: payload.array._id, objectIds: [payload.fileId] }, true)
+                data.worker = [...(0,_cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_0__/* .getDistribution */ .f)(server.workers.distribution, data.distributionKeys)]
+                return data
+            }).then(data => data && server.send(data))
+                .catch(error => errorResponse(payload, error))
+        })
+        server.cluster.on('db.partition.availability', payload => {
+            if (payload.serverId === server.id) return
+            return serializeReplication(payload, () => peers.change({
+                partitionId: payload.partitionId, nodeId: payload.serverId, operation: payload.operation
+            }, payload.session, payload.revision))
+        })
+        server.cluster.on('db.distribution', payload => {
+            if (payload.serverId === server.id) return
+            return serializeReplication(payload, () => peers.change({
+                ...payload, ...payload.scope, nodeId: payload.nodeId ?? payload.serverId
+            }, payload.session, payload.revision))
+        })
+        const sendInventory = (nodeId, reply = false) => serializeTransaction(async () => {
+            const inventory = await db.distribution.local.snapshot()
+            // Snapshot reads can discover local partitions and queue announcements.
+            await dispatchChanges()
+            return meshSend({ method: 'db.distribution.sync', server: nodeId, serverId: server.id,
+                session, revision, reply, inventory })
+        })
+        server.cluster.on('db.root.update', payload => {
+            if (payload.serverId === server.id) return
+            return serializeReplication(payload, () => db.applyRoots([{ organization_id: payload.scope?.organization_id ?? payload.organization_id, value: payload.value }]))
+        })
+        server.cluster.on('db.distribution.sync', payload => {
+            if (payload.serverId === server.id) return
+            return serializeReplication(payload, async () => {
+                if (peers.replace(payload.serverId, payload.inventory, payload.session, payload.revision))
+                    await db.applyRoots(payload.inventory.roots)
+            }).then(() => !payload.reply && sendInventory(payload.serverId, true))
+                .catch(error => errorResponse(payload, error))
+        })
+        server.cluster.on('peerConnected', ({ nodeId }) => {
+            peers.connect(nodeId)
+            deliver({ method: 'db.distribution.sync', nodeId }, () => sendInventory(nodeId))
+        })
+        server.cluster.on('peerDisconnected', ({ nodeId }) => {
+            return serializeReplication({ method: 'db.distribution.disconnect', nodeId }, () => peers.remove(nodeId))
+        })
+        // DB may be attached after control connections have already opened.
+        for (const socket of server.cluster.controlSockets ?? []) {
+            if (socket.serverId) deliver({ method: 'db.distribution.sync' }, () => sendInventory(socket.serverId))
+        }
+    }
+
+    return db
+}
+
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (initializeServerDB)));
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "bN", 0, /* binding */ CoCreateDB
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 2244
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Ad: () => (/* binding */ arrayMetadataPath),
+/* harmony export */   B0: () => (/* binding */ replaceJSON),
+/* harmony export */   Fl: () => (/* binding */ normalizeObject),
+/* harmony export */   Jv: () => (/* binding */ objectDeletionPath),
+/* harmony export */   RI: () => (/* binding */ auditMetadata),
+/* harmony export */   SO: () => (/* binding */ setPath),
+/* harmony export */   TQ: () => (/* binding */ readJSON),
+/* harmony export */   Ve: () => (/* binding */ arrayDirectory),
+/* harmony export */   du: () => (/* binding */ objectPath),
+/* harmony export */   fI: () => (/* binding */ databaseDirectory),
+/* harmony export */   fp: () => (/* binding */ flattenIndexValues),
+/* harmony export */   mL: () => (/* binding */ databaseMetadataPath),
+/* harmony export */   mz: () => (/* binding */ writeExclusiveJSON)
+/* harmony export */ });
+/* unused harmony exports EXISTS_INDEX_PREFIX, typeOf */
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3981);
+/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5634);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5663);
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2561);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4934);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9074);
+/* harmony import */ var _bytes_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5082);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1150);
+
+
+
+
+
+
+
+
+
+
+const DATABASE_CATALOG = '__catalog__'
+const DATABASE_CATALOG_ARRAY = 'databases'
+const ARRAY_CATALOG = '__arrays__'
+const EXISTS_INDEX_PREFIX = '\0exists:'
+
+function auditMetadata(request = {}) {
+    const on = request.timeStamp
+        ? new Date(request.timeStamp).toISOString()
+        : new Date().toISOString()
+    const audit = { on }
+    const by = request.user_id || request.clientId
+    if (by !== undefined) audit.by = by
+    return audit
+}
+
+const assertId = (id, label) => {
+    if (typeof id !== 'string' || !/^[0-9a-f]{24}$/.test(id))
+        throw new TypeError(`${label} must be a 24-character hexadecimal ObjectId`)
+    return id
+}
+
+function databaseDirectory(root, databaseId) {
+    return (0,node_path__WEBPACK_IMPORTED_MODULE_3__.join)(root, 'databases', assertId(databaseId, 'databaseId'))
+}
+
+function arrayDirectory(root, databaseId, arrayId) {
+    return (0,node_path__WEBPACK_IMPORTED_MODULE_3__.join)(databaseDirectory(root, databaseId), 'arrays', assertId(arrayId, 'arrayId'))
+}
+
+function databaseMetadataPath(root, databaseId) {
+    return (0,_files_js__WEBPACK_IMPORTED_MODULE_8__/* .recordPath */ .lX)(root, 'databases', databaseId)
+}
+
+function arrayMetadataPath(root, databaseId, arrayId) {
+    return (0,_files_js__WEBPACK_IMPORTED_MODULE_8__/* .recordPath */ .lX)(root, 'arrays', arrayId)
+}
+function objectDeletionPath(root, databaseId, arrayId, objectId) {
+    return (0,node_path__WEBPACK_IMPORTED_MODULE_3__.join)(root, 'deleted', `${(0,_files_js__WEBPACK_IMPORTED_MODULE_8__/* .stableId */ .dD)(JSON.stringify([databaseId, arrayId, objectId]))}.json`)
+}
+const typeOf = value => value === null ? 'null' :
+    typeof value === 'boolean' ? 'boolean' :
+        typeof value === 'string' ? 'string' :
+            typeof value === 'number' && Number.isFinite(value) ? 'number' : null
+
+function objectPath(root, databaseId, arrayId, objectId) {
+    return (0,_files_js__WEBPACK_IMPORTED_MODULE_8__/* .recordPath */ .lX)(root, 'objects', objectId)
+}
+
+async function readJSON(file) {
+    return (0,_memory_js__WEBPACK_IMPORTED_MODULE_5__/* .readMemoryJSON */ .Eh)(file)
+}
+
+function setPath(object, path, value) {
+    const keys = path.split('.')
+
+    if (keys.some(key => !key || ['__proto__', 'prototype', 'constructor'].includes(key)))
+        throw new TypeError(`Invalid object key path: ${path}`)
+
+    let target = object
+
+    for (const key of keys.slice(0, -1)) {
+        if (!target[key] || typeof target[key] !== 'object' || Array.isArray(target[key]))
+            target[key] = {}
+        target = target[key]
+    }
+
+    target[keys.at(-1)] = (0,_mutation_js__WEBPACK_IMPORTED_MODULE_6__/* .live */ .VD)(value)
+}
+
+function normalizeObject(input) {
+    for (const key of Object.keys(input)) {
+        if (key.startsWith('$') && key !== '$bytes') { delete input[key]; continue }
+        if (key.split('.').some(part => ['__proto__', 'prototype', 'constructor'].includes(part)))
+            throw new TypeError(`Invalid object key path: ${key}`)
+    }
+    for (const key of Object.keys(input)) if (key.includes('.')) {
+        const value = input[key]
+        delete input[key]
+        setPath(input, key, value)
+    }
+    return input
+}
+
+function flattenIndexValues(object, prefix = '', entries = []) {
+    for (const [key, value] of Object.entries(object)) {
+        if (key.startsWith('$')) continue
+        const path = prefix ? `${prefix}.${key}` : key
+        if (value === undefined) continue
+        entries.push([`${EXISTS_INDEX_PREFIX}${path}`, true])
+
+        if (Array.isArray(value)) entries.push([path, value])
+        else if (value && typeof value === 'object')
+            flattenIndexValues(value, path, entries)
+        else if (typeOf(value))
+            entries.push([path, value])
+    }
+
+    return entries
+}
+
+async function writeExclusiveJSON(file, value) {
+    const store = (0,_persistence_js__WEBPACK_IMPORTED_MODULE_2__/* .persistenceFor */ .z)(file)
+    if (store || (0,_memory_js__WEBPACK_IMPORTED_MODULE_5__/* .memoryOnly */ .sz)(file)) {
+        if (await (0,_memory_js__WEBPACK_IMPORTED_MODULE_5__/* .readMemoryJSON */ .Eh)(file) !== undefined) {
+            const error = new Error(`Object already exists: ${file}`)
+            error.code = 'EEXIST'
+            throw error
+        }
+        if (store) store.stageJSON(file, value)
+        else (0,_memory_js__WEBPACK_IMPORTED_MODULE_5__/* .writeMemoryJSON */ .br)(file, value)
+        return
+    }
+    await (0,_io_js__WEBPACK_IMPORTED_MODULE_1__/* .mkdir */ .Ck)((0,node_path__WEBPACK_IMPORTED_MODULE_3__.join)(file, '..'), { recursive: true })
+
+    const temporary = `${file}.${(0,node_crypto__WEBPACK_IMPORTED_MODULE_4__.randomUUID)()}.tmp`
+
+    try {
+        const encoded = JSON.stringify(value)
+        await (0,node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.writeFile)(temporary, encoded)
+        await (0,node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.link)(temporary, file)
+        ;(0,_bytes_js__WEBPACK_IMPORTED_MODULE_7__/* .recordFileBytes */ .Pt)(file, Buffer.byteLength(encoded))
+        await (0,_bytes_js__WEBPACK_IMPORTED_MODULE_7__/* .flushFileBytes */ .Aq)((0,node_path__WEBPACK_IMPORTED_MODULE_3__.join)(file, '..'))
+        ;(0,_memory_js__WEBPACK_IMPORTED_MODULE_5__/* .writeMemoryJSON */ .br)(file, value)
+    } finally {
+        await (0,_io_js__WEBPACK_IMPORTED_MODULE_1__/* .unlink */ .y1)(temporary).catch(error => {
+            if (error.code !== 'ENOENT') throw error
+        })
+    }
+}
+
+async function replaceJSON(file, value) {
+    if ((0,_memory_js__WEBPACK_IMPORTED_MODULE_5__/* .memoryOnly */ .sz)(file)) return (0,_memory_js__WEBPACK_IMPORTED_MODULE_5__/* .writeMemoryJSON */ .br)(file, value)
+    const store = (0,_persistence_js__WEBPACK_IMPORTED_MODULE_2__/* .persistenceFor */ .z)(file)
+    if (store) { store.stageJSON(file, value); return (0,_memory_js__WEBPACK_IMPORTED_MODULE_5__/* .peekMemoryJSON */ .TS)(file) }
+    await (0,_io_js__WEBPACK_IMPORTED_MODULE_1__/* .mkdir */ .Ck)((0,node_path__WEBPACK_IMPORTED_MODULE_3__.join)(file, '..'), { recursive: true })
+
+    const temporary = `${file}.${(0,node_crypto__WEBPACK_IMPORTED_MODULE_4__.randomUUID)()}.tmp`
+
+    try {
+        const encoded = JSON.stringify(value)
+        await (0,node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.writeFile)(temporary, encoded)
+        await (0,node_fs_promises__WEBPACK_IMPORTED_MODULE_0__.rename)(temporary, file)
+        ;(0,_bytes_js__WEBPACK_IMPORTED_MODULE_7__/* .recordFileBytes */ .Pt)(file, Buffer.byteLength(encoded))
+        await (0,_bytes_js__WEBPACK_IMPORTED_MODULE_7__/* .flushFileBytes */ .Aq)((0,node_path__WEBPACK_IMPORTED_MODULE_3__.join)(file, '..'))
+        return (0,_memory_js__WEBPACK_IMPORTED_MODULE_5__/* .writeMemoryJSON */ .br)(file, value)
+    } catch (error) {
+        await (0,_io_js__WEBPACK_IMPORTED_MODULE_1__/* .unlink */ .y1)(temporary).catch(() => {})
+        throw error
+    }
+}
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "ii", 0, /* binding */ DATABASE_CATALOG,
+/* harmony export */   "ip", 0, /* binding */ ARRAY_CATALOG,
+/* harmony export */   "u1", 0, /* binding */ DATABASE_CATALOG_ARRAY
 /* harmony export */ ]);
 
 
@@ -21250,7 +27084,8 @@ let server = null;
 let fileServerConfig = {
     defaultCacheControl: 'public, max-age=3600',
     enableSitemapCheck: true,
-    enableThemeDetection: true
+    enableThemeDetection: true,
+    storage: process.env.COCREATE_FILE_STORAGE || null
 };
 
 /**
@@ -21447,6 +27282,7 @@ async function resolveFile({ pathname, hostname, organizationId, crud, session, 
 
     const queryData = {
         method: "object.read",
+        ...(fileServerConfig.storage ? { storage: fileServerConfig.storage } : {}),
         host: hostname,
         array: "files",
         organization_id: organizationId,
@@ -21550,6 +27386,7 @@ async function getDefaultFile({ fileName, hostname, organizationId, crud }) {
     const activeCrud = crud || (server ? server.crud : null);
     const queryData = {
         method: "object.read",
+        ...(fileServerConfig.storage ? { storage: fileServerConfig.storage } : {}),
         host: hostname,
         array: "files",
         organization_id: organizationId,
@@ -21947,89 +27784,2965 @@ async function init(serverInstance) {
 
 /***/ },
 
-/***/ 3291
+/***/ 9058
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   init: () => (/* binding */ init)
+/* harmony export */   Pw: () => (/* binding */ resolveAIConfig)
 /* harmony export */ });
-/********************************************************************************
- * Copyright (C) 2023 CoCreate and Contributors.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- ********************************************************************************/
+/* unused harmony export defaults */
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9298);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2623);
 
-// Commercial Licensing Information:
-// For commercial use of this software without the copyleft provisions of the AGPLv3,
-// you must obtain a commercial license from CoCreate LLC.
-// For details, visit <https://CoCreateJS.com/licenses/> or contact us at sales@CoCreateJS.com.
 
-let server;
 
-async function createOrganization(data) {
-    const organization = {
-        method: "object.create",
-        host: data.host,
-        array: "organizations",
-        object: {
-            ...data.organization,
-            owner: data.user_id
-        }
-    };
-
-    try {
-        await server.crud.send(organization);
-
-        if (organization.error) {
-            data.error = organization.error;
-        }
-
-        if (!(data.organization = organization.object?.[0])) {
-            data.error = "Failed to create organization";
-        }
-
-    } catch (error) {
-        data.error = error.message;
-    }
-
-    return server.send(data);
-}
-
-const Organizations = {
-    create: createOrganization
+const defaults = {
+    enabled: true,
+    platformCredentialFallback: false,
+    defaultStorageTarget: 'virtual',
+    allowLocalFileSystem: false,
+    allowUnconfirmedLocalWrite: false,
+    allowPlatformCommands: false,
+    platformCommandTimeout: 600000,
+    platformCommandMaxOutputBytes: 1048576,
+    cliPath: undefined,
+    cliDirectory: undefined,
+    requestTimeout: 600000,
+    systemInstructions: ''
 };
 
-/** Attach organization services and socket handlers to an initialized server.  * @public
+async function resolveAIConfig(server, options = {}) {
+    const aiConfig = { ...defaults };
+    const localConfig = _cocreate_config__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A.get('ai');
+    if (localConfig) (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .dotNotationToObject */ .O)(localConfig, aiConfig);
+
+    const databaseConfig = await _cocreate_config__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A.query({
+        type: 'ai',
+        organization_id: server.organization_id
+    }, server.crud);
+    (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .dotNotationToObject */ .O)(databaseConfig, aiConfig);
+    (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .dotNotationToObject */ .O)(options, aiConfig);
+
+    // Project paths belong to Cluster's repository configuration, never AI.
+    delete aiConfig.localFsRoot;
+    return aiConfig;
+}
+
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (resolveAIConfig)));
+
+
+/***/ },
+
+/***/ 176
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Cu: () => (/* binding */ getMissingCredentialKeys),
+/* harmony export */   y$: () => (/* binding */ getCredentialRequirements)
+/* harmony export */ });
+/* unused harmony export getCredentialValue */
+/**
+ * Resolve the API profile fields required by one configured AI provider.
+ * `credentials` maps persisted API profile keys to provider-facing labels.
+ * @private
  * @environment server
  */
-function init(Server) {
-    if (!Server?.crud || !Server?.on) {
-        throw new Error("An initialized CoCreate server is required");
+function getCredentialRequirements(providerConfig = {}, providerId = "") {
+	const configured = providerConfig.credentials;
+	const labels = configured && typeof configured === "object" && !Array.isArray(configured)
+		? Object.fromEntries(
+			Object.entries(configured)
+				.filter(([key, label]) => key && typeof label === "string" && label.trim())
+				.map(([key, label]) => [key, label.trim()])
+		)
+		: {};
+
+	if (!Object.keys(labels).length) {
+		const apiName = providerConfig.api || providerId || "AI provider";
+		labels.key = `${apiName} API key`;
+	}
+
+	return { keys: Object.keys(labels), labels };
+}
+
+function getCredentialValue(profile = {}, key = "") {
+	if (!key) return undefined;
+	if (key in profile) return profile[key];
+	return key.split(".").reduce((current, part) => current?.[part], profile);
+}
+
+function getMissingCredentialKeys(profile = {}, keys = []) {
+	return keys.filter((key) => {
+		const value = getCredentialValue(profile, key);
+		return value === undefined || value === null || value === "";
+	});
+}
+
+
+/***/ },
+
+/***/ 7436
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   $: () => (/* binding */ createMcpCrudTool),
+/* harmony export */   H: () => (/* binding */ createAppTools)
+/* harmony export */ });
+const normalizeName = value => String(value || '').toLowerCase().replaceAll(/[^a-z0-9]/g, '');
+const escapeRegex = value => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+function normalizeOperators(value) {
+    if (Array.isArray(value)) return value.map(normalizeOperators);
+    if (!value || typeof value !== 'object') return value;
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [
+        key,
+        ['$in', '$nin', '$all'].includes(key) && !Array.isArray(item)
+            ? [normalizeOperators(item)]
+            : normalizeOperators(item)
+    ]));
+}
+
+function mergeAppFilter(filter, appFilter) {
+    if (!appFilter) return filter;
+    return {
+        ...filter,
+        query: filter.query
+            ? { $and: [appFilter, filter.query] }
+            : appFilter
+    };
+}
+
+function createMcpCrudTool(server) {
+    const appCache = new Map();
+    const activeAppsByArray = new Map();
+
+    const readApps = async (context, query, limit = 10) => {
+        const request = await server.authorize.request({
+            method: 'object.read', array: 'apps',
+            organization_id: context.organization_id,
+            host: context.host,
+            apikey: context.apikey,
+            filter: { query, key: { _id: 1, name: 1, singularName: 1, path: 1, array: 1, filter: 1 }, limit }
+        });
+        return (await server.crud.send(request))?.object ?? [];
+    };
+
+    const resolveApp = async (array, context) => {
+        if (typeof array !== 'string' || array === 'apps') return;
+        const normalized = normalizeName(array);
+        if (appCache.has(normalized)) return appCache.get(normalized);
+
+        const exact = `^${escapeRegex(array)}$`;
+        const apps = await readApps(context, {
+            $or: [
+                { name: { $regex: exact, $options: 'i' } },
+                { singularName: { $regex: exact, $options: 'i' } },
+                { array: { $regex: exact, $options: 'i' } }
+            ]
+        });
+        const app = apps.find(item => [item.name, item.singularName, item.array]
+            .flatMap(value => Array.isArray(value) ? value : [value])
+            .some(value => normalizeName(value) === normalized));
+        appCache.set(normalized, app);
+        if (app?.array) {
+            for (const item of Array.isArray(app.array) ? app.array : [app.array]) {
+                activeAppsByArray.set(normalizeName(item), app);
+            }
+        }
+        return app;
+    };
+
+    const resolveAppForArray = async (array, context) => {
+        const cached = activeAppsByArray.get(normalizeName(array));
+        if (cached) return cached;
+        const apps = await readApps(context, { array });
+        const app = apps.find(item => (Array.isArray(item.array) ? item.array : [item.array])
+            .some(value => value === array));
+        if (app) activeAppsByArray.set(normalizeName(array), app);
+        return app;
+    };
+
+    const normalizeRequest = async (input, context) => {
+        if (!input || typeof input !== 'object' || Array.isArray(input) ||
+            !/^(storage|database|array|index|object)\.(create|read|update|delete)$/.test(input.method || '')) {
+            throw new Error('CRUD accepts CoCreate storage, database, array, index, and object CRUD methods.');
+        }
+        const { fields, limit, projection, query, skip, sort, ...request } = input;
+        if (Array.isArray(request.array) && request.array.length === 1) request.array = request.array[0];
+
+        let app;
+        if (/^object\./.test(request.method) && typeof request.array === 'string' && request.array !== 'apps') {
+            app = activeAppsByArray.get(normalizeName(request.array)) || await resolveApp(request.array, context);
+            if (app?.array) {
+                const requestedArray = request.array;
+                request.array = Array.isArray(app.array) ? app.array[0] : app.array;
+                request.app_id = app._id;
+                if (app.filter?.query && request.method === 'object.create') {
+                    const defaults = Object.fromEntries(Object.entries(app.filter.query)
+                        .filter(([, value]) => value === null || ['string', 'number', 'boolean'].includes(typeof value)));
+                    request.object = (Array.isArray(request.object) ? request.object : [request.object])
+                        .map(record => ({ ...defaults, ...record }));
+                } else if (app.filter?.query) {
+                    const requestedQuery = request.filter?.query ?? query;
+                    request.filter = mergeAppFilter({ ...(request.filter || {}), ...(requestedQuery !== undefined && { query: requestedQuery }) }, app.filter.query);
+                }
+                request.requestedArray = requestedArray;
+            }
+        }
+
+        const filter = { ...(request.filter || {}) };
+        const requestedProjection = projection ?? fields ?? filter.projection;
+        const requestedSkip = skip ?? filter.skip;
+        const requestedSort = sort ?? filter.sort;
+        const filterOptions = {
+            limit,
+            key: requestedProjection,
+            query,
+            index: requestedSkip,
+            sort: requestedSort && !Array.isArray(requestedSort)
+                ? Object.entries(requestedSort).map(([key, direction]) => ({ key, direction }))
+                : requestedSort
+        };
+        delete filter.projection;
+        delete filter.skip;
+        for (const [key, value] of Object.entries(filterOptions)) {
+            if (value !== undefined && filter[key] === undefined) filter[key] = value;
+        }
+        if (filter.query) filter.query = normalizeOperators(filter.query);
+        if (Object.keys(filter).length) request.filter = filter;
+        else delete request.filter;
+
+        const writes = ['object.create', 'object.update'].includes(request.method);
+        const records = Array.isArray(request.object) ? request.object : [request.object];
+        if (writes && request.array === 'secrets') {
+            throw new Error('External API credentials cannot be written to secrets.');
+        }
+        if (writes && request.array === 'apis' && records.some(record => record && typeof record === 'object' &&
+            (Object.hasOwn(record, 'key') || Object.hasOwn(record.$set ?? {}, 'key')))) {
+            throw new Error('API keys cannot be written through CRUD.');
+        }
+        if (writes && request.array === 'endpoints') {
+            const required = ['api_id', 'name', 'method', 'endpoint', 'description', 'enabled'];
+            const unsupported = ['requestTemplate', 'handler', 'code', 'source', 'route', 'implementation'];
+            for (const record of records) {
+                const missing = required.filter(key => record?.[key] === undefined);
+                const invalid = unsupported.filter(key => record?.[key] !== undefined);
+                if (!record || typeof record !== 'object' || missing.length || invalid.length ||
+                    typeof record.method !== 'string' || record.method !== record.method.toLowerCase()) {
+                    throw new Error('Endpoint records must use the CoCreate API endpoint structure with a lowercase HTTP method; executable code fields are not accepted.');
+                }
+            }
+        }
+        if (writes && request.array === 'webhooks') {
+            const required = ['api_id', 'path', 'description', 'enabled', 'chunks', 'receive', 'rawBody'];
+            for (const record of records) {
+                if (!record || typeof record !== 'object' || required.some(key => record[key] === undefined) ||
+                    (!record.process && !record.action) || !Array.isArray(record.chunks) ||
+                    !record.receive || typeof record.receive !== 'object' ||
+                    !record.rawBody || typeof record.rawBody !== 'object') {
+                    throw new Error('Webhook records must use the configured CoCreate webhook AST structure.');
+                }
+            }
+        }
+        return request;
+    };
+
+    return {
+        name: 'crud',
+        title: 'CoCreate CRUD',
+        description: 'Read, create, update, or delete CoCreate data. App names and singular names are resolved through apps records and their filters/defaults are applied.',
+        inputSchema: {
+            type: 'object',
+            properties: {
+                method: { type: 'string', pattern: '^(storage|database|array|index|object)\\.(create|read|update|delete)$' },
+                array: { description: 'CoCreate array name or an app name/singular name.' },
+                object: {}, filter: { type: 'object' }, storage: { type: 'string' }, database: { type: 'string' },
+                query: {}, fields: {}, projection: {}, limit: { type: 'integer' }, skip: { type: 'integer' }, sort: {}
+            },
+            required: ['method'],
+            additionalProperties: true
+        },
+        authorize: async (input, context) => {
+            const request = await normalizeRequest(input, context);
+            const { organization_id: _organizationId, host: _host, apikey: _apikey, user_id: _userId, ...operation } = request;
+            return { ...operation, organization_id: context.organization_id, host: context.host, apikey: context.apikey };
+        },
+        handler: async (request, context) => {
+            const { requestedArray, ...operation } = request;
+            const response = await server.crud.send(operation);
+            const resultKey = operation.method.split('.')[0];
+            const items = response?.[resultKey];
+            if (operation.method === 'object.read' && operation.array === 'apps' && Array.isArray(items)) {
+                for (const app of items) {
+                    for (const name of [app.name, app.singularName]) if (name) appCache.set(normalizeName(name), app);
+                    for (const array of Array.isArray(app.array) ? app.array : [app.array]) if (array) activeAppsByArray.set(normalizeName(array), app);
+                }
+            }
+            let app;
+            if (operation.array && operation.array !== 'apps') {
+                try {
+                    app = activeAppsByArray.get(normalizeName(operation.array)) || await resolveAppForArray(operation.array, context);
+                } catch { /* Object results remain usable if app metadata is not readable. */ }
+            }
+            const excluded = ['apps', 'apis', 'endpoints', 'webhooks', 'ai-instructions'];
+            const references = operation.method.startsWith('object.') && Array.isArray(items) && !excluded.includes(operation.array)
+                ? items.filter(item => item?._id).map(item => ({
+                    method: operation.method,
+                    filter: operation.filter || {},
+                    ...(app?._id && { app_id: app._id }),
+                    ...(app?.path && { app_path: app.path }),
+                    ...(operation.storage !== undefined && { storage: operation.storage }),
+                    ...(operation.database !== undefined && { database: operation.database }),
+                    array: operation.array,
+                    object: item._id,
+                    key: '{}',
+                    language: 'json'
+                }))
+                : undefined;
+            return {
+                ...response,
+                ...(requestedArray && requestedArray !== operation.array && { requestedArray }),
+                ...(references?.length && { references })
+            };
+        }
+    };
+}
+
+function createAppTools(server) {
+    return [
+        {
+            name: 'list_apps',
+            description: 'Discover CoCreate app records, their names, singular names, physical arrays, filters, and app paths. Use this to map an application concept to its stored data.',
+            inputSchema: {
+                type: 'object', properties: { search: { type: 'string' }, limit: { type: 'integer', minimum: 1, maximum: 100 } },
+                additionalProperties: false
+            },
+            authorize: async (input, context) => {
+                const filter = { enabled: { $ne: false } };
+                if (input.search) {
+                    const exact = `.*${escapeRegex(input.search)}.*`;
+                    filter.$or = [
+                        { name: { $regex: exact, $options: 'i' } },
+                        { singularName: { $regex: exact, $options: 'i' } },
+                        { array: { $regex: exact, $options: 'i' } }
+                    ];
+                }
+                return { method: 'object.read', array: 'apps', filter: { query: filter, limit: Math.min(Math.max(input.limit || 50, 1), 100) }, organization_id: context.organization_id, host: context.host, apikey: context.apikey };
+            },
+            handler: async request => {
+                const response = await server.crud.send(request);
+                return { apps: (response?.object ?? []).map(({ _id, name, singularName, array, path, description, filter }) => ({ _id, name, singularName, array, path, description, filter })) };
+            }
+        }
+    ];
+}
+
+
+/***/ },
+
+/***/ 3651
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Us: () => (/* binding */ projectStorageTarget),
+/* harmony export */   dk: () => (/* binding */ isPlatformOrganization),
+/* harmony export */   gi: () => (/* binding */ platformAccessError),
+/* harmony export */   gk: () => (/* binding */ isToolAvailable)
+/* harmony export */ });
+/* unused harmony export createPermissionHandler */
+const platformTools = new Set([
+  'read_local_file', 'edit_local_file', 'write_local_file',
+  'git_project', 'coc', 'execute_command', 'request_server_file',
+  'manage_server_storage', 'manage_server_routes',
+  'manage_server_autoscaler', 'manage_server_cluster', 'send_server_message'
+]);
+
+/** Match trusted request scope against the running server's organization. */
+function isPlatformOrganization(server, organization_id) {
+  return typeof organization_id === 'string' && organization_id.trim().length > 0 &&
+    typeof server?.organization_id === 'string' && organization_id === server.organization_id;
+}
+
+function platformAccessError(server, organization_id) {
+  if (isPlatformOrganization(server, organization_id)) return;
+  return {
+    success: false,
+    error: 'Unauthorized: local filesystem, Git, CLI, and server control access is restricted to the platform organization.'
+  };
+}
+
+function isToolAvailable(server, organization_id, name) {
+  return !platformTools.has(name) || isPlatformOrganization(server, organization_id);
+}
+
+/** Tenant project tools default to CRUD; an explicit local target is denied. */
+function projectStorageTarget(server, organization_id, requested, fallback) {
+  return requested ?? (isPlatformOrganization(server, organization_id) ? fallback : 'virtual');
+}
+
+/** Only registered custom tools may run; native SDK capabilities stay disabled. */
+function createPermissionHandler(server, organization_id, tools) {
+  const registered = new Set(tools.map(tool => tool.name));
+  return async permission => {
+    if (typeof organization_id === 'string' && organization_id.trim() &&
+        permission?.managedApprovalRequired !== true && permission?.kind === 'custom-tool' &&
+        registered.has(permission.toolName) && isToolAvailable(server, organization_id, permission.toolName)) {
+      return { kind: 'approve-once' };
     }
-    server = Server;
-    server.organizations = Organizations;
-    server.on("createOrganization", (data) => server.organizations.create(data));
-    return Organizations;
+    return { kind: 'reject', feedback: 'Only the configured, authorized CoCreate tools may run in this session.' };
+  };
+}
+
+
+/***/ },
+
+/***/ 3803
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   G: () => (/* binding */ createPortedRegistry)
+/* harmony export */ });
+/* harmony import */ var _tools_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4638);
+/* harmony import */ var _tools_autoscaler_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9912);
+/* harmony import */ var _tools_coc_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1265);
+/* harmony import */ var _tools_command_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8851);
+/* harmony import */ var _tools_files_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5601);
+/* harmony import */ var _tools_git_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5294);
+/* harmony import */ var _tools_routes_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6822);
+/* harmony import */ var _tools_send_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(4954);
+/* harmony import */ var _tools_servers_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1446);
+/* harmony import */ var _tools_socket_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(4857);
+/* harmony import */ var _tools_storage_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(4355);
+/* harmony import */ var _crud_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(7436);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(3651);
+/* harmony import */ var _credentials_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(176);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const fallbackSchema = { type: 'object', properties: {}, additionalProperties: true };
+const supported = (definition, config = {}) => ({
+    name: definition.name,
+    description: config.description || definition.description || definition.name,
+    inputSchema: config.parameters || definition.inputSchema || fallbackSchema,
+    authorize: definition.authorize,
+    handler: definition.handler
+});
+
+const fixedToolConfigs = {
+    crud: {
+        description: 'Read or modify CoCreate data, with app-name resolution, app-specific filters/defaults, and object references.',
+        parameters: null
+    },
+    list_apps: {
+        description: 'Find application definitions and map an app name to its physical CoCreate array.',
+        parameters: { type: 'object', properties: { search: { type: 'string' }, limit: { type: 'integer' } }, additionalProperties: false }
+    },
+    list_ai_instructions: {
+        description: 'List enabled instruction names before fetching a specific instruction.',
+        parameters: { type: 'object', properties: { search: { type: 'string' }, limit: { type: 'integer' } }, additionalProperties: false }
+    },
+    describe_api_credentials: {
+        description: 'Show the credential field names required by an API profile without returning any secret values.',
+        parameters: { type: 'object', properties: { api: { type: 'string' } }, required: ['api'], additionalProperties: false }
+    },
+    render_crud: {
+        description: 'Return a CoCreate app view reference for a previously authorized record. Does not return a large field value.',
+        parameters: {
+            type: 'object',
+            properties: {
+                array: { type: 'string' }, object: { type: 'string' }, key: { type: 'string' },
+                language: { type: 'string' }, display: { type: 'string', enum: ['details', 'code', 'form'] },
+                storage: { type: 'string' }, database: { type: 'string' }
+            },
+            required: ['array', 'object', 'key'], additionalProperties: false
+        }
+    },
+    get_ai_instructions: {
+        description: 'Retrieve CoCreate operating instructions, examples, and referenced source files by name.',
+        parameters: { type: 'object', properties: { name: { type: 'string' } }, required: ['name'], additionalProperties: false }
+    },
+    coc: {
+        description: 'Platform organization only. Download database-backed CoCreate files to the prepared project workspace or upload workspace changes to CoCreate files.',
+        parameters: {
+            type: 'object', properties: {
+                action: { type: 'string', enum: ['download', 'upload'] },
+                paths: { type: 'array', items: { type: 'string' } },
+                site: { type: 'boolean' }, overwrite: { type: 'boolean' }
+            }, required: ['action'], additionalProperties: false
+        }
+    }
+};
+
+function trusted(context, payload) {
+    const { organization_id: _org, host: _host, apikey: _key, user_id: _user, ...operation } = payload;
+    return { ...operation, organization_id: context.organization_id, host: context.host, apikey: context.apikey };
+}
+
+function scopedServer(server, context) {
+    const crud = Object.create(server.crud);
+    crud.send = async payload => {
+        const authorized = await server.authorize.request(trusted(context, payload));
+        return server.crud.send(authorized);
+    };
+
+    const scoped = Object.create(server);
+    scoped.crud = crud;
+    if (typeof server.send === 'function') {
+        scoped.send = async payload => {
+            const authorized = await server.authorize.request(trusted(context, payload));
+            return server.send(authorized);
+        };
+    }
+    if (server.api?.send) {
+        const api = Object.create(server.api);
+        api.send = async payload => {
+            const authorized = await server.authorize.request(trusted(context, payload));
+            return server.api.send(authorized);
+        };
+        scoped.api = api;
+    }
+    return scoped;
+}
+
+function makeTemplates(server, aiConfig, context, mcpPath) {
+    const scoped = scopedServer(server, context);
+    const settings = {
+        server: scoped,
+        allowLocalFileSystem: aiConfig.allowLocalFileSystem === true,
+        allowUnconfirmedLocalWrite: aiConfig.allowUnconfirmedLocalWrite === true
+    };
+    const fileTools = (0,_tools_files_js__WEBPACK_IMPORTED_MODULE_4__/* .createFileTools */ .i)({
+        ...settings,
+        crud: scoped.crud,
+        defaultStorageTarget: aiConfig.defaultStorageTarget || 'virtual'
+    });
+    const routesTool = (0,_tools_routes_js__WEBPACK_IMPORTED_MODULE_6__/* .createRouteTool */ .Q)({ server: scoped });
+    const originalRouteHandler = routesTool.handler;
+    routesTool.handler = async (input = {}, routeContext = {}) => {
+        if (input.routePath === mcpPath && ['add', 'remove'].includes(input.action)) {
+            throw new Error('The MCP endpoint route cannot be changed by a tool call.');
+        }
+        return originalRouteHandler(input, routeContext);
+    };
+
+    return [
+        (0,_tools_api_js__WEBPACK_IMPORTED_MODULE_0__/* .createApiTool */ .b)({ server: scoped, organization_id: context.organization_id, host: context.host }),
+        (0,_tools_send_js__WEBPACK_IMPORTED_MODULE_7__/* .createSendTool */ .v)({ server: scoped, organization_id: context.organization_id }),
+        ...fileTools.tools,
+        (0,_tools_socket_js__WEBPACK_IMPORTED_MODULE_9__/* .createSocketTool */ .m)({ server: scoped }),
+        (0,_tools_storage_js__WEBPACK_IMPORTED_MODULE_10__/* .createStorageTool */ ._)({ server: scoped }),
+        (0,_tools_servers_js__WEBPACK_IMPORTED_MODULE_8__/* .createServerClusterTool */ .S)({ server: scoped }),
+        routesTool,
+        (0,_tools_autoscaler_js__WEBPACK_IMPORTED_MODULE_1__/* .createAutoscalerTool */ .m)({ server: scoped }),
+        (0,_tools_coc_js__WEBPACK_IMPORTED_MODULE_2__/* .createCocTool */ .Y)(settings),
+        (0,_tools_git_js__WEBPACK_IMPORTED_MODULE_5__/* .createGitTool */ .P)(settings),
+        ...(aiConfig.allowPlatformCommands === true ? [(0,_tools_command_js__WEBPACK_IMPORTED_MODULE_3__/* .createCommandTool */ .m)({
+            server: scoped,
+            enabled: true,
+            timeout: aiConfig.platformCommandTimeout,
+            maxOutputBytes: aiConfig.platformCommandMaxOutputBytes
+        })] : [])
+    ];
+}
+
+function methodForTool(name, input) {
+    if (name === 'execute_server_api') return input;
+    if (name === 'send_socket_message') {
+        if (typeof input.data?.method !== 'string') throw new Error('data.method is required.');
+        return { ...input.data, clientId: input.clientId, broadcast: input.broadcast };
+    }
+    if (name === 'send_server_message') {
+        if (typeof input.method !== 'string') throw new Error('method is required.');
+        return input;
+    }
+    const action = typeof input.action === 'string' ? input.action : 'execute';
+    return { ...input, method: `mcp.${name}.${action}` };
+}
+
+function createInstructionTools(server) {
+    return [
+        {
+            name: 'search_conversation_history',
+            description: 'Search messages in a specified conversation within the authenticated organization.',
+            inputSchema: { type: 'object', properties: { conversation_id: { type: 'string' }, query: { type: 'string' }, limit: { type: 'integer' }, skip: { type: 'integer' } }, required: ['conversation_id'], additionalProperties: false },
+            authorize: async (input, context) => {
+                const query = { conversation_id: input.conversation_id };
+                if (input.query) query.content = { $regex: input.query.slice(0, 200).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), $options: 'i' };
+                return { method: 'object.read', array: 'ai-messages', filter: { query, key: { role: 1, content: 1 }, sort: [{ key: '_id', direction: -1 }], index: Math.max(Number(input.skip) || 0, 0), limit: Math.min(Math.max(Number(input.limit) || 12, 1), 20) }, organization_id: context.organization_id, host: context.host, apikey: context.apikey };
+            },
+            handler: async request => {
+                const response = await server.crud.send(request);
+                return { messages: (response?.object ?? []).reverse().map(({ role, content }) => ({ role, content })), count: response?.filter?.count };
+            }
+        },
+        {
+            name: 'list_ai_instructions',
+            description: 'List enabled CoCreate AI instruction names and descriptions. Use get_ai_instructions to fetch the relevant guidance and sources.',
+            inputSchema: { type: 'object', properties: { search: { type: 'string' }, limit: { type: 'integer' } }, additionalProperties: false },
+            authorize: async (input, context) => ({
+                method: 'object.read', array: 'ai-instructions',
+                filter: { query: { enabled: true, ...(input.search && { name: { $regex: input.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), $options: 'i' } }) }, key: { name: 1, description: 1, default: 1 }, limit: Math.min(Math.max(input.limit || 100, 1), 100) },
+                organization_id: context.organization_id, host: context.host, apikey: context.apikey
+            }),
+            handler: async request => {
+                const response = await server.crud.send(request);
+                return { instructions: (response?.object ?? []).map(({ name, description, default: isDefault }) => ({ name, description, default: isDefault === true })) };
+            }
+        },
+        {
+            name: 'get_ai_instructions',
+            description: 'Fetch named CoCreate operating instructions, examples, and the content of referenced source files.',
+            inputSchema: fixedToolConfigs.get_ai_instructions.parameters,
+            authorize: async (input, context) => ({
+                method: 'object.read', array: 'ai-instructions',
+                filter: { query: { name: input.name, enabled: true }, limit: 1 },
+                organization_id: context.organization_id, host: context.host, apikey: context.apikey
+            }),
+            handler: async (request, context) => {
+                const response = await server.crud.send(request);
+                const instruction = response?.object?.[0];
+                if (!instruction) return { error: `No AI instructions found with name "${request.filter.query.name}".` };
+                const sources = [];
+                for (const source of instruction.sources ?? []) {
+                    const pathname = source.pathname ?? source.path;
+                    if (!pathname) { sources.push({ ...source, found: false }); continue; }
+                    const fileRequest = await server.authorize.request(trusted(context, {
+                        method: 'object.read', array: 'files',
+                        filter: { query: { $or: [{ pathname }, { path: pathname }] }, key: { name: 1, pathname: 1, path: 1, src: 1, content: 1, 'content-type': 1, updated: 1 }, limit: 1 }
+                    }));
+                    const file = (await server.crud.send(fileRequest))?.object?.[0];
+                    sources.push(file
+                        ? { ...source, name: source.name ?? file.name, pathname: file.pathname ?? file.path ?? pathname, content: file.src ?? file.content ?? '', contentType: file['content-type'], updated: file.updated, found: true }
+                        : { ...source, pathname, found: false });
+                }
+                return { name: instruction.name, description: instruction.description, instructions: instruction.instructions ?? instruction.content ?? '', examples: instruction.examples ?? [], sources };
+            }
+        }
+    ];
+}
+
+function createCredentialDescriptionTool(server, aiConfig) {
+    if (!aiConfig.providers || typeof aiConfig.providers !== 'object') return;
+    return {
+        name: 'describe_api_credentials',
+        description: 'Describe which credential fields a configured AI provider API profile requires. Never returns credential values.',
+        inputSchema: { type: 'object', properties: { api: { type: 'string' } }, required: ['api'], additionalProperties: false },
+        authorize: async (input, context) => ({ method: 'object.read', array: 'apis', filter: { query: { name: input.api }, limit: 1 }, organization_id: context.organization_id, host: context.host, apikey: context.apikey }),
+        handler: async (request) => {
+            const profile = (await server.crud.send(request))?.object?.[0];
+            if (!profile?._id) return { error: `No API configuration named "${request.filter.query.name}" was found.` };
+            const match = Object.entries(aiConfig.providers).find(([providerId, config]) =>
+                providerId === request.filter.query.name || config?.api === request.filter.query.name
+            );
+            if (!match) return { error: `No AI provider configuration is mapped to API "${request.filter.query.name}".` };
+            const [provider, providerConfig] = match;
+            const requirements = (0,_credentials_js__WEBPACK_IMPORTED_MODULE_13__/* .getCredentialRequirements */ .y$)(providerConfig, provider);
+            return {
+                api: profile.name,
+                provider,
+                required: requirements.keys.map(key => ({ key, label: requirements.labels[key] })),
+                missing: (0,_credentials_js__WEBPACK_IMPORTED_MODULE_13__/* .getMissingCredentialKeys */ .Cu)(profile, requirements.keys)
+            };
+        }
+    };
+}
+
+function createRenderCrudTool(server) {
+    return {
+        name: 'render_crud',
+        description: fixedToolConfigs.render_crud.description,
+        inputSchema: fixedToolConfigs.render_crud.parameters,
+        authorize: async (input, context) => ({
+            method: 'object.read', array: input.array,
+            ...(input.storage !== undefined && { storage: input.storage }),
+            ...(input.database !== undefined && { database: input.database }),
+            filter: { query: { _id: input.object }, key: { _id: 1 }, limit: 1 },
+            mcpView: { key: input.key, language: input.language, display: input.display },
+            organization_id: context.organization_id, host: context.host, apikey: context.apikey
+        }),
+        handler: async (request, context) => {
+            const { mcpView, ...crudRequest } = request;
+            const record = (await server.crud.send(crudRequest))?.object?.[0];
+            if (!record?._id) throw new Error('The requested record could not be found.');
+            const appRequest = await server.authorize.request(trusted(context, {
+                method: 'object.read', array: 'apps',
+                filter: { query: { array: request.array }, key: { _id: 1, path: 1, array: 1 }, limit: 20 }
+            }));
+            const app = (await server.crud.send(appRequest))?.object?.find(item =>
+                (Array.isArray(item.array) ? item.array : [item.array]).includes(request.array));
+            return { reference: {
+                method: 'object.read', filter: {}, app_id: app?._id, app_path: app?.path,
+                ...(request.storage !== undefined && { storage: request.storage }),
+                ...(request.database !== undefined && { database: request.database }),
+                array: request.array, object: record._id, key: mcpView?.key,
+                language: mcpView?.language, display: mcpView?.display || 'details'
+            } };
+        }
+    };
+}
+
+function createPortedRegistry(server, aiConfig, context, { mcpPath = '/mcp' } = {}) {
+    const configured = aiConfig.tools || {};
+    const definitions = new Map();
+    const toolContext = {
+        ...context,
+        storageTarget: (0,_platform_js__WEBPACK_IMPORTED_MODULE_12__/* .projectStorageTarget */ .Us)(server, context.organization_id, undefined, aiConfig.defaultStorageTarget || 'virtual'),
+        confirmLocalWrite: context.confirmLocalWrite === true
+    };
+    const templates = makeTemplates(server, aiConfig, toolContext, mcpPath);
+    const placeholders = [
+        ...createInstructionTools(server),
+        createRenderCrudTool(server),
+        createCredentialDescriptionTool(server, aiConfig),
+        ...templates,
+        ...(0,_crud_js__WEBPACK_IMPORTED_MODULE_11__/* .createAppTools */ .H)(server),
+        (0,_crud_js__WEBPACK_IMPORTED_MODULE_11__/* .createMcpCrudTool */ .$)(server)
+    ].filter(Boolean);
+
+    for (const placeholder of placeholders) {
+        const name = placeholder.name;
+        if (configured[name] === false) continue;
+        const config = configured[name] ?? fixedToolConfigs[name];
+        if (!config) continue;
+        if (!(0,_platform_js__WEBPACK_IMPORTED_MODULE_12__/* .isToolAvailable */ .gk)(server, context.organization_id, name)) continue;
+        definitions.set(name, supported({
+            ...placeholder,
+            authorize: placeholder.authorize || ((input) => methodForTool(name, input)),
+            handler: placeholder.handler
+        }, config));
+    }
+
+    // The generic CRUD bridge is always present; its app-aware implementation is
+    // installed by the caller so the same trusted authorization boundary applies.
+    return [...definitions.values()];
+}
+
+
+/***/ },
+
+/***/ 4638
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   b: () => (/* binding */ createApiTool)
+/* harmony export */ });
+/********************************************************************************
+ * Copyright (C) 2026 CoCreate and Contributors.
+ *
+ * Licensed under GNU AGPLv3.
+ ********************************************************************************/
+
+/**
+ * Creates the bridge to server.api.send(data).
+ *
+ * The authenticated organization and host are captured per AI session and
+ * written after model-provided values so they cannot be overridden.
+ *
+ * @param {Object} options
+ * @param {Object} options.server - CoCreateServer instance
+ * @param {string} options.organization_id - Authenticated request organization
+ * @param {string} [options.host] - Authenticated request host
+ * @returns {Object} API tool definition
+ * @private
+ * @environment server
+ */
+function createApiTool({ server, organization_id, host }) {
+  return {
+    name: 'execute_server_api',
+
+    handler: async (input = {}) => {
+      if (typeof organization_id !== 'string' || !organization_id.trim()) {
+        return { success: false, error: 'An authenticated organization_id is required for API calls.' };
+      }
+      const api = server.api;
+      if (typeof api?.send !== 'function') {
+        throw new Error('The CoCreate server API capability is not initialized.');
+      }
+      const {
+        organization_id: _ignoredOrganizationId,
+        host: _ignoredHost,
+        ...apiPayload
+      } = input;
+
+      return api.send({
+        ...apiPayload,
+        organization_id,
+        host
+      });
+    }
+  };
+}
+
+
+/***/ },
+
+/***/ 9912
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   m: () => (/* binding */ createAutoscalerTool)
+/* harmony export */ });
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3651);
+
+
+/**
+ * Exposes the actual server.autoscaler interface to platform AI requests.
+ * @private
+ * @environment server
+ */
+function createAutoscalerTool({ server }) {
+  const autoscaler = server.autoscaler;
+
+  return {
+    name: 'manage_server_autoscaler',
+
+    handler: async ({ action, value }, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_0__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+
+      switch (action) {
+        case 'getConfig':
+          return autoscaler.config;
+        case 'determineScaleOutTarget':
+          return autoscaler.determineScaleOutTarget(value);
+        case 'scaleOut':
+          return autoscaler.scaleOut(value);
+        case 'determineScaleInTarget':
+          return autoscaler.determineScaleInTarget(value);
+        case 'scaleIn':
+          return autoscaler.scaleIn(value);
+        default:
+          throw new Error(`Unsupported autoscaler action: ${action}`);
+      }
+    }
+  };
+}
+
+
+/***/ },
+
+/***/ 1265
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Y: () => (/* binding */ createCocTool)
+/* harmony export */ });
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9391);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3651);
+
+
+
+
+
+
+const normalizeVirtualPath = (value = '/') =>
+  value.startsWith('/') ? value : `/${value}`;
+
+const inferMimeType = (pathname) => ({
+  '.css': 'text/css',
+  '.html': 'text/html',
+  '.htm': 'text/html',
+  '.js': 'text/javascript',
+  '.json': 'application/json',
+  '.svg': 'image/svg+xml',
+  '.txt': 'text/plain'
+})[node_path__WEBPACK_IMPORTED_MODULE_1__["default"].extname(pathname).toLowerCase()] ?? 'text/plain';
+
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+function getContent(file) {
+  const content = file.src ?? file.source ?? file.content ?? '';
+  if (Buffer.isBuffer(content)) return content;
+  if (content?.type === 'Buffer' && Array.isArray(content.data)) {
+    return Buffer.from(content.data);
+  }
+  if (content && typeof content === 'object' && Array.isArray(content.data)) {
+    return Buffer.from(content.data);
+  }
+  return typeof content === 'string' ? content : JSON.stringify(content, null, 2);
 }
 
 /**
- * A simple organizations component in vanilla javascript. Easily configured using HTML5 attributes and/or JavaScript API.
- *
- * @module organizations
+ * Exposes the CoCreate download/upload workflow without a shell or child
+ * process. Only the platform organization may access the local workspace.
+ * @private
  * @environment server
  */
+function createCocTool({
+  server,
+  allowLocalFileSystem,
+  allowUnconfirmedLocalWrite
+}) {
+  const workspaces = (0,_workspace_js__WEBPACK_IMPORTED_MODULE_2__/* .createWorkspaceResolver */ .IN)(server);
+  const crud = server.crud;
+
+  async function downloadTarget(target, context, overwrite) {
+    const pathname = normalizeVirtualPath(target);
+    const isPrefix = pathname === '/' || pathname.endsWith('/');
+    const query = isPrefix
+      ? { pathname: { $regex: `^${escapeRegex(pathname)}` } }
+      : {
+          $or: [
+            { pathname },
+            { pathname: target },
+            { path: pathname },
+            { path: target }
+          ]
+        };
+    let index = 0;
+    let downloaded = 0;
+    let skipped = 0;
+
+    while (true) {
+      const response = await crud.send({
+        method: 'object.read',
+        array: 'files',
+        organization_id: context.organization_id,
+        host: context.host,
+        filter: {
+          query,
+          sort: [
+            { key: 'pathname', direction: 'asc' },
+            { key: '_id', direction: 'asc' }
+          ],
+          index,
+          limit: 1
+        }
+      });
+      const file = response?.object?.[0];
+      if (!file) break;
+      index++;
+
+      const filePath = file.pathname ?? file.path;
+      if (!filePath) continue;
+      const relativePath = filePath.replace(/^\/+/, '');
+      const fullPath = await workspaces.resolvePath(
+        context.organization_id,
+        relativePath,
+        { forWrite: true }
+      );
+      const isDirectory = file['content-type'] === 'text/directory' ||
+        file.type === 'directory' || filePath.endsWith('/');
+      if (isDirectory) {
+        await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].mkdir(fullPath, { recursive: true });
+        continue;
+      }
+
+      await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].mkdir(node_path__WEBPACK_IMPORTED_MODULE_1__["default"].dirname(fullPath), { recursive: true });
+      try {
+        await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].writeFile(fullPath, getContent(file), overwrite ? undefined : { flag: 'wx' });
+        downloaded++;
+      } catch (error) {
+        if (!overwrite && error.code === 'EEXIST') {
+          skipped++;
+          continue;
+        }
+        throw error;
+      }
+    }
+
+    return { downloaded, skipped };
+  }
+
+  return {
+    name: 'coc',
+
+    handler: async ({ action, paths = [], site = false, overwrite = false }, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_3__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+      if (!allowLocalFileSystem) {
+        return { success: false, error: 'Local file system access is disabled.' };
+      }
+
+      const workspace = await workspaces.ensure(context.organization_id);
+      const targets = (Array.isArray(paths) ? paths : [paths]).filter(Boolean).map(String);
+
+      if (action === 'download') {
+        if (site) targets.unshift('/');
+        if (!targets.length) throw new Error('paths is required unless site=true.');
+
+        let downloaded = 0;
+        let skipped = 0;
+        for (const target of [...new Set(targets)]) {
+          const result = await downloadTarget(
+            target,
+            context,
+            overwrite === true
+          );
+          downloaded += result.downloaded;
+          skipped += result.skipped;
+        }
+        return {
+          success: true,
+          action,
+          workspace,
+          downloaded,
+          skipped,
+          overwrite: overwrite === true
+        };
+      }
+
+      if (action === 'upload') {
+        if (!allowUnconfirmedLocalWrite && context.confirmLocalWrite !== true) {
+          return {
+            success: false,
+            error: 'Live upload requires explicit confirmation. Set context.confirmLocalWrite=true.'
+          };
+        }
+        if (!targets.length) throw new Error('paths is required for upload.');
+
+        const uploaded = [];
+        for (const target of targets) {
+          const fullPath = await workspaces.resolvePath(context.organization_id, target);
+          const stats = await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].stat(fullPath);
+          if (!stats.isFile()) throw new Error(`Upload target must be a file: ${target}`);
+          const pathname = normalizeVirtualPath(target);
+          const content = await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].readFile(fullPath, 'utf8');
+          const existing = await crud.send({
+            method: 'object.read',
+            array: 'files',
+            organization_id: context.organization_id,
+            host: context.host,
+            filter: { query: { pathname }, limit: 1 }
+          });
+          const record = existing?.object?.[0];
+          const object = {
+            ...(record?._id && { _id: record._id }),
+            pathname,
+            path: node_path__WEBPACK_IMPORTED_MODULE_1__["default"].posix.dirname(pathname),
+            directory: node_path__WEBPACK_IMPORTED_MODULE_1__["default"].posix.basename(node_path__WEBPACK_IMPORTED_MODULE_1__["default"].posix.dirname(pathname)),
+            name: node_path__WEBPACK_IMPORTED_MODULE_1__["default"].posix.basename(pathname),
+            src: content,
+            'content-type': record?.['content-type'] ?? inferMimeType(pathname),
+            public: record?.public ?? 'true'
+          };
+          await crud.send({
+            method: record?._id ? 'object.update' : 'object.create',
+            array: 'files',
+            organization_id: context.organization_id,
+            host: context.host,
+            object: [object]
+          });
+          uploaded.push(pathname);
+        }
+        return { success: true, action, workspace, uploaded };
+      }
+
+      throw new Error(`Unsupported coc action: ${action}`);
+    }
+  };
+}
+
+
+/***/ },
+
+/***/ 8851
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   m: () => (/* binding */ createCommandTool)
+/* harmony export */ });
+/* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6564);
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8298);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5663);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9391);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3651);
+
+
+
+
+
+
+
+const DEFAULT_TIMEOUT = 120000;
+const MAX_COMMAND_BYTES = 64 * 1024;
+
+function resolveTimeout(value, maximum) {
+  const timeout = Math.trunc(Number(value)) || DEFAULT_TIMEOUT;
+  return Math.min(maximum, Math.max(1000, timeout));
+}
+
+/**
+ * Creates the unrestricted platform command tool. Its only application-level
+ * boundary is the authenticated platform organization; the spawned process's
+ * operating-system account remains the ultimate permission boundary.
+ * @private
+ * @environment server
+ */
+function createCommandTool({
+  server,
+  enabled,
+  timeout = 600000,
+  maxOutputBytes = 1024 * 1024
+}) {
+  const workspaces = (0,_workspace_js__WEBPACK_IMPORTED_MODULE_3__/* .createWorkspaceResolver */ .IN)(server);
+  const maximumTimeout = Math.max(1000, Math.trunc(Number(timeout)) || 600000);
+  const outputLimit = Math.max(1024, Math.trunc(Number(maxOutputBytes)) || 1024 * 1024);
+
+  return {
+    name: 'execute_command',
+
+    handler: async ({ command, cwd, timeout: requestedTimeout, input }, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_4__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+      if (!enabled) {
+        return { success: false, error: 'Platform command execution is disabled.' };
+      }
+      if (typeof command !== 'string' || !command.trim()) {
+        throw new Error('A non-empty command is required.');
+      }
+      if (Buffer.byteLength(command, 'utf8') > MAX_COMMAND_BYTES) {
+        throw new Error(`Command cannot exceed ${MAX_COMMAND_BYTES} bytes.`);
+      }
+      if (input !== undefined && typeof input !== 'string') {
+        throw new Error('input must be a string when provided.');
+      }
+
+      const workspace = await workspaces.ensure(context.organization_id);
+      const workingDirectory = cwd
+        ? node_path__WEBPACK_IMPORTED_MODULE_2__["default"].resolve(workspace, String(cwd))
+        : workspace;
+      const stats = await node_fs_promises__WEBPACK_IMPORTED_MODULE_1__["default"].stat(workingDirectory);
+      if (!stats.isDirectory()) {
+        throw new Error(`Command working directory is not a directory: ${workingDirectory}`);
+      }
+
+      const commandTimeout = resolveTimeout(requestedTimeout, maximumTimeout);
+      return new Promise((resolve, reject) => {
+        const child = (0,node_child_process__WEBPACK_IMPORTED_MODULE_0__.exec)(command, {
+          cwd: workingDirectory,
+          env: process.env,
+          encoding: 'utf8',
+          maxBuffer: outputLimit,
+          timeout: commandTimeout,
+          windowsHide: true
+        }, (error, stdout = '', stderr = '') => {
+          if (error && typeof error.code !== 'number') {
+            const failure = String(error.message || error).trim();
+            resolve({
+              success: true,
+              action: 'execute',
+              ok: false,
+              command,
+              cwd: workingDirectory,
+              exitCode: null,
+              signal: error.signal ?? null,
+              stdout,
+              stderr,
+              failure
+            });
+            return;
+          }
+
+          resolve({
+            success: true,
+            action: 'execute',
+            ok: !error,
+            command,
+            cwd: workingDirectory,
+            exitCode: error?.code ?? 0,
+            signal: error?.signal ?? null,
+            stdout,
+            stderr
+          });
+        });
+
+        child.once('error', reject);
+        if (input !== undefined) child.stdin.end(input);
+      });
+    }
+  };
+}
+
+
+/***/ },
+
+/***/ 5601
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   i: () => (/* binding */ createFileTools)
+/* harmony export */ });
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8298);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9391);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3651);
+
+
+
+
+
+/**
+ * Factory function creating all file management tools for virtual and local file systems.
+ *
+ * @param {Object} options
+ * @param {Object} options.server - Server context instance
+ * @param {Object} options.crud - CoCreate CRUD service
+ * @param {string} options.defaultStorageTarget - Default virtual or local target
+ * @param {boolean} options.allowLocalFileSystem - Flag indicating whether local disk writes are enabled
+ * @returns {Array<Object>} Array of tool definitions for copilot file actions
+ * @private
+ * @environment server
+ */
+function createFileTools({
+  server,
+  crud,
+  defaultStorageTarget,
+  allowLocalFileSystem,
+  allowUnconfirmedLocalWrite
+}) {
+  const files = server.files;
+  const workspaces = (0,_workspace_js__WEBPACK_IMPORTED_MODULE_2__/* .createWorkspaceResolver */ .IN)(server);
+  const normalizeVirtualPath = (filePath) =>
+    filePath.startsWith('/') ? filePath : `/${filePath}`;
+  const inferMimeType = (pathname) => {
+    const extension = node_path__WEBPACK_IMPORTED_MODULE_0__["default"].extname(pathname).toLowerCase();
+    return {
+      '.css': 'text/css',
+      '.html': 'text/html',
+      '.htm': 'text/html',
+      '.js': 'text/javascript',
+      '.json': 'application/json',
+      '.svg': 'image/svg+xml',
+      '.txt': 'text/plain'
+    }[extension] ?? 'text/plain';
+  };
+  const virtualPathQuery = (filePath) => {
+    const pathname = normalizeVirtualPath(filePath);
+    return {
+      $or: [
+        { pathname },
+        { pathname: filePath },
+        { path: pathname },
+        { path: filePath }
+      ]
+    };
+  };
+  const resolveLocalPath = (filePath, context, options) =>
+    workspaces.resolvePath(context?.organization_id, filePath, options);
+
+  const requestServerFileTool = {
+    name: 'request_server_file',
+
+    handler: async ({ path: pathname }, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_3__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+      return files.resolveFile({
+        pathname,
+        hostname: context.host,
+        organizationId: context.organization_id,
+        crud
+      });
+    }
+  };
+
+  const readVirtualFileTool = {
+    name: 'read_virtual_file',
+
+    handler: async ({ filePath }, context) => {
+      const result = await crud.send({
+        method: 'object.read',
+        array: 'files',
+        organization_id: context.organization_id,
+        filter: {
+          query: virtualPathQuery(filePath),
+          limit: 1
+        }
+      });
+
+      const file = result.object[0];
+      if (!file) {
+        return { error: `Virtual file not found: ${filePath}` };
+      }
+
+      return {
+        path: file.pathname ?? file.path,
+        name: file.name,
+        content: file.src ?? file.content ?? '',
+        metadata: file.metadata,
+        reference: {
+          array: 'files',
+          object: file._id,
+          key: file.src !== undefined ? 'src' : 'content'
+        }
+      };
+    }
+  };
+
+  const writeVirtualFileTool = {
+    name: 'write_virtual_file',
+
+    handler: async ({ filePath, content, mimeType }, context) => {
+      const pathname = normalizeVirtualPath(filePath);
+      const fileName = node_path__WEBPACK_IMPORTED_MODULE_0__["default"].basename(pathname);
+      const filePathname = node_path__WEBPACK_IMPORTED_MODULE_0__["default"].posix.dirname(pathname);
+      const directory = filePathname === '/'
+        ? '/'
+        : node_path__WEBPACK_IMPORTED_MODULE_0__["default"].posix.basename(filePathname);
+
+      const existing = await crud.send({
+        method: 'object.read',
+        array: 'files',
+        organization_id: context.organization_id,
+        filter: {
+          query: virtualPathQuery(filePath),
+          limit: 1
+        }
+      });
+
+      const existingFile = existing.object[0];
+      let saveResult;
+
+      if (existingFile && existingFile._id) {
+        saveResult = await crud.send({
+          method: 'object.update',
+          array: 'files',
+          organization_id: context.organization_id,
+          object: [{
+            _id: existingFile._id,
+            host: ['*'],
+            directory,
+            path: filePathname,
+            pathname,
+            name: fileName,
+            src: content,
+            'content-type': mimeType ?? existingFile['content-type'] ?? inferMimeType(pathname),
+            public: 'true'
+          }]
+        });
+      } else {
+        saveResult = await crud.send({
+          method: 'object.create',
+          array: 'files',
+          organization_id: context.organization_id,
+          object: [{
+            host: ['*'],
+            directory,
+            path: filePathname,
+            pathname,
+            name: fileName,
+            src: content,
+            'content-type': mimeType ?? inferMimeType(pathname),
+            public: 'true'
+          }]
+        });
+      }
+
+      await server.send({
+        method: 'ai.file.updated',
+        organization_id: context.organization_id,
+        user_id: context.user_id,
+        clientId: context.clientId,
+        broadcast: false,
+        log: false,
+        ai: { path: pathname, src: content }
+      });
+
+      return {
+        success: true,
+        path: pathname,
+        updated: !!existingFile,
+        result: saveResult,
+        change: {
+          action: existingFile ? 'update' : 'create',
+          path: pathname,
+          before: existingFile ?? null,
+          after: saveResult?.object?.[0] ?? {
+            ...(existingFile ?? {}),
+            pathname,
+            name: fileName,
+            src: content,
+            'content-type': mimeType ?? existingFile?.['content-type'] ?? inferMimeType(pathname)
+          }
+        }
+      };
+    }
+  };
+
+  const listVirtualFilesTool = {
+    name: 'list_virtual_files',
+
+    handler: async ({ prefix, limit = 200 }, context) => {
+      const result = await crud.send({
+        method: 'object.read',
+        array: 'files',
+        organization_id: context.organization_id,
+        filter: {
+          query: {},
+          limit
+        }
+      });
+
+      const fileObjects = result.object;
+      const filtered = prefix
+        ? fileObjects.filter((file) =>
+            (file.pathname ?? file.path ?? '').startsWith(prefix)
+          )
+        : fileObjects;
+
+      return {
+        count: filtered.length,
+        files: filtered.map((f) => ({
+          path: f.pathname ?? f.path,
+          name: f.name,
+          'content-type': f['content-type']
+        }))
+      };
+    }
+  };
+
+  const deleteVirtualFileTool = {
+    name: 'delete_virtual_file',
+
+    handler: async ({ filePath }, context) => {
+      const pathname = normalizeVirtualPath(filePath);
+      const existing = await crud.send({
+        method: 'object.read',
+        array: 'files',
+        organization_id: context.organization_id,
+        filter: {
+          query: virtualPathQuery(filePath),
+          limit: 1
+        }
+      });
+      const existingFile = existing.object?.[0] ?? null;
+      const result = await crud.send({
+        method: 'object.delete',
+        array: 'files',
+        organization_id: context.organization_id,
+        filter: {
+          query: virtualPathQuery(filePath)
+        }
+      });
+
+      await server.send({
+        method: 'ai.file.deleted',
+        organization_id: context.organization_id,
+        user_id: context.user_id,
+        clientId: context.clientId,
+        broadcast: false,
+        log: false,
+        ai: { path: pathname }
+      });
+
+      return {
+        success: true,
+        path: pathname,
+        result,
+        change: {
+          action: 'delete',
+          path: pathname,
+          before: existingFile,
+          after: null
+        }
+      };
+    }
+  };
+
+  const localFsReadTool = {
+    name: 'read_local_file',
+
+    handler: async ({ filePath, startLine = 1, endLine }, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_3__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+      if (!allowLocalFileSystem) {
+        return { success: false, error: 'Local file system access is disabled.' };
+      }
+
+      const fullPath = await resolveLocalPath(filePath, context);
+      const content = await node_fs_promises__WEBPACK_IMPORTED_MODULE_1__["default"].readFile(fullPath, 'utf8');
+      const lines = content.split('\n');
+      const start = Math.min(lines.length, Math.max(1, Math.trunc(Number(startLine)) || 1));
+      const requestedEnd = endLine === undefined
+        ? start + 399
+        : Math.trunc(Number(endLine));
+      const end = Math.min(lines.length, Math.max(start, requestedEnd || start));
+
+      return {
+        success: true,
+        filePath,
+        startLine: start,
+        endLine: end,
+        totalLines: lines.length,
+        hasMore: end < lines.length,
+        content: lines.slice(start - 1, end).join('\n')
+      };
+    }
+  };
+
+  const localFsEditTool = {
+    name: 'edit_local_file',
+
+    handler: async ({ filePath, oldText, newText }, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_3__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+      if (!allowLocalFileSystem) {
+        return { success: false, error: 'Local file system access is disabled.' };
+      }
+      if (!allowUnconfirmedLocalWrite && context.confirmLocalWrite !== true) {
+        return {
+          success: false,
+          error: 'Local edit requires explicit confirmation. Set context.confirmLocalWrite=true.'
+        };
+      }
+      if (typeof oldText !== 'string' || !oldText) {
+        throw new Error('oldText is required and cannot be empty.');
+      }
+      if (typeof newText !== 'string') throw new Error('newText must be a string.');
+
+      const fullPath = await resolveLocalPath(filePath, context);
+      const content = await node_fs_promises__WEBPACK_IMPORTED_MODULE_1__["default"].readFile(fullPath, 'utf8');
+      const firstMatch = content.indexOf(oldText);
+      if (firstMatch === -1) {
+        return { success: false, error: 'oldText was not found; no changes were made.' };
+      }
+      if (content.indexOf(oldText, firstMatch + oldText.length) !== -1) {
+        return {
+          success: false,
+          error: 'oldText matches more than once; include more surrounding text to make the edit unique.'
+        };
+      }
+
+      const updated = content.slice(0, firstMatch) + newText +
+        content.slice(firstMatch + oldText.length);
+      await node_fs_promises__WEBPACK_IMPORTED_MODULE_1__["default"].writeFile(fullPath, updated, 'utf8');
+      return {
+        success: true,
+        filePath,
+        replacedCharacters: oldText.length,
+        insertedCharacters: newText.length
+      };
+    }
+  };
+
+  const localFsWriteTool = {
+    name: 'write_local_file',
+
+    handler: async ({ filePath, content }, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_3__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+      if (!allowLocalFileSystem) {
+        return { success: false, error: 'Local file system access is disabled.' };
+      }
+      if (!allowUnconfirmedLocalWrite && context.confirmLocalWrite !== true) {
+        return {
+          success: false,
+          error: 'Local write requires explicit confirmation. Set context.confirmLocalWrite=true.'
+        };
+      }
+
+      const fullPath = await resolveLocalPath(filePath, context, { forWrite: true });
+      await node_fs_promises__WEBPACK_IMPORTED_MODULE_1__["default"].mkdir(node_path__WEBPACK_IMPORTED_MODULE_0__["default"].dirname(fullPath), { recursive: true });
+      await node_fs_promises__WEBPACK_IMPORTED_MODULE_1__["default"].writeFile(fullPath, content, 'utf8');
+      return { success: true, filePath };
+    }
+  };
+
+  const readProjectFileTool = {
+    name: 'read_project_file',
+
+    handler: async ({ filePath, target = 'auto', startLine, endLine }, context = {}) => {
+      const selected = (0,_platform_js__WEBPACK_IMPORTED_MODULE_3__/* .projectStorageTarget */ .Us)(server, context?.organization_id,
+        target === 'auto' ? context?.storageTarget : target, defaultStorageTarget);
+
+      if (target === 'local' && !allowLocalFileSystem) {
+        return {
+          success: false,
+          error: 'Local file system target requested but disabled by configuration.'
+        };
+      }
+
+      if (selected === 'local') {
+        return localFsReadTool.handler({ filePath, startLine, endLine }, context);
+      }
+
+      return readVirtualFileTool.handler({ filePath }, context);
+    }
+  };
+
+  const writeProjectFileTool = {
+    name: 'write_project_file',
+
+    handler: async ({ filePath, content, mimeType, target = 'auto' }, context = {}) => {
+      const selected = (0,_platform_js__WEBPACK_IMPORTED_MODULE_3__/* .projectStorageTarget */ .Us)(server, context?.organization_id,
+        target === 'auto' ? context?.storageTarget : target, defaultStorageTarget);
+
+      if (target === 'local' && !allowLocalFileSystem) {
+        return {
+          success: false,
+          error: 'Local file system target requested but disabled by configuration.'
+        };
+      }
+
+      if (selected === 'local') {
+        return localFsWriteTool.handler({ filePath, content }, context);
+      }
+
+      return writeVirtualFileTool.handler({ filePath, content, mimeType }, context);
+    }
+  };
+
+  const tools = [
+    requestServerFileTool,
+    readVirtualFileTool,
+    writeVirtualFileTool,
+    deleteVirtualFileTool,
+    listVirtualFilesTool,
+    readProjectFileTool,
+    writeProjectFileTool
+  ];
+
+  if (allowLocalFileSystem) {
+    tools.push(localFsReadTool, localFsEditTool, localFsWriteTool);
+  }
+
+  return { tools };
+}
+
+
+/***/ },
+
+/***/ 5294
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   P: () => (/* binding */ createGitTool)
+/* harmony export */ });
+/* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6564);
+/* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4472);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9391);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3651);
+
+
+
+
+
+
+const execFileAsync = (0,node_util__WEBPACK_IMPORTED_MODULE_1__.promisify)(node_child_process__WEBPACK_IMPORTED_MODULE_0__.execFile);
+const MAX_OUTPUT_BYTES = 256 * 1024;
+const DEFAULT_LIMIT = 50;
+const MAX_LIMIT = 200;
+const SAFE_REVISION = /^[A-Za-z0-9][A-Za-z0-9._/~^{}-]*$/;
+
+const sanitizedEnvironment = () => Object.fromEntries(
+  Object.entries(process.env).filter(([name]) => !name.startsWith('GIT_'))
+);
+
+function boundedLimit(value) {
+  const number = Math.trunc(Number(value)) || DEFAULT_LIMIT;
+  return Math.min(MAX_LIMIT, Math.max(1, number));
+}
+
+function validateRevision(value = 'HEAD') {
+  if (typeof value !== 'string' || !SAFE_REVISION.test(value)) {
+    throw new Error(`Invalid Git revision: ${value}`);
+  }
+  return value;
+}
+
+function validateMessage(value) {
+  if (typeof value !== 'string' || !value.trim()) {
+    throw new Error('A non-empty commit message is required.');
+  }
+  if (Buffer.byteLength(value, 'utf8') > 4096) {
+    throw new Error('The commit message cannot exceed 4096 bytes.');
+  }
+  return value.trim();
+}
+
+function requireConfirmation(context, allowUnconfirmedLocalWrite, operation) {
+  if (!allowUnconfirmedLocalWrite && context.confirmLocalWrite !== true) {
+    return {
+      success: false,
+      error: `${operation} requires explicit confirmation. Set context.confirmLocalWrite=true.`
+    };
+  }
+}
+
+/**
+ * Creates a constrained, platform-only Git tool. Repository cloning and
+ * credentials intentionally remain server-owned initialization concerns.
+ * @private
+ * @environment server
+ */
+function createGitTool({
+  server,
+  allowLocalFileSystem,
+  allowUnconfirmedLocalWrite,
+  gitBinary = 'git'
+}) {
+  const workspaces = (0,_workspace_js__WEBPACK_IMPORTED_MODULE_2__/* .createWorkspaceResolver */ .IN)(server);
+  const mutationQueues = new Map();
+
+  const withMutationLock = async (organization_id, operation) => {
+    const previous = mutationQueues.get(organization_id) ?? Promise.resolve();
+    let release;
+    const current = new Promise((resolve) => { release = resolve; });
+    mutationQueues.set(organization_id, current);
+    await previous.catch(() => {});
+    try {
+      return await operation();
+    } finally {
+      release();
+      if (mutationQueues.get(organization_id) === current) {
+        mutationQueues.delete(organization_id);
+      }
+    }
+  };
+
+  const validatePaths = (organization_id, values = []) => {
+    const paths = (Array.isArray(values) ? values : [values])
+      .filter((value) => value !== undefined && value !== null && value !== '')
+      .map(String);
+
+    for (const filePath of paths) {
+      if (filePath.startsWith(':')) {
+        throw new Error(`Git pathspec magic is not allowed: ${filePath}`);
+      }
+      workspaces.resolve(organization_id, filePath);
+    }
+    return paths;
+  };
+
+  const runGit = async (workspace, args, { allowExitCodes = [] } = {}) => {
+    try {
+      const { stdout = '', stderr = '' } = await execFileAsync(gitBinary, [
+        '-c', 'core.hooksPath=/dev/null',
+        '-c', 'core.pager=cat',
+        ...args
+      ], {
+        cwd: workspace,
+        encoding: 'utf8',
+        maxBuffer: MAX_OUTPUT_BYTES,
+        timeout: 30000,
+        windowsHide: true,
+        env: {
+          ...sanitizedEnvironment(),
+          GIT_TERMINAL_PROMPT: '0',
+          GIT_PAGER: 'cat',
+          GIT_EDITOR: 'true',
+          GIT_AUTHOR_NAME: 'CoCreate AI',
+          GIT_AUTHOR_EMAIL: 'ai@cocreate.local',
+          GIT_COMMITTER_NAME: 'CoCreate AI',
+          GIT_COMMITTER_EMAIL: 'ai@cocreate.local'
+        }
+      });
+      return { stdout, stderr };
+    } catch (error) {
+      if (allowExitCodes.includes(error.code)) {
+        return { stdout: error.stdout ?? '', stderr: error.stderr ?? '', code: error.code };
+      }
+      const detail = String(error.stderr || error.stdout || error.message).trim();
+      throw new Error(`Git command failed: ${detail}`);
+    }
+  };
+
+  const assertRepository = async (workspace) => {
+    const { stdout } = await runGit(workspace, ['rev-parse', '--is-inside-work-tree']);
+    if (stdout.trim() !== 'true') throw new Error('The project workspace is not a Git repository.');
+  };
+
+  return {
+    name: 'git_project',
+
+    handler: async (payload = {}, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_3__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+      if (!allowLocalFileSystem) {
+        return { success: false, error: 'Organization workspace access is disabled.' };
+      }
+
+      const workspace = await workspaces.ensure(context.organization_id);
+      await assertRepository(workspace);
+      const action = payload.action;
+      const paths = validatePaths(context.organization_id, payload.paths);
+
+      if (action === 'status') {
+        const { stdout } = await runGit(workspace, [
+          'status', '--porcelain=v1', '-z', '--untracked-files=all'
+        ]);
+        return {
+          success: true,
+          action,
+          clean: stdout.length === 0,
+          entries: stdout.split('\0').filter(Boolean)
+        };
+      }
+
+      if (action === 'list_files') {
+        const args = ['ls-files', '-z'];
+        if (paths.length) args.push('--', ...paths);
+        const { stdout } = await runGit(workspace, args);
+        const limit = boundedLimit(payload.limit);
+        const allFiles = stdout.split('\0').filter(Boolean);
+        return {
+          success: true,
+          action,
+          files: allFiles.slice(0, limit),
+          count: allFiles.length,
+          truncated: allFiles.length > limit
+        };
+      }
+
+      if (action === 'diff') {
+        const args = ['diff', '--no-ext-diff', '--no-color'];
+        if (payload.staged === true) args.push('--cached');
+        if (payload.stat === true) args.push('--stat');
+        if (paths.length) args.push('--', ...paths);
+        const { stdout } = await runGit(workspace, args);
+        return { success: true, action, staged: payload.staged === true, diff: stdout };
+      }
+
+      if (action === 'log') {
+        const limit = boundedLimit(payload.limit);
+        const { stdout } = await runGit(workspace, [
+          'log', `-${limit}`, '--date=iso-strict',
+          '--format=%H%x1f%h%x1f%an%x1f%ae%x1f%ad%x1f%s%x1e'
+        ]);
+        const commits = stdout.split('\x1e').filter((value) => value.trim()).map((value) => {
+          const [hash, shortHash, author, email, date, subject] = value.trim().split('\x1f');
+          return { hash, shortHash, author, email, date, subject };
+        });
+        return { success: true, action, commits };
+      }
+
+      if (action === 'show') {
+        const revision = validateRevision(payload.revision);
+        const args = ['show', '--no-ext-diff', '--no-color', '--format=fuller', revision];
+        if (paths.length) args.push('--', ...paths);
+        const { stdout } = await runGit(workspace, args);
+        return { success: true, action, revision, content: stdout };
+      }
+
+      if (action === 'commit') {
+        const denied = requireConfirmation(context, allowUnconfirmedLocalWrite, 'Git commit');
+        if (denied) return denied;
+        if (!paths.length) throw new Error('paths is required for a Git commit.');
+        const message = validateMessage(payload.message);
+        return withMutationLock(context.organization_id, async () => {
+          await runGit(workspace, ['add', '--', ...paths]);
+          const staged = await runGit(
+            workspace,
+            ['diff', '--cached', '--quiet', '--', ...paths],
+            { allowExitCodes: [1] }
+          );
+          if (staged.code !== 1) {
+            return { success: false, error: 'The selected paths contain no changes to commit.' };
+          }
+          await runGit(workspace, ['commit', '--only', '--no-verify', '-m', message, '--', ...paths]);
+          const { stdout } = await runGit(workspace, ['rev-parse', 'HEAD']);
+          return { success: true, action, commit: stdout.trim(), paths };
+        });
+      }
+
+      if (action === 'create_branch') {
+        const denied = requireConfirmation(context, allowUnconfirmedLocalWrite, 'Branch creation');
+        if (denied) return denied;
+        if (typeof payload.branch !== 'string' || !payload.branch) {
+          throw new Error('branch is required.');
+        }
+        return withMutationLock(context.organization_id, async () => {
+          await runGit(workspace, ['check-ref-format', '--branch', payload.branch]);
+          await runGit(workspace, ['branch', '--', payload.branch]);
+          return { success: true, action, branch: payload.branch };
+        });
+      }
+
+      if (action === 'switch_branch') {
+        const denied = requireConfirmation(context, allowUnconfirmedLocalWrite, 'Branch switching');
+        if (denied) return denied;
+        if (typeof payload.branch !== 'string' || !payload.branch) {
+          throw new Error('branch is required.');
+        }
+        return withMutationLock(context.organization_id, async () => {
+          await runGit(workspace, ['check-ref-format', '--branch', payload.branch]);
+          await runGit(workspace, ['switch', '--', payload.branch]);
+          return { success: true, action, branch: payload.branch };
+        });
+      }
+
+      if (action === 'revert') {
+        const denied = requireConfirmation(context, allowUnconfirmedLocalWrite, 'Git revert');
+        if (denied) return denied;
+        const revision = validateRevision(payload.revision);
+        return withMutationLock(context.organization_id, async () => {
+          const status = await runGit(workspace, [
+            'status', '--porcelain=v1', '--untracked-files=no'
+          ]);
+          if (status.stdout) {
+            return {
+              success: false,
+              error: 'Git revert requires a clean tracked working tree. Commit or discard current changes first.'
+            };
+          }
+          try {
+            await runGit(workspace, ['revert', '--no-edit', revision]);
+          } catch (error) {
+            await runGit(workspace, ['revert', '--abort']).catch(() => {});
+            throw error;
+          }
+          const { stdout } = await runGit(workspace, ['rev-parse', 'HEAD']);
+          return { success: true, action, reverted: revision, commit: stdout.trim() };
+        });
+      }
+
+      throw new Error(`Unsupported Git action: ${action}`);
+    }
+  };
+}
+
+
+/***/ },
+
+/***/ 6822
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Q: () => (/* binding */ createRouteTool)
+/* harmony export */ });
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3651);
+
+
+/**
+ * Factory creating platform custom route management tool for server.routes.
+ *
+ * @param {Object} options
+ * @param {Object} options.server - Server context instance
+ * @returns {Object} Route management copilot tool definition
+ * @private
+ * @environment server
+ */
+function createRouteTool({ server }) {
+  const routes = server.routes;
+
+  return {
+    name: 'manage_server_routes',
+
+    handler: async ({ action, routePath, responseContent, contentType = 'text/plain' }, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_0__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+
+      if (action === 'list') {
+        const activeRoutes = Array.from(routes.keys());
+        return { success: true, routes: activeRoutes, count: activeRoutes.length };
+      }
+
+      if (action === 'add') {
+        if (!routePath) return { success: false, error: 'routePath is required when adding a route.' };
+
+        const customHandler = async (req, res) => {
+          res.writeHead(200, { 'Content-Type': contentType });
+          res.end(typeof responseContent === 'object' ? JSON.stringify(responseContent) : responseContent ?? 'OK');
+        };
+
+        routes.set(routePath, customHandler);
+        return { success: true, message: `Route "${routePath}" successfully registered.`, routePath };
+      }
+
+      if (action === 'remove') {
+        if (!routePath) return { success: false, error: 'routePath is required when removing a route.' };
+        const removed = routes.delete(routePath);
+        return { success: removed, message: removed ? `Route "${routePath}" removed.` : `Route "${routePath}" not found.` };
+      }
+
+      return { success: false, error: `Invalid action: ${action}` };
+    }
+  };
+}
+
+
+/***/ },
+
+/***/ 4954
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   v: () => (/* binding */ createSendTool)
+/* harmony export */ });
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3651);
+
+
+/**
+ * Creates the bridge to CoCreateServer's unified server.send(payload) router.
+ *
+ * The organization is captured from the authenticated AI request and injected
+ * after model-provided fields so it cannot be overridden.
+ *
+ * @param {Object} options
+ * @param {Object} options.server - CoCreateServer instance
+ * @param {string} options.organization_id - Authenticated request organization
+ * @returns {Object} Copilot tool definition for send_server_message
+ * @private
+ * @environment server
+ */
+function createSendTool({ server, organization_id }) {
+  return {
+    name: 'send_server_message',
+
+    handler: async (payload) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_0__/* .platformAccessError */ .gi)(server, organization_id);
+      if (denied) return denied;
+      const routedPayload = {
+        ...payload,
+        organization_id
+      };
+
+      await server.send(routedPayload);
+      return routedPayload;
+    }
+  };
+}
+
+
+/***/ },
+
+/***/ 1446
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   S: () => (/* binding */ createServerClusterTool)
+/* harmony export */ });
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3651);
+
+
+/**
+ * @file src/tools/servers.js
+ * Tool interface for inspecting cluster topology and controlling server state.
+ * Topology comes from the 'servers' CRUD collection populated by
+ * @cocreate/cluster's state.save()/getServerObject(). Controls use server.send().
+ * @environment server
+ */
+
+/**
+ * Factory creating the manage_server_cluster tool definition.
+ *
+ * @param {Object} options
+ * @param {Object} options.server - Server context instance containing server.crud
+ * @returns {Object} Copilot tool definition for manage_server_cluster
+ * @private
+ * @environment server
+ */
+function createServerClusterTool({ server }) {
+  const crud = server.crud;
+
+  return {
+    name: 'manage_server_cluster',
+
+    handler: async ({
+      action,
+      serverId,
+      host,
+      status,
+      limit = 50,
+      operation,
+      worker,
+      value,
+      organizations
+    }, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_0__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+
+      switch (action) {
+          case 'self': {
+            return {
+              success: true,
+              action: 'self',
+              server: {
+                _id: server.id,
+                host: server.host,
+                ip: server.ip,
+                isPrimary: server.isPrimary,
+                isWorker: server.isWorker,
+                workerId: server.workerId,
+                totalWorkers: server.workers.size,
+                deployment: server.deployment,
+                isCordoned: server.state.isCordon,
+                isShedding: server.state.isShedding,
+                isDraining: server.state.isDraining
+              }
+            };
+          }
+
+          case 'get': {
+            if (!serverId && !host) {
+              return { success: false, error: 'Either "serverId" or "host" is required for get action.' };
+            }
+
+            const query = serverId ? { _id: serverId } : { host };
+            const response = await crud.send({
+              method: 'object.read',
+              array: 'servers',
+              organization_id: context.organization_id,
+              filter: { query, limit: 1 }
+            });
+
+            const found = response.object[0];
+            return { success: true, action: 'get', server: found };
+          }
+
+          case 'list': {
+            const query = status ? { status } : {};
+            const response = await crud.send({
+              method: 'object.read',
+              array: 'servers',
+              organization_id: context.organization_id,
+              filter: { query, limit }
+            });
+
+            const servers = response.object;
+            return { success: true, action: 'list', count: servers.length, servers };
+          }
+
+          case 'control': {
+            if (!serverId) {
+              return { success: false, error: '"serverId" is required for control actions.' };
+            }
+
+            const workerOperations = new Set(['cordon', 'shed', 'drain']);
+            const masterOperations = new Set(['reboot', 'shutdown']);
+            const supported = new Set([
+              ...workerOperations,
+              ...masterOperations,
+              'restart'
+            ]);
+            if (!supported.has(operation)) {
+              return { success: false, error: `Unsupported server control operation: ${operation}` };
+            }
+            if (workerOperations.has(operation) && worker == null) {
+              return { success: false, error: `"worker" is required for ${operation}.` };
+            }
+            if (operation === 'shed' && organizations === undefined) {
+              return {
+                success: false,
+                error: '"organizations" must be an organization ID, an array of IDs, or false for shed.'
+              };
+            }
+
+            const payload = {
+              method: operation,
+              server: serverId,
+              organization_id: context.organization_id
+            };
+
+            if (worker != null) payload.worker = worker;
+            if (operation === 'cordon' || operation === 'drain') {
+              payload.value = value !== false;
+            }
+            if (operation === 'shed') payload.organizations = organizations;
+            if (masterOperations.has(operation) || (operation === 'restart' && worker == null)) {
+              payload.master = true;
+            }
+
+            await server.send(payload);
+            return { success: true, action: 'control', operation, payload };
+          }
+
+        default:
+          throw new Error(`Unsupported cluster action: ${action}`);
+      }
+    }
+  };
+}
+
+
+/***/ },
+
+/***/ 4857
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   m: () => (/* binding */ createSocketTool)
+/* harmony export */ });
+/**
+ * Factory creating dedicated WebSocket messaging tool for direct client transmission.
+ *
+ * @param {Object} options
+ * @param {Object} options.server - Server context instance
+ * @returns {Object} Socket tool definition
+ * @private
+ * @environment server
+ */
+function createSocketTool({ server }) {
+
+  return {
+    name: 'send_socket_message',
+
+    handler: async ({ data = {}, clientId, broadcast = false }, context) => {
+      const targetClientId = context.clientId ?? clientId;
+
+      if (!broadcast && !targetClientId) {
+        throw new Error('clientId is required unless broadcast is true.');
+      }
+
+      const payload = {
+        ...data,
+        organization_id: context.organization_id,
+        ...(targetClientId ? { clientId: targetClientId } : {}),
+        ...(context.user_id ? { user_id: context.user_id } : {}),
+        broadcast: broadcast === true,
+        log: data.log ?? false
+      };
+
+      await server.send(payload);
+      return payload;
+    }
+  };
+}
+
+
+/***/ },
+
+/***/ 4355
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   _: () => (/* binding */ createStorageTool)
+/* harmony export */ });
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3651);
+
+
+/**
+ * Exposes server.storage to platform AI requests.
+ * @private
+ * @environment server
+ */
+function createStorageTool({ server }) {
+  const storage = server.storage;
+
+  return {
+    name: 'manage_server_storage',
+
+    handler: async ({ action, key, value }, context = {}) => {
+      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_0__/* .platformAccessError */ .gi)(server, context?.organization_id);
+      if (denied) return denied;
+
+      switch (action) {
+        case 'get':
+          return storage.get(key);
+        case 'set':
+          return storage.set(key, value);
+        case 'delete':
+          return storage.delete(key);
+        case 'size':
+          return storage.size();
+        case 'clear':
+          return storage.clear();
+        default:
+          throw new Error(`Unsupported storage action: ${action}`);
+      }
+    }
+  };
+}
+
+
+/***/ },
+
+/***/ 9391
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   IN: () => (/* binding */ createWorkspaceResolver)
+/* harmony export */ });
+/* unused harmony exports getRepositoryWorkspace, createRuntimeDirectories */
+/* unused harmony import specifier */ var fs;
+/* unused harmony import specifier */ var path;
+/* unused harmony import specifier */ var tmpdir;
+/* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
+/* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6674);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3651);
+
+
+
+
+
+/** Return only a checkout prepared by the running cluster. */
+function getRepositoryWorkspace(server) {
+  const checkout = server?.repository?.repositories?.find(entry =>
+    entry?.enabled !== false && entry?.checkout?.workspace)?.checkout.workspace;
+  if (typeof checkout === 'string' && node_path__WEBPACK_IMPORTED_MODULE_1__["default"].isAbsolute(checkout)) return node_path__WEBPACK_IMPORTED_MODULE_1__["default"].resolve(checkout);
+  const inherited = process.env.SERVER_REPOSITORY_ROOT;
+  if ((0,_platform_js__WEBPACK_IMPORTED_MODULE_3__/* .isPlatformOrganization */ .dk)(server, process.env.SERVER_REPOSITORY_ORGANIZATION_ID) &&
+      typeof inherited === 'string' && node_path__WEBPACK_IMPORTED_MODULE_1__["default"].isAbsolute(inherited)) return node_path__WEBPACK_IMPORTED_MODULE_1__["default"].resolve(inherited);
+}
+
+function createWorkspaceResolver(server) {
+  const assertContained = (workspace, target, filePath) => {
+    if (target !== workspace && !target.startsWith(`${workspace}${node_path__WEBPACK_IMPORTED_MODULE_1__["default"].sep}`)) {
+      throw new Error(`Local file path escapes the prepared repository workspace: ${filePath}`);
+    }
+  };
+
+  const organizationRoot = (organization_id) => {
+    if (!(0,_platform_js__WEBPACK_IMPORTED_MODULE_3__/* .isPlatformOrganization */ .dk)(server, organization_id)) {
+      throw new Error('Local workspace access is restricted to the platform organization.');
+    }
+    const root = getRepositoryWorkspace(server);
+    if (!root) throw new Error('No prepared cluster repository is available for local workspace access.');
+    return root;
+  };
+
+  const resolve = (organization_id, filePath = '.') => {
+    const workspace = organizationRoot(organization_id);
+    if (typeof filePath !== 'string' || node_path__WEBPACK_IMPORTED_MODULE_1__["default"].isAbsolute(filePath)) {
+      throw new Error(`Local file path must be relative to the prepared repository workspace: ${filePath}`);
+    }
+    const [firstSegment] = filePath.replaceAll('\\', '/').split('/').filter(Boolean);
+    if (['.ai', '.git'].includes(firstSegment)) {
+      throw new Error(`The ${firstSegment} directory is reserved and cannot be accessed by project file tools.`);
+    }
+    const target = node_path__WEBPACK_IMPORTED_MODULE_1__["default"].resolve(workspace, filePath);
+    assertContained(workspace, target, filePath);
+    return target;
+  };
+
+  const ensure = async (organization_id) => {
+    const workspace = organizationRoot(organization_id);
+    if (!(await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].stat(workspace)).isDirectory()) throw new Error('The prepared cluster checkout must be an existing directory.');
+    // Cluster owns checkout creation. AI never invents an organization/sites root.
+    return workspace;
+  };
+
+  const resolvePath = async (organization_id, filePath = '.', { forWrite = false } = {}) => {
+    const workspace = await ensure(organization_id);
+    const target = resolve(organization_id, filePath);
+    const realWorkspace = await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].realpath(workspace);
+
+    if (!forWrite) {
+      const realTarget = await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].realpath(target);
+      assertContained(realWorkspace, realTarget, filePath);
+      return realTarget;
+    }
+
+    let existingPath = target;
+    while (existingPath !== workspace) {
+      try {
+        await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].lstat(existingPath);
+        break;
+      } catch (error) {
+        if (error.code !== 'ENOENT') throw error;
+        existingPath = node_path__WEBPACK_IMPORTED_MODULE_1__["default"].dirname(existingPath);
+      }
+    }
+
+    const realExistingPath = await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].realpath(existingPath);
+    assertContained(realWorkspace, realExistingPath, filePath);
+
+    try {
+      const realTarget = await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].realpath(target);
+      assertContained(realWorkspace, realTarget, filePath);
+      return realTarget;
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+      return target;
+    }
+  };
+
+  return { organizationRoot, resolve, resolvePath, ensure };
+}
+
+/** SDK state is internal; it never grants a tenant local file or command tools. */
+async function createRuntimeDirectories(server, organization_id, { useRepository = false } = {}) {
+  if (typeof organization_id !== 'string' || !organization_id.trim()) {
+    throw new Error('An authenticated organization_id is required for an AI runtime.');
+  }
+  if (useRepository) {
+    const workingDirectory = await createWorkspaceResolver(server).ensure(organization_id);
+    const baseDirectory = path.join(path.dirname(workingDirectory), '.cocreate', 'ai', path.basename(workingDirectory));
+    await fs.mkdir(baseDirectory, { recursive: true, mode: 0o700 });
+    return { workingDirectory, baseDirectory, cleanup: async () => {} };
+  }
+  const root = await fs.mkdtemp(path.join(tmpdir(), 'cocreate-ai-'));
+  const workingDirectory = path.join(root, 'work');
+  const baseDirectory = path.join(root, 'state');
+  const cleanup = () => fs.rm(root, { recursive: true, force: true });
+  try {
+    await fs.mkdir(workingDirectory, { mode: 0o700 });
+    await fs.mkdir(baseDirectory, { mode: 0o700 });
+    return { workingDirectory, baseDirectory, cleanup };
+  } catch (error) {
+    await cleanup();
+    throw error;
+  }
+}
+
+
+/***/ },
+
+/***/ 8512
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* unused harmony export init */
+/* harmony import */ var _tools_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8019);
+/* harmony import */ var _capabilities_registry_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3803);
+/* harmony import */ var _capabilities_config_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9058);
+
+
+
+
+const DEFAULT_PATH = '/mcp';
+const MAX_BODY_BYTES = 1024 * 1024;
+const PROTOCOL_VERSION = '2025-11-25';
+const SUPPORTED_VERSIONS = new Set([
+    '2025-03-26',
+    '2025-06-18',
+    '2025-11-25'
+]);
+const RESERVED_TOOL_NAMES = new Set([
+    'crud', 'list_apps', 'list_ai_instructions', 'get_ai_instructions',
+    'render_crud', 'describe_api_credentials', 'execute_server_api',
+    'run_workflow', 'request_server_file', 'read_virtual_file',
+    'write_virtual_file', 'list_virtual_files', 'delete_virtual_file',
+    'read_local_file', 'edit_local_file', 'write_local_file',
+    'read_project_file', 'write_project_file', 'send_server_message',
+    'send_socket_message', 'manage_server_storage', 'manage_server_cluster',
+    'manage_server_routes', 'manage_server_autoscaler', 'coc', 'git_project',
+    'execute_command', 'search_conversation_history', 'read_reference'
+]);
+
+function jsonRpcError(id, code, message) {
+    return { jsonrpc: '2.0', id, error: { code, message } };
+}
+
+function jsonRpcResult(id, result) {
+    return { jsonrpc: '2.0', id, result };
+}
+
+function sendJson(res, status, body, headers = {}) {
+    if (res.writableEnded) return;
+    res.writeHead(status, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+        ...headers
+    });
+    res.end(body === undefined ? undefined : JSON.stringify(body));
+}
+
+async function readJson(req) {
+    const chunks = [];
+    let size = 0;
+    for await (const chunk of req) {
+        const buffer = Buffer.from(chunk);
+        size += buffer.length;
+        if (size > MAX_BODY_BYTES) {
+            throw Object.assign(new Error('Request body exceeds 1 MiB.'), { status: 413 });
+        }
+        chunks.push(buffer);
+    }
+    try {
+        return JSON.parse(Buffer.concat(chunks).toString('utf8'));
+    } catch {
+        throw Object.assign(new Error('Request body must contain valid JSON.'), { status: 400 });
+    }
+}
+
+async function authenticateRequest(server, req) {
+    const host = new URL(`https://${req.headers.host || ''}`).hostname;
+    const configuredHost = server.host
+        ? new URL(`https://${server.host}`).hostname
+        : null;
+    const organization = server.organization_id && configuredHost === host
+        ? { _id: server.organization_id }
+        : await server.crud.getOrganization({ host });
+    if (!organization?._id || organization.error) {
+        throw Object.assign(new Error('Organization not found for this host.'), { status: 404 });
+    }
+
+    const bearer = req.headers.authorization?.match(/^Bearer\s+(\S+)$/i)?.[1];
+    const apiKeyHeader = req.headers['x-api-key'];
+    if (bearer && apiKeyHeader && bearer !== apiKeyHeader) {
+        throw Object.assign(new Error('Conflicting API keys were provided.'), { status: 401 });
+    }
+    const apikey = apiKeyHeader || bearer;
+    if (typeof apikey !== 'string' || !apikey.trim()) {
+        throw Object.assign(new Error('A valid API key is required.'), { status: 401 });
+    }
+
+    return {
+        organization_id: organization._id,
+        host,
+        apikey,
+        client: req.headers['mcp-client-name'] || 'mcp-client'
+    };
+}
+
+function isPlainObject(value) {
+    return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function withTrustedContext(payload, context) {
+    if (!isPlainObject(payload) || typeof payload.method !== 'string') {
+        throw new Error('A CoCreate authorization envelope with a method is required.');
+    }
+    const {
+        organization_id: _organizationId,
+        host: _host,
+        apikey: _apikey,
+        user_id: _userId,
+        ...operation
+    } = payload;
+    return {
+        ...operation,
+        organization_id: context.organization_id,
+        host: context.host,
+        apikey: context.apikey
+    };
+}
+
+
+function normalizeTool(tool) {
+    if (!tool || typeof tool.name !== 'string' || !tool.name.trim() ||
+        typeof tool.authorize !== 'function' || typeof tool.handler !== 'function') {
+        throw new TypeError('Each MCP tool requires a name, authorize function, and handler.');
+    }
+    return {
+        name: tool.name,
+        ...(tool.title && { title: tool.title }),
+        description: tool.description || tool.name,
+        inputSchema: tool.inputSchema || { type: 'object', properties: {} },
+        ...(tool.annotations && { annotations: tool.annotations }),
+        authorize: tool.authorize,
+        handler: tool.handler
+    };
+}
+
+function getToolDefinitions(tools) {
+    return [...tools.values()]
+        .map(({ authorize, handler, ...definition }) => definition)
+        .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/**
+ * Attach a stateless MCP Streamable HTTP endpoint to a CoCreate server.
+ * Tools receive verified request context; client arguments cannot set tenant identity.
+ *
+ * @param {object} server - Initialized CoCreate server.
+ * @param {object} [options]
+ * @param {string} [options.path='/mcp'] - HTTP route to register.
+ * @param {Array<object>} [options.tools] - Additional explicitly registered tools.
+ * @returns {{ tools: object, close: Function }} MCP integration controls.
+ * @public
+ * @environment server
+ */
+function init(server, options = {}) {
+    if (!server?.routes || typeof server.routes.set !== 'function') {
+        throw new TypeError('An initialized CoCreate server with a route registry is required.');
+    }
+    if (!server.crud?.getOrganization || typeof server.authorize?.request !== 'function') {
+        throw new TypeError('CoCreate CRUD organization lookup and authorization are required.');
+    }
+
+    const path = options.path || DEFAULT_PATH;
+    if (server.routes.has(path)) throw new Error(`CoCreate route is already registered: ${path}`);
+    let aiConfigError;
+    const aiConfigPromise = Promise.resolve(options.aiConfig
+        ? options.aiConfig
+        : (0,_capabilities_config_js__WEBPACK_IMPORTED_MODULE_2__/* .resolveAIConfig */ .Pw)(server, options.ai || {})).catch(error => {
+        aiConfigError = error;
+        return {};
+    });
+    const allowedOrigins = new Set(options.allowedOrigins || []);
+    const tools = new Map();
+    const builtins = (0,_tools_js__WEBPACK_IMPORTED_MODULE_0__/* .createBuiltInTools */ .x)(server).filter(tool => ['run_workflow', 'read_reference'].includes(tool.name));
+    for (const builtin of builtins) tools.set(builtin.name, normalizeTool(builtin));
+    for (const definition of options.tools || []) {
+        const tool = normalizeTool(definition);
+        if (tools.has(tool.name) || RESERVED_TOOL_NAMES.has(tool.name)) throw new Error(`Duplicate or reserved MCP tool: ${tool.name}`);
+        tools.set(tool.name, tool);
+    }
+
+    const toolsForContext = async context => {
+        const aiConfig = await aiConfigPromise;
+        if (aiConfigError) throw aiConfigError;
+        const availableTools = new Map(tools);
+        for (const definition of (0,_capabilities_registry_js__WEBPACK_IMPORTED_MODULE_1__/* .createPortedRegistry */ .G)(server, aiConfig, context, { mcpPath: path })) {
+            if (availableTools.has(definition.name)) continue;
+            availableTools.set(definition.name, normalizeTool(definition));
+        }
+        return availableTools;
+    };
+
+    const route = async (req, res) => {
+        const origin = req.headers.origin;
+        if (origin && !allowedOrigins.has(origin)) {
+            return sendJson(res, 403, { error: 'Origin is not allowed.' });
+        }
+        const corsHeaders = origin ? {
+            'Access-Control-Allow-Origin': origin,
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Api-Key, MCP-Protocol-Version',
+            'Access-Control-Max-Age': '600',
+            Vary: 'Origin'
+        } : {};
+        if (req.method === 'OPTIONS') {
+            res.writeHead(204, { Allow: 'POST, GET, OPTIONS', ...corsHeaders });
+            return res.end();
+        }
+        if (req.method === 'GET') {
+            res.writeHead(405, { Allow: 'POST, OPTIONS', ...corsHeaders });
+            return res.end();
+        }
+        if (req.method !== 'POST') {
+            res.writeHead(405, { Allow: 'POST, GET, OPTIONS', ...corsHeaders });
+            return res.end();
+        }
+        const acceptedTypes = (req.headers.accept || '').split(',').map(value => value.trim());
+        if (!acceptedTypes.includes('application/json') ||
+            !acceptedTypes.includes('text/event-stream')) {
+            return sendJson(res, 406, { error: 'Accept must include application/json and text/event-stream.' }, corsHeaders);
+        }
+
+        let message;
+        try {
+            message = await readJson(req);
+        } catch (error) {
+            return sendJson(res, error.status || 400, { error: error.message });
+        }
+        if (!isPlainObject(message) || message.jsonrpc !== '2.0' || typeof message.method !== 'string') {
+            return sendJson(res, 400, jsonRpcError(message?.id ?? null, -32600, 'Invalid JSON-RPC request.'));
+        }
+        const notification = !Object.hasOwn(message, 'id');
+
+        let context;
+        try {
+            context = await authenticateRequest(server, req);
+            await server.authorize.request({
+                method: 'mcp.connect',
+                organization_id: context.organization_id,
+                host: context.host,
+                apikey: context.apikey
+            });
+        } catch (error) {
+            const status = error.status || (error.code === 'AUTHORIZATION_DENIED' ? 403 : 401);
+            return sendJson(res, status,
+                notification ? undefined : jsonRpcError(message.id, -32001,
+                    status === 403 ? 'MCP access is not authorized.' : error.message));
+        }
+
+        let responseVersion = SUPPORTED_VERSIONS.has(req.headers['mcp-protocol-version'])
+            ? req.headers['mcp-protocol-version']
+            : PROTOCOL_VERSION;
+        const respond = body => sendJson(res, 200, body, {
+            'MCP-Protocol-Version': responseVersion,
+            ...corsHeaders
+        });
+        try {
+            if (message.method === 'initialize') {
+                const requested = message.params?.protocolVersion;
+                if (!SUPPORTED_VERSIONS.has(requested)) {
+                    return respond(jsonRpcError(message.id, -32602, 'Unsupported MCP protocol version.'));
+                }
+                const version = requested;
+                responseVersion = version;
+                return respond(jsonRpcResult(message.id, {
+                    protocolVersion: version,
+                    capabilities: { tools: { listChanged: false } },
+                    serverInfo: { name: 'cocreate-mcp', version: '0.1.0' }
+                }));
+            }
+            if (message.method === 'notifications/initialized') {
+                return sendJson(res, 202);
+            }
+            if (message.method === 'ping') return respond(jsonRpcResult(message.id, {}));
+            if (message.method === 'tools/list') {
+                return respond(jsonRpcResult(message.id, { tools: getToolDefinitions(await toolsForContext(context)) }));
+            }
+            if (message.method === 'tools/call') {
+                const { name, arguments: args = {} } = message.params || {};
+                const tool = (await toolsForContext(context)).get(name);
+                if (!tool) return respond(jsonRpcError(message.id, -32602, 'Unknown MCP tool.'));
+                try {
+                    const operation = await tool.authorize(args, context);
+                    const authorizedRequest = await server.authorize.request(
+                        withTrustedContext(operation, context)
+                    );
+                    const result = await tool.handler(authorizedRequest, context);
+                    const content = typeof result === 'string'
+                        ? [{ type: 'text', text: result }]
+                        : [{ type: 'text', text: JSON.stringify(result ?? null) }];
+                    const toolResult = { content, isError: false };
+                    if (req.headers['mcp-protocol-version'] !== '2025-03-26') {
+                        toolResult.structuredContent = result ?? null;
+                    }
+                    return respond(jsonRpcResult(message.id, toolResult));
+                } catch (error) {
+                    return respond(jsonRpcResult(message.id, {
+                        content: [{ type: 'text', text: error.message || 'Tool execution failed.' }],
+                        isError: true
+                    }));
+                }
+            }
+            if (notification) return sendJson(res, 202);
+            return respond(jsonRpcError(message.id, -32601, 'Method not found.'));
+        } catch (error) {
+            if (!res.headersSent) return respond(jsonRpcError(message.id ?? null, -32603, 'MCP request failed.'));
+            res.end();
+        }
+    };
+
+    server.routes.set(path, route);
+    return {
+        tools: {
+            register(definition) {
+                const tool = normalizeTool(definition);
+                if (tools.has(tool.name) || RESERVED_TOOL_NAMES.has(tool.name)) throw new Error(`Duplicate or reserved MCP tool: ${tool.name}`);
+                tools.set(tool.name, tool);
+                return () => tools.delete(tool.name);
+            },
+            async list() {
+                return getToolDefinitions(await toolsForContext({ organization_id: server.organization_id, host: server.host }));
+            }
+        },
+        close() {
+            if (server.routes.get(path) === route) server.routes.delete(path);
+            tools.clear();
+        }
+    };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ init });
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "A", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 8019
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   x: () => (/* binding */ createBuiltInTools)
+/* harmony export */ });
+const object = (properties, required = []) => ({
+    type: 'object', properties, required, additionalProperties: false
+});
+
+const string = { type: 'string' };
+
+function getPath(value, pathname) {
+    return pathname.split('.').reduce((current, key) => current?.[key], value);
+}
+
+function trusted(context, payload) {
+    const { organization_id: _organizationId, host: _host, apikey: _apikey, user_id: _userId, ...operation } = payload;
+    return { ...operation, organization_id: context.organization_id, host: context.host, apikey: context.apikey };
+}
+
+async function authorize(server, context, payload) {
+    return server.authorize.request(trusted(context, payload));
+}
+
+async function sendCrud(server, context, payload) {
+    const authorized = await authorize(server, context, payload);
+    return server.crud.send(authorized);
+}
+
+function isPlatform(server, context) {
+    return Boolean(server.organization_id && server.organization_id === context.organization_id);
+}
+
+function requirePlatform(server, context) {
+    if (!isPlatform(server, context)) {
+        throw new Error('This tool is restricted to the CoCreate platform organization.');
+    }
+}
+
+function tool(name, description, inputSchema, authorizeInput, handler) {
+    return {
+        name, description, inputSchema,
+        authorize: authorizeInput,
+        handler
+    };
+}
+
+/** Built-in CoCreate tools that mirror the shared Server AI service surface. */
+function createBuiltInTools(server, { mcpPath = '/mcp' } = {}) {
+    const tools = [];
+
+    tools.push(tool(
+        'execute_server_api',
+        'Call a configured CoCreate API. The API method and endpoint permissions are checked for this API key.',
+        { type: 'object', properties: { method: string, api: string, endpoint: string, url: string, data: {}, searchParams: {}, headers: {}, timeout: { type: 'number' } }, required: ['method'], additionalProperties: true },
+        input => {
+            if (typeof input.method !== 'string' || !input.method.trim()) throw new Error('A configured API method is required.');
+            return input;
+        },
+        async (request, context) => {
+            if (typeof server.api?.send !== 'function') throw new Error('The CoCreate API service is not initialized.');
+            return server.api.send(trusted(context, request));
+        }
+    ));
+
+    tools.push(tool(
+        'run_workflow',
+        'Run a named, configured CoCreate workflow. The workflow method must be authorized for this API key.',
+        object({ method: string, data: {}, input: {} }, ['method']),
+        input => {
+            if (typeof input.method !== 'string' || !/^workflow\.[A-Za-z0-9_-]+$/.test(input.method)) {
+                throw new Error('method must name a workflow, for example workflow.sendEmail.');
+            }
+            return input;
+        },
+        async (request, context) => {
+            if (typeof server.workflow?.run !== 'function') throw new Error('The CoCreate workflow service is not initialized.');
+            return server.workflow.run(trusted(context, request));
+        }
+    ));
+
+    tools.push(tool(
+        'get_ai_instructions',
+        'Retrieve named CoCreate AI operating instructions with examples and referenced source files.',
+        object({ name: string }, ['name']),
+        input => ({ method: 'object.read', array: 'ai-instructions', filter: { query: { name: input.name, enabled: true }, limit: 1 } }),
+        async (request, context) => {
+            const result = await server.crud.send(request);
+            const instruction = result?.object?.[0];
+            if (!instruction) return { error: `No AI instructions found with name "${request.filter.query.name}".` };
+            const sources = [];
+            for (const source of instruction.sources ?? []) {
+                const pathname = source.pathname ?? source.path;
+                if (!pathname) {
+                    sources.push({ ...source, found: false });
+                    continue;
+                }
+                const fileResponse = await sendCrud(server, context, {
+                    method: 'object.read', array: 'files',
+                    filter: { query: { $or: [{ pathname }, { path: pathname }] }, limit: 1 }
+                });
+                const file = fileResponse?.object?.[0];
+                sources.push(file
+                    ? { ...source, name: source.name ?? file.name, pathname: file.pathname ?? file.path ?? pathname, content: file.src ?? file.content ?? '', contentType: file['content-type'], updated: file.updated, found: true }
+                    : { ...source, pathname, found: false });
+            }
+            return {
+                name: instruction.name,
+                description: instruction.description,
+                instructions: instruction.instructions ?? instruction.content ?? '',
+                examples: instruction.examples ?? [],
+                sources
+            };
+        }
+    ));
+
+    tools.push(tool(
+        'read_reference',
+        'Resolve a CoCreate object reference returned by a previous read, including one selected field or full details.',
+        object({ array: string, object: string, key: string, storage: string, database: string }, ['array', 'object']),
+        input => ({
+            method: 'object.read', array: input.array,
+            ...(input.storage !== undefined && { storage: input.storage }),
+            ...(input.database !== undefined && { database: input.database }),
+            filter: { query: { _id: input.object }, ...(input.key ? { key: { [input.key]: 1, _id: 1 } } : {}), limit: 1 }
+        }),
+        async request => {
+            const result = await server.crud.send(request);
+            const record = result?.object?.[0];
+            if (!record) return { error: 'The referenced CoCreate object was not found.' };
+            return request.filter.key && Object.keys(request.filter.key).length > 1
+                ? { array: request.array, object: record._id, key: Object.keys(request.filter.key).find(key => key !== '_id'), value: getPath(record, Object.keys(request.filter.key).find(key => key !== '_id')) }
+                : { array: request.array, object: record._id, details: record };
+        }
+    ));
+
+    tools.push(tool(
+        'send_socket_message',
+        'Send a CoCreate message to the authenticated client or an explicitly addressed client in this tenant.',
+        object({ data: { type: 'object' }, clientId: string, broadcast: { type: 'boolean' } }, ['data']),
+        input => {
+            if (typeof input.data?.method !== 'string' || !input.data.method.trim()) throw new Error('data.method is required so the message can be authorized.');
+            return { ...input.data, clientId: input.clientId, broadcast: input.broadcast };
+        },
+        async (request, context) => {
+            if (typeof server.send !== 'function') throw new Error('The CoCreate server message service is not initialized.');
+            const payload = trusted(context, { ...request, broadcast: request.broadcast === true, log: request.log ?? false });
+            await server.send(payload);
+            return { success: true, sent: true };
+        }
+    ));
+
+    const serverTool = (name, service, description, properties, actions, handler) => tools.push(tool(
+        name,
+        `${description} Platform organization only.`,
+        object({ service: { type: 'string', enum: [service] }, action: { type: 'string', enum: actions }, ...properties }, ['action']),
+        input => ({ method: `server.${service}.${input.action}`, service, action: input.action, ...input }),
+        async (request, context) => {
+            requirePlatform(server, context);
+            const { service, action, ...args } = request;
+            return handler(service, action, args, context);
+        }
+    ));
+
+    serverTool('manage_server_storage', 'storage', 'Read or manage server storage.', { key: string, value: {} }, ['get', 'set', 'delete', 'size', 'clear'], async (_service, action, args) => {
+                const storage = server.storage;
+                if (!storage || typeof storage[action] !== 'function' || !['get', 'set', 'delete', 'size', 'clear'].includes(action)) throw new Error(`Unsupported storage action: ${action}`);
+                return action === 'size' || action === 'clear' ? storage[action]() : storage[action](args.key, args.value);
+    });
+    serverTool('manage_server_routes', 'routes', 'List, add, or remove registered server routes.', { routePath: string, responseContent: {}, contentType: string }, ['list', 'add', 'remove'], async (_service, action, args) => {
+                if (action === 'list') return [...server.routes.keys()];
+                if (action === 'remove') {
+                    if (args.routePath === mcpPath) throw new Error('The MCP route cannot remove itself.');
+                    return { removed: server.routes.delete(args.routePath), routePath: args.routePath };
+                }
+                if (action === 'add') {
+                    if (!args.routePath || server.routes.has(args.routePath)) throw new Error('A new routePath is required and must not already be registered.');
+                    server.routes.set(args.routePath, async (_req, res) => {
+                        res.writeHead(200, { 'Content-Type': args.contentType || 'text/plain' });
+                        res.end(typeof args.responseContent === 'object' ? JSON.stringify(args.responseContent) : args.responseContent ?? 'OK');
+                    });
+                    return { added: true, routePath: args.routePath };
+                }
+    });
+    serverTool('manage_server_autoscaler', 'autoscaler', 'Inspect and control server autoscaling.', { value: {} }, ['getConfig', 'determineScaleOutTarget', 'scaleOut', 'determineScaleInTarget', 'scaleIn'], async (_service, action, args) => {
+                const scaler = server.autoscaler;
+                if (!['getConfig', 'determineScaleOutTarget', 'scaleOut', 'determineScaleInTarget', 'scaleIn'].includes(action) || typeof scaler?.[action] !== 'function') throw new Error(`Unsupported autoscaler action: ${action}`);
+                return action === 'getConfig' ? scaler.config : scaler[action](args.value);
+    });
+    serverTool('manage_server_cluster', 'cluster', 'Inspect server cluster state and members, or control a server or worker.', { serverId: string, host: string, status: string, limit: { type: 'integer' }, operation: string, worker: string, value: {}, organizations: {} }, ['self', 'get', 'list', 'control'], async (_service, action, args, context) => {
+                if (action === 'self') return { _id: server.id, host: server.host, ip: server.ip, isPrimary: server.isPrimary, isWorker: server.isWorker, workerId: server.workerId, totalWorkers: server.workers?.size, deployment: server.deployment };
+                if (action === 'list' || action === 'get') {
+                    const query = action === 'get' ? (args.serverId ? { _id: args.serverId } : { host: args.host }) : args.status ? { status: args.status } : {};
+                    if (action === 'get' && !args.serverId && !args.host) throw new Error('serverId or host is required.');
+                    const response = await sendCrud(server, context, { method: 'object.read', array: 'servers', filter: { query, limit: Math.min(Math.max(Number(args.limit) || (action === 'get' ? 1 : 50), 1), 100) } });
+                    return action === 'get' ? response?.object?.[0] : response?.object ?? [];
+                }
+                if (action === 'control') {
+                    if (!args.serverId) throw new Error('serverId is required for cluster control.');
+                    const workerOperations = new Set(['cordon', 'shed', 'drain']);
+                    const masterOperations = new Set(['reboot', 'shutdown']);
+                    const operation = args.operation;
+                    if (![...workerOperations, ...masterOperations, 'restart'].includes(operation)) throw new Error(`Unsupported server control operation: ${operation}`);
+                    if (workerOperations.has(operation) && args.worker == null) throw new Error(`worker is required for ${operation}.`);
+                    if (operation === 'shed' && args.organizations === undefined) throw new Error('organizations is required for shed.');
+                    const payload = { method: operation, server: args.serverId, organization_id: context.organization_id };
+                    if (args.worker != null) payload.worker = args.worker;
+                    if (operation === 'cordon' || operation === 'drain') payload.value = args.value !== false;
+                    if (operation === 'shed') payload.organizations = args.organizations;
+                    if (masterOperations.has(operation) || (operation === 'restart' && args.worker == null)) payload.master = true;
+                    const authorized = await authorize(server, context, payload);
+                    await server.send(authorized);
+                    return { success: true, action, operation, payload: authorized };
+                }
+                throw new Error(`Unsupported cluster action: ${action}`);
+    });
+
+    return tools;
+}
 
 
 /***/ },
@@ -23211,7 +31924,7 @@ const CoCreateSocketClient = {
                         socket.connected = true;
                         socket.__disconnectNotified = false;
                         delete data.currentReconnectDelay;
-                        self.checkMessageQueue(data);
+                        self.checkMessageQueue();
                     } else if (message.method === "disconnect") {
                         socket.connected = false;
                         self.connected = false;
@@ -23244,40 +31957,6 @@ const CoCreateSocketClient = {
                                     (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .ObjectId */ .V)(message._id).timestamp
                                 ) {
                                     _cocreate_config__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .A.set(socket.url, message._id);
-                                }
-                            }
-
-                            let Data = {
-                                method: "object.delete",
-                                database: "system",
-                                array: "messageQueue",
-                                filter: {
-                                    query: {
-                                        "updated.on": {
-                                            $gt: message.timestamp
-                                        },
-                                        status: "queued"
-                                    }
-                                }
-                            };
-
-                            let type = message.method.split(".")[0];
-                            if (Array.isArray(message[type])) {
-                                for (let item of message[type]) {
-                                    if (type == "object") {
-                                        Data.filter.query["data._id"] =
-                                            item._id;
-                                    } else if (
-                                        [
-                                            "database",
-                                            "array",
-                                            "index"
-                                        ].includes(type)
-                                    ) {
-                                        Data.filter.query[
-                                            "data.name"
-                                        ] = item.name;
-                                    }
                                 }
                             }
                         }
@@ -23341,33 +32020,12 @@ const CoCreateSocketClient = {
         }
     },
 
-    checkMessageQueue(config) {
+    checkMessageQueue() {
         if (this.messageQueue.size > 0) {
             for (let [uuid, data] of this.messageQueue) {
                 this.send(data);
                 this.messageQueue.delete(uuid);
             }
-        }
-
-        const storage = getIndexeddb();
-        if (isBrowser && storage) {
-            storage
-                .send({
-                    method: "object.delete",
-                    database: "system",
-                    array: "messageQueue",
-                    filter: {
-                        query: { status: "queued" }
-                    },
-                    organization_id: config.organization_id
-                })
-                .then((data) => {
-                    if (data) {
-                        for (let i = 0; i < data.object.length; i++) {
-                            this.send(data.object[i].data);
-                        }
-                    }
-                });
         }
     },
 
@@ -23415,27 +32073,7 @@ const CoCreateSocketClient = {
                     data.status = "queued";
                 }
 
-                if (isBrowser) {
-                    if (data.status !== "sent") data.status = "queued";
-
-                    const storage = getIndexeddb();
-                    if (storage && data.status === "queued") {
-                        storage.send({
-                            method: "object.update",
-                            database: "system",
-                            array: "messageQueue",
-                            upsert: true,
-                            object: {
-                                _id: UUID,
-                                data,
-                                status: "queued"
-                            },
-                            organization_id: data.organization_id
-                        });
-                    } else if (data.status === "queued") {
-                        this.messageQueue.set(UUID, data);
-                    }
-                } else if (data.status === "queued") {
+                if (data.status === "queued") {
                     this.messageQueue.set(UUID, data);
                 }
             }
@@ -23702,6 +32340,7 @@ if (isBrowser) {
 /* harmony import */ var ws__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2237);
 /* harmony import */ var node_url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9061);
 /* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9298);
+/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4172);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -23729,6 +32368,7 @@ if (isBrowser) {
 
 
 
+
 /**
  *
  * @public
@@ -23750,6 +32390,13 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
         this.organizationBalances = new Map();
         this.clients = new Map();
         this.sockets = new Map();
+        this.distribution = new Map();
+        server.on('db.distribution.set', payload => {
+            // Socket messages always carry top-level organization identity; DB controls do not.
+            if (payload.organization_id || payload.serverId !== this.serverId) return;
+            this.setDistribution(payload.data);
+            return { ...payload, success: true };
+        });
         this.users = new Map();
 
         // Extract isolated helper properties directly from the server instance
@@ -23993,7 +32640,6 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
                 isRegistered: true,
                 organizationBalance: this.organizationBalances.get(organization_id),
                 clients: new Map(),
-                subscriptions: new Map(),
                 debounce: null
             };
 
@@ -24055,114 +32701,32 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
         }
     }
 
-    subscribe(socket, subscriptionKeys) {
-        const organization = this.organizations.get(socket.organization_id);
-        if (!organization) return;
-        if (!organization.subscriptions)
-            organization.subscriptions = new Map();
-        if (!socket.subscriptionKeys) socket.subscriptionKeys = new Set();
-
-        const keys = Array.isArray(subscriptionKeys)
-            ? subscriptionKeys
-            : subscriptionKeys
-                ? [subscriptionKeys]
-                : [];
-
-        for (const key of keys) {
-            if (typeof key !== "string" || !key) continue;
-
-            let socketIds = organization.subscriptions.get(key);
-            if (!socketIds) {
-                socketIds = new Set();
-                organization.subscriptions.set(key, socketIds);
-            }
-
-            socketIds.add(socket.id);
-            socket.subscriptionKeys.add(key);
-        }
+    setDistribution({ organization_id, clientId, distribution } = {}) {
+        if (!this.organizations.get(organization_id)?.clients?.has(clientId)) return;
+        this.distribution ||= new Map();
+        (0,_cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_4__/* .addDistribution */ .E)(this.distribution, distribution, clientId);
     }
 
-    unsubscribe(socket, subscriptionKeys) {
-        const organization = this.organizations.get(socket.organization_id);
-        if (!organization?.subscriptions) return;
-
-        const keys = Array.isArray(subscriptionKeys)
-            ? subscriptionKeys
-            : subscriptionKeys
-                ? [subscriptionKeys]
-                : [];
-
-        for (const key of keys) {
-            const socketIds = organization.subscriptions.get(key);
-            if (!socketIds) continue;
-
-            socketIds.delete(socket.id);
-            if (!socketIds.size) organization.subscriptions.delete(key);
-            socket.subscriptionKeys?.delete(key);
-        }
-    }
-
-    removeSubscriptions(socket) {
-        if (!socket.subscriptionKeys?.size) return;
-        this.unsubscribe(socket, [...socket.subscriptionKeys]);
-        socket.subscriptionKeys.clear();
-    }
-
-    getSubscribers(data) {
+    getDistributionClients(data) {
         const clients = new Map();
         const organization = this.organizations.get(data.organization_id);
-
-        const socketIds = new Set();
-        for (const key of data.subscriptionKeys) {
-            const subscribedIds = organization?.subscriptions?.get(key);
-            if (!subscribedIds) continue;
-            for (const socketId of subscribedIds) socketIds.add(socketId);
+        const origin = (!data.serverId || data.serverId === this.serverId) && (data.workerId == null || data.workerId === this.workerId) && this.sockets.get(data.socketId);
+        const clientIds = /\.(create|update|delete)$/.test(data.method)
+            ? (0,_cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_4__/* .getDistribution */ .f)(this.distribution, data.distributionKeys) : new Set();
+        if (origin && origin.organization_id === data.organization_id) clientIds.add(origin.clientId);
+        for (const clientId of clientIds) {
+            const sockets = [...organization?.clients?.get(clientId)?.values() ?? []];
+            if (origin?.organization_id === data.organization_id && origin.clientId === clientId) {
+                clients.set(clientId, [origin, ...sockets.filter(socket => socket !== origin)]);
+            } else if (sockets.length) clients.set(clientId, sockets);
         }
-
-        for (const socketId of socketIds) {
-            const socket = this.sockets.get(socketId);
-            if (!socket || socket.organization_id !== data.organization_id)
-                continue;
-
-            let sockets = clients.get(socket.clientId);
-            if (!sockets) {
-                sockets = [];
-                clients.set(socket.clientId, sockets);
-            }
-            sockets.push(socket);
-        }
-
-        const socketById = this.sockets.get(data.socketId);
-        const origin = socketById?.organization_id === data.organization_id
-            ? socketById
-            : undefined;
-        if (origin) {
-            const sockets = clients.get(origin.clientId) || [];
-            clients.set(origin.clientId, [origin, ...sockets]);
-        }
-
-        // Subscriptions select clients; any tab of that client can provide failover.
-        for (const [clientId, sockets] of clients) {
-            const fallbackSockets = organization?.clients?.get(clientId);
-            clients.set(clientId, [...new Set([
-                ...sockets,
-                ...(fallbackSockets ? fallbackSockets.values() : [])
-            ])]);
-        }
-
         return clients;
     }
 
     getClients(data) {
         try {
+            if (Array.isArray(data.distributionKeys)) return this.getDistributionClients(data);
             if (data.broadcast === "false") data.broadcast = false;
-
-            if (
-                Array.isArray(data.subscriptionKeys) &&
-                data.subscriptionKeys.length
-            ) {
-                return this.getSubscribers(data);
-            }
 
             const clients = new Map();
             const organization = this.organizations.get(data.organization_id);
@@ -24232,7 +32796,6 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
         const socketId = socket.id;
 
         const organization = this.organizations.get(organization_id);
-        this.removeSubscriptions(socket);
         if (organization && organization.clients) {
             const clientSocketsMap = organization.clients.get(clientId);
 
@@ -24364,7 +32927,6 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
 
             // 3. Terminate all client connections cleanly
             for (const socket of orgSockets) {
-                this.removeSubscriptions(socket);
                 try {
                     // Send a clean departure frame if open
                     this._safeSend(socket, { method: "disconnect", reason: "Shedding / Draining Process" });
@@ -24519,6 +33081,14 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
             data.clientId = socket.clientId;
             data.organization_id = organization_id;
             data.host = socket.host;
+            delete data.worker;
+            delete data.workerId;
+            delete data.server;
+            delete data.serverId;
+            delete data.cluster;
+            delete data.clusterId;
+            delete data.distributionKeys;
+            delete data.distribution;
             // Storage authorization may change organization_id; replies still belong to this connection.
             data.replyOrganizationId = organization_id;
 
@@ -24607,21 +33177,9 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
             } // End of Authorization Block
 
             const moduleName = data.method?.split(".")[0];
-            if (
-                ["storage", "database", "array", "index", "object"].includes(
-                    moduleName
-                ) &&
-                data.subscription
-            ) {
-                this.subscribe(socket, data.subscription);
-            }
-
             // Dispatch built-in services directly; registered application methods use server.on().
             if (data.api) {
                 await this.server.api.send(data);
-            } else if (data.method === "unsubscribe") {
-                this.unsubscribe(socket, data.subscription);
-                this._safeSend(socket, data);
             } else if (data.method === "crdt" || data.method === "cursor") {
                 this.server.send(data);
             } else if (["storage", "database", "array", "index", "object"].includes(moduleName)) {
@@ -24640,9 +33198,6 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
     async send(data) {
         data = { ...data };
         delete data.replyOrganizationId;
-        const subscriptionDelivery =
-            Array.isArray(data.subscriptionKeys) &&
-            data.subscriptionKeys.length > 0;
 
         if (data.method === 'organization.balance') {
             this.setOrganizationBalance(data, { propagate: false });
@@ -24724,7 +33279,7 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
         if (cleanData.filter?.query) {
             cleanData.filter = { ...cleanData.filter, query: { ...cleanData.filter.query } };
         }
-        if (subscriptionDelivery) cleanData.broadcastClient = false;
+        if (Array.isArray(data.distributionKeys)) cleanData.broadcastClient = true;
 
         if (
             cleanData.filter &&
@@ -32177,49 +40732,95 @@ const cloudProviders = [
 /* empty/unused harmony star reexport */
 /* empty/unused harmony star reexport */
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   _: () => (/* binding */ createUpdate)
+/* harmony export */   _W: () => (/* binding */ createUpdate)
 /* harmony export */ });
+/* unused harmony exports createUpdateChanges, mergeUpdateChanges */
+/* unused harmony import specifier */ var isEqualObject;
 /* harmony import */ var _dataQuery_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(900);
 
 
 
 
 
+const updateOperators = new Set([
+    "$set", "$rename", "$inc", "$push", "$each", "$splice", "$unset",
+    "$delete", "$slice", "$pop", "$shift", "$addToSet", "$pull"
+]);
+const isArrayIndex = key => /^(0|[1-9]\d*)$/.test(key) && Number(key) < 2 ** 32 - 1;
+const noCreate = new Set(["$rename", "$unset", "$delete", "$slice", "$pop", "$shift", "$pull"]);
+
+function assertUpdatePath(path) {
+    const keys = String(path).replace(/\[(\d+)\]/g, ".$1").split(".");
+    if (keys.some(key => !key || ["__proto__", "prototype", "constructor"].includes(key)))
+        throw new TypeError("Invalid update path");
+    return keys;
+}
+
+function arrayAt(object, key) {
+    if (object[key] === undefined) object[key] = [];
+    if (!Array.isArray(object[key])) throw new TypeError("Array update requires an array");
+    return object[key];
+}
+
+function renameTo(object, path, value) {
+    const keys = assertUpdatePath(path);
+    let parent = object;
+    for (let i = 0; i < keys.length - 1; i++) {
+        if (parent[keys[i]] === undefined) parent[keys[i]] = isArrayIndex(keys[i + 1]) ? [] : {};
+        if (!parent[keys[i]] || typeof parent[keys[i]] !== "object")
+            throw new TypeError("Rename destination requires an object");
+        parent = parent[keys[i]];
+    }
+    parent[keys.at(-1)] = value;
+}
+
 function dotNotationToObjectUpdate(data, object = {}) {
 	try {
-		for (const key of Object.keys(data)) {
+        // Validate all operator paths before applying any of these operations.
+        for (const [key, value] of Object.entries(data)) {
+            const at = key.indexOf(".");
+            const operator = key.startsWith("$") ? key.slice(0, at) : undefined;
+            if (operator && (!updateOperators.has(operator) || at < 0))
+                throw new TypeError("Unsupported update operator");
+            const path = operator ? key.slice(at + 1) : key;
+            assertUpdatePath(path);
+            if (operator === "$rename") {
+                if (typeof value !== "string") throw new TypeError("Rename destination must be a path string");
+                assertUpdatePath(value);
+            }
+            if (operator === "$addToSet" && value && typeof value === "object" && Object.hasOwn(value, "$each") &&
+                (!Array.isArray(value.$each) || Object.keys(value).some(key => key !== "$each")))
+                throw new TypeError("Add to set each requires an array and no other modifiers");
+            if (operator === "$inc" && (typeof value !== "number" || !Number.isFinite(value)))
+                throw new TypeError("Increment requires a finite number");
+        }
+		operation: for (const key of Object.keys(data)) {
 			let newObject = object;
 			let keys = key
 				.replace(/\[(\d+)\]/g, ".$1")
 				.split(".")
-				.map((k) => (isNaN(k) ? k : Number(k)));
+				.map((k) => (isArrayIndex(k) ? Number(k) : k));
 			let value = data[key];
 			let operator;
-			if (keys[0].startsWith("$")) operator = keys.shift();
+			if (typeof keys[0] === "string" && keys[0].startsWith("$")) operator = keys.shift();
 
 			let length = keys.length - 1;
 			for (let i = 0; i < keys.length; i++) {
+                if (i < length && newObject[keys[i]] == null && noCreate.has(operator)) continue operation;
 				if (length == i) {
 					if (operator) {
-						let operators = [
-							"$rename",
-							"$inc",
-							"$push",
-							"$each",
-							"$splice",
-							"$unset",
-							"$delete",
-							"$slice",
-							"$pop",
-							"$shift",
-							"$addToSet",
-							"$pull"
-						];
-						if (!operators.includes(operator)) continue;
-						if (operator === "$rename") {
-							newObject[value] = newObject[keys[i]];
-							delete newObject[keys[i]];
-						} else if (
+                        if (operator === "$set") {
+                            newObject[keys[i]] = value;
+                        } else if (operator === "$rename") {
+                            if (!Object.hasOwn(newObject, keys[i])) continue;
+                            const source = keys.join(".");
+                            const destination = assertUpdatePath(value).join(".");
+                            if (source === destination) continue;
+                            if (source.startsWith(destination + ".") || destination.startsWith(source + "."))
+                                throw new TypeError("Rename paths cannot overlap");
+                            renameTo(object, value, newObject[keys[i]]);
+                            delete newObject[keys[i]];
+                        } else if (
 							operator === "$delete" ||
 							operator === "$unset" ||
 							operator === "$slice"
@@ -32230,30 +40831,35 @@ function dotNotationToObjectUpdate(data, object = {}) {
 								delete newObject[keys[i]];
 							}
 						} else if (operator === "$shift") {
-							newObject[keys[i]].shift();
+							if (newObject[keys[i]] !== undefined) arrayAt(newObject, keys[i]).shift();
 						} else if (operator === "$pop") {
-							newObject[keys[i]].pop();
+							if (newObject[keys[i]] !== undefined) arrayAt(newObject, keys[i]).pop();
 						} else if (operator === "$addToSet") {
-							if (!newObject[keys[i]]) newObject[keys[i]] = [];
-							let exists;
-							if (Array.isArray(value)) {
-								exists = newObject[keys[i]].some(
-									(item) => Array.isArray(item) && (0,_dataQuery_js__WEBPACK_IMPORTED_MODULE_1__/* .isEqualArray */ .kh)(item, value)
-								);
-							} else if (
-								typeof value === "object" &&
-								value !== null
-							) {
-								exists = newObject[keys[i]].some(
-									(item) =>
-										typeof item === "object" && (0,_dataQuery_js__WEBPACK_IMPORTED_MODULE_1__/* .isEqualObject */ .ob)(item, value)
-								);
-							} else {
-								exists = newObject[keys[i]].includes(value);
-							}
-							if (!exists) newObject[keys[i]].push(value);
+							arrayAt(newObject, keys[i]);
+                            const candidates = value && typeof value === "object" && Object.hasOwn(value, "$each")
+                                ? value.$each : [value];
+                            for (const candidate of candidates) {
+								let exists;
+								if (Array.isArray(candidate)) {
+									exists = newObject[keys[i]].some(
+										(item) => Array.isArray(item) && (0,_dataQuery_js__WEBPACK_IMPORTED_MODULE_1__/* .isEqualArray */ .kh)(item, candidate)
+									);
+								} else if (
+									typeof candidate === "object" &&
+									candidate !== null
+								) {
+									exists = newObject[keys[i]].some(
+										(item) =>
+											typeof item === "object" && (0,_dataQuery_js__WEBPACK_IMPORTED_MODULE_1__/* .isEqualObject */ .ob)(item, candidate)
+									);
+								} else {
+									exists = newObject[keys[i]].includes(candidate);
+								}
+								if (!exists) newObject[keys[i]].push(candidate);
+                            }
 						} else if (operator === "$pull") {
-							if (!newObject[keys[i]]) continue;
+							if (newObject[keys[i]] === undefined) continue;
+                            arrayAt(newObject, keys[i]);
 							if (Array.isArray(value)) {
 								newObject[keys[i]] = newObject[keys[i]].filter(
 									(item) => !Array.isArray(item) || !(0,_dataQuery_js__WEBPACK_IMPORTED_MODULE_1__/* .isEqualArray */ .kh)(item, value)
@@ -32277,20 +40883,19 @@ function dotNotationToObjectUpdate(data, object = {}) {
 								newObject.length >= keys[i]
 							)
 								newObject.splice(keys[i], 0, value);
-							else if (newObject[keys[i]]) newObject[keys[i]].push(value);
-							else newObject[keys[i]] = [value];
+                            else arrayAt(newObject, keys[i]).push(value);
 						} else if (operator === "$each") {
 							if (!Array.isArray(value)) value = [value];
 							if (typeof keys[i] === "number")
 								newObject.splice(keys[i], 0, ...value);
-							else newObject[keys[i]].push(...value);
-						} else if (operator === "$inc") {
-							if (
-								!newObject[keys[i]] ||
-								typeof newObject[keys[i]] !== "number"
-							)
-								newObject[keys[i]] = value;
-							else newObject[keys[i]] += value;
+							else arrayAt(newObject, keys[i]).push(...value);
+                        } else if (operator === "$inc") {
+                            const current = newObject[keys[i]];
+                            if (current !== undefined && (typeof current !== "number" || !Number.isFinite(current)))
+                                throw new TypeError("Cannot increment a non-number");
+                            const next = (current ?? 0) + value;
+                            if (!Number.isFinite(next)) throw new TypeError("Increment overflow");
+                            newObject[keys[i]] = next;
 						}
 					} else if (value === undefined) {
 						if (typeof keys[i] === "number") newObject.splice(keys[i], 1);
@@ -32313,47 +40918,108 @@ function dotNotationToObjectUpdate(data, object = {}) {
 		}
 		return object;
 	} catch (error) {
-		console.log("Error converting dot notation to object", error);
 		return false;
 	}
 }
 
-function createUpdate(update, data, globalOpertors) {
-	let operatorKeys = {};
-	if (globalOpertors) operatorKeys = { ...globalOpertors };
-
-	Object.keys(data).forEach((key) => {
-		if (key.startsWith("$")) {
-			if (!key.includes("."))
-				for (let oldkey of Object.keys(data[key]))
-					operatorKeys[key + "." + oldkey] = data[key][oldkey];
-			else operatorKeys[key] = data[key];
-		} else if (
-			typeof data[key] === "string" &&
-			data[key].startsWith("$")
-		) {
-			operatorKeys[data[key] + "." + key] = data[key];
-		} else if (key.endsWith("]")) {
-			const regex = /^(.*(?:\[\d+\].*?)?)\[(.*?)\](?:\[\])?$/;
-			const match = key.match(regex);
-			if (match[2] === "") operatorKeys["$push." + match[1]] = data[key];
-			else {
-				let index = parseInt(match[2], 10);
-				if (Number.isNaN(index))
-					operatorKeys[match[2] + "." + match[1]] = data[key];
-				else operatorKeys[key] = data[key];
-			}
-		} else if (key.includes(".")) {
-			operatorKeys[key] = data[key];
-		} else if (data[key] === undefined) {
-			delete update[key];
-		} else update[key] = data[key];
-	});
-
-	return dotNotationToObjectUpdate(operatorKeys, update);
+function createUpdate(update, data, globalOperators) {
+    try {
+        const keys = Object.keys(data);
+        for (const key of keys) {
+            if (!key.startsWith("$")) assertUpdatePath(key);
+            else if (!updateOperators.has(key.split(".")[0])) return false;
+        }
+        const operatorKeys = { ...globalOperators };
+        for (const key of keys) {
+            const value = data[key];
+            if (key.startsWith("$")) {
+                if (!key.includes(".")) {
+                    for (const path of Object.keys(value)) operatorKeys[key + "." + path] = value[path];
+                } else operatorKeys[key] = value;
+            } else if (typeof value === "string" && updateOperators.has(value)) {
+                operatorKeys[value + "." + key] = value;
+            } else if (key.endsWith("]")) {
+                const match = key.match(/^(.*(?:\[\d+\].*?)?)\[(.*?)\](?:\[\])?$/);
+                if (!match) return false;
+                if (match[2] === "") operatorKeys["$push." + match[1]] = value;
+                else {
+                    const index = parseInt(match[2], 10);
+                    if (Number.isNaN(index)) operatorKeys[match[2] + "." + match[1]] = value;
+                    else operatorKeys[key] = value;
+                }
+            } else if (key.includes(".")) operatorKeys[key] = value;
+            else if (value === undefined) delete update[key];
+            else update[key] = value;
+        }
+        return dotNotationToObjectUpdate(operatorKeys, update);
+    } catch {
+        return false;
+    }
 }
 
 
+
+/** Describe the resulting values, rather than replaying the original operators. */
+function createUpdateChanges(current, updated) {
+    const changes = {};
+    const plain = value => value !== null && typeof value === 'object' &&
+        (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null);
+    const visit = (before, after, prefix = '') => {
+        for (const key of new Set([...Object.keys(before), ...Object.keys(after)])) {
+            const path = prefix ? `${prefix}.${key}` : key;
+            const had = Object.hasOwn(before, key);
+            const has = Object.hasOwn(after, key) && after[key] !== undefined;
+            if (!has) {
+                if (had) { assertUpdatePath(path); (changes.$unset ??= {})[path] = true; }
+            } else if (had && plain(before[key]) && plain(after[key])) {
+                visit(before[key], after[key], path);
+            } else if (!had || !isEqualObject(before[key], after[key])) {
+                assertUpdatePath(path);
+                (changes.$set ??= {})[path] = structuredClone(after[key]);
+            }
+        }
+    };
+    visit(current, updated);
+    return changes;
+}
+
+/** Coalesce changed paths without dropping a field that changed and reverted. */
+function mergeUpdateChanges(previous, next) {
+    const result = structuredClone(previous);
+    for (const operator of ['$set', '$unset']) {
+        for (const [path, value] of Object.entries(next[operator] ?? {})) {
+            // A later parent replacement/removal supersedes pending descendants.
+            for (const existing of ['$set', '$unset']) {
+                for (const key of Object.keys(result[existing] ?? {}))
+                    if (key === path || key.startsWith(path + '.')) delete result[existing][key];
+            }
+            const removedParent = Object.keys(result.$unset ?? {}).find(key => path.startsWith(key + '.'));
+            if (removedParent) {
+                if (operator === '$unset') continue;
+                delete result.$unset[removedParent];
+                const valueAtParent = {};
+                if (createUpdate(valueAtParent, { $set: { [path.slice(removedParent.length + 1)]: value } }) === false)
+                    throw new Error('Cannot compose recreated update changes');
+                (result.$set ??= {})[removedParent] = valueAtParent;
+                continue;
+            }
+            // Apply a later child change inside an already pending parent value.
+            const parent = Object.keys(result.$set ?? {}).find(key => path.startsWith(key + '.'));
+            if (parent) {
+                const nested = path.slice(parent.length + 1);
+                const document = { value: result.$set[parent] };
+                if (createUpdate(document, { [operator]: { [`value.${nested}`]: value } }) === false)
+                    throw new Error('Cannot compose update changes');
+                result.$set[parent] = document.value;
+            } else {
+                (result[operator] ??= {})[path] = structuredClone(value);
+            }
+        }
+    }
+    for (const operator of ['$set', '$unset'])
+        if (result[operator] && !Object.keys(result[operator]).length) delete result[operator];
+    return result;
+}
 
 
 /***/ },
@@ -32369,8 +41035,6 @@ function createUpdate(update, data, globalOpertors) {
 /* harmony export */   ob: () => (/* binding */ isEqualObject)
 /* harmony export */ });
 /* harmony import */ var _getValueFromObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7076);
-/* harmony import */ var _isValidDate_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8170);
-
 
 
 function isEqualArray(arr1, arr2) {
@@ -32434,187 +41098,192 @@ function isEqualValue(value1, value2) {
 	return false;
 }
 
-function queryMatch(data, query) {
-	for (let key of Object.keys(query)) {
-		const queryEntry = query[key];
-		let dataValue;
-		try {
-			dataValue = (0,_getValueFromObject_js__WEBPACK_IMPORTED_MODULE_0__/* .getValueFromObject */ .r)(data, key, true);
-		} catch (error) {
-			return false;
+function pathResult(data, path) {
+	// Most CRUD predicates address a direct property; avoid path parsing and
+	// recursive visitor allocation on that common path.
+	if (!path.includes(".") && !path.includes("[")) {
+		const exists = data !== null && typeof data === "object" && Object.hasOwn(data, path);
+		return { exists, values: exists ? [data[path]] : [] };
+	}
+	const keys = String(path).replace(/\[(\d+)\]/g, ".$1").split(".").filter(Boolean);
+	const visit = (value, index) => {
+		if (index === keys.length) return { exists: true, values: [value] };
+		if (Array.isArray(value) && !/^\d+$/.test(keys[index])) {
+			const result = { exists: false, values: [] };
+			for (const item of value) {
+				const child = visit(item, index);
+				result.exists ||= child.exists;
+				for (const leaf of child.values) result.values.push(leaf);
+			}
+			return result;
 		}
+		if (value === null || typeof value !== "object" || !Object.hasOwn(value, keys[index]))
+			return { exists: false, values: [] };
+		return visit(value[keys[index]], index + 1);
+	};
+	return visit(data, 0);
+}
 
-		if (queryEntry === null || typeof queryEntry !== "object") {
-			if (Array.isArray(dataValue)) return dataValue.includes(queryEntry);
-			else return Object.is(dataValue, queryEntry);
-		} else if (Array.isArray(queryEntry)) {
-			if (Array.isArray(dataValue)) {
-				return isEqualArray(dataValue, queryEntry);
-			} else {
-				return false;
-			}
-		} else {
-			for (let property of Object.keys(queryEntry)) {
-				if (property === "$options") continue;
-				if (!property.startsWith("$")) {
-					if (typeof dataValue !== "object") {
-						return false;
-					} else
-						return queryMatch(
-							{ [property]: (0,_getValueFromObject_js__WEBPACK_IMPORTED_MODULE_0__/* .getValueFromObject */ .r)(dataValue, property) },
-							{ [property]: query[key][property] }
-						);
-				} else {
-					let queryValue = queryEntry[property];
-					if ((0,_isValidDate_js__WEBPACK_IMPORTED_MODULE_1__/* .isValidDate */ .v)(queryValue) && (0,_isValidDate_js__WEBPACK_IMPORTED_MODULE_1__/* .isValidDate */ .v)(dataValue)) {
-						queryValue = new Date(queryValue);
-						dataValue = new Date(dataValue);
-					}
-					let queryStatus = false;
-					switch (property) {
-						case "$eq":
-							queryStatus = isEqualValue(dataValue, queryValue);
-							break;
-						case "$ne":
-							queryStatus = !isEqualValue(dataValue, queryValue);
-							break;
-						case "$not":
-							queryStatus = !queryMatch(data, {
-								[key]: query[key]["$not"]
-							});
-							break;
-						case "$lt":
-							queryStatus = dataValue < queryValue;
-							break;
-						case "$lte":
-							queryStatus = dataValue <= queryValue;
-							break;
-						case "$gt":
-							queryStatus = dataValue > queryValue;
-							break;
-						case "$gte":
-							queryStatus = dataValue >= queryValue;
-							break;
-						case "$in":
-							queryValue = Array.isArray(queryValue)
-								? queryValue
-								: [queryValue];
-							if (Array.isArray(dataValue)) {
-								queryStatus = dataValue.some((element) =>
-									queryValue.includes(element)
-								);
-							} else {
-								queryStatus = queryValue.includes(dataValue);
-							}
-							break;
-						case "$nin":
-							queryValue = Array.isArray(queryValue)
-								? queryValue
-								: [queryValue];
-							if (Array.isArray(dataValue)) {
-								queryStatus = !dataValue.some((element) =>
-									queryValue.includes(element)
-								);
-							} else {
-								queryStatus = !queryValue.includes(dataValue);
-							}
-							break;
-						case "$all":
-							if (Array.isArray(dataValue) && Array.isArray(queryValue)) {
-								queryStatus = queryValue.every((element) =>
-									dataValue.includes(element)
-								);
-							}
-							break;
-						case "$elemMatch":
-							if (Array.isArray(data[key])) {
-								queryStatus = data[key].some((element) =>
-									queryMatch(element, query[key][property])
-								);
-							}
-							break;
-						case "$size":
-							if (Array.isArray(dataValue)) {
-								queryStatus = dataValue.length === queryValue;
-							}
-							break;
-						case "$exists":
-							queryStatus = queryValue
-								? data.hasOwnProperty(key)
-								: !data.hasOwnProperty(key);
-							break;
-						case "$regex":
-							if (typeof dataValue === "string") {
-								let regexFlag = query[key]["$options"] || "";
-								let regex = new RegExp(queryValue, regexFlag);
-								queryStatus = regex.test(dataValue);
-							}
-							break;
-						case "$type":
-							let dataType = typeof dataValue;
-							if (Array.isArray(dataValue)) {
-								dataType = "array";
-							}
-							queryStatus = dataType === queryValue;
-							break;
-						case "$mod":
-							if (
-								typeof dataValue === "number" &&
-								Array.isArray(queryValue) &&
-								queryValue.length === 2
-							) {
-								const [divisor, remainder] = queryValue;
-								queryStatus = dataValue % divisor === remainder;
-							}
-							break;
-						case "$where":
-							if (typeof queryValue === "function") {
-								try {
-								} catch (error) {
-									console.error(
-										"Error in queryData $where function:",
-										error
-									);
-								}
-							}
-							break;
-						default:
-							console.log("unknown operator");
-							break;
-					}
-					if (!queryStatus) return false;
-				}
-			}
-			return true;
-		}
+function queryType(value) {
+	if (value === null) return "null";
+	if (Array.isArray(value)) return "array";
+	if (value instanceof Date) return "date";
+	return typeof value;
+}
+
+function equalQueryValue(value, expected) {
+	if (Array.isArray(value)) {
+		if (Array.isArray(expected) && isEqualArray(value, expected)) return true;
+		return value.some(item => isEqualValue(item, expected));
+	}
+	return isEqualValue(value, expected);
+}
+
+function compareQueryValue(value, expected, operator) {
+	switch (operator) {
+		case "$lt": return value < expected;
+		case "$lte": return value <= expected;
+		case "$gt": return value > expected;
+		case "$gte": return value >= expected;
+		default: return false;
 	}
 }
 
+function matchFieldValue(value, exists, condition, document, key) {
+	if (condition === null || typeof condition !== "object" || condition instanceof Date || condition instanceof RegExp)
+		return exists ? equalQueryValue(value, condition) : condition === undefined;
+	if (Array.isArray(condition))
+		return exists && Array.isArray(value) && isEqualArray(value, condition);
+
+	const keys = Object.keys(condition);
+	const operatorKeys = keys.filter(name => name.startsWith("$"));
+	if (!operatorKeys.length)
+		return exists && value !== null && typeof value === "object" && queryData(value, condition);
+
+	for (const operator of operatorKeys) {
+		const expected = condition[operator];
+		if (operator === "$options") continue;
+		let result = false;
+		switch (operator) {
+			case "$eq":
+				result = exists ? equalQueryValue(value, expected) : expected === undefined;
+				break;
+			case "$ne":
+				result = !matchFieldValue(value, exists, { $eq: expected }, document, key);
+				break;
+			case "$not":
+				result = !matchFieldValue(value, exists, expected, document, key);
+				break;
+			case "$lt": case "$lte": case "$gt": case "$gte":
+				result = exists && (Array.isArray(value) ? value.some(item => compareQueryValue(item, expected, operator)) : compareQueryValue(value, expected, operator));
+				break;
+			case "$in": case "$nin": {
+				const choices = Array.isArray(expected) ? expected : [expected];
+				const matched = exists
+					? (Array.isArray(value) ? value.some(item => choices.some(choice => equalQueryValue(item, choice))) : choices.some(choice => equalQueryValue(value, choice)))
+					: choices.includes(undefined);
+				result = operator === "$in" ? matched : !matched;
+				break;
+			}
+			case "$all":
+				result = Array.isArray(value) && Array.isArray(expected) && expected.every(item => value.some(entry => isEqualValue(entry, item)));
+				break;
+			case "$elemMatch":
+				result = Array.isArray(value) && value.some(item => {
+					if (expected && typeof expected === "object" && !Array.isArray(expected) && Object.keys(expected).every(name => name.startsWith("$")))
+						return matchFieldValue(item, true, expected, item, key);
+					return queryData(item, expected);
+				});
+				break;
+			case "$size":
+				result = Array.isArray(value) && value.length === expected;
+				break;
+			case "$exists":
+				result = Boolean(expected) === exists;
+				break;
+			case "$regex": {
+				const expression = expected instanceof RegExp
+					? new RegExp(expected.source, expected.flags)
+					: new RegExp(expected, condition.$options || "");
+				const values = Array.isArray(value) ? value : [value];
+				result = exists && values.some(item => {
+					if (typeof item !== "string") return false;
+					expression.lastIndex = 0;
+					return expression.test(item);
+				});
+				break;
+			}
+			case "$type": {
+				const aliases = { bool: "boolean", int: "number", long: "number", double: "number", decimal: "number" };
+				const actual = queryType(value);
+				const expectedTypes = Array.isArray(expected) ? expected : [expected];
+				result = exists && expectedTypes.some(type => (aliases[type] || type) === actual);
+				break;
+			}
+			case "$mod":
+				result = exists && Array.isArray(expected) && expected.length === 2 && expected[0] !== 0 &&
+					(Array.isArray(value) ? value.some(item => typeof item === "number" && item % expected[0] === expected[1]) : typeof value === "number" && value % expected[0] === expected[1]);
+				break;
+			case "$where":
+				result = typeof expected === "function" && Boolean(expected.call(document));
+				break;
+			default:
+				return false;
+		}
+		if (!result) return false;
+	}
+	return true;
+}
+
+// Dotted traversal can reach several actual values. Keep those values
+// separate: their container is not a stored array for $type/$size/$all.
+function matchPathResult(result, condition, document, key) {
+	if (result.values.length <= 1)
+		return matchFieldValue(result.values[0], result.exists, condition, document, key);
+
+	const operators = condition && typeof condition === "object" && !Array.isArray(condition)
+		? Object.keys(condition).filter(name => name.startsWith("$")) : [];
+	if (!operators.length)
+		return result.values.some(value => matchFieldValue(value, true, condition, document, key));
+
+	for (const operator of operators) {
+		if (operator === "$options") continue;
+		const expected = condition[operator];
+		if (operator === "$not") {
+			if (matchPathResult(result, expected, document, key)) return false;
+			continue;
+		}
+		const negative = operator === "$ne" || operator === "$nin";
+		const positive = operator === "$ne" ? "$eq" : operator === "$nin" ? "$in" : operator;
+		const predicate = { [positive]: expected };
+		if (operator === "$regex" && condition.$options) predicate.$options = condition.$options;
+		const matched = result.values.some(value => matchFieldValue(value, true, predicate, document, key));
+		if (negative ? matched : !matched) return false;
+	}
+	return true;
+}
+
 function queryData(data, query) {
-	if (!query) return true
-	if (query.$and) {
-		for (let i = 0; i < query.$and.length; i++) {
-			if (!queryData(data, query.$and[i])) return false;
+	if (query === undefined || query === null) return true;
+	if (Array.isArray(query)) return query.every(condition => queryData(data, condition));
+	if (typeof query !== "object") return false;
+
+	for (const [key, condition] of Object.entries(query)) {
+		if (key === "$and") {
+			if (!Array.isArray(condition) || !condition.every(part => queryData(data, part))) return false;
+		} else if (key === "$or") {
+			if (!Array.isArray(condition) || !condition.some(part => queryData(data, part))) return false;
+		} else if (key === "$nor") {
+			if (!Array.isArray(condition) || condition.some(part => queryData(data, part))) return false;
+		} else if (key === "$where") {
+			if (typeof condition !== "function" || !condition.call(data)) return false;
+		} else if (key.startsWith("$")) {
+			return false;
+		} else {
+			const result = pathResult(data, key);
+			if (!matchPathResult(result, condition, data, key)) return false;
 		}
 	}
-
-	if (query.$nor) {
-		for (let i = 0; i < query.$nor.length; i++) {
-			if (queryData(data, query.$nor[i])) return false;
-		}
-	}
-
-	for (let key of Object.keys(query)) {
-		if (key === "$and" || key === "$or") continue;
-		if (!queryMatch(data, { [key]: query[key] })) return false;
-	}
-
-	if (query.$or) {
-		for (let i = 0; i < query.$or.length; i++) {
-			if (queryData(data, query.$or[i])) return true;
-		}
-	}
-
 	return true;
 }
 
@@ -32753,6 +41422,33 @@ function sortData(data, sort) {
 		}
 		return 0;
 	});
+}
+
+
+/***/ },
+
+/***/ 4172
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   E: () => (/* binding */ addDistribution),
+/* harmony export */   f: () => (/* binding */ getDistribution)
+/* harmony export */ });
+/** Add recipients to a process-local distribution map. References never grant access. */
+function addDistribution(distribution, references, recipient) {
+    if (recipient === undefined || recipient === null) return
+    for (const reference of references ?? []) {
+        if (typeof reference !== 'string') continue
+        if (!distribution.has(reference)) distribution.set(reference, new Set())
+        distribution.get(reference).add(recipient)
+    }
+}
+
+function getDistribution(distribution, references) {
+    const recipients = new Set()
+    for (const reference of references ?? [])
+        for (const recipient of distribution?.get(reference) ?? []) recipients.add(recipient)
+    return recipients
 }
 
 
@@ -35941,6 +44637,13 @@ function convertValue(value, valueType = "") {
 
 let server;
 
+function errorHandler(data, error) {
+    if (!Array.isArray(data.error)) data.error = data.error === undefined ? [] : [data.error];
+    const errors = error?.errors ?? error?.message ?? error;
+    data.error.push(...(Array.isArray(errors) ? errors : [errors]));
+    return data;
+}
+
 function createTenantProxy(target, organization_id, host, allowOrganizationOverride = false) {
 	if (!target) return undefined;
 
@@ -36002,7 +44705,7 @@ function createSandbox(payload, workflowDefinition, workflowName, organization_i
 			}
 			const result = await execute(child);
 			if (throwOnError && result.error?.length) {
-				throw new Error(result.error.map(error => error?.message || String(error)).join('; '));
+				throw Object.assign(new Error('Child workflow failed.'), { errors: result.error });
 			}
 			return result;
 		}
@@ -36121,10 +44824,7 @@ async function execute(payload = {}) {
 		const sandbox = createSandbox(payload, workflowDefinition, workflowName, organization_id, host);
 		await executeWorkflowActions(workflowDefinition.actions, sandbox);
 	} catch (error) {
-		if (!Array.isArray(payload.error)) {
-			payload.error = payload.error ? [payload.error] : [];
-		}
-		payload.error.push(error?.message || String(error));
+		errorHandler(payload, error);
 	}
 
 	return payload;
@@ -36139,11 +44839,13 @@ async function execute(payload = {}) {
 async function run(payload = {}) {
 	await execute(payload);
 	try {
-		Promise.resolve(server.send(payload)).catch(error => {
-			console.error("[@cocreate/workflows] Response delivery failed:", error);
+		Promise.resolve(server.send(payload)).then(response => {
+			if (response?.error && response.error !== payload.error) errorHandler(payload, response.error);
+		}).catch(error => {
+			errorHandler(payload, error);
 		});
 	} catch (error) {
-		console.error("[@cocreate/workflows] Response delivery failed:", error);
+		errorHandler(payload, error);
 	}
 	return payload;
 }
@@ -37073,7 +45775,7 @@ function openCursor(
                     if (data.method == "object.create") {
                         data[type][i] = await add(objectStore, data[type][i]);
                     } else if (data.method == "object.update") {
-                        let update = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .createUpdate */ ._)(
+                        let update = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .createUpdate */ ._W)(
                             cursor && cursor.value ? cursor.value : {},
                             data[type][i],
                             globalOperators
@@ -37107,7 +45809,7 @@ function openCursor(
                         let result = cursor.value;
 
                         if (data.method == "object.update") {
-                            let update = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .createUpdate */ ._)(
+                            let update = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .createUpdate */ ._W)(
                                 cursor.value,
                                 data[type][i],
                                 globalOperators
@@ -37409,8 +46111,6 @@ async function boot() {
             // Dynamic imports for all worker processes
             // await import('@cocreate/notification');
 
-            const Organizations = await Promise.resolve(/* import() */).then(() => (__webpack_require__(3291)));
-            await Organizations.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
             const Users = await Promise.resolve(/* import() */).then(() => (__webpack_require__(6884)));
             await Users.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
 
