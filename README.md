@@ -1477,7 +1477,7 @@ For commercial licensing, enterprise support, integrations, or deployment inquir
 ## Resources
 
 - **CoCreateJS:** https://github.com/CoCreateJS/CoCreateJS
-- **CoCreateServer:** https://github.com/CoCreateJS/Server
+- **CoCreateServer:** https://github.com/CoCreateJS/server
 - **CoCreateClient:** https://github.com/CoCreateJS/Client
 - **CoCreateDB:** https://github.com/CoCreateJS/db
 - **GitHub Organization:** https://github.com/CoCreateJS

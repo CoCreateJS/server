@@ -23,13 +23,13 @@ jobs:
     runs-on: ${{ matrix.runner }}
     defaults:
       run:
-        working-directory: CoCreate-server
+        working-directory: server
     steps:
       - name: Checkout dev source and committed Server runtime
         uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
-          path: CoCreate-server
+          path: server
           fetch-depth: 0
 
       - name: Setup Node.js
@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: dev-linux-${{ matrix.aws_arch }}
-          path: CoCreate-server/dist/cocreate-server-node-linux-${{ matrix.aws_arch }}.tar.gz
+          path: server/dist/cocreate-server-node-linux-${{ matrix.aws_arch }}.tar.gz
           if-no-files-found: error
           retention-days: 1
 
