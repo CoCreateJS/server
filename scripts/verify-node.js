@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const directory = path.join(root, "dist/node");
-const storageSourceRoot = `${path.resolve(root, "../CoCreate-storages")}${path.sep}`;
+const storageSourceRoot = `${path.resolve(root, "../storages")}${path.sep}`;
 const packageManifest = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
 const { default: config } = await import(pathToFileURL(path.join(root, "CoCreate.config.js")));
 execFileSync(process.execPath, ["--check", path.join(directory, "index.js")]);

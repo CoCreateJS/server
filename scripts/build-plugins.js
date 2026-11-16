@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const configUrl = pathToFileURL(path.join(root, "CoCreate.config.js"));
 const { default: config } = await import(configUrl);
-const pluginRoot = path.resolve(root, "../CoCreate-plugins");
+const pluginRoot = path.resolve(root, "../plugins");
 const requestedPlugins = new Set(process.argv.slice(2));
 const builtPlugins = {};
 const plugins = Object.entries(config.plugins || {}).filter(([key, plugin]) =>
