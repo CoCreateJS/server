@@ -10101,7 +10101,7 @@ const x = (y) => {
 	const x = {}; __webpack_require__.d(x, y); return x
 } 
 const y = (x) => (() => (x))
-module.exports = x({ ["createCipheriv"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createCipheriv), ["createDecipheriv"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createDecipheriv), ["createHash"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createHash), ["createPrivateKey"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createPrivateKey), ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__["default"]), ["randomBytes"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.randomBytes), ["randomUUID"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.randomUUID), ["timingSafeEqual"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.timingSafeEqual) });
+module.exports = x({ ["createCipheriv"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createCipheriv), ["createDecipheriv"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createDecipheriv), ["createHash"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createHash), ["createPrivateKey"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createPrivateKey), ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__["default"]), ["randomBytes"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.randomBytes), ["randomUUID"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.randomUUID), ["webcrypto"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.webcrypto) });
 
 /***/ },
 
@@ -11436,9 +11436,9 @@ init();
 /* unused harmony exports init, send, webhook, makeHttpRequest, getApiConfig */
 /* harmony import */ var node_url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9061);
 /* harmony import */ var _cocreate_ast_server__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9165);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8307);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5999);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(717);
+/* harmony import */ var _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9874);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8307);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5999);
 /********************************************************************************
  * Copyright (C) 2023-2026 CoCreate and Contributors.
  *
@@ -11460,6 +11460,7 @@ init();
  * @file Core API Handler module for dynamic multi-tenant integrations, webhook routing, and AST macro pipeline execution.
  * @module @cocreate/api-handler
  */
+
 
 
 
@@ -11562,13 +11563,13 @@ function createSandbox(context) {
         response: context.response,
         header: context.request?.headers || context.header || {},
         searchParams: context.searchParams,
-        objectToSearchParams: _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .objectToSearchParams */ .Z,
-        searchParamsToObject: _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .searchParamsToObject */ .f,
+        objectToSearchParams: _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .objectToSearchParams */ .Z,
+        searchParamsToObject: _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__/* .searchParamsToObject */ .f,
         Buffer,
 
         crud: secureCrud,
         socket: secureSocket,
-        security: _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__/* .security */ .rG,
+        kms: _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_2__/* .kms */ .iv,
 
         key: context.key,
         config: context.config,
@@ -11598,7 +11599,7 @@ function createSandbox(context) {
         $header: sandbox.header,
         $crud: sandbox.crud,
         $socket: sandbox.socket,
-        $security: sandbox.security,
+        $kms: sandbox.kms,
         $config: sandbox.config,
         $api: sandbox.api
     });
@@ -11750,7 +11751,7 @@ async function send(data, parentContext = null) {
             url += request.endpoint.startsWith("/") ? request.endpoint : `/${request.endpoint}`;
         }
 
-        const searchParams = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .objectToSearchParams */ .Z)(request.searchParams);
+        const searchParams = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .objectToSearchParams */ .Z)(request.searchParams);
         url += searchParams && url.includes("?") ? `&${searchParams.slice(1)}` : searchParams;
 
         const resolvedHttpMethod = request.method?.trim().toUpperCase();
@@ -11766,7 +11767,7 @@ async function send(data, parentContext = null) {
         if (!["GET", "HEAD"].includes(resolvedHttpMethod) && request.data !== undefined) {
             if (typeof request.data === 'object' && request.data !== null) {
                 options.body = request.encoding === "form"
-                    ? (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .objectToSearchParams */ .Z)(request.data, false)
+                    ? (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .objectToSearchParams */ .Z)(request.data, false)
                     : JSON.stringify(request.data);
                 if (!options.headers["Content-Type"] && !options.headers["content-type"]) {
                     options.headers["Content-Type"] = "application/json; charset=utf-8";
@@ -11860,7 +11861,7 @@ async function webhook(req, res) {
         const context = {
             request: req,
             response: res,
-            searchParams: (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .searchParamsToObject */ .f)(urlObject.searchParams),
+            searchParams: (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_4__/* .searchParamsToObject */ .f)(urlObject.searchParams),
             host: hostname,
             organization,
             organization_id: organization._id,
@@ -14136,7 +14137,7 @@ async function astAsync(options) {
 /* unused harmony export serverModules */
 /* harmony import */ var node_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7721);
 /* harmony import */ var node_buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1786);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(717);
+/* harmony import */ var _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9874);
 
 
 
@@ -14191,7 +14192,7 @@ const serverModules = [
 const serverGlobalsScope = {
     $global: globalThis, // Node global object; also available as shared $globalThis.
     $Buffer: node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer, // Native binary buffer constructor.
-    $security: _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .security */ .rG, // Existing CoCreate security helpers.
+    $kms: _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_2__/* .kms */ .iv, // Cryptographic and key-management helpers.
     $setImmediate: globalThis.setImmediate, // Schedule a callback for the check phase.
     $clearImmediate: globalThis.clearImmediate // Cancel a scheduled immediate callback.
 };
@@ -14469,7 +14470,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ 9743
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(717);
+/* harmony import */ var _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9874);
 /********************************************************************************
  * Copyright (C) 2023-2026 CoCreate and Contributors.
  *
@@ -14516,14 +14517,14 @@ function init(serverInstance) {
  * @environment server
  */
 function createKeyPair() {
-    // Utilize security.generateKeyPair utility with RSA configuration
-    const { publicKey, privateKey } = _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .security */ .rG.generateKeyPair('rsa', {
+    // Utilize kms.generateKeyPair utility with RSA configuration
+    const { publicKey, privateKey } = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_0__/* .kms */ .iv.generateKeyPair('rsa', {
         modulusLength: 2048
     });
 
     const created = Date.now();
     const keyPair = {
-        _id: _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .security */ .rG.generateApiKey({ prefix: '', byteLength: 16, encoding: 'hex' }).secret,
+        _id: _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_0__/* .kms */ .iv.generateApiKey({ prefix: '', byteLength: 16, encoding: 'hex' }).secret,
         privateKey,
         publicKey,
         created,
@@ -14566,7 +14567,7 @@ function sanitizeToken(token) {
 
 /**
  * Creates and signs a new token utilizing the latest available RSA key pair.
- * Generates an RS256 JWT using security.generateJWT.
+ * Generates an RS256 JWT using kms.generateJWT.
  * @public
  * @environment server
  */
@@ -14605,8 +14606,8 @@ function encodeToken(organization_id, user_id, clientId, host) {
         exp
     };
 
-    // Offload JWT creation and cryptographic signing to security utility
-    const token = _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .security */ .rG.generateJWT({ header, payload }, keyPair.privateKey, 'RS256');
+    // Offload JWT creation and cryptographic signing to KMS helpers.
+    const token = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_0__/* .kms */ .iv.generateJWT({ header, payload }, keyPair.privateKey, 'RS256');
 
     const session = {
         user_id,
@@ -14683,8 +14684,8 @@ async function decodeToken(tokenRaw, organization_id, clientId, host) {
     if (parts.length !== 3) return {};
 
     const [headerB64, payloadB64] = parts;
-    const header = _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .security */ .rG.base64urlDecode(headerB64);
-    const payload = _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .security */ .rG.base64urlDecode(payloadB64);
+    const header = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_0__/* .kms */ .iv.base64urlDecode(headerB64);
+    const payload = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_0__/* .kms */ .iv.base64urlDecode(payloadB64);
 
     if (!header || !payload) return {};
     const isPlatformOrganization = organization_id === server?.organization_id;
@@ -14704,11 +14705,11 @@ async function decodeToken(tokenRaw, organization_id, clientId, host) {
         return {};
     }
 
-    // 2. Core Security Check: Identify active signing keys using Key ID (kid) and verify via security engine
+    // 2. Verify against the active KMS signing key identified by the token's key ID.
     const keyPair = keyPairs.get(header.kid);
     let verifiedPayload;
     if (keyPair) {
-        verifiedPayload = _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .security */ .rG.verifyJWT(token, keyPair.publicKey, 'RS256');
+        verifiedPayload = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_0__/* .kms */ .iv.verifyJWT(token, keyPair.publicKey, 'RS256');
         if (!verifiedPayload) {
             console.warn(`[SECURITY WARNING] Blocked forged token attempt on clientId: ${clientId || payload.clientId}`);
             return {};
@@ -17711,6 +17712,14 @@ async function handleRequest(server, req, res) {
             }
         }
 
+        // OAuth protocol paths are reserved and dispatched before user routes.
+        if (server.oauth?.isReservedPath(reqPath)) {
+            const handler = server.oauth.handlerFor(reqPath);
+            if (!handler) return sendJson(res, 404, { error: 'not_found' });
+            await handler(req, res);
+            if (res.writableEnded || res.headersSent) return;
+        }
+
         // Match registered exact or wildcard routes first.
         let handler = server.routes.get(reqPath);
 
@@ -17920,8 +17929,9 @@ function sendJson(res, status, body, headers = {}) {
 /* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(4711);
 /* harmony import */ var _cocreate_log__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(1691);
 /* harmony import */ var _apikey_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(2995);
-/* harmony import */ var _repository_index_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(3207);
-/* harmony import */ var _workers_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(853);
+/* harmony import */ var _oauth_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(3601);
+/* harmony import */ var _repository_index_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(3207);
+/* harmony import */ var _workers_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(853);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -17939,6 +17949,7 @@ function sendJson(res, status, body, headers = {}) {
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
  ********************************************************************************/
+
 
 
 
@@ -17980,7 +17991,7 @@ class CoCreateServer {
         this.routes = new Map();
 
         // The local worker collection also owns its process lifecycle.
-        this.workers = new _workers_js__WEBPACK_IMPORTED_MODULE_15__/* ["default"] */ .A(this);
+        this.workers = new _workers_js__WEBPACK_IMPORTED_MODULE_16__/* ["default"] */ .A(this);
         this.cluster = _mesh_index_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .Ay;
 
         // Directly bind cluster instance properties to parent server instance
@@ -18106,7 +18117,7 @@ class CoCreateServer {
                 console.warn('[@cocreate/cluster] Could not update the worker profile:', workerResponse.error);
             await this.state.save('running');
 
-            this.repository = await _repository_index_js__WEBPACK_IMPORTED_MODULE_14__/* ["default"].init */ .A.init(this);
+            this.repository = await _repository_index_js__WEBPACK_IMPORTED_MODULE_15__/* ["default"].init */ .A.init(this);
 
             if (await this.workers.setupMasterCluster()) {
                 return this;
@@ -18139,6 +18150,7 @@ class CoCreateServer {
                 this.deployment.location = await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .getClientInfo */ .m4)(this.id);
             }
 
+            this.oauth = await _oauth_js__WEBPACK_IMPORTED_MODULE_14__/* ["default"].init */ .A.init(this);
             await _http_js__WEBPACK_IMPORTED_MODULE_8__/* ["default"] */ .A.init(this);
 
             // Publish worker active running state object to DB upon creation/startup
@@ -19722,6 +19734,347 @@ class ServerMeshOutbound {
         this.pruneTimers.clear();
     }
 }
+
+
+/***/ },
+
+/***/ 3601
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* unused harmony export init */
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2561);
+/********************************************************************************
+ * Copyright (C) 2026 CoCreate and Contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ ********************************************************************************/
+
+
+
+const WELL_KNOWN_AUTHORIZATION_SERVER = '/.well-known/oauth-authorization-server';
+const WELL_KNOWN_PROTECTED_RESOURCE = '/.well-known/oauth-protected-resource';
+const MAX_BODY_SIZE = 32 * 1024;
+const TOKEN_ARRAY = 'oauth';
+const hash = value => (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.createHash)('sha256').update(value).digest('hex');
+
+const workflowRoutes = new Map([
+    ['/oauth/register', 'register'],
+    ['/oauth/authorize', 'authorize'],
+    ['/oauth/request', 'request'],
+    ['/oauth/decision', 'decision'],
+    ['/oauth/token', 'token'],
+    ['/oauth/revoke', 'revoke']
+]);
+
+function sendJson(res, status, body, headers = {}) {
+    if (res.writableEnded) return;
+    res.writeHead(status, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+        Pragma: 'no-cache',
+        ...headers
+    });
+    res.end(JSON.stringify(body));
+}
+
+function originFor(req) {
+    const host = req.headers.host;
+    if (!host) throw new Error('The request Host header is required.');
+    return new URL(`https://${host}`).origin;
+}
+
+function cookieToken(req) {
+    const match = String(req.headers.cookie || '').match(/(?:^|;\s*)token=([^;]+)/);
+    if (!match) return '';
+    try { return decodeURIComponent(match[1]); }
+    catch { return ''; }
+}
+
+function resourceFor(req, origin) {
+    const prefix = `${WELL_KNOWN_PROTECTED_RESOURCE}/`;
+    const pathname = (req.url || '/').split('?')[0];
+    const resourcePath = pathname.startsWith(prefix)
+        ? pathname.slice(prefix.length)
+        : '';
+    return new URL(resourcePath ? `/${resourcePath}` : '/', origin).toString();
+}
+
+function uniqueParameters(searchParams, label) {
+    const result = {};
+    for (const [key, value] of searchParams) {
+        if (Object.hasOwn(result, key)) {
+            throw Object.assign(new Error(`OAuth ${label} parameter '${key}' must not be repeated.`), { status: 400 });
+        }
+        result[key] = value;
+    }
+    return result;
+}
+
+async function readBody(req) {
+    const chunks = [];
+    let size = 0;
+    for await (const chunk of req) {
+        size += chunk.length;
+        if (size > MAX_BODY_SIZE) throw Object.assign(new Error('OAuth request body is too large.'), { status: 413 });
+        chunks.push(chunk);
+    }
+
+    const text = Buffer.concat(chunks).toString('utf8');
+    const contentType = String(req.headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+    if (!text) return {};
+    if (contentType === 'application/json') {
+        try {
+            const value = JSON.parse(text);
+            if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error();
+            return value;
+        } catch {
+            throw Object.assign(new Error('OAuth request body must be a JSON object.'), { status: 400 });
+        }
+    }
+    if (contentType === 'application/x-www-form-urlencoded') {
+        return uniqueParameters(new URLSearchParams(text), 'body');
+    }
+    throw Object.assign(new Error('Unsupported OAuth request content type.'), { status: 415 });
+}
+
+async function requestFor(req) {
+    const url = new URL(req.url || '/', `https://${req.headers.host}`);
+    const body = ['POST', 'PUT', 'PATCH'].includes(req.method) ? await readBody(req) : {};
+    return {
+        method: req.method,
+        url: url.toString(),
+        path: url.pathname,
+        query: uniqueParameters(url.searchParams, 'query'),
+        headers: {
+            origin: req.headers.origin,
+            contentType: req.headers['content-type'],
+            accept: req.headers.accept
+        },
+        body
+    };
+}
+
+function sendWorkflowResponse(res, result) {
+    const response = result?.httpResponse;
+    if (!response || !Number.isInteger(response.status) || response.status < 100 || response.status > 599) {
+        return sendJson(res, 500, { error: 'OAuth workflow returned no valid httpResponse.' });
+    }
+
+    const headers = response.headers && typeof response.headers === 'object' ? response.headers : {};
+    if (response.body !== undefined && response.body !== null &&
+        typeof response.body !== 'string' && !Buffer.isBuffer(response.body) &&
+        !headers['Content-Type'] && !headers['content-type']) {
+        headers['Content-Type'] = 'application/json; charset=utf-8';
+    }
+    res.writeHead(response.status, { 'Cache-Control': 'no-store', ...headers });
+    if (response.body === undefined || response.body === null) return res.end();
+    if (typeof response.body === 'string' || Buffer.isBuffer(response.body)) return res.end(response.body);
+    return res.end(JSON.stringify(response.body));
+}
+
+/**
+ * Registers CoCreate's fixed OAuth protocol routes on the server instance.
+ * Protocol callbacks normalize HTTP into named workflow envelopes. Workflows
+ * set `payload.httpResponse` for the adapter to write to the client.
+ * @param {object} server - Initialized CoCreate server context.
+ * @returns {{ close: Function }} OAuth route controls.
+ * @public
+ * @environment server
+ */
+function init(server) {
+    if (!server?.routes || typeof server.routes.set !== 'function') {
+        throw new TypeError('CoCreate OAuth requires the server route registry.');
+    }
+    if (!server.workflow || typeof server.workflow.run !== 'function') {
+        throw new TypeError('CoCreate OAuth requires the server workflow service.');
+    }
+
+    const routes = new Map();
+    const route = (path, handler) => {
+        // OAuth owns these fixed protocol paths.
+        routes.set(path, handler);
+        server.routes.set(path, handler);
+    };
+
+    const metadata = async (req, res) => {
+        if (req.method !== 'GET' && req.method !== 'HEAD') {
+            return sendJson(res, 405, { error: 'method_not_allowed' }, { Allow: 'GET, HEAD' });
+        }
+        try {
+            const issuer = originFor(req);
+            const body = {
+                issuer,
+                authorization_endpoint: new URL('/oauth/authorize', issuer).toString(),
+                token_endpoint: new URL('/oauth/token', issuer).toString(),
+                registration_endpoint: new URL('/oauth/register', issuer).toString(),
+                revocation_endpoint: new URL('/oauth/revoke', issuer).toString(),
+                response_types_supported: ['code'],
+                grant_types_supported: ['authorization_code', 'refresh_token'],
+                code_challenge_methods_supported: ['S256'],
+                token_endpoint_auth_methods_supported: ['none'],
+                revocation_endpoint_auth_methods_supported: ['none']
+            };
+            if (req.method === 'HEAD') {
+                res.writeHead(200, {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Cache-Control': 'no-store',
+                    Pragma: 'no-cache'
+                });
+                return res.end();
+            }
+            return sendJson(res, 200, body);
+        } catch (error) {
+            return sendJson(res, 400, { error: 'invalid_request', error_description: error.message });
+        }
+    };
+
+    const protectedResourceMetadata = async (req, res) => {
+        if (req.method !== 'GET' && req.method !== 'HEAD') {
+            return sendJson(res, 405, { error: 'method_not_allowed' }, { Allow: 'GET, HEAD' });
+        }
+        const pathname = (req.url || '/').split('?')[0];
+        if (pathname !== WELL_KNOWN_PROTECTED_RESOURCE &&
+            !pathname.startsWith(`${WELL_KNOWN_PROTECTED_RESOURCE}/`)) {
+            return sendJson(res, 404, { error: 'not_found' });
+        }
+        try {
+            const issuer = originFor(req);
+            const body = {
+                resource: resourceFor(req, issuer),
+                authorization_servers: [issuer],
+                bearer_methods_supported: ['header']
+            };
+            if (req.method === 'HEAD') {
+                res.writeHead(200, {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Cache-Control': 'no-store',
+                    Pragma: 'no-cache'
+                });
+                return res.end();
+            }
+            return sendJson(res, 200, body);
+        } catch (error) {
+            return sendJson(res, 400, { error: 'invalid_request', error_description: error.message });
+        }
+    };
+
+    const authenticate = async (req, { resource, scope } = {}) => {
+        const bearer = req.headers.authorization?.match(/^Bearer\s+(\S+)$/i)?.[1];
+        if (!bearer) return null;
+
+        const host = new URL(`https://${req.headers.host || ''}`).hostname;
+        const organization = await server.crud.getOrganization({ host });
+        if (!organization?._id || organization.error) return null;
+        const result = await server.crud.send({
+            method: 'object.read',
+            array: TOKEN_ARRAY,
+            organization_id: organization._id,
+            host,
+            filter: { query: { type: 'token', token_hash: hash(bearer) }, limit: 1 }
+        });
+        const errors = Array.isArray(result?.error) ? result.error.length : Boolean(result?.error);
+        if (!result || result.success === false || errors) {
+            throw Object.assign(new Error('OAuth token lookup failed.'), { status: 503 });
+        }
+
+        const token = result.object?.[0];
+        const requestedScopes = Array.isArray(scope) ? scope : scope ? [scope] : [];
+        if (!token || !token.user_id || token.expires_at <= Date.now() ||
+            (resource && token.resource !== resource) ||
+            requestedScopes.some(value => !token.scope?.includes(value))) return null;
+
+        return {
+            organization_id: organization._id,
+            host,
+            user_id: token.user_id,
+            oauth: true,
+            scope: token.scope || []
+        };
+    };
+
+    const workflowHandler = name => async (req, res) => {
+        try {
+            const host = new URL(`https://${req.headers.host}`).hostname;
+            const organization = await server.crud.getOrganization({ host });
+            if (!organization?._id || organization.error) {
+                return sendJson(res, 404, { error: 'Organization not found for this host.' });
+            }
+
+            const request = await requestFor(req);
+            let user_id;
+            if (name === 'decision' && request.body.approved === true) {
+                const sessionToken = cookieToken(req);
+                if (sessionToken && server.authenticate?.decodeToken) {
+                    const session = await server.authenticate.decodeToken(
+                        sessionToken, organization._id, undefined, host
+                    );
+                    if (session?.expires > Date.now()) user_id = session.user_id;
+                }
+            }
+            const payload = {
+                method: `workflow.oauth.${name}`,
+                [`oauth.${name}`]: { request },
+                organization_id: organization._id,
+                host,
+                ...(user_id && { user_id })
+            };
+            const result = await server.workflow.run(payload);
+            if (result?.error?.length || result?.success === false) {
+                return sendJson(res, 400, { error: 'invalid_request', error_description: result.error });
+            }
+            return sendWorkflowResponse(res, result);
+        } catch (error) {
+            return sendJson(res, error.status || 500, {
+                error: error.status === 400 ? 'invalid_request' : 'server_error',
+                error_description: error.message
+            });
+        }
+    };
+
+    const unknownEndpoint = async (_req, res) => sendJson(res, 404, { error: 'not_found' });
+
+    route(WELL_KNOWN_AUTHORIZATION_SERVER, metadata);
+    route(WELL_KNOWN_PROTECTED_RESOURCE, protectedResourceMetadata);
+    route(`${WELL_KNOWN_PROTECTED_RESOURCE}*`, protectedResourceMetadata);
+    for (const [path, name] of workflowRoutes) route(path, workflowHandler(name));
+    route('/oauth/*', unknownEndpoint);
+
+    server.oauth = {
+        routes: [...routes.keys()],
+        authenticate,
+        isReservedPath(path) {
+            return path === WELL_KNOWN_AUTHORIZATION_SERVER ||
+                path === WELL_KNOWN_PROTECTED_RESOURCE ||
+                path.startsWith(`${WELL_KNOWN_PROTECTED_RESOURCE}/`) ||
+                path.startsWith('/oauth/');
+        },
+        handlerFor(path) {
+            const exact = routes.get(path);
+            if (exact) return exact;
+            for (const [routePath, handler] of routes) {
+                if (routePath.endsWith('*') && path.startsWith(routePath.slice(0, -1))) return handler;
+            }
+            return null;
+        },
+        close() {
+            for (const [path, handler] of routes) {
+                if (server.routes.get(path) === handler) server.routes.delete(path);
+            }
+            if (server.oauth === this) delete server.oauth;
+        }
+    };
+
+    return server.oauth;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ init });
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "A", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ ]);
 
 
 /***/ },
@@ -30757,6 +31110,8 @@ const KEY_BYTES = 32;
 const IV_BYTES = 12;
 const DEFAULT_ROTATION_DELAY = 60_000;
 const MAX_TIMER_DELAY = 2_147_000_000;
+const instances = new WeakMap();
+const KEY_ARRAY = 'keys';
 
 const error = message => new Error(`[CoCreateKMS] ${message}`);
 const asId = value => {
@@ -30784,15 +31139,17 @@ function tenantContext(input, server) {
     const entries = Array.isArray(scopes) ? scopes : [scopes];
     const scopedOrganization = entries.find(scope => scope && typeof scope === 'object' && scope.organization_id)?.organization_id;
     const scopedHost = entries.find(scope => scope && typeof scope === 'object' && scope.host)?.host;
-    const organization_id = input.organization_id ?? scopedOrganization ?? server.organization_id;
-    const host = input.host ?? scopedHost ?? server.host;
-    if (organization_id != null) asId(organization_id);
-    return { organization_id, host, scopes };
+    const organization_id = input.organization_id ?? scopedOrganization;
+    const host = input.host ?? scopedHost;
+    if (!organization_id || !host) throw error('organization_id and host are required for every managed key operation.');
+    asId(organization_id);
+    if (typeof host !== 'string' || !host.trim()) throw error('host must be a non-empty hostname.');
+    return { organization_id: asId(organization_id), host: host.toLowerCase(), scopes };
 }
 
 function scopeKey(input, server) {
     const { organization_id, host, scopes } = tenantContext(input, server);
-    return json({ organization_id, host, scopes });
+    return json({ organization_id, host });
 }
 
 function validateRecord(record) {
@@ -30859,6 +31216,9 @@ function decryptBytes(envelope, key, aad) {
 
 /** Initialize KMS on a CoCreate server. No storage work runs until an API method is called. */
 function init(server) {
+    if (!server || (typeof server !== 'object' && typeof server !== 'function'))
+        throw error('init(server) requires a server context object.');
+    if (instances.has(server)) return instances.get(server);
     const keys = new Map();
     const keyScopes = new Map();
     const keyOrganizations = new Map();
@@ -30866,7 +31226,42 @@ function init(server) {
     const activationTimers = new Map();
     const rotationLocks = new Map();
     let closed = false;
-    const configuredWorkflows = server.kmsConfig?.workflows ?? {};
+
+    async function crud(input, method, fields = {}) {
+        if (typeof server.crud?.send !== 'function') throw error('server.crud.send is required for managed key operations.');
+        const { organization_id, host } = tenantContext(input, server);
+        const response = await server.crud.send({
+            method,
+            organization_id,
+            host,
+            database: 'app',
+            array: KEY_ARRAY,
+            ...fields
+        });
+        const errors = Array.isArray(response?.error) ? response.error : response?.error ? [response.error] : [];
+        if (response?.success === false || errors.length)
+            throw error(errors.map(item => item?.message ?? item).join('; ') || `${method} failed.`);
+        return response;
+    }
+
+    async function createKey(key, input = {}) {
+        return crud(input, 'object.create', { object: structuredClone(key) });
+    }
+
+    async function saveKey(key, input = {}) {
+        const response = await crud(input, 'object.update', {
+            upsert: true,
+            object: structuredClone(key)
+        });
+        return response;
+    }
+
+    async function findKeys(input, query) {
+        const response = await crud(input, 'object.read', {
+            filter: { query, limit: 0 }
+        });
+        return Array.isArray(response?.object) ? response.object : [];
+    }
 
     async function authorize(input, action, keyId) {
         if (!(input.user_id || input.apikey)) return;
@@ -30883,40 +31278,8 @@ function init(server) {
         }, input.user_id);
     }
 
-    async function runWorkflow(name, data, input = {}, action = 'workflow') {
-        if (!name) return null;
-        if (typeof server.workflow?.run !== 'function')
-            throw error(`Workflow "${name}" is configured for ${action}, but the workflow service is unavailable.`);
-        const { organization_id, host } = tenantContext(input, server);
-        if (!organization_id || !host)
-            throw error(`Organization and host scope are required to run the ${action} workflow.`);
-        await authorize(input, action, data?.key?._id ?? data?._id ?? data?.query?._id ?? data?.query?.key);
-        const result = await server.workflow.run({
-            method: `workflow.${name}`,
-            organization_id,
-            host,
-            data
-        });
-        const output = result?.data ?? result;
-        const errors = [result?.error, output?.error].flatMap(value => Array.isArray(value) ? value : value ? [value] : []);
-        if (result?.success === false || output?.success === false || errors.length)
-            throw error(errors.map(item => item?.message ?? item).join('; ') || `Workflow "${name}" failed.`);
-        return output;
-    }
-
-    async function persistKey(key, event, scopes, input = {}) {
-        const workflow = configuredWorkflows.store;
-        if (!workflow) return false;
-        await runWorkflow(workflow, {
-            event,
-            key: structuredClone(key),
-            scopes: structuredClone(scopes ?? null)
-        }, { ...input, scopes }, 'store');
-        return true;
-    }
-
     function normalizeKey(key, context) {
-        if (!key || typeof key !== 'object') throw error('The fetch workflow must return a key document.');
+        if (!key || typeof key !== 'object') throw error('CRUD must return a key document.');
         const record = { ...key };
         if (record.type !== TYPE) throw error(`Fetched key must have type "${TYPE}".`);
         if (Buffer.isBuffer(record.keyMaterial) || record.keyMaterial instanceof Uint8Array) {
@@ -30930,20 +31293,15 @@ function init(server) {
         const validKeyMaterial = keyMaterial.length === KEY_BYTES;
         keyMaterial.fill(0);
         if (!validKeyMaterial)
-            throw error('The fetch workflow must return 32-byte key material as a Buffer or base64url string.');
+            throw error('CRUD must return 32-byte key material as a Buffer or base64url string.');
         record.organization_id ??= context.organization_id;
         validateRecord(record);
         return record;
     }
 
     async function fetchKey(input, query) {
-        const workflow = configuredWorkflows.fetch;
-        if (!workflow) return null;
-        const data = await runWorkflow(workflow, {
-            query,
-            scopes: structuredClone(input.scopes ?? null)
-        }, input, 'fetch');
-        return Object.hasOwn(query, '_id') ? data?.key ?? null : data?.keys ?? [];
+        const records = await findKeys(input, { type: TYPE, ...query });
+        return Object.hasOwn(query, '_id') ? records[0] ?? null : records;
     }
 
     function set({ key, scopes, organization_id, host } = {}) {
@@ -30955,7 +31313,7 @@ function init(server) {
         context.organization_id ??= key.organization_id ? asId(key.organization_id) : undefined;
         const record = normalizeKey(key, context);
         keys.set(id, record);
-        keyScopes.set(id, json(context));
+        keyScopes.set(id, scopeKey(context, server));
         keyOrganizations.set(id, context.organization_id);
         return publicKey(record);
     }
@@ -30964,15 +31322,15 @@ function init(server) {
         const id = asId(_id);
         const input = { scopes, ...contextFields };
         const context = tenantContext(input, server);
+        await authorize(input, 'get', id);
         const cached = keys.get(id);
         if (cached && keyScopes.get(id) === scopeKey(input, server)) {
-            await authorize(input, 'get', id);
             return cached;
         }
         const fetched = await fetchKey(input, { _id: id });
         if (!fetched) return null;
         const record = normalizeKey(fetched, context);
-        if (idOf(record) !== id) throw error('The fetch workflow returned a different key ObjectId than requested.');
+        if (idOf(record) !== id) throw error('CRUD returned a different key ObjectId than requested.');
         set({ key: record, scopes, organization_id: context.organization_id, host: context.host });
         return record;
     }
@@ -31009,8 +31367,9 @@ function init(server) {
         const interval = Number(key.rotation?.interval);
         if (closed || !Number.isFinite(interval) || interval <= 0) return;
         if (['destroyed', 'deleted', 'revoked', 'expired'].includes(lifecycle(key)) || key.verification?.status === 'failed') return;
+        const tenant = tenantContext({ scopes, organization_id: key.organization_id, host }, server);
         const rootId = key.key ?? key._id;
-        const lockId = `${scopeKey({ scopes, organization_id: key.organization_id, host }, server)}:${asId(rootId)}`;
+        const lockId = `${scopeKey(tenant, server)}:${asId(rootId)}`;
         clearTimeout(rotationTimers.get(lockId));
         const createdAt = Date.parse(key.created?.on ?? Date.now());
         const activationAt = Date.parse(key.activates?.on ?? Date.now());
@@ -31029,13 +31388,13 @@ function init(server) {
                 return;
             }
             try {
-                await rotate({ scopes, host, _id: rootId, automatic: true });
+                await rotate({ ...tenant, _id: rootId, automatic: true });
             } catch {
                 const retry = setTimeout(async () => {
                     rotationTimers.delete(lockId);
                     if (closed) return;
                     try {
-                        await rotate({ scopes, host, _id: rootId, automatic: true });
+                        await rotate({ ...tenant, _id: rootId, automatic: true });
                     } catch {
                         scheduleRotation(key, scopes, host);
                     }
@@ -31050,7 +31409,8 @@ function init(server) {
 
     function scheduleActivation(key, scopes, host) {
         if (closed || !key.verification?.required || key.verification.status === 'verified') return;
-        const timerId = `${scopeKey({ scopes, organization_id: key.organization_id, host }, server)}:${asId(key._id)}`;
+        const tenant = tenantContext({ scopes, organization_id: key.organization_id, host }, server);
+        const timerId = `${scopeKey(tenant, server)}:${asId(key._id)}`;
         clearTimeout(activationTimers.get(timerId));
         const activatesAt = Date.parse(key.activates?.on ?? Date.now());
         const dueAt = Number.isFinite(activatesAt) ? activatesAt : Date.now();
@@ -31062,9 +31422,9 @@ function init(server) {
             const current = keys.get(asId(key._id)) ?? key;
             let verification;
             try {
-                verification = await verifyAvailability({ scopes }, current, current.verification);
+                verification = await verifyAvailability(tenant, current, current.verification);
             } catch {
-                scheduleActivation(current, scopes, host);
+                scheduleActivation(current, tenant.scopes, tenant.host);
                 return;
             }
             if (verification.status === 'verified') {
@@ -31074,18 +31434,18 @@ function init(server) {
                     status: Date.now() >= dueAt ? 'active' : 'pending'
                 };
                 try {
-                    await persistKey(updated, 'key.activated', scopes);
+                    await saveKey(updated, tenant);
                 } catch {
-                    scheduleActivation(current, scopes, host);
+                    scheduleActivation(current, tenant.scopes, tenant.host);
                     return;
                 }
                 set({ key: updated, scopes, organization_id: updated.organization_id, host });
-                scheduleRotation(updated, scopes, host);
+                scheduleRotation(updated, tenant.scopes, tenant.host);
                 return;
             }
             const timeoutAt = Number(current.verification.timeoutAt);
             if (!Number.isFinite(timeoutAt) || Date.now() < timeoutAt) {
-                scheduleActivation(current, scopes, host);
+                scheduleActivation(current, tenant.scopes, tenant.host);
                 return;
             }
             const updated = {
@@ -31094,9 +31454,9 @@ function init(server) {
                 status: 'pending'
             };
             try {
-                await persistKey(updated, 'key.verification-failed', scopes);
+                await saveKey(updated, tenant);
             } catch {
-                scheduleActivation(current, scopes, host);
+                scheduleActivation(current, tenant.scopes, tenant.host);
                 return;
             }
             set({ key: updated, scopes, organization_id: updated.organization_id, host });
@@ -31151,7 +31511,7 @@ function init(server) {
             const status = idOf(record) === idOf(active[0]) ? 'active' : 'historical';
             if (record.status !== status) {
                 const updated = { ...record, status };
-                await persistKey(updated, 'key.status-changed', input.scopes, input);
+                await saveKey(updated, input);
                 set({ key: updated, scopes: input.scopes, organization_id: input.organization_id, host: input.host });
                 if (idOf(record) === idOf(selected)) selected = updated;
             }
@@ -31161,35 +31521,18 @@ function init(server) {
 
     async function verifyAvailability(input, key, verify) {
         if (!verify || verify === false) return { required: false, status: 'not-required' };
-        const config = typeof verify === 'string' ? { workflow: verify } : verify === true ? {} : verify;
-        const workflow = config.workflow ?? configuredWorkflows.verify;
-        if (!workflow)
-            return {
-                required: true, workflow, status: 'pending',
-                timeoutAt: Number(config.timeoutAt) || Date.now() + (Number(config.timeout) || 300_000),
-                retryInterval: Number(config.retryInterval) || 5_000
-            };
-        let result;
-        try {
-            result = await runWorkflow(workflow, {
-                key: { _id: key._id, version: key.version, key: key.key },
-                scopes: structuredClone(input.scopes ?? null)
-            }, input, 'verify');
-        } catch {
-            result = null;
-        }
+        const verifyKey = typeof verify === 'function' ? verify : server.kmsConfig?.verify;
+        if (typeof verifyKey !== 'function') throw error('Key verification requires a verification callback.');
+        const result = await verifyKey({ key: publicKey(key), ...tenantContext(input, server) });
         const expectedKey = asId(key._id);
         const resultKey = result?.key?._id ?? result?.key;
         const resultVersion = result?.version ?? result?.key?.version;
         const wrongKey = resultKey !== undefined && String(resultKey) !== expectedKey;
         const wrongVersion = resultVersion !== undefined && Number(resultVersion) !== Number(key.version);
-        if (result?.error?.length || result?.success === false || result?.verified !== true || wrongKey || wrongVersion)
-            return {
-                required: true, workflow, status: 'pending',
-                timeoutAt: Number(config.timeoutAt) || Date.now() + (Number(config.timeout) || 300_000),
-                retryInterval: Number(config.retryInterval) || 5_000
-            };
-        return { required: true, workflow, status: 'verified', verified: { on: new Date().toISOString() } };
+        if (result === false || result?.error || result?.success === false ||
+            (result !== true && result?.verified !== true) || wrongKey || wrongVersion)
+            throw error('Key verification callback did not verify the requested key version.');
+        return { required: true, status: 'verified', verified: { on: new Date().toISOString() } };
     }
 
     async function rotate(input = {}) {
@@ -31223,9 +31566,9 @@ function init(server) {
                 organization_id: tenantContext(input, server).organization_id,
                 type: TYPE
             };
-            await persistKey(key, 'key.rotated', input.scopes, input);
+            await createKey(key, input);
             key.verification = await verifyAvailability(input, key, input.verify ?? latest.rotation?.verify);
-            if (key.verification.required) await persistKey(key, 'key.verification-pending', input.scopes, input);
+            if (key.verification.required) await saveKey(key, input);
             set({ key, scopes: input.scopes, organization_id: input.organization_id, host: input.host });
             scheduleActivation(key, input.scopes, input.host);
             scheduleRotation(key, input.scopes, input.host);
@@ -31264,10 +31607,10 @@ function init(server) {
             deleted: { on: null, by: null },
             organization_id: context.organization_id
         };
-        await persistKey(key, 'key.generated', input.scopes, input);
+        await createKey(key, input);
         const saved = key;
         saved.verification = await verifyAvailability(input, saved, input.verify ?? input.rotation?.verify);
-        if (saved.verification.required) await persistKey(saved, 'key.verification-pending', input.scopes, input);
+        if (saved.verification.required) await saveKey(saved, input);
         set({ key: saved, scopes: input.scopes, organization_id: input.organization_id, host: input.host });
         scheduleActivation(saved, input.scopes, input.host);
         scheduleRotation(saved, input.scopes, input.host);
@@ -31354,7 +31697,7 @@ function init(server) {
         if (!key) throw error('Key not found.');
         await authorize(input, 'revoke', key._id);
         const updated = { ...key, revoked: { on: new Date().toISOString(), by: input.user_id ?? input.by ?? null }, status: 'revoked' };
-        await persistKey(updated, 'key.revoked', input.scopes, input);
+        await saveKey(updated, input);
         set({ key: updated, scopes: input.scopes, organization_id: input.organization_id, host: input.host });
         return publicKey(updated);
     }
@@ -31364,7 +31707,7 @@ function init(server) {
         if (!key) throw error('Key not found.');
         await authorize(input, 'setExpiration', key._id);
         const updated = { ...key, expires: { ...key.expires, on: dateValue(input.on, 'expires.on') } };
-        await persistKey(updated, 'key.expiration-changed', input.scopes, input);
+        await saveKey(updated, input);
         set({ key: updated, scopes: input.scopes, organization_id: input.organization_id, host: input.host });
         return publicKey(updated);
     }
@@ -31374,7 +31717,7 @@ function init(server) {
         if (!key) throw error('Key not found.');
         await authorize(input, 'delete', key._id);
         const updated = { ...key, deleted: { on: new Date().toISOString(), by: input.user_id ?? input.by ?? null }, status: 'deleted' };
-        await persistKey(updated, 'key.deleted', input.scopes, input);
+        await saveKey(updated, input);
         keys.delete(asId(key._id));
         keyScopes.delete(asId(key._id));
         keyOrganizations.delete(asId(key._id));
@@ -31388,7 +31731,7 @@ function init(server) {
         if (input.confirm !== asId(key._id) || input.dependenciesCleared !== true)
             throw error('destroy requires confirm equal to the key ObjectId and dependenciesCleared: true.');
         const destroyed = { ...key, keyMaterial: null, destroyed: true, status: 'destroyed' };
-        await persistKey(destroyed, 'key.destroyed', input.scopes, input);
+        await saveKey(destroyed, input);
         keys.delete(asId(key._id));
         keyScopes.delete(asId(key._id));
         keyOrganizations.delete(asId(key._id));
@@ -31416,8 +31759,10 @@ function init(server) {
             keys.clear();
             keyScopes.clear();
             keyOrganizations.clear();
+            instances.delete(server);
         }
     };
+    instances.set(server, api);
     return api;
 }
 
@@ -31425,6 +31770,1230 @@ function init(server) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, [
 /* harmony export */   "A", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 2845
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* unused harmony exports KMS, kms, timingSafeEqual, base64urlEncode, base64urlDecode, base64UrlEncode, base64UrlDecode, base64Encode, hexEncode, hash, signHmac, generateKeyPair, generateApiKey, verifyApiKey, generateJWT, verifyJWT, decodeToken, verifyToken, generateToken, encrypt, decrypt, createCSR, readCertificateExpiry, parsePrivateKey, exportJwk, getJwkThumbprint, createJWS, generateVapidKeys, createVapidToken, createOAuthAssertion, createWebhookSignature, createAwsSigV4Token, transform */
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2561);
+/* harmony import */ var node_buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1786);
+
+
+
+/**
+ * Packs a single ASN.1 tag and length wrapper around content bytes.
+ * @param {number} tag - ASN.1 tag identifier byte
+ * @param {Buffer} content - Raw content payload buffer
+ * @returns {Buffer} DER-encoded tag-length-value structure
+ */
+function derTag(tag, content) {
+    let lenBytes;
+    const len = content.length;
+
+    if (len < 128) {
+        lenBytes = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([len]);
+    } else if (len < 256) {
+        lenBytes = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0x81, len]);
+    } else if (len < 65536) {
+        lenBytes = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0x82, (len >> 8) & 0xff, len & 0xff]);
+    } else {
+        lenBytes = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0x83, (len >> 16) & 0xff, (len >> 8) & 0xff, len & 0xff]);
+    }
+
+    return node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat([node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([tag]), lenBytes, content]);
+}
+
+/**
+ * Packs an array of ASN.1 DER elements into a DER Sequence (0x30).
+ * @param {Buffer[]} items - Array of DER-encoded element buffers
+ * @returns {Buffer} DER Sequence buffer
+ */
+function derSequence(items) {
+    return derTag(0x30, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat(items));
+}
+
+/**
+ * Packs an array of ASN.1 DER elements into a DER Set (0x31).
+ * @param {Buffer[]} items - Array of DER-encoded element buffers
+ * @returns {Buffer} DER Set buffer
+ */
+function derSet(items) {
+    return derTag(0x31, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat(items));
+}
+
+/**
+ * Encodes a dot-separated Object Identifier (OID) string into DER format.
+ * @param {string} oidString - Dot-separated OID string (e.g. "2.5.4.3")
+ * @returns {Buffer} DER OID buffer
+ */
+function derOID(oidString) {
+    const parts = oidString.split(".").map(Number);
+    const bytes = [parts[0] * 40 + parts[1]];
+
+    for (let i = 2; i < parts.length; i++) {
+        let val = parts[i];
+        const stack = [];
+        stack.push(val & 0x7f);
+        while ((val >>= 7) > 0) {
+            stack.push((val & 0x7f) | 0x80);
+        }
+        bytes.push(...stack.reverse());
+    }
+
+    return derTag(0x06, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(bytes));
+}
+
+/**
+ * CoCreate KMS Helper API
+ *
+ * Provides atomic cryptographic primitives, ASN.1/DER certificate utilities,
+ * and high-level token composers designed to be invoked directly or
+ * evaluated dynamically by an Abstract System / ASC engine ($kms.*).
+ */
+class KMS {
+
+    /**
+     * Constant-time comparison between two string or Buffer values.
+     * Guards against timing side-channel attacks during verification.
+     *
+     * @param {string|Buffer} a - First comparison value
+     * @param {string|Buffer} b - Second comparison value
+     * @returns {boolean} True if values match identically
+     */
+    static timingSafeEqual(a, b) {
+        if (typeof a !== typeof b) return false;
+
+        const bufA = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(a) ? a : node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(String(a));
+        const bufB = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(b) ? b : node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(String(b));
+
+        if (bufA.length !== bufB.length) {
+            node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].timingSafeEqual(bufA, bufA);
+            return false;
+        }
+
+        return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].timingSafeEqual(bufA, bufB);
+    }
+
+    /**
+     * Encodes input into Base64URL format (RFC 7515).
+     * @param {any} input - Input object, string, or buffer
+     * @returns {string} Base64URL encoded string
+     */
+    static base64urlEncode(input) {
+        if (node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(input)) {
+            return input.toString("base64url");
+        }
+        const str = typeof input === "object" ? JSON.stringify(input) : String(input);
+        return node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(str, "utf8").toString("base64url");
+    }
+
+    /**
+     * CamelCase alias for base64urlEncode for normalized cross-module conventions.
+     * @param {any} input - Input object, string, or buffer
+     * @returns {string} Base64URL encoded string
+     */
+    static base64UrlEncode(input) {
+        return this.base64urlEncode(input);
+    }
+
+    /**
+     * Decodes Base64URL string back into UTF-8 string or parsed JSON object.
+     * @param {string} str - Base64URL encoded input
+     * @param {boolean} [parseJson=true] - Attempt JSON parsing if true
+     * @returns {any} Decoded string or parsed object
+     */
+    static base64urlDecode(str, parseJson = true) {
+        try {
+            const decoded = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(str, "base64url").toString("utf8");
+            return parseJson ? JSON.parse(decoded) : decoded;
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * CamelCase alias for base64urlDecode for normalized cross-module conventions.
+     * @param {string} str - Base64URL encoded input
+     * @param {boolean} [parseJson=true] - Attempt JSON parsing if true
+     * @returns {any} Decoded string or parsed object
+     */
+    static base64UrlDecode(str, parseJson = true) {
+        return this.base64urlDecode(str, parseJson);
+    }
+
+    /**
+     * Encodes input into standard Base64 format.
+     * @param {any} input - Input object, string, or buffer
+     * @returns {string} Base64 string
+     */
+    static base64Encode(input) {
+        if (node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(input)) {
+            return input.toString("base64");
+        }
+        const str = typeof input === "object" ? JSON.stringify(input) : String(input);
+        return node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(str, "utf8").toString("base64");
+    }
+
+    /**
+     * Encodes input into Hexadecimal format.
+     * @param {any} input - Input object, string, or buffer
+     * @returns {string} Hex string
+     */
+    static hexEncode(input) {
+        if (node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(input)) {
+            return input.toString("hex");
+        }
+        const str = typeof input === "object" ? JSON.stringify(input) : String(input);
+        return node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(str, "utf8").toString("hex");
+    }
+
+    /**
+     * Generates a cryptographic hash digest (SHA-256, SHA-512, MD5, etc.).
+     *
+     * @param {string|Buffer|Object} payload - Data to hash
+     * @param {string} [algorithm='sha256'] - Hashing algorithm
+     * @param {string} [digest='hex'] - Output format ('hex', 'base64', 'base64url')
+     * @returns {string} Calculated digest string
+     */
+    static hash(payload, algorithm = "sha256", digest = "hex") {
+        const data = (typeof payload === "object" && !node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(payload))
+            ? JSON.stringify(payload)
+            : String(payload);
+        const hash = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHash(algorithm).update(data);
+        return digest === "buffer" ? hash.digest() : hash.digest(digest);
+    }
+
+    /**
+     * Generates an HMAC signature using a shared secret.
+     *
+     * @param {string|Buffer|Object} payload - Data to sign
+     * @param {string|Buffer} secret - Shared secret key
+     * @param {string} [algorithm='sha256'] - HMAC algorithm
+     * @param {string} [digest='hex'] - Output digest format ('hex', 'base64', 'base64url')
+     * @returns {string} Calculated HMAC string
+     */
+    static signHmac(payload, secret, algorithm = "sha256", digest = "hex") {
+        const data = (typeof payload === "object" && !node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(payload))
+            ? JSON.stringify(payload)
+            : String(payload);
+        return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac(algorithm, secret).update(data).digest(digest);
+    }
+
+    /**
+     * Dynamically generates RSA, EC, Ed25519, or X25519 key pairs.
+     * @param {string} [type='rsa'] - Key algorithm type ('rsa', 'ec', 'ed25519', 'x25519')
+     * @param {Object} [options={}] - Options (e.g. { modulusLength: 2048 }, { namedCurve: 'prime256v1' })
+     * @returns {{publicKey: string, privateKey: string}} PEM key pair object
+     */
+    static generateKeyPair(type = "rsa", options = {}) {
+        const algoType = type.toLowerCase();
+
+        switch (algoType) {
+            case "rsa": {
+                const { modulusLength = 2048 } = options;
+                return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].generateKeyPairSync("rsa", {
+                    modulusLength,
+                    publicKeyEncoding: { type: "spki", format: "pem" },
+                    privateKeyEncoding: { type: "pkcs8", format: "pem" }
+                });
+            }
+            case "ec": {
+                const { namedCurve = "prime256v1" } = options;
+                return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].generateKeyPairSync("ec", {
+                    namedCurve,
+                    publicKeyEncoding: { type: "spki", format: "pem" },
+                    privateKeyEncoding: { type: "pkcs8", format: "pem" }
+                });
+            }
+            case "ed25519":
+            case "x25519": {
+                return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].generateKeyPairSync(algoType, {
+                    publicKeyEncoding: { type: "spki", format: "pem" },
+                    privateKeyEncoding: { type: "pkcs8", format: "pem" }
+                });
+            }
+            default:
+                throw new Error(`[KMS] Unsupported key pair algorithm: ${type}`);
+        }
+    }
+
+    /**
+     * Generates an RSA key pair with an OpenSSH-formatted public key.
+     * The public key can be registered with GitHub as a repository deploy key.
+     * @param {number} [modulusLength=3072] - RSA modulus size in bits
+     * @returns {{publicKey: string, privateKey: string}} OpenSSH public key and PEM private key
+     */
+    static generateSshKeyPair(modulusLength = 3072) {
+        const { publicKey, privateKey } = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].generateKeyPairSync("rsa", {
+            modulusLength,
+            publicKeyEncoding: { type: "spki", format: "pem" },
+            privateKeyEncoding: { type: "pkcs1", format: "pem" }
+        });
+        const jwk = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPublicKey(publicKey).export({ format: "jwk" });
+        const sshString = value => {
+            const length = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.alloc(4);
+            length.writeUInt32BE(value.length);
+            return node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat([length, value]);
+        };
+        const mpint = value => {
+            const buffer = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(value, "base64url");
+            return sshString(buffer[0] & 0x80 ? node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat([node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0]), buffer]) : buffer);
+        };
+        const encodedKey = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat([
+            sshString(node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from("ssh-rsa")),
+            mpint(jwk.e),
+            mpint(jwk.n)
+        ]).toString("base64");
+
+        return { publicKey: `ssh-rsa ${encodedKey}`, privateKey };
+    }
+
+    /**
+     * Constructs API keys with custom service prefixes and entropy lengths.
+     * @param {Object} [options={}] - Options ({ prefix, byteLength, encoding })
+     * @returns {{apiKey: string, secret: string, hashedKey: string}} Key details
+     */
+    static generateApiKey(options = {}) {
+        const { prefix = "sk_", byteLength = 32, encoding = "base64url" } = options;
+
+        const rawBytes = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].randomBytes(byteLength);
+        const secret = rawBytes.toString(encoding);
+        const apiKey = `${prefix}${secret}`;
+        const hashedKey = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHash("sha256").update(apiKey).digest("hex");
+
+        return { apiKey, secret, hashedKey };
+    }
+
+    /**
+     * Validates an incoming API key against a stored SHA-256 hash in constant time.
+     * @param {string} incomingApiKey - Incoming API key
+     * @param {string} storedHashedKey - Expected SHA-256 hash
+     * @returns {boolean} True if key matches
+     */
+    static verifyApiKey(incomingApiKey, storedHashedKey) {
+        if (!incomingApiKey || !storedHashedKey) return false;
+        const computedHash = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHash("sha256").update(incomingApiKey).digest("hex");
+        return this.timingSafeEqual(computedHash, storedHashedKey);
+    }
+
+    /**
+     * Generates a signed JWT with symmetric or asymmetric algorithms.
+     * @param {Object} tokenEnvelope - Token envelope ({ header, payload })
+     * @param {string|Buffer} secretOrPrivateKey - Key or secret
+     * @param {string} [algorithm='RS256'] - JWT algorithm (HS256, RS256, ES256, etc.)
+     * @returns {string} Compact signed JWT string
+     */
+    static generateJWT(tokenEnvelope, secretOrPrivateKey, algorithm = "RS256") {
+        const { header = {}, payload = {} } = tokenEnvelope;
+
+        const jwtHeader = { alg: algorithm, typ: "JWT", ...header };
+        const encodedHeader = this.base64urlEncode(jwtHeader);
+        const encodedPayload = this.base64urlEncode(payload);
+        const signatureInput = `${encodedHeader}.${encodedPayload}`;
+
+        let signature = "";
+
+        if (algorithm.startsWith("HS")) {
+            const hashAlg = algorithm === "HS512" ? "sha512" : "sha256";
+            signature = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac(hashAlg, secretOrPrivateKey)
+                .update(signatureInput)
+                .digest("base64url");
+        } else if (algorithm.startsWith("ES")) {
+            const hashAlg = algorithm === "ES384" ? "sha384" : algorithm === "ES512" ? "sha512" : "sha256";
+            signature = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].sign(hashAlg, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(signatureInput), {
+                key: secretOrPrivateKey,
+                dsaEncoding: "ieee-p1363"
+            }).toString("base64url");
+        } else {
+            const hashAlg = algorithm.startsWith("ES") ? "sha256" : (algorithm === "RS512" ? "sha512" : "sha256");
+            const signer = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createSign(hashAlg);
+            signer.update(signatureInput);
+            signer.end();
+            signature = signer.sign(secretOrPrivateKey, "base64url");
+        }
+
+        return `${signatureInput}.${signature}`;
+    }
+
+    /**
+     * Verifies and decodes a signed JWT token.
+     * @param {string} token - Signed JWT string
+     * @param {string|Buffer} secretOrPublicKey - Key or secret
+     * @param {string} [algorithm='RS256'] - JWT algorithm
+     * @returns {Object|null} Decoded payload object or null if invalid
+     */
+    static verifyJWT(token, secretOrPublicKey, algorithm = "RS256") {
+        try {
+            const parts = token.split(".");
+            if (parts.length !== 3) return null;
+
+            const [headerB64, payloadB64, signatureB64] = parts;
+            const signatureInput = `${headerB64}.${payloadB64}`;
+
+            let isValid = false;
+
+            if (algorithm.startsWith("HS")) {
+                const hashAlg = algorithm === "HS512" ? "sha512" : "sha256";
+                const expectedSignature = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac(hashAlg, secretOrPublicKey)
+                    .update(signatureInput)
+                    .digest("base64url");
+                isValid = this.timingSafeEqual(signatureB64, expectedSignature);
+            } else if (algorithm.startsWith("ES")) {
+                const hashAlg = algorithm === "ES384" ? "sha384" : algorithm === "ES512" ? "sha512" : "sha256";
+                isValid = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].verify(hashAlg, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(signatureInput), {
+                    key: secretOrPublicKey,
+                    dsaEncoding: "ieee-p1363"
+                }, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(signatureB64, "base64url"));
+            } else {
+                const hashAlg = algorithm.startsWith("ES") ? "sha256" : (algorithm === "RS512" ? "sha512" : "sha256");
+                const verifier = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createVerify(hashAlg);
+                verifier.update(signatureInput);
+                verifier.end();
+                isValid = verifier.verify(secretOrPublicKey, signatureB64, "base64url");
+            }
+
+            if (!isValid) return null;
+
+            const payload = this.base64urlDecode(payloadB64);
+            if (payload && payload.exp && (payload.exp * 1000) < Date.now()) {
+                return null;
+            }
+
+            return payload;
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * High-level token decoder and verifier.
+     * Decodes JWT payload directly or verifies signature when secret is supplied.
+     * Normalized method to prevent module-level execution errors.
+     *
+     * @param {string} token - Token string to decode
+     * @param {string|Buffer} [secretOrPublicKey] - Optional secret/key for verification
+     * @param {string} [algorithm='RS256'] - JWT algorithm
+     * @returns {Object|null} Decoded payload or null
+     */
+    static decodeToken(token, secretOrPublicKey, algorithm = "RS256") {
+        if (!token || typeof token !== "string") return null;
+        if (secretOrPublicKey) {
+            return this.verifyJWT(token, secretOrPublicKey, algorithm);
+        }
+        const parts = token.split(".");
+        const payloadSegment = parts.length === 3 ? parts[1] : parts[0];
+        return this.base64urlDecode(payloadSegment, true);
+    }
+
+    /**
+     * Alias for verifyJWT for normalized authentication module contracts.
+     */
+    static verifyToken(token, secretOrPublicKey, algorithm = "RS256") {
+        return this.verifyJWT(token, secretOrPublicKey, algorithm);
+    }
+
+    /**
+     * Alias for generateJWT for normalized authentication module contracts.
+     */
+    static generateToken(tokenEnvelope, secretOrPrivateKey, algorithm = "RS256") {
+        return this.generateJWT(tokenEnvelope, secretOrPrivateKey, algorithm);
+    }
+
+    /**
+     * AES-256-GCM Authenticated Symmetric Encryption.
+     * @param {any} payload - Plaintext payload string or object
+     * @param {string|Buffer} secretKey - Passphrase or 32-byte key buffer
+     * @returns {{ciphertext: string, iv: string, tag: string}} Encrypted envelope
+     */
+    static encrypt(payload, secretKey) {
+        const key = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(secretKey) && secretKey.length === 32
+            ? secretKey
+            : node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHash("sha256").update(String(secretKey)).digest();
+        const iv = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].randomBytes(12);
+        const cipher = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createCipheriv("aes-256-gcm", key, iv);
+
+        const data = typeof payload === "object" && !node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(payload)
+            ? JSON.stringify(payload)
+            : String(payload);
+
+        let ciphertext = cipher.update(data, "utf8", "base64url");
+        ciphertext += cipher.final("base64url");
+        const tag = cipher.getAuthTag().toString("base64url");
+
+        return {
+            ciphertext,
+            iv: iv.toString("base64url"),
+            tag
+        };
+    }
+
+    /**
+     * AES-256-GCM Authenticated Symmetric Decryption.
+     * @param {{ciphertext: string, iv: string, tag: string}} envelope - Encrypted envelope
+     * @param {string|Buffer} secretKey - Passphrase or 32-byte key buffer
+     * @param {boolean} [parseJson=true] - Attempt JSON parsing if true
+     * @returns {any} Decoded plaintext string or object
+     */
+    static decrypt(envelope, secretKey, parseJson = true) {
+        try {
+            const { ciphertext, iv, tag } = envelope;
+            const key = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(secretKey) && secretKey.length === 32
+                ? secretKey
+                : node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHash("sha256").update(String(secretKey)).digest();
+
+            const decipher = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createDecipheriv("aes-256-gcm", key, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(iv, "base64url"));
+            decipher.setAuthTag(node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(tag, "base64url"));
+
+            let plaintext = decipher.update(ciphertext, "base64url", "utf8");
+            plaintext += decipher.final("utf8");
+
+            return parseJson ? JSON.parse(plaintext) : plaintext;
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * Generates a DER-encoded PKCS#10 Certificate Signing Request (CSR)
+     * supporting single and multi-domain (SAN) configurations for Let's Encrypt / SSL.
+     *
+     * @param {string|crypto.KeyObject} privateKeyInput - Domain private key (PEM or KeyObject)
+     * @param {string[]} domains - List of SAN domain names (primary domain first)
+     * @returns {string} Base64URL-encoded DER CSR
+     */
+    static createCSR(privateKeyInput, domains) {
+        if (!domains || domains.length === 0) {
+            throw new Error("[KMS] At least one domain is required to generate a CSR");
+        }
+
+        const privateKey = typeof privateKeyInput === "string"
+            ? node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPrivateKey(privateKeyInput)
+            : privateKeyInput;
+
+        const primaryDomain = domains[0];
+        const pubKeyDetails = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPublicKey(privateKey);
+        const spkiDer = pubKeyDetails.export({ type: "spki", format: "der" });
+
+        // Subject Attribute: Common Name (CN = primaryDomain)
+        const subject = derSequence([
+            derSet([
+                derSequence([
+                    derOID("2.5.4.3"), // CommonName OID
+                    derTag(0x0c, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(primaryDomain, "utf8")) // UTF8String
+                ])
+            ])
+        ]);
+
+        // Extension Request: Subject Alternative Names (SAN)
+        const sanEntries = domains.map(domain => derTag(0x82, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(domain, "utf8"))); // Context primitive [2] dNSName
+        const sanExtension = derSequence([
+            derOID("2.5.29.17"), // subjectAltName OID
+            derTag(0x04, derSequence(sanEntries)) // OCTET STRING containing SAN Sequence
+        ]);
+
+        const extensionsSequence = derSequence([sanExtension]);
+        const attributeExtensionReq = derTag(0xa0, derSequence([
+            derOID("1.2.840.113549.1.9.14"), // extensionRequest OID
+            derSet([extensionsSequence])
+        ]));
+
+        // CertificationRequestInfo structure
+        const certReqInfo = derSequence([
+            derTag(0x02, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0x00])), // Version 0
+            subject,
+            spkiDer,
+            attributeExtensionReq
+        ]);
+
+        // Sign CertificationRequestInfo with Domain Private Key
+        const signer = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createSign("SHA256");
+        signer.update(certReqInfo);
+        const signature = signer.sign(privateKey);
+
+        // Signature Algorithm OID (sha256WithRSAEncryption or ecdsa-with-SHA256)
+        const isEC = privateKey.asymmetricKeyType === "ec";
+        const sigAlgOid = isEC ? "1.2.840.10045.4.3.2" : "1.2.840.113549.1.1.11";
+        const sigAlgorithm = derSequence([
+            derOID(sigAlgOid),
+            isEC ? node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.alloc(0) : derTag(0x05, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.alloc(0)) // NULL parameters for RSA
+        ]);
+
+        // PKCS#10 CertificationRequest Sequence
+        const csrDer = derSequence([
+            certReqInfo,
+            sigAlgorithm,
+            derTag(0x03, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat([node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0x00]), signature])) // BIT STRING
+        ]);
+
+        return this.base64urlEncode(csrDer);
+    }
+
+    /**
+     * Extracts expiration Date from a PEM Certificate using native Node X509 parser.
+     * @param {string|Buffer} certPem - PEM-encoded certificate
+     * @returns {Date|null} Expiration date object or null if invalid
+     */
+    static readCertificateExpiry(certPem) {
+        try {
+            const x509 = new node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].X509Certificate(certPem);
+            return new Date(x509.validTo);
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * Converts a PEM string or KeyObject into a KeyObject.
+     * @param {string|crypto.KeyObject} keyInput
+     * @returns {crypto.KeyObject}
+     */
+    static parsePrivateKey(keyInput) {
+        return typeof keyInput === "string" ? node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPrivateKey(keyInput) : keyInput;
+    }
+
+    /**
+     * Exports a public key derived from key input as a JWK object.
+     * @param {string|crypto.KeyObject} keyInput
+     * @returns {Object} JWK representation
+     */
+    static exportJwk(keyInput) {
+        const key = typeof keyInput === "string" ? node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPrivateKey(keyInput) : keyInput;
+        const pubKey = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPublicKey(key);
+        return pubKey.export({ format: "jwk" });
+    }
+
+    /**
+     * Calculates RFC 7638 SHA-256 JWK Thumbprint
+     * @param {Object} jwk - JWK key object
+     * @returns {string} Base64URL encoded thumbprint
+     */
+    static getJwkThumbprint(jwk) {
+        const orderedJwk = jwk.kty === "RSA"
+            ? { e: jwk.e, kty: jwk.kty, n: jwk.n }
+            : { crv: jwk.crv, kty: jwk.kty, x: jwk.x, y: jwk.y };
+
+        const hashBuf = this.hash(JSON.stringify(orderedJwk), "sha256", "buffer");
+        return this.base64urlEncode(hashBuf);
+    }
+
+    /**
+     * Constructs a JWS signature object for ACME RFC 8555 protocol requests.
+     * @param {Object} header - Protected header fields (nonce, url, kid/jwk)
+     * @param {any} payload - Body payload string or object
+     * @param {string|crypto.KeyObject} privateKey - Signing private key
+     * @returns {string} Stringified JOSE JSON structure { protected, payload, signature }
+     */
+    static createJWS(header, payload, privateKey) {
+        const key = typeof privateKey === "string" ? node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPrivateKey(privateKey) : privateKey;
+        const isEC = key.asymmetricKeyType === "ec";
+        const alg = header.alg || (isEC ? "ES256" : "RS256");
+
+        const fullHeader = { alg, ...header };
+        const protectedHeader = this.base64urlEncode(fullHeader);
+        const payloadString = payload !== "" ? this.base64urlEncode(payload) : "";
+
+        const signInput = `${protectedHeader}.${payloadString}`;
+        let signature;
+        if (isEC) {
+            signature = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].sign("sha256", node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(signInput), { key, dsaEncoding: "ieee-p1363" });
+        } else {
+            const signer = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createSign("SHA256");
+            signer.update(signInput);
+            signer.end();
+            signature = signer.sign(key);
+        }
+        const encodedSignature = this.base64urlEncode(signature);
+
+        return JSON.stringify({
+            protected: protectedHeader,
+            payload: payloadString,
+            signature: encodedSignature
+        });
+    }
+
+    /**
+     * Generates NIST P-256 (prime256v1) ECC key pairs for VAPID Web Push Notifications.
+     * @returns {{ publicKey: string, privateKey: string }} Base64URL-encoded key pair
+     */
+    static generateVapidKeys() {
+        const keyPair = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].generateKeyPairSync("ec", {
+            namedCurve: "prime256v1",
+            publicKeyEncoding: { type: "spki", format: "der" },
+            privateKeyEncoding: { type: "pkcs8", format: "der" }
+        });
+
+        // Uncompressed EC point extraction (65 bytes)
+        const pubDer = keyPair.publicKey;
+        const uncompressedPoint = pubDer.subarray(pubDer.length - 65);
+
+        return {
+            publicKey: this.base64urlEncode(uncompressedPoint),
+            privateKey: this.base64urlEncode(keyPair.privateKey)
+        };
+    }
+
+    /**
+     * Generates a VAPID token value for browser push notifications (RFC 8292).
+     * Returns: "vapid t=<jwt>, k=<public_key>"
+     *
+     * @param {Object} options - VAPID options ({ audience, subject, expiration, publicKey })
+     * @param {string|crypto.KeyObject} privateKey - VAPID private key
+     * @returns {string} Formatted VAPID authorization string
+     */
+    static createVapidToken(options, privateKey) {
+        const { audience, subject, expiration = Math.floor(Date.now() / 1000) + 43200, publicKey } = options;
+
+        if (typeof privateKey === "string" && !privateKey.includes("BEGIN")) {
+            privateKey = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPrivateKey({
+                key: node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(privateKey, "base64url"),
+                format: "der",
+                type: "pkcs8"
+            });
+        }
+
+        const jwt = this.generateJWT({
+            header: { typ: "JWT", alg: "ES256" },
+            payload: { aud: audience, sub: subject, exp: expiration }
+        }, privateKey, "ES256");
+
+        return `vapid t=${jwt}, k=${publicKey}`;
+    }
+
+    /**
+     * Generates an OAuth 2.0 Client Assertion JWT (RFC 7523).
+     * Standardized protocol used for service-to-service authentication across
+     * Google Cloud, Salesforce, DocuSign, Okta, and enterprise OAuth 2.0 providers.
+     *
+     * @param {Object} options - Assertion details ({ issuer, subject, audience, scopes, expirationSeconds })
+     * @param {string|crypto.KeyObject} privateKey - Signing private key
+     * @param {string} [algorithm='RS256'] - Signing algorithm
+     * @returns {string} Signed OAuth assertion JWT string
+     */
+    static createOAuthAssertion(options, privateKey, algorithm = "RS256") {
+        const {
+            issuer,
+            subject = issuer,
+            audience,
+            scopes,
+            expirationSeconds = 3600
+        } = options;
+
+        const now = Math.floor(Date.now() / 1000);
+        const scopeString = Array.isArray(scopes) ? scopes.join(" ") : scopes;
+
+        const payload = {
+            iss: issuer,
+            sub: subject,
+            aud: audience,
+            iat: now,
+            exp: now + expirationSeconds
+        };
+
+        if (scopeString) {
+            payload.scope = scopeString;
+        }
+
+        return this.generateJWT({
+            header: { alg: algorithm, typ: "JWT" },
+            payload
+        }, privateKey, algorithm);
+    }
+
+    /**
+     * Computes a standard Webhook signature string (Stripe, Twilio, GitHub).
+     *
+     * @param {string|Buffer|Object} payload - Raw incoming request body
+     * @param {string} secret - Webhook signing secret key
+     * @param {Object} [options={}] - Options ({ timestamp, algorithm, format })
+     * @returns {string} Webhook signature string
+     */
+    static createWebhookSignature(payload, secret, options = {}) {
+        const { timestamp = Math.floor(Date.now() / 1000), algorithm = "sha256", format = "stripe" } = options;
+        const rawBody = typeof payload === "object" && !node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(payload) ? JSON.stringify(payload) : String(payload);
+
+        if (format === "stripe") {
+            const signatureInput = `${timestamp}.${rawBody}`;
+            const signature = this.signHmac(signatureInput, secret, algorithm, "hex");
+            return `t=${timestamp},v1=${signature}`;
+        }
+
+        if (format === "github") {
+            const signature = this.signHmac(rawBody, secret, algorithm, "hex");
+            return `sha256=${signature}`;
+        }
+
+        return this.signHmac(rawBody, secret, algorithm, "hex");
+    }
+
+    /**
+     * Calculates an AWS SigV4 authorization signature string.
+     *
+     * @param {Object} requestDetails - Details ({ method, uri, queryParams, headers, payload, region, service })
+     * @param {Object} credentials - Credentials ({ accessKeyId, secretAccessKey })
+     * @returns {string} Full AWS SigV4 Authorization string
+     */
+    static createAwsSigV4Token(requestDetails, credentials) {
+        const {
+            method = "GET",
+            uri = "/",
+            queryParams = "",
+            headers = {},
+            payload = "",
+            region = "us-east-1",
+            service = "s3",
+            isoDate = new Date().toISOString().replace(/[:-]|\.\d{3}/g, "")
+        } = requestDetails;
+
+        const dateStamp = isoDate.slice(0, 8);
+        const hashedPayload = this.hash(payload, "sha256", "hex");
+
+        const canonicalHeaders = Object.keys(headers)
+            .map(k => `${k.toLowerCase()}:${headers[k].trim()}\n`)
+            .sort()
+            .join("");
+
+        const signedHeaders = Object.keys(headers)
+            .map(k => k.toLowerCase())
+            .sort()
+            .join(";");
+
+        const canonicalRequest = [
+            method.toUpperCase(),
+            uri,
+            queryParams,
+            canonicalHeaders,
+            signedHeaders,
+            hashedPayload
+        ].join("\n");
+
+        const credentialScope = `${dateStamp}/${region}/${service}/aws4_request`;
+        const stringToSign = [
+            "AWS4-HMAC-SHA256",
+            isoDate,
+            credentialScope,
+            this.hash(canonicalRequest, "sha256", "hex")
+        ].join("\n");
+
+        const kDate = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac("sha256", `AWS4${credentials.secretAccessKey}`).update(dateStamp).digest();
+        const kRegion = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac("sha256", kDate).update(region).digest();
+        const kService = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac("sha256", kRegion).update(service).digest();
+        const kSigning = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac("sha256", kService).update("aws4_request").digest();
+
+        const signature = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac("sha256", kSigning).update(stringToSign).digest("hex");
+
+        return `AWS4-HMAC-SHA256 Credential=${credentials.accessKeyId}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
+    }
+
+    /**
+     * Dynamic Transformation Pipeline (ASC Executor Integration)
+     * Executes a chain of atomic cryptographic operations sequentially.
+     *
+     * @param {any} initialValue - Base input string, object, or buffer
+     * @param {Array<Object>} pipelineSteps - Ordered list of dynamic operations
+     * @returns {string|Buffer|Object} Final transformed token string or object
+     */
+    static transform(initialValue, pipelineSteps = []) {
+        return pipelineSteps.reduce((acc, step) => {
+            const { op, ...opts } = step;
+
+            switch (op) {
+                case "timestamp":
+                    if (opts.format === "seconds") {
+                        return Math.floor(Date.now() / 1000);
+                    }
+                    if (opts.format === "iso-basic") {
+                        return new Date().toISOString().replace(/[:-]|\.\d{3}/g, "");
+                    }
+                    return Date.now();
+
+                case "hash":
+                    return this.hash(acc, opts.algorithm || "sha256", opts.digest || "hex");
+
+                case "signHmac":
+                    return this.signHmac(acc, opts.secret, opts.algorithm || "sha256", opts.digest || "hex");
+
+                case "base64Encode":
+                    return this.base64Encode(acc);
+
+                case "base64urlEncode":
+                    return this.base64urlEncode(acc);
+
+                case "hexEncode":
+                    return this.hexEncode(acc);
+
+                case "encrypt":
+                    return this.encrypt(acc, opts.secretKey);
+
+                case "generateJWT":
+                    return this.generateJWT(acc, opts.secretOrPrivateKey, opts.algorithm || "RS256");
+
+                case "concat":
+                case "format":
+                    return `${opts.prefix || ""}${acc}${opts.suffix || ""}`;
+
+                case "jsonStringify":
+                    return JSON.stringify(acc);
+
+                default:
+                    if (typeof this[op] === "function") {
+                        return this[op](acc, opts);
+                    }
+                    return acc;
+            }
+        }, initialValue);
+    }
+}
+
+// Bind all static methods to KMS.prototype so instance calls work
+Object.getOwnPropertyNames(KMS).forEach(prop => {
+    if (typeof KMS[prop] === "function" && prop !== "length" && prop !== "name" && prop !== "prototype") {
+        KMS.prototype[prop] = KMS[prop].bind(KMS);
+    }
+});
+
+// Create a singleton instance containing class reference for hybrid object/instance/class usage
+const kms = new KMS();
+kms.KMS = KMS;
+
+// Attach static methods directly onto singleton instance for fail-safe property invocation
+Object.getOwnPropertyNames(KMS).forEach(prop => {
+    if (typeof KMS[prop] === "function" && prop !== "length" && prop !== "name" && prop !== "prototype") {
+        kms[prop] = KMS[prop].bind(KMS);
+    }
+});
+
+// Export all utility methods as named ESM exports for namespace imports (import * as kms)
+const {
+    timingSafeEqual,
+    base64urlEncode,
+    base64urlDecode,
+    base64UrlEncode,
+    base64UrlDecode,
+    base64Encode,
+    hexEncode,
+    hash,
+    signHmac,
+    generateKeyPair,
+    generateApiKey,
+    verifyApiKey,
+    generateJWT,
+    verifyJWT,
+    decodeToken,
+    verifyToken,
+    generateToken,
+    encrypt,
+    decrypt,
+    createCSR,
+    readCertificateExpiry,
+    parsePrivateKey,
+    exportJwk,
+    getJwkThumbprint,
+    createJWS,
+    generateVapidKeys,
+    createVapidToken,
+    createOAuthAssertion,
+    createWebhookSignature,
+    createAwsSigV4Token,
+    transform
+} = KMS;
+
+// Default export provides hybrid singleton instance with bound functions and embedded Class reference
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (kms);
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 425
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   q: () => (/* binding */ createKMS)
+/* harmony export */ });
+/* unused harmony export encoding */
+/* harmony import */ var _jose_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8206);
+
+// Portable KMS primitives. No Node imports; requires Web Crypto (secure context in browsers).
+const enc = new TextEncoder();
+const bytes = value => typeof value === 'string' ? enc.encode(value) : value instanceof Uint8Array ? value : value instanceof ArrayBuffer ? new Uint8Array(value) : (() => { throw new TypeError('Expected string or bytes'); })();
+const b64 = value => { const a = bytes(value); let s = ''; for (let i=0;i<a.length;i+=8192) s += String.fromCharCode(...a.subarray(i,i+8192)); return btoa(s); };
+const unb64 = value => Uint8Array.from(atob(value), c => c.charCodeAt(0));
+const encoding = Object.freeze({
+    base64Encode: b64, base64Decode: unb64,
+    base64urlEncode: value => b64(value).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,''),
+    base64urlDecode: value => { if (typeof value !== 'string' || !/^[A-Za-z0-9_-]*$/.test(value) || value.length % 4 === 1) throw new TypeError('Invalid base64url'); const decoded=unb64(value.replaceAll('-','+').replaceAll('_','/') + '='.repeat((4-value.length%4)%4)); if (b64(decoded).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'')!==value) throw new TypeError('Invalid base64url'); return decoded; },
+    hexEncode: value => Array.from(bytes(value), b => b.toString(16).padStart(2,'0')).join(''),
+    hexDecode: value => { if (typeof value !== 'string' || value.length%2 || !/^[0-9a-f]*$/i.test(value)) throw new TypeError('Invalid hex'); return Uint8Array.from(value.match(/../g) || [], x => parseInt(x,16)); }
+});
+const hashName = name => ({sha256:'SHA-256',sha384:'SHA-384',sha512:'SHA-512'})[String(name).toLowerCase().replaceAll('-','')] || (()=>{throw new RangeError('Unsupported hash')})();
+const algName = name => String(name).toLowerCase();
+const rsaAlg = {name:'RSA-PSS',hash:'SHA-256'};
+function createKMS(webcrypto) {
+    if (!webcrypto?.subtle || !webcrypto?.getRandomValues) throw new Error('Web Crypto is required');
+    const {subtle} = webcrypto;
+    const randomBytes = length => { if (!Number.isSafeInteger(length) || length<1 || length>65536) throw new RangeError('Invalid random length'); return webcrypto.getRandomValues(new Uint8Array(length)); };
+    const hash = async (data,{algorithm='sha256',encoding:format='hex'}={}) => { const result=new Uint8Array(await subtle.digest(hashName(algorithm),bytes(data))); return format==='bytes'?result:format==='hex'?encoding.hexEncode(result):format==='base64url'?encoding.base64urlEncode(result):(()=>{throw new RangeError('Invalid output encoding')})(); };
+    const hmac = async (data,key,{algorithm='sha256',encoding:format='hex'}={}) => { const name=hashName(algorithm); const k=await subtle.importKey('raw',bytes(key),{name:'HMAC',hash:name},false,['sign']); const result=new Uint8Array(await subtle.sign('HMAC',k,bytes(data))); return format==='bytes'?result:format==='hex'?encoding.hexEncode(result):format==='base64url'?encoding.base64urlEncode(result):(()=>{throw new RangeError('Invalid output encoding')})(); };
+    const generateKey = async ({algorithm='aes-256-gcm',extractable=true}={}) => { const a=algName(algorithm); if (a==='aes-256-gcm'||a==='aes-128-gcm') return randomBytes(a==='aes-256-gcm'?32:16); if (a==='hmac-sha256'||a==='hmac-sha384'||a==='hmac-sha512') return randomBytes(32); throw new RangeError('Unsupported key algorithm'); };
+    const generateKeyPair = async ({algorithm='ed25519',modulusLength=3072,extractable=true}={}) => { const a=algName(algorithm); if(a==='ed25519') return subtle.generateKey('Ed25519',extractable,['sign','verify']); if(a==='rsa'||a==='rsa-pss-sha256') { if(!Number.isSafeInteger(modulusLength)||modulusLength<2048) throw new RangeError('RSA modulusLength must be >=2048'); return subtle.generateKey({...rsaAlg,modulusLength,publicExponent:new Uint8Array([1,0,1])},extractable,['sign','verify']); } throw new RangeError('Unsupported key pair algorithm'); };
+    const encrypt = async (data,key,{algorithm='aes-256-gcm',aad,iv}={}) => { const a=algName(algorithm),length=a==='aes-256-gcm'?32:a==='aes-128-gcm'?16:0; if(!length) throw new RangeError('Unsupported encryption algorithm'); if(bytes(key).length!==length) throw new RangeError('Invalid AES key length'); if(iv!==undefined) throw new RangeError('GCM nonces are generated internally'); const nonce=randomBytes(12); const k=await subtle.importKey('raw',bytes(key),'AES-GCM',false,['encrypt']); const output=new Uint8Array(await subtle.encrypt({name:'AES-GCM',iv:nonce,tagLength:128,...(aad===undefined?{}:{additionalData:bytes(aad)})},k,bytes(data))); return {algorithm:a,iv:encoding.base64urlEncode(nonce),ciphertext:encoding.base64urlEncode(output.subarray(0,-16)),tag:encoding.base64urlEncode(output.subarray(-16))}; };
+    const decrypt = async (envelope,key,{aad}={}) => { const a=algName(envelope?.algorithm),length=a==='aes-256-gcm'?32:a==='aes-128-gcm'?16:0; if(!length) throw new RangeError('Unsupported encryption algorithm'); if(bytes(key).length!==length) throw new RangeError('Invalid AES key length'); const iv=encoding.base64urlDecode(envelope.iv),tag=encoding.base64urlDecode(envelope.tag),ciphertext=encoding.base64urlDecode(envelope.ciphertext); if(iv.length!==12||tag.length!==16) throw new RangeError('Invalid GCM envelope'); const k=await subtle.importKey('raw',bytes(key),'AES-GCM',false,['decrypt']); const combined=new Uint8Array(ciphertext.length+16); combined.set(ciphertext);combined.set(tag,ciphertext.length); return new Uint8Array(await subtle.decrypt({name:'AES-GCM',iv,tagLength:128,...(aad===undefined?{}:{additionalData:bytes(aad)})},k,combined)); };
+    const sign = async (data,key,{algorithm='ed25519',encoding:format='base64url'}={}) => { const a=algName(algorithm),params=a==='ed25519'?'Ed25519':a==='rsa-pss-sha256'?{name:'RSA-PSS',saltLength:32}:null; if(!params) throw new RangeError('Unsupported signing algorithm'); const result=new Uint8Array(await subtle.sign(params,key,bytes(data))); return format==='bytes'?result:format==='base64url'?encoding.base64urlEncode(result):(()=>{throw new RangeError('Invalid signature encoding')})(); };
+    const verify = async (data,signature,key,{algorithm='ed25519',encoding:format='base64url'}={}) => { const a=algName(algorithm),params=a==='ed25519'?'Ed25519':a==='rsa-pss-sha256'?{name:'RSA-PSS',saltLength:32}:null; if(!params) throw new RangeError('Unsupported signing algorithm'); return subtle.verify(params,key,typeof signature==='string'&&format==='base64url'?encoding.base64urlDecode(signature):bytes(signature),bytes(data)); };
+    const exportKey = async (key,{format='jwk'}={}) => { if(!['jwk','spki','pkcs8','raw'].includes(format)) throw new RangeError('Invalid key format'); return subtle.exportKey(format,key); };
+    const importKey = async (material,{algorithm='ed25519',format='jwk',usage,extractable=true}={}) => { const a=algName(algorithm),hmac=a==='hmac-sha256'||a==='hmac-sha384'||a==='hmac-sha512',aes=a==='aes-256-gcm'||a==='aes-128-gcm',params=a==='ed25519'?'Ed25519':a==='rsa-pss-sha256'?rsaAlg:hmac?{name:'HMAC',hash:hashName(a.slice(5))}:aes?'AES-GCM':null; if(!params) throw new RangeError('Unsupported key algorithm'); const usages=usage===undefined?(aes?['encrypt','decrypt']:hmac?['sign','verify']:['verify']):Array.isArray(usage)?usage:[usage]; return subtle.importKey(format,material,params,extractable,usages); };
+    const crypto=Object.freeze({hash,hmac,randomBytes,generateKey,generateKeyPair,encrypt,decrypt,sign,verify,importKey,exportKey});
+    const aes=Object.freeze({generateKey:options=>generateKey({...options,algorithm:options?.algorithm??'aes-256-gcm'}),encrypt:(data,key,options={})=>encrypt(data,key,{...options,algorithm:options.algorithm??'aes-256-gcm'}),decrypt});
+    const sha256=Object.freeze({hash:(data,options={})=>hash(data,{...options,algorithm:'sha256'})});
+    const ed25519=Object.freeze({generateKeyPair:()=>generateKeyPair({algorithm:'ed25519'}),sign:(data,key,options={})=>sign(data,key,{...options,algorithm:'ed25519'}),verify:(data,sig,key,options={})=>verify(data,sig,key,{...options,algorithm:'ed25519'})});
+    const rsa=Object.freeze({generateKeyPair:options=>generateKeyPair({...options,algorithm:'rsa'}),pss:Object.freeze({sign:(data,key,options={})=>sign(data,key,{...options,algorithm:'rsa-pss-sha256'}),verify:(data,sig,key,options={})=>verify(data,sig,key,{...options,algorithm:'rsa-pss-sha256'})})});
+    return Object.freeze({crypto,aes,sha256,ed25519,rsa,encoding,...(0,_jose_js__WEBPACK_IMPORTED_MODULE_0__/* .createJOSE */ .k)(webcrypto,encoding)});
+}
+
+
+/***/ },
+
+/***/ 8206
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   k: () => (/* binding */ createJOSE)
+/* harmony export */ });
+// Portable JOSE support: compact JWS, signed JWT (JWS compact), and JWK.
+// No Node imports. All signing and verification use Web Crypto.
+const encoder = new TextEncoder();
+const decoder = new TextDecoder('utf-8', { fatal: true });
+const bytes = value => typeof value === 'string'
+    ? encoder.encode(value)
+    : value instanceof Uint8Array
+        ? value
+        : value instanceof ArrayBuffer
+            ? new Uint8Array(value)
+            : (() => { throw new TypeError('Expected string or bytes'); })();
+const supported = new Set(['HS256', 'PS256', 'EdDSA']);
+const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+const own = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
+const isCryptoKey = value => object(value) &&
+    typeof value.type === 'string' &&
+    object(value.algorithm) &&
+    Array.isArray(value.usages);
+const parseJSON = data => {
+    const value = JSON.parse(decoder.decode(data));
+    if (!object(value)) throw new TypeError('Expected JSON object');
+    return value;
+};
+const canonical = value => JSON.stringify(value);
+const allowed = alg => {
+    if (!supported.has(alg)) throw new RangeError('Unsupported JOSE algorithm');
+    return alg;
+};
+const noCritical = header => {
+    if (own(header, 'crit') || own(header, 'b64'))
+        throw new RangeError('Critical and unencoded payload extensions are unsupported');
+};
+
+function createJOSE(webcrypto, encoding) {
+    if (!webcrypto?.subtle) throw new Error('Web Crypto is required');
+    const { subtle } = webcrypto;
+    const decode = encoding.base64urlDecode;
+    const encode = encoding.base64urlEncode;
+    const algorithm = alg => alg === 'HS256'
+        ? { name: 'HMAC', hash: 'SHA-256' }
+        : alg === 'PS256'
+            ? { name: 'RSA-PSS', hash: 'SHA-256' }
+            : 'Ed25519';
+
+    function validateCryptoKey(key, alg, usage) {
+        const expected = algorithm(alg);
+        const expectedName = typeof expected === 'string' ? expected : expected.name;
+        if (!isCryptoKey(key) || key.algorithm.name !== expectedName)
+            throw new TypeError(`Key type does not match ${alg}`);
+
+        const expectedType = alg === 'HS256' ? 'secret' : usage === 'sign' ? 'private' : 'public';
+        if (key.type !== expectedType || !key.usages.includes(usage))
+            throw new TypeError(`Key type or usage does not permit ${usage} with ${alg}`);
+
+        if (alg === 'HS256') {
+            if (key.algorithm.hash?.name !== 'SHA-256')
+                throw new TypeError('HS256 requires an HMAC/SHA-256 key');
+            if (Number(key.algorithm.length) < 256)
+                throw new TypeError('HS256 requires a key of at least 256 bits');
+        }
+        if (alg === 'PS256' && key.algorithm.hash?.name !== 'SHA-256')
+            throw new TypeError('PS256 requires an RSA-PSS/SHA-256 key');
+        return key;
+    }
+
+    const importKey = async (material, { alg = 'EdDSA', usage = 'verify', extractable = false } = {}) => {
+        allowed(alg);
+        if (!['sign', 'verify'].includes(usage)) throw new RangeError('Invalid JOSE key usage');
+        if (isCryptoKey(material)) return validateCryptoKey(material, alg, usage);
+
+        const params = algorithm(alg);
+        let key;
+        if (object(material) && typeof material.kty === 'string') {
+            const expectedKty = alg === 'HS256' ? 'oct' : alg === 'PS256' ? 'RSA' : 'OKP';
+            if (material.kty !== expectedKty || (alg === 'EdDSA' && material.crv !== 'Ed25519'))
+                throw new TypeError(`JWK type does not match ${alg}`);
+            const acceptedJwkAlgorithms = alg === 'EdDSA' ? ['EdDSA', 'Ed25519'] : [alg];
+            if (material.alg !== undefined && !acceptedJwkAlgorithms.includes(material.alg))
+                throw new TypeError(`JWK algorithm does not match ${alg}`);
+            key = await subtle.importKey('jwk', material, params, extractable, [usage]);
+        } else if (alg === 'HS256') {
+            const secret = bytes(material);
+            if (secret.length < 32)
+                throw new RangeError('HS256 requires a key of at least 32 bytes');
+            key = await subtle.importKey('raw', secret, params, extractable, [usage]);
+        } else {
+            throw new TypeError('Asymmetric keys must be CryptoKey or JWK');
+        }
+        return validateCryptoKey(key, alg, usage);
+    };
+
+    const signBytes = async (input, key, alg) => {
+        const cryptoKey = await importKey(key, { alg, usage: 'sign' });
+        const params = alg === 'PS256' ? { name: 'RSA-PSS', saltLength: 32 } : algorithm(alg);
+        return new Uint8Array(await subtle.sign(params, cryptoKey, bytes(input)));
+    };
+
+    const verifyBytes = async (input, signature, key, alg) => {
+        const cryptoKey = await importKey(key, { alg, usage: 'verify' });
+        const params = alg === 'PS256' ? { name: 'RSA-PSS', saltLength: 32 } : algorithm(alg);
+        return subtle.verify(params, cryptoKey, signature, bytes(input));
+    };
+
+    const sign = async (payload, key, { alg = 'EdDSA', header = {} } = {}) => {
+        allowed(alg);
+        if (!object(header) || (own(header, 'alg') && header.alg !== alg))
+            throw new TypeError('Invalid protected header algorithm');
+        noCritical(header);
+        const protectedHeader = { ...header, alg };
+        const part1 = encode(encoder.encode(canonical(protectedHeader)));
+        const part2 = encode(bytes(payload));
+        const signingInput = `${part1}.${part2}`;
+        const signature = await signBytes(signingInput, key, alg);
+        return `${signingInput}.${encode(signature)}`;
+    };
+
+    const verify = async (compact, key, { alg } = {}) => {
+        if (typeof compact !== 'string') throw new TypeError('Expected compact JWS');
+        const parts = compact.split('.');
+        const validPart = value => /^[A-Za-z0-9_-]*$/.test(value);
+        if (parts.length !== 3 || !parts[0] || !parts[2] || !parts.every(validPart))
+            throw new TypeError('Invalid compact JWS');
+        const header = parseJSON(decode(parts[0]));
+        noCritical(header);
+        allowed(header.alg);
+        if (!alg || alg !== header.alg)
+            throw new RangeError('Explicit matching expected algorithm required');
+        const payload = decode(parts[1]);
+        const signature = decode(parts[2]);
+        const valid = await verifyBytes(`${parts[0]}.${parts[1]}`, signature, key, alg);
+        if (!valid) throw new Error('Invalid JWS signature');
+        return { header, payload };
+    };
+
+    const jws = Object.freeze({ sign, verify });
+    const jwt = Object.freeze({
+        generate: (claims, key, options = {}) => {
+            if (!object(claims)) throw new TypeError('JWT claims must be an object');
+            return sign(canonical(claims), key, {
+                ...options,
+                header: { typ: 'JWT', ...options.header }
+            });
+        },
+        verify: async (token, key, {
+            alg,
+            issuer,
+            audience,
+            subject,
+            clockTolerance = 0,
+            now = Math.floor(Date.now() / 1000),
+            requireExp = false
+        } = {}) => {
+            if (!Number.isFinite(clockTolerance) || clockTolerance < 0 || !Number.isFinite(now))
+                throw new RangeError('Invalid clock settings');
+            if (typeof requireExp !== 'boolean') throw new TypeError('requireExp must be boolean');
+            const { header, payload } = await verify(token, key, { alg });
+            if (header.typ !== undefined && header.typ !== 'JWT') throw new Error('Invalid JWT type');
+            const claims = parseJSON(payload);
+            for (const field of ['exp', 'nbf', 'iat']) {
+                if (own(claims, field) && (typeof claims[field] !== 'number' || !Number.isFinite(claims[field])))
+                    throw new Error(`Invalid ${field} claim`);
+            }
+            if (requireExp && !own(claims, 'exp')) throw new Error('JWT expiration is required');
+            if (own(claims, 'exp') && now - clockTolerance >= claims.exp) throw new Error('JWT expired');
+            if (own(claims, 'nbf') && now + clockTolerance < claims.nbf) throw new Error('JWT not active');
+            if (issuer !== undefined && claims.iss !== issuer) throw new Error('JWT issuer mismatch');
+            if (subject !== undefined && claims.sub !== subject) throw new Error('JWT subject mismatch');
+            if (audience !== undefined && !(Array.isArray(claims.aud)
+                ? claims.aud.includes(audience)
+                : claims.aud === audience)) throw new Error('JWT audience mismatch');
+            return claims;
+        }
+    });
+
+    const required = jwk => {
+        if (!object(jwk)) throw new TypeError('Expected JWK');
+        const names = jwk.kty === 'RSA'
+            ? ['e', 'kty', 'n']
+            : jwk.kty === 'EC'
+                ? ['crv', 'kty', 'x', 'y']
+                : jwk.kty === 'OKP'
+                    ? ['crv', 'kty', 'x']
+                    : jwk.kty === 'oct'
+                        ? ['k', 'kty']
+                        : null;
+        if (!names || names.some(name => typeof jwk[name] !== 'string'))
+            throw new TypeError('Unsupported or incomplete JWK');
+        return Object.fromEntries(names.map(name => [name, jwk[name]]));
+    };
+
+    const jwk = Object.freeze({
+        import: importKey,
+        export: async key => subtle.exportKey('jwk', key),
+        thumbprint: async key => {
+            const material = isCryptoKey(key) ? await subtle.exportKey('jwk', key) : key;
+            const digest = await subtle.digest('SHA-256', encoder.encode(canonical(required(material))));
+            return encode(new Uint8Array(digest));
+        }
+    });
+    return Object.freeze({ jwt, jws, jwk });
+}
+
+
+/***/ },
+
+/***/ 9874
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   iv: () => (/* reexport safe */ _node_kms_js__WEBPACK_IMPORTED_MODULE_3__.Ay)
+/* harmony export */ });
+/* unused harmony exports crypto, aes, sha256, ed25519, rsa, encoding, jwt, jws, jwk */
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2561);
+/* harmony import */ var _portable_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(425);
+/* harmony import */ var _index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8685);
+/* harmony import */ var _node_kms_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2845);
+
+
+ // Existing KMS implementation (unchanged)
+
+const standalone=(0,_portable_index_js__WEBPACK_IMPORTED_MODULE_1__/* .createKMS */ .q)(node_crypto__WEBPACK_IMPORTED_MODULE_0__.webcrypto);
+const {crypto,aes,sha256,ed25519,rsa,encoding,jwt,jws,jwk}=standalone;
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze({..._index_js__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .A,...standalone,kms: _node_kms_js__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .Ay}));
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ ]);
 
 
@@ -34150,264 +35719,6 @@ async function createRuntimeDirectories(server, organization_id, { useRepository
 
 /***/ },
 
-/***/ 187
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   y: () => (/* binding */ createOAuth)
-/* harmony export */ });
-/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2561);
-
-
-const STORE_ARRAY = 'mcp-oauth';
-const ACCESS_TTL = 10 * 60;
-const REFRESH_TTL = 30 * 24 * 60 * 60;
-const CODE_TTL = 5 * 60;
-const DEFAULT_SCOPE = 'mcp';
-
-const hash = value => (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.createHash)('sha256').update(value).digest('hex');
-const randomToken = () => (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.randomBytes)(32).toString('base64url');
-const equal = (a, b) => {
-    const left = Buffer.from(String(a));
-    const right = Buffer.from(String(b));
-    return left.length === right.length && (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.timingSafeEqual)(left, right);
-};
-
-function json(res, status, body, headers = {}) {
-    res.writeHead(status, {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Cache-Control': 'no-store',
-        Pragma: 'no-cache',
-        ...headers
-    });
-    res.end(JSON.stringify(body));
-}
-
-async function body(req) {
-    const chunks = [];
-    let size = 0;
-    for await (const chunk of req) {
-        size += chunk.length;
-        if (size > 32 * 1024) throw Object.assign(new Error('Request body is too large.'), { status: 413 });
-        chunks.push(chunk);
-    }
-    const text = Buffer.concat(chunks).toString('utf8');
-    if ((req.headers['content-type'] || '').includes('application/json')) {
-        try { return JSON.parse(text); } catch { throw Object.assign(new Error('Invalid JSON body.'), { status: 400 }); }
-    }
-    return Object.fromEntries(new URLSearchParams(text));
-}
-
-async function hostContext(server, req) {
-    const host = new URL(`https://${req.headers.host || ''}`).hostname;
-    const configuredHost = server.host ? new URL(`https://${server.host}`).hostname : null;
-    const organization = server.organization_id && configuredHost === host
-        ? { _id: server.organization_id }
-        : await server.crud.getOrganization({ host });
-    if (!organization?._id || organization.error) throw Object.assign(new Error('Organization not found.'), { status: 404 });
-    return { host, organization_id: organization._id };
-}
-
-function store(server, context) {
-    const base = { ...context, array: STORE_ARRAY };
-    return {
-        async read(query) {
-            const result = await server.crud.send({ method: 'object.read', ...base, filter: { query, limit: 2 } });
-            return Array.isArray(result?.object) ? result.object : result?.object ? [result.object] : [];
-        },
-        async create(object) {
-            return server.crud.send({ method: 'object.create', ...base, object: { _id: (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.randomBytes)(12).toString('hex'), ...object } });
-        },
-        async update(id, object) {
-            return server.crud.send({ method: 'object.update', ...base, object: { _id: id, ...object }, upsert: false });
-        },
-        async remove(id) {
-            return server.crud.send({ method: 'object.delete', ...base, object: { _id: id } });
-        }
-    };
-}
-
-function verifierValid(verifier, challenge) {
-    return typeof verifier === 'string' && verifier.length >= 43 && verifier.length <= 128 &&
-        /^[A-Za-z0-9._~-]+$/.test(verifier) &&
-        equal((0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.createHash)('sha256').update(verifier).digest('base64url'), challenge);
-}
-
-function cookieToken(req) {
-    const cookie = req.headers.cookie || '';
-    const match = cookie.match(/(?:^|;\s*)token=([^;]+)/);
-    if (!match) return '';
-    try { return decodeURIComponent(match[1]); } catch { return ''; }
-}
-
-function redirectWith(url, fields) {
-    const target = new URL(url);
-    for (const [key, value] of Object.entries(fields)) target.searchParams.set(key, value);
-    return target.toString();
-}
-
-function createOAuth(server, { mcpPath = '/mcp', authorizationPage = '/auth/oauth.html' } = {}) {
-    const issuerFor = req => new URL('/', `https://${req.headers.host}`).origin;
-    const resourceFor = req => new URL(mcpPath, issuerFor(req)).toString();
-    const pageFor = req => new URL(authorizationPage, issuerFor(req)).toString();
-
-    async function metadata(req, res) {
-        const issuer = issuerFor(req);
-        return json(res, 200, {
-            issuer,
-            authorization_endpoint: new URL('/oauth/authorize', issuer).toString(),
-            token_endpoint: new URL('/oauth/token', issuer).toString(),
-            registration_endpoint: new URL('/oauth/register', issuer).toString(),
-            revocation_endpoint: new URL('/oauth/revoke', issuer).toString(),
-            response_types_supported: ['code'],
-            grant_types_supported: ['authorization_code', 'refresh_token'],
-            code_challenge_methods_supported: ['S256'],
-            token_endpoint_auth_methods_supported: ['none'],
-            revocation_endpoint_auth_methods_supported: ['none'],
-            scopes_supported: [DEFAULT_SCOPE],
-            client_id_metadata_document_supported: false
-        });
-    }
-
-    async function route(req, res) {
-        let context;
-        try { context = await hostContext(server, req); }
-        catch (error) { return json(res, error.status || 500, { error: 'server_error', error_description: error.message }); }
-        const db = store(server, context);
-        const url = new URL(req.url, `https://${req.headers.host}`);
-        const issuer = issuerFor(req);
-        const resource = resourceFor(req);
-
-        if (req.method === 'GET' && url.pathname === '/.well-known/oauth-authorization-server') return metadata(req, res);
-        if (req.method === 'GET' && url.pathname === `/.well-known/oauth-protected-resource${mcpPath}`) {
-            return json(res, 200, { resource, authorization_servers: [issuer], bearer_methods_supported: ['header'], scopes_supported: [DEFAULT_SCOPE] });
-        }
-        if (req.method === 'GET' && url.pathname === '/.well-known/oauth-protected-resource') {
-            return json(res, 200, { resource, authorization_servers: [issuer], bearer_methods_supported: ['header'], scopes_supported: [DEFAULT_SCOPE] });
-        }
-        if (req.method === 'POST' && url.pathname === '/oauth/register') {
-            let input;
-            try { input = await body(req); } catch (error) { return json(res, error.status || 400, { error: 'invalid_client_metadata' }); }
-            const redirects = input.redirect_uris;
-            if (!Array.isArray(redirects) || !redirects.length || redirects.length > 10 || redirects.some(value => {
-                try {
-                    const target = new URL(value);
-                    const secureRedirect = target.protocol === 'https:';
-                    const loopbackRedirect = target.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(target.hostname);
-                    return (!secureRedirect && !loopbackRedirect) || target.username || target.password || target.hash;
-                } catch { return true; }
-            })) return json(res, 400, { error: 'invalid_redirect_uri' });
-            const clientId = randomToken();
-            await db.create({ type: 'client', client_id: clientId, redirect_uris: redirects, client_name: String(input.client_name || 'MCP client').slice(0, 100), created_at: Date.now() });
-            return json(res, 201, { client_id: clientId, client_id_issued_at: Math.floor(Date.now() / 1000), redirect_uris: redirects, client_name: String(input.client_name || 'MCP client').slice(0, 100), token_endpoint_auth_method: 'none', grant_types: ['authorization_code', 'refresh_token'], response_types: ['code'] });
-        }
-        if (req.method === 'GET' && url.pathname === '/oauth/authorize') {
-            const p = url.searchParams;
-            const client = (await db.read({ type: 'client', client_id: p.get('client_id') }))[0];
-            const redirectUri = p.get('redirect_uri');
-            const state = p.get('state');
-            const challenge = p.get('code_challenge');
-            if (!client || !client.redirect_uris?.includes(redirectUri)) return json(res, 400, { error: 'invalid_request', error_description: 'Unknown client or redirect URI.' });
-            if (p.get('response_type') !== 'code' || p.get('code_challenge_method') !== 'S256' ||
-                !/^[A-Za-z0-9_-]{43,128}$/.test(challenge || '') || !state || state.length > 4096 || p.get('resource') !== resource) {
-                return json(res, 400, { error: 'invalid_request', error_description: 'Authorization Code with PKCE S256 and the MCP resource are required.' });
-            }
-            const scope = (p.get('scope') || DEFAULT_SCOPE).split(/\s+/).filter(Boolean);
-            if (scope.some(item => item !== DEFAULT_SCOPE)) return json(res, 400, { error: 'invalid_scope' });
-            const requestId = randomToken();
-            await db.create({ type: 'authorization', request_id: hash(requestId), client_id: client.client_id, redirect_uri: redirectUri, state, challenge, scope, resource, expires_at: Date.now() + CODE_TTL * 1000 });
-            const page = new URL(pageFor(req));
-            page.searchParams.set('request', requestId);
-            return res.writeHead(302, { Location: page.toString(), 'Cache-Control': 'no-store' }), res.end();
-        }
-        if (req.method === 'GET' && url.pathname === '/oauth/request') {
-            const id = url.searchParams.get('id') || '';
-            const tx = (await db.read({ type: 'authorization', request_id: hash(id) }))[0];
-            if (!tx || tx.expires_at < Date.now()) return json(res, 400, { error: 'invalid_request' });
-            const client = (await db.read({ type: 'client', client_id: tx.client_id }))[0];
-            return json(res, 200, { client_name: client?.client_name || 'MCP client', scope: tx.scope });
-        }
-        if (req.method === 'POST' && url.pathname === '/oauth/decision') {
-            const origin = req.headers.origin;
-            if (origin !== issuer) return json(res, 403, { error: 'access_denied' });
-            let input;
-            try { input = await body(req); } catch { return json(res, 400, { error: 'invalid_request' }); }
-            const id = String(input.request || '');
-            const tx = (await db.read({ type: 'authorization', request_id: hash(id) }))[0];
-            if (!tx || tx.expires_at < Date.now()) return json(res, 400, { error: 'invalid_request' });
-            if (input.approved !== true) {
-                await db.remove(tx._id);
-                return json(res, 200, { redirect: redirectWith(tx.redirect_uri, { error: 'access_denied', state: tx.state }) });
-            }
-            const sessionToken = cookieToken(req);
-            if (!sessionToken || !server.authenticate?.decodeToken) return json(res, 401, { error: 'login_required' });
-            const session = await server.authenticate.decodeToken(sessionToken, context.organization_id, undefined, context.host);
-            if (!session?.user_id) return json(res, 401, { error: 'login_required' });
-            const code = randomToken();
-            await db.remove(tx._id);
-            await db.create({ type: 'code', code_hash: hash(code), client_id: tx.client_id, redirect_uri: tx.redirect_uri, challenge: tx.challenge, scope: tx.scope, resource: tx.resource, user_id: session.user_id, expires_at: Date.now() + CODE_TTL * 1000 });
-            return json(res, 200, { redirect: redirectWith(tx.redirect_uri, { code, state: tx.state }) });
-        }
-        if (req.method === 'POST' && url.pathname === '/oauth/token') {
-            let input;
-            try { input = await body(req); } catch { return json(res, 400, { error: 'invalid_request' }); }
-            if (input.grant_type === 'authorization_code') {
-                const codeRecord = (await db.read({ type: 'code', code_hash: hash(input.code || '') }))[0];
-                if (!codeRecord || codeRecord.expires_at < Date.now() || codeRecord.client_id !== input.client_id || codeRecord.redirect_uri !== input.redirect_uri || codeRecord.resource !== input.resource || !verifierValid(input.code_verifier, codeRecord.challenge)) return json(res, 400, { error: 'invalid_grant' });
-                await db.remove(codeRecord._id);
-                const accessToken = randomToken();
-                const refreshToken = randomToken();
-                await db.create({ type: 'token', token_hash: hash(accessToken), user_id: codeRecord.user_id, client_id: codeRecord.client_id, scope: codeRecord.scope, resource: codeRecord.resource, expires_at: Date.now() + ACCESS_TTL * 1000, refresh_hash: hash(refreshToken), refresh_expires_at: Date.now() + REFRESH_TTL * 1000 });
-                return json(res, 200, { access_token: accessToken, token_type: 'Bearer', expires_in: ACCESS_TTL, refresh_token: refreshToken, scope: codeRecord.scope.join(' ') });
-            }
-            if (input.grant_type === 'refresh_token') {
-                const token = (await db.read({ type: 'token', refresh_hash: hash(input.refresh_token || '') }))[0];
-                if (!token || token.refresh_expires_at < Date.now() || token.client_id !== input.client_id || token.resource !== input.resource) return json(res, 400, { error: 'invalid_grant' });
-                await db.remove(token._id);
-                const accessToken = randomToken();
-                const refreshToken = randomToken();
-                await db.create({ type: 'token', token_hash: hash(accessToken), user_id: token.user_id, client_id: token.client_id, scope: token.scope, resource: token.resource, expires_at: Date.now() + ACCESS_TTL * 1000, refresh_hash: hash(refreshToken), refresh_expires_at: Date.now() + REFRESH_TTL * 1000 });
-                return json(res, 200, { access_token: accessToken, token_type: 'Bearer', expires_in: ACCESS_TTL, refresh_token: refreshToken, scope: token.scope.join(' ') });
-            }
-            return json(res, 400, { error: 'unsupported_grant_type' });
-        }
-        if (req.method === 'POST' && url.pathname === '/oauth/revoke') {
-            let input;
-            try { input = await body(req); } catch { return json(res, 400, { error: 'invalid_request' }); }
-            const valueHash = hash(input.token || '');
-            const access = await db.read({ type: 'token', token_hash: valueHash });
-            const refresh = await db.read({ type: 'token', refresh_hash: valueHash });
-            for (const record of [...access, ...refresh]) await db.remove(record._id);
-            return json(res, 200, {});
-        }
-        return json(res, 404, { error: 'not_found' });
-    }
-
-    async function authenticate(req) {
-        const bearer = req.headers.authorization?.match(/^Bearer\s+(\S+)$/i)?.[1];
-        if (!bearer) return null;
-        const context = await hostContext(server, req);
-        const records = await store(server, context).read({ type: 'token', token_hash: hash(bearer) });
-        const token = records[0];
-        if (!token || token.expires_at <= Date.now() || token.resource !== resourceFor(req) || !token.scope?.includes(DEFAULT_SCOPE)) return null;
-        return { ...context, user_id: token.user_id, oauth: true, scope: token.scope || [] };
-    }
-
-    const safeRoute = async (req, res) => {
-        try {
-            await route(req, res);
-        } catch (error) {
-            if (!res.headersSent && !res.writableEnded) {
-                json(res, error.status || 500, { error: 'server_error', error_description: error.status ? error.message : 'OAuth request failed.' });
-            } else if (!res.writableEnded) res.end();
-        }
-    };
-    return { route: safeRoute, authenticate, resourceFor };
-}
-
-
-/***/ },
-
 /***/ 5277
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
@@ -34418,8 +35729,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tools_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4395);
 /* harmony import */ var _capabilities_registry_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3204);
 /* harmony import */ var _capabilities_config_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8321);
-/* harmony import */ var _oauth_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(187);
-
 
 
 
@@ -34588,7 +35897,6 @@ function init(server, options = {}) {
 
     const path = options.path || DEFAULT_PATH;
     if (server.routes.has(path)) throw new Error(`CoCreate route is already registered: ${path}`);
-    const oauth = (0,_oauth_js__WEBPACK_IMPORTED_MODULE_3__/* .createOAuth */ .y)(server, { mcpPath: path, authorizationPage: options.authorizationPage });
     let aiConfigError;
     const aiConfigPromise = Promise.resolve(options.aiConfig
         ? options.aiConfig
@@ -34661,7 +35969,10 @@ function init(server, options = {}) {
         let context;
         try {
             const bootstrap = ['initialize', 'notifications/initialized', 'ping', 'tools/list'].includes(message.method);
-            if (req.headers.authorization) context = await oauth.authenticate(req);
+            if (req.headers.authorization) {
+                const resource = new URL(path, `https://${req.headers.host}`).toString();
+                context = await server.oauth?.authenticate(req, { resource, scope: 'mcp' });
+            }
             if (!context && message.method === 'tools/call' && req.headers['x-api-key']) {
                 context = await authenticateApiKey(server, req);
             }
@@ -34775,19 +36086,10 @@ function init(server, options = {}) {
         }
     };
 
-    const oauthPaths = [
-        '/oauth/register', '/oauth/authorize', '/oauth/request', '/oauth/decision',
-        '/oauth/token', '/oauth/revoke', '/.well-known/oauth-authorization-server',
-        '/.well-known/oauth-protected-resource', `/.well-known/oauth-protected-resource${path}`
-    ];
-    const registeredPaths = new Set([path, ...oauthPaths]);
-    for (const routePath of registeredPaths) {
-        if (server.routes.has(routePath)) throw new Error(`CoCreate route is already registered: ${routePath}`);
+    if (server.routes.has(path)) {
+        throw new Error(`CoCreate route is already registered: ${path}`);
     }
     server.routes.set(path, route);
-    for (const oauthPath of oauthPaths) {
-        server.routes.set(oauthPath, oauth.route);
-    }
     return {
         tools: {
             register(definition) {
@@ -34802,7 +36104,6 @@ function init(server, options = {}) {
         },
         close() {
             if (server.routes.get(path) === route) server.routes.delete(path);
-            for (const oauthPath of oauthPaths) if (server.routes.get(oauthPath) === oauth.route) server.routes.delete(oauthPath);
             tools.clear();
         }
     };
@@ -39007,12 +40308,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var node_dns_promises__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3538);
 /* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7869);
 /* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(4276);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(717);
+/* harmony import */ var _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9874);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
  * Licensed under GNU AGPLv3.
  ********************************************************************************/
+
 
 
 
@@ -39218,10 +40520,10 @@ class NativeCertificatesClient {
 
         let accountKey = options.accountKey;
         if (typeof accountKey === "string") {
-            accountKey = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.parsePrivateKey(accountKey);
+            accountKey = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.parsePrivateKey(accountKey);
         } else if (!accountKey) {
-            const keyPair = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.generateKeyPair("rsa", { modulusLength: 2048 });
-            accountKey = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.parsePrivateKey(keyPair.privateKey);
+            const keyPair = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.generateKeyPair("rsa", { modulusLength: 2048 });
+            accountKey = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.parsePrivateKey(keyPair.privateKey);
         }
 
         this.accountKey = accountKey;
@@ -39230,8 +40532,8 @@ class NativeCertificatesClient {
         this.directory = null;
         this.accountInitPromise = null;
 
-        this.jwk = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.exportJwk(this.accountKey);
-        this.jwkThumbprint = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.getJwkThumbprint(this.jwk);
+        this.jwk = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.exportJwk(this.accountKey);
+        this.jwkThumbprint = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.getJwkThumbprint(this.jwk);
     }
 
     /**
@@ -39295,7 +40597,7 @@ class NativeCertificatesClient {
             ...(this.accountUrl ? { kid: this.accountUrl } : { jwk: this.jwk })
         };
 
-        const body = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.createJWS(header, payload, this.accountKey);
+        const body = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.createJWS(header, payload, this.accountKey);
 
         const res = await fetch(url, {
             method: "POST",
@@ -39461,7 +40763,7 @@ class NativeCertificatesClient {
  * @environment server
  */
     async finalizeOrder(order, domainPrivateKey, domains) {
-        const csrBase64Url = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.createCSR(domainPrivateKey, domains);
+        const csrBase64Url = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.createCSR(domainPrivateKey, domains);
         const res = await this.postJws(order.finalize, { csr: csrBase64Url });
 
         if (!res.ok) {
@@ -39514,12 +40816,12 @@ async function ensureLocalSelfSignedCert(rawHost = "localhost") {
         await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].mkdir(targetPath, { recursive: true, mode: 0o700 });
         let key, cert;
 
-        if (typeof _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.createSelfSignedCert === "function") {
-            const certData = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.createSelfSignedCert(domain);
+        if (typeof _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.createSelfSignedCert === "function") {
+            const certData = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.createSelfSignedCert(domain);
             key = certData.key || certData.privateKey;
             cert = certData.cert || certData.certificate;
         } else {
-            const keyPair = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.generateKeyPair("rsa", { modulusLength: 2048 });
+            const keyPair = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.generateKeyPair("rsa", { modulusLength: 2048 });
             key = keyPair.privateKey;
             cert = keyPair.publicKey;
         }
@@ -39593,7 +40895,7 @@ function readCertificateExpiry(certPem) {
     try {
         if (!certPem) return null;
         const pemString = typeof certPem !== "string" ? certPem.toString() : certPem;
-        const expiry = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.readCertificateExpiry(pemString);
+        const expiry = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.readCertificateExpiry(pemString);
         if (expiry) {
             const date = new Date(expiry);
             if (!isNaN(date.getTime())) return date;
@@ -39724,7 +41026,7 @@ async function request(rawHost, hostPosition, hostObject, organization_id, wildc
         await node_fs_promises__WEBPACK_IMPORTED_MODULE_0__["default"].mkdir(hostKeyPath, { recursive: true, mode: 0o700 });
 
         const domains = wildcard ? [domain, `*.${domain}`] : [domain];
-        const domainKeyPair = _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__/* .security */ .rG.generateKeyPair("rsa", { modulusLength: 2048 });
+        const domainKeyPair = _cocreate_kms_server__WEBPACK_IMPORTED_MODULE_7__/* .kms */ .iv.generateKeyPair("rsa", { modulusLength: 2048 });
         const domainPrivateKeyPem = domainKeyPair.privateKey;
 
         if (!client) {
@@ -45647,914 +46949,6 @@ function searchParamsToObject(value) {
 
 /***/ },
 
-/***/ 717
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* unused harmony exports Security, timingSafeEqual, base64urlEncode, base64urlDecode, base64UrlEncode, base64UrlDecode, base64Encode, hexEncode, hash, signHmac, generateKeyPair, generateApiKey, verifyApiKey, generateJWT, verifyJWT, decodeToken, verifyToken, generateToken, encrypt, decrypt, createCSR, readCertificateExpiry, parsePrivateKey, exportJwk, getJwkThumbprint, createJWS, generateVapidKeys, createVapidToken, createOAuthAssertion, createWebhookSignature, createAwsSigV4Token, transform */
-/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2561);
-/* harmony import */ var node_buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1786);
-
-
-
-/**
- * Packs a single ASN.1 tag and length wrapper around content bytes.
- * @param {number} tag - ASN.1 tag identifier byte
- * @param {Buffer} content - Raw content payload buffer
- * @returns {Buffer} DER-encoded tag-length-value structure
- */
-function derTag(tag, content) {
-    let lenBytes;
-    const len = content.length;
-
-    if (len < 128) {
-        lenBytes = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([len]);
-    } else if (len < 256) {
-        lenBytes = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0x81, len]);
-    } else if (len < 65536) {
-        lenBytes = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0x82, (len >> 8) & 0xff, len & 0xff]);
-    } else {
-        lenBytes = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0x83, (len >> 16) & 0xff, (len >> 8) & 0xff, len & 0xff]);
-    }
-
-    return node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat([node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([tag]), lenBytes, content]);
-}
-
-/**
- * Packs an array of ASN.1 DER elements into a DER Sequence (0x30).
- * @param {Buffer[]} items - Array of DER-encoded element buffers
- * @returns {Buffer} DER Sequence buffer
- */
-function derSequence(items) {
-    return derTag(0x30, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat(items));
-}
-
-/**
- * Packs an array of ASN.1 DER elements into a DER Set (0x31).
- * @param {Buffer[]} items - Array of DER-encoded element buffers
- * @returns {Buffer} DER Set buffer
- */
-function derSet(items) {
-    return derTag(0x31, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat(items));
-}
-
-/**
- * Encodes a dot-separated Object Identifier (OID) string into DER format.
- * @param {string} oidString - Dot-separated OID string (e.g. "2.5.4.3")
- * @returns {Buffer} DER OID buffer
- */
-function derOID(oidString) {
-    const parts = oidString.split(".").map(Number);
-    const bytes = [parts[0] * 40 + parts[1]];
-
-    for (let i = 2; i < parts.length; i++) {
-        let val = parts[i];
-        const stack = [];
-        stack.push(val & 0x7f);
-        while ((val >>= 7) > 0) {
-            stack.push((val & 0x7f) | 0x80);
-        }
-        bytes.push(...stack.reverse());
-    }
-
-    return derTag(0x06, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(bytes));
-}
-
-/**
- * Universal Security Engine
- *
- * Provides atomic cryptographic primitives, ASN.1/DER certificate utilities,
- * and high-level token composers designed to be invoked directly or
- * evaluated dynamically by an Abstract System / ASC engine ($security.*).
- */
-class Security {
-
-    /**
-     * Constant-time comparison between two string or Buffer values.
-     * Guards against timing side-channel attacks during verification.
-     *
-     * @param {string|Buffer} a - First comparison value
-     * @param {string|Buffer} b - Second comparison value
-     * @returns {boolean} True if values match identically
-     */
-    static timingSafeEqual(a, b) {
-        if (typeof a !== typeof b) return false;
-
-        const bufA = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(a) ? a : node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(String(a));
-        const bufB = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(b) ? b : node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(String(b));
-
-        if (bufA.length !== bufB.length) {
-            node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].timingSafeEqual(bufA, bufA);
-            return false;
-        }
-
-        return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].timingSafeEqual(bufA, bufB);
-    }
-
-    /**
-     * Encodes input into Base64URL format (RFC 7515).
-     * @param {any} input - Input object, string, or buffer
-     * @returns {string} Base64URL encoded string
-     */
-    static base64urlEncode(input) {
-        if (node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(input)) {
-            return input.toString("base64url");
-        }
-        const str = typeof input === "object" ? JSON.stringify(input) : String(input);
-        return node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(str, "utf8").toString("base64url");
-    }
-
-    /**
-     * CamelCase alias for base64urlEncode for normalized cross-module conventions.
-     * @param {any} input - Input object, string, or buffer
-     * @returns {string} Base64URL encoded string
-     */
-    static base64UrlEncode(input) {
-        return this.base64urlEncode(input);
-    }
-
-    /**
-     * Decodes Base64URL string back into UTF-8 string or parsed JSON object.
-     * @param {string} str - Base64URL encoded input
-     * @param {boolean} [parseJson=true] - Attempt JSON parsing if true
-     * @returns {any} Decoded string or parsed object
-     */
-    static base64urlDecode(str, parseJson = true) {
-        try {
-            const decoded = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(str, "base64url").toString("utf8");
-            return parseJson ? JSON.parse(decoded) : decoded;
-        } catch {
-            return null;
-        }
-    }
-
-    /**
-     * CamelCase alias for base64urlDecode for normalized cross-module conventions.
-     * @param {string} str - Base64URL encoded input
-     * @param {boolean} [parseJson=true] - Attempt JSON parsing if true
-     * @returns {any} Decoded string or parsed object
-     */
-    static base64UrlDecode(str, parseJson = true) {
-        return this.base64urlDecode(str, parseJson);
-    }
-
-    /**
-     * Encodes input into standard Base64 format.
-     * @param {any} input - Input object, string, or buffer
-     * @returns {string} Base64 string
-     */
-    static base64Encode(input) {
-        if (node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(input)) {
-            return input.toString("base64");
-        }
-        const str = typeof input === "object" ? JSON.stringify(input) : String(input);
-        return node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(str, "utf8").toString("base64");
-    }
-
-    /**
-     * Encodes input into Hexadecimal format.
-     * @param {any} input - Input object, string, or buffer
-     * @returns {string} Hex string
-     */
-    static hexEncode(input) {
-        if (node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(input)) {
-            return input.toString("hex");
-        }
-        const str = typeof input === "object" ? JSON.stringify(input) : String(input);
-        return node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(str, "utf8").toString("hex");
-    }
-
-    /**
-     * Generates a cryptographic hash digest (SHA-256, SHA-512, MD5, etc.).
-     *
-     * @param {string|Buffer|Object} payload - Data to hash
-     * @param {string} [algorithm='sha256'] - Hashing algorithm
-     * @param {string} [digest='hex'] - Output format ('hex', 'base64', 'base64url')
-     * @returns {string} Calculated digest string
-     */
-    static hash(payload, algorithm = "sha256", digest = "hex") {
-        const data = (typeof payload === "object" && !node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(payload))
-            ? JSON.stringify(payload)
-            : String(payload);
-        return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHash(algorithm).update(data).digest(digest);
-    }
-
-    /**
-     * Generates an HMAC signature using a shared secret.
-     *
-     * @param {string|Buffer|Object} payload - Data to sign
-     * @param {string|Buffer} secret - Shared secret key
-     * @param {string} [algorithm='sha256'] - HMAC algorithm
-     * @param {string} [digest='hex'] - Output digest format ('hex', 'base64', 'base64url')
-     * @returns {string} Calculated HMAC string
-     */
-    static signHmac(payload, secret, algorithm = "sha256", digest = "hex") {
-        const data = (typeof payload === "object" && !node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(payload))
-            ? JSON.stringify(payload)
-            : String(payload);
-        return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac(algorithm, secret).update(data).digest(digest);
-    }
-
-    /**
-     * Dynamically generates RSA, EC, Ed25519, or X25519 key pairs.
-     * @param {string} [type='rsa'] - Key algorithm type ('rsa', 'ec', 'ed25519', 'x25519')
-     * @param {Object} [options={}] - Options (e.g. { modulusLength: 2048 }, { namedCurve: 'prime256v1' })
-     * @returns {{publicKey: string, privateKey: string}} PEM key pair object
-     */
-    static generateKeyPair(type = "rsa", options = {}) {
-        const algoType = type.toLowerCase();
-
-        switch (algoType) {
-            case "rsa": {
-                const { modulusLength = 2048 } = options;
-                return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].generateKeyPairSync("rsa", {
-                    modulusLength,
-                    publicKeyEncoding: { type: "spki", format: "pem" },
-                    privateKeyEncoding: { type: "pkcs8", format: "pem" }
-                });
-            }
-            case "ec": {
-                const { namedCurve = "prime256v1" } = options;
-                return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].generateKeyPairSync("ec", {
-                    namedCurve,
-                    publicKeyEncoding: { type: "spki", format: "pem" },
-                    privateKeyEncoding: { type: "pkcs8", format: "pem" }
-                });
-            }
-            case "ed25519":
-            case "x25519": {
-                return node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].generateKeyPairSync(algoType, {
-                    publicKeyEncoding: { type: "spki", format: "pem" },
-                    privateKeyEncoding: { type: "pkcs8", format: "pem" }
-                });
-            }
-            default:
-                throw new Error(`[SECURITY] Unsupported key pair algorithm: ${type}`);
-        }
-    }
-
-    /**
-     * Generates an RSA key pair with an OpenSSH-formatted public key.
-     * The public key can be registered with GitHub as a repository deploy key.
-     * @param {number} [modulusLength=3072] - RSA modulus size in bits
-     * @returns {{publicKey: string, privateKey: string}} OpenSSH public key and PEM private key
-     */
-    static generateSshKeyPair(modulusLength = 3072) {
-        const { publicKey, privateKey } = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].generateKeyPairSync("rsa", {
-            modulusLength,
-            publicKeyEncoding: { type: "spki", format: "pem" },
-            privateKeyEncoding: { type: "pkcs1", format: "pem" }
-        });
-        const jwk = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPublicKey(publicKey).export({ format: "jwk" });
-        const sshString = value => {
-            const length = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.alloc(4);
-            length.writeUInt32BE(value.length);
-            return node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat([length, value]);
-        };
-        const mpint = value => {
-            const buffer = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(value, "base64url");
-            return sshString(buffer[0] & 0x80 ? node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat([node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0]), buffer]) : buffer);
-        };
-        const encodedKey = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat([
-            sshString(node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from("ssh-rsa")),
-            mpint(jwk.e),
-            mpint(jwk.n)
-        ]).toString("base64");
-
-        return { publicKey: `ssh-rsa ${encodedKey}`, privateKey };
-    }
-
-    /**
-     * Constructs API keys with custom service prefixes and entropy lengths.
-     * @param {Object} [options={}] - Options ({ prefix, byteLength, encoding })
-     * @returns {{apiKey: string, secret: string, hashedKey: string}} Key details
-     */
-    static generateApiKey(options = {}) {
-        const { prefix = "sk_", byteLength = 32, encoding = "base64url" } = options;
-
-        const rawBytes = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].randomBytes(byteLength);
-        const secret = rawBytes.toString(encoding);
-        const apiKey = `${prefix}${secret}`;
-        const hashedKey = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHash("sha256").update(apiKey).digest("hex");
-
-        return { apiKey, secret, hashedKey };
-    }
-
-    /**
-     * Validates an incoming API key against a stored SHA-256 hash in constant time.
-     * @param {string} incomingApiKey - Incoming API key
-     * @param {string} storedHashedKey - Expected SHA-256 hash
-     * @returns {boolean} True if key matches
-     */
-    static verifyApiKey(incomingApiKey, storedHashedKey) {
-        if (!incomingApiKey || !storedHashedKey) return false;
-        const computedHash = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHash("sha256").update(incomingApiKey).digest("hex");
-        return this.timingSafeEqual(computedHash, storedHashedKey);
-    }
-
-    /**
-     * Generates a signed JWT with symmetric or asymmetric algorithms.
-     * @param {Object} tokenEnvelope - Token envelope ({ header, payload })
-     * @param {string|Buffer} secretOrPrivateKey - Key or secret
-     * @param {string} [algorithm='RS256'] - JWT algorithm (HS256, RS256, ES256, etc.)
-     * @returns {string} Compact signed JWT string
-     */
-    static generateJWT(tokenEnvelope, secretOrPrivateKey, algorithm = "RS256") {
-        const { header = {}, payload = {} } = tokenEnvelope;
-
-        const jwtHeader = { alg: algorithm, typ: "JWT", ...header };
-        const encodedHeader = this.base64urlEncode(jwtHeader);
-        const encodedPayload = this.base64urlEncode(payload);
-        const signatureInput = `${encodedHeader}.${encodedPayload}`;
-
-        let signature = "";
-
-        if (algorithm.startsWith("HS")) {
-            const hashAlg = algorithm === "HS512" ? "sha512" : "sha256";
-            signature = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac(hashAlg, secretOrPrivateKey)
-                .update(signatureInput)
-                .digest("base64url");
-        } else {
-            const hashAlg = algorithm.startsWith("ES") ? "sha256" : (algorithm === "RS512" ? "sha512" : "sha256");
-            const signer = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createSign(hashAlg);
-            signer.update(signatureInput);
-            signer.end();
-            signature = signer.sign(secretOrPrivateKey, "base64url");
-        }
-
-        return `${signatureInput}.${signature}`;
-    }
-
-    /**
-     * Verifies and decodes a signed JWT token.
-     * @param {string} token - Signed JWT string
-     * @param {string|Buffer} secretOrPublicKey - Key or secret
-     * @param {string} [algorithm='RS256'] - JWT algorithm
-     * @returns {Object|null} Decoded payload object or null if invalid
-     */
-    static verifyJWT(token, secretOrPublicKey, algorithm = "RS256") {
-        try {
-            const parts = token.split(".");
-            if (parts.length !== 3) return null;
-
-            const [headerB64, payloadB64, signatureB64] = parts;
-            const signatureInput = `${headerB64}.${payloadB64}`;
-
-            let isValid = false;
-
-            if (algorithm.startsWith("HS")) {
-                const hashAlg = algorithm === "HS512" ? "sha512" : "sha256";
-                const expectedSignature = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac(hashAlg, secretOrPublicKey)
-                    .update(signatureInput)
-                    .digest("base64url");
-                isValid = this.timingSafeEqual(signatureB64, expectedSignature);
-            } else {
-                const hashAlg = algorithm.startsWith("ES") ? "sha256" : (algorithm === "RS512" ? "sha512" : "sha256");
-                const verifier = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createVerify(hashAlg);
-                verifier.update(signatureInput);
-                verifier.end();
-                isValid = verifier.verify(secretOrPublicKey, signatureB64, "base64url");
-            }
-
-            if (!isValid) return null;
-
-            const payload = this.base64urlDecode(payloadB64);
-            if (payload && payload.exp && (payload.exp * 1000) < Date.now()) {
-                return null;
-            }
-
-            return payload;
-        } catch {
-            return null;
-        }
-    }
-
-    /**
-     * High-level token decoder and verifier.
-     * Decodes JWT payload directly or verifies signature when secret is supplied.
-     * Normalized method to prevent module-level execution errors.
-     *
-     * @param {string} token - Token string to decode
-     * @param {string|Buffer} [secretOrPublicKey] - Optional secret/key for verification
-     * @param {string} [algorithm='RS256'] - JWT algorithm
-     * @returns {Object|null} Decoded payload or null
-     */
-    static decodeToken(token, secretOrPublicKey, algorithm = "RS256") {
-        if (!token || typeof token !== "string") return null;
-        if (secretOrPublicKey) {
-            return this.verifyJWT(token, secretOrPublicKey, algorithm);
-        }
-        const parts = token.split(".");
-        const payloadSegment = parts.length === 3 ? parts[1] : parts[0];
-        return this.base64urlDecode(payloadSegment, true);
-    }
-
-    /**
-     * Alias for verifyJWT for normalized authentication module contracts.
-     */
-    static verifyToken(token, secretOrPublicKey, algorithm = "RS256") {
-        return this.verifyJWT(token, secretOrPublicKey, algorithm);
-    }
-
-    /**
-     * Alias for generateJWT for normalized authentication module contracts.
-     */
-    static generateToken(tokenEnvelope, secretOrPrivateKey, algorithm = "RS256") {
-        return this.generateJWT(tokenEnvelope, secretOrPrivateKey, algorithm);
-    }
-
-    /**
-     * AES-256-GCM Authenticated Symmetric Encryption.
-     * @param {any} payload - Plaintext payload string or object
-     * @param {string|Buffer} secretKey - Passphrase or 32-byte key buffer
-     * @returns {{ciphertext: string, iv: string, tag: string}} Encrypted envelope
-     */
-    static encrypt(payload, secretKey) {
-        const key = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(secretKey) && secretKey.length === 32
-            ? secretKey
-            : node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHash("sha256").update(String(secretKey)).digest();
-        const iv = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].randomBytes(12);
-        const cipher = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createCipheriv("aes-256-gcm", key, iv);
-
-        const data = typeof payload === "object" && !node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(payload)
-            ? JSON.stringify(payload)
-            : String(payload);
-
-        let ciphertext = cipher.update(data, "utf8", "base64url");
-        ciphertext += cipher.final("base64url");
-        const tag = cipher.getAuthTag().toString("base64url");
-
-        return {
-            ciphertext,
-            iv: iv.toString("base64url"),
-            tag
-        };
-    }
-
-    /**
-     * AES-256-GCM Authenticated Symmetric Decryption.
-     * @param {{ciphertext: string, iv: string, tag: string}} envelope - Encrypted envelope
-     * @param {string|Buffer} secretKey - Passphrase or 32-byte key buffer
-     * @param {boolean} [parseJson=true] - Attempt JSON parsing if true
-     * @returns {any} Decoded plaintext string or object
-     */
-    static decrypt(envelope, secretKey, parseJson = true) {
-        try {
-            const { ciphertext, iv, tag } = envelope;
-            const key = node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(secretKey) && secretKey.length === 32
-                ? secretKey
-                : node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHash("sha256").update(String(secretKey)).digest();
-
-            const decipher = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createDecipheriv("aes-256-gcm", key, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(iv, "base64url"));
-            decipher.setAuthTag(node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(tag, "base64url"));
-
-            let plaintext = decipher.update(ciphertext, "base64url", "utf8");
-            plaintext += decipher.final("utf8");
-
-            return parseJson ? JSON.parse(plaintext) : plaintext;
-        } catch {
-            return null;
-        }
-    }
-
-    /**
-     * Generates a DER-encoded PKCS#10 Certificate Signing Request (CSR)
-     * supporting single and multi-domain (SAN) configurations for Let's Encrypt / SSL.
-     *
-     * @param {string|crypto.KeyObject} privateKeyInput - Domain private key (PEM or KeyObject)
-     * @param {string[]} domains - List of SAN domain names (primary domain first)
-     * @returns {string} Base64URL-encoded DER CSR
-     */
-    static createCSR(privateKeyInput, domains) {
-        if (!domains || domains.length === 0) {
-            throw new Error("[SECURITY] At least one domain is required to generate a CSR");
-        }
-
-        const privateKey = typeof privateKeyInput === "string"
-            ? node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPrivateKey(privateKeyInput)
-            : privateKeyInput;
-
-        const primaryDomain = domains[0];
-        const pubKeyDetails = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPublicKey(privateKey);
-        const spkiDer = pubKeyDetails.export({ type: "spki", format: "der" });
-
-        // Subject Attribute: Common Name (CN = primaryDomain)
-        const subject = derSequence([
-            derSet([
-                derSequence([
-                    derOID("2.5.4.3"), // CommonName OID
-                    derTag(0x0c, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(primaryDomain, "utf8")) // UTF8String
-                ])
-            ])
-        ]);
-
-        // Extension Request: Subject Alternative Names (SAN)
-        const sanEntries = domains.map(domain => derTag(0x82, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from(domain, "utf8"))); // Context primitive [2] dNSName
-        const sanExtension = derSequence([
-            derOID("2.5.29.17"), // subjectAltName OID
-            derTag(0x04, derSequence(sanEntries)) // OCTET STRING containing SAN Sequence
-        ]);
-
-        const extensionsSequence = derSequence([sanExtension]);
-        const attributeExtensionReq = derTag(0xa0, derSequence([
-            derOID("1.2.840.113549.1.9.14"), // extensionRequest OID
-            derSet([extensionsSequence])
-        ]));
-
-        // CertificationRequestInfo structure
-        const certReqInfo = derSequence([
-            derTag(0x02, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0x00])), // Version 0
-            subject,
-            spkiDer,
-            attributeExtensionReq
-        ]);
-
-        // Sign CertificationRequestInfo with Domain Private Key
-        const signer = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createSign("SHA256");
-        signer.update(certReqInfo);
-        const signature = signer.sign(privateKey);
-
-        // Signature Algorithm OID (sha256WithRSAEncryption or ecdsa-with-SHA256)
-        const isEC = privateKey.asymmetricKeyType === "ec";
-        const sigAlgOid = isEC ? "1.2.840.10045.4.3.2" : "1.2.840.113549.1.1.11";
-        const sigAlgorithm = derSequence([
-            derOID(sigAlgOid),
-            isEC ? node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.alloc(0) : derTag(0x05, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.alloc(0)) // NULL parameters for RSA
-        ]);
-
-        // PKCS#10 CertificationRequest Sequence
-        const csrDer = derSequence([
-            certReqInfo,
-            sigAlgorithm,
-            derTag(0x03, node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.concat([node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.from([0x00]), signature])) // BIT STRING
-        ]);
-
-        return this.base64urlEncode(csrDer);
-    }
-
-    /**
-     * Extracts expiration Date from a PEM Certificate using native Node X509 parser.
-     * @param {string|Buffer} certPem - PEM-encoded certificate
-     * @returns {Date|null} Expiration date object or null if invalid
-     */
-    static readCertificateExpiry(certPem) {
-        try {
-            const x509 = new node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].X509Certificate(certPem);
-            return new Date(x509.validTo);
-        } catch {
-            return null;
-        }
-    }
-
-    /**
-     * Converts a PEM string or KeyObject into a KeyObject.
-     * @param {string|crypto.KeyObject} keyInput
-     * @returns {crypto.KeyObject}
-     */
-    static parsePrivateKey(keyInput) {
-        return typeof keyInput === "string" ? node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPrivateKey(keyInput) : keyInput;
-    }
-
-    /**
-     * Exports a public key derived from key input as a JWK object.
-     * @param {string|crypto.KeyObject} keyInput
-     * @returns {Object} JWK representation
-     */
-    static exportJwk(keyInput) {
-        const key = typeof keyInput === "string" ? node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPrivateKey(keyInput) : keyInput;
-        const pubKey = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPublicKey(key);
-        return pubKey.export({ format: "jwk" });
-    }
-
-    /**
-     * Calculates RFC 7638 SHA-256 JWK Thumbprint
-     * @param {Object} jwk - JWK key object
-     * @returns {string} Base64URL encoded thumbprint
-     */
-    static getJwkThumbprint(jwk) {
-        const orderedJwk = jwk.kty === "RSA"
-            ? { e: jwk.e, kty: jwk.kty, n: jwk.n }
-            : { crv: jwk.crv, kty: jwk.kty, x: jwk.x, y: jwk.y };
-
-        const hashBuf = this.hash(JSON.stringify(orderedJwk), "sha256", "buffer");
-        return this.base64urlEncode(hashBuf);
-    }
-
-    /**
-     * Constructs a JWS signature object for ACME RFC 8555 protocol requests.
-     * @param {Object} header - Protected header fields (nonce, url, kid/jwk)
-     * @param {any} payload - Body payload string or object
-     * @param {string|crypto.KeyObject} privateKey - Signing private key
-     * @returns {string} Stringified JOSE JSON structure { protected, payload, signature }
-     */
-    static createJWS(header, payload, privateKey) {
-        const key = typeof privateKey === "string" ? node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createPrivateKey(privateKey) : privateKey;
-        const isEC = key.asymmetricKeyType === "ec";
-        const alg = header.alg || (isEC ? "ES256" : "RS256");
-
-        const fullHeader = { alg, ...header };
-        const protectedHeader = this.base64urlEncode(fullHeader);
-        const payloadString = payload !== "" ? this.base64urlEncode(payload) : "";
-
-        const signInput = `${protectedHeader}.${payloadString}`;
-        const signer = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createSign(isEC ? "sha256" : "SHA256");
-        signer.update(signInput);
-        const signature = this.base64urlEncode(signer.sign(key));
-
-        return JSON.stringify({
-            protected: protectedHeader,
-            payload: payloadString,
-            signature
-        });
-    }
-
-    /**
-     * Generates NIST P-256 (prime256v1) ECC key pairs for VAPID Web Push Notifications.
-     * @returns {{ publicKey: string, privateKey: string }} Base64URL-encoded key pair
-     */
-    static generateVapidKeys() {
-        const keyPair = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].generateKeyPairSync("ec", {
-            namedCurve: "prime256v1",
-            publicKeyEncoding: { type: "spki", format: "der" },
-            privateKeyEncoding: { type: "pkcs8", format: "der" }
-        });
-
-        // Uncompressed EC point extraction (65 bytes)
-        const pubDer = keyPair.publicKey;
-        const uncompressedPoint = pubDer.subarray(pubDer.length - 65);
-
-        return {
-            publicKey: this.base64urlEncode(uncompressedPoint),
-            privateKey: this.base64urlEncode(keyPair.privateKey)
-        };
-    }
-
-    /**
-     * Generates a VAPID token value for browser push notifications (RFC 8292).
-     * Returns: "vapid t=<jwt>, k=<public_key>"
-     *
-     * @param {Object} options - VAPID options ({ audience, subject, expiration, publicKey })
-     * @param {string|crypto.KeyObject} privateKey - VAPID private key
-     * @returns {string} Formatted VAPID authorization string
-     */
-    static createVapidToken(options, privateKey) {
-        const { audience, subject, expiration = Math.floor(Date.now() / 1000) + 43200, publicKey } = options;
-
-        const jwt = this.generateJWT({
-            header: { typ: "JWT", alg: "ES256" },
-            payload: { aud: audience, sub: subject, exp: expiration }
-        }, privateKey, "ES256");
-
-        return `vapid t=${jwt}, k=${publicKey}`;
-    }
-
-    /**
-     * Generates an OAuth 2.0 Client Assertion JWT (RFC 7523).
-     * Standardized protocol used for service-to-service authentication across
-     * Google Cloud, Salesforce, DocuSign, Okta, and enterprise OAuth 2.0 providers.
-     *
-     * @param {Object} options - Assertion details ({ issuer, subject, audience, scopes, expirationSeconds })
-     * @param {string|crypto.KeyObject} privateKey - Signing private key
-     * @param {string} [algorithm='RS256'] - Signing algorithm
-     * @returns {string} Signed OAuth assertion JWT string
-     */
-    static createOAuthAssertion(options, privateKey, algorithm = "RS256") {
-        const {
-            issuer,
-            subject = issuer,
-            audience,
-            scopes,
-            expirationSeconds = 3600
-        } = options;
-
-        const now = Math.floor(Date.now() / 1000);
-        const scopeString = Array.isArray(scopes) ? scopes.join(" ") : scopes;
-
-        const payload = {
-            iss: issuer,
-            sub: subject,
-            aud: audience,
-            iat: now,
-            exp: now + expirationSeconds
-        };
-
-        if (scopeString) {
-            payload.scope = scopeString;
-        }
-
-        return this.generateJWT({
-            header: { alg: algorithm, typ: "JWT" },
-            payload
-        }, privateKey, algorithm);
-    }
-
-    /**
-     * Computes a standard Webhook signature string (Stripe, Twilio, GitHub).
-     *
-     * @param {string|Buffer|Object} payload - Raw incoming request body
-     * @param {string} secret - Webhook signing secret key
-     * @param {Object} [options={}] - Options ({ timestamp, algorithm, format })
-     * @returns {string} Webhook signature string
-     */
-    static createWebhookSignature(payload, secret, options = {}) {
-        const { timestamp = Math.floor(Date.now() / 1000), algorithm = "sha256", format = "stripe" } = options;
-        const rawBody = typeof payload === "object" && !node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer.isBuffer(payload) ? JSON.stringify(payload) : String(payload);
-
-        if (format === "stripe") {
-            const signatureInput = `${timestamp}.${rawBody}`;
-            const signature = this.signHmac(signatureInput, secret, algorithm, "hex");
-            return `t=${timestamp},v1=${signature}`;
-        }
-
-        if (format === "github") {
-            const signature = this.signHmac(rawBody, secret, algorithm, "hex");
-            return `sha256=${signature}`;
-        }
-
-        return this.signHmac(rawBody, secret, algorithm, "hex");
-    }
-
-    /**
-     * Calculates an AWS SigV4 authorization signature string.
-     *
-     * @param {Object} requestDetails - Details ({ method, uri, queryParams, headers, payload, region, service })
-     * @param {Object} credentials - Credentials ({ accessKeyId, secretAccessKey })
-     * @returns {string} Full AWS SigV4 Authorization string
-     */
-    static createAwsSigV4Token(requestDetails, credentials) {
-        const {
-            method = "GET",
-            uri = "/",
-            queryParams = "",
-            headers = {},
-            payload = "",
-            region = "us-east-1",
-            service = "s3",
-            isoDate = new Date().toISOString().replace(/[:-]|\.\d{3}/g, "")
-        } = requestDetails;
-
-        const dateStamp = isoDate.slice(0, 8);
-        const hashedPayload = this.hash(payload, "sha256", "hex");
-
-        const canonicalHeaders = Object.keys(headers)
-            .map(k => `${k.toLowerCase()}:${headers[k].trim()}\n`)
-            .sort()
-            .join("");
-
-        const signedHeaders = Object.keys(headers)
-            .map(k => k.toLowerCase())
-            .sort()
-            .join(";");
-
-        const canonicalRequest = [
-            method.toUpperCase(),
-            uri,
-            queryParams,
-            canonicalHeaders,
-            signedHeaders,
-            hashedPayload
-        ].join("\n");
-
-        const credentialScope = `${dateStamp}/${region}/${service}/aws4_request`;
-        const stringToSign = [
-            "AWS4-HMAC-SHA256",
-            isoDate,
-            credentialScope,
-            this.hash(canonicalRequest, "sha256", "hex")
-        ].join("\n");
-
-        const kDate = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac("sha256", `AWS4${credentials.secretAccessKey}`).update(dateStamp).digest();
-        const kRegion = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac("sha256", kDate).update(region).digest();
-        const kService = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac("sha256", kRegion).update(service).digest();
-        const kSigning = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac("sha256", kService).update("aws4_request").digest();
-
-        const signature = node_crypto__WEBPACK_IMPORTED_MODULE_0__["default"].createHmac("sha256", kSigning).update(stringToSign).digest("hex");
-
-        return `AWS4-HMAC-SHA256 Credential=${credentials.accessKeyId}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
-    }
-
-    /**
-     * Dynamic Transformation Pipeline (ASC Executor Integration)
-     * Executes a chain of atomic security operations sequentially.
-     *
-     * @param {any} initialValue - Base input string, object, or buffer
-     * @param {Array<Object>} pipelineSteps - Ordered list of dynamic operations
-     * @returns {string|Buffer|Object} Final transformed token string or object
-     */
-    static transform(initialValue, pipelineSteps = []) {
-        return pipelineSteps.reduce((acc, step) => {
-            const { op, ...opts } = step;
-
-            switch (op) {
-                case "timestamp":
-                    if (opts.format === "seconds") {
-                        return Math.floor(Date.now() / 1000);
-                    }
-                    if (opts.format === "iso-basic") {
-                        return new Date().toISOString().replace(/[:-]|\.\d{3}/g, "");
-                    }
-                    return Date.now();
-
-                case "hash":
-                    return this.hash(acc, opts.algorithm || "sha256", opts.digest || "hex");
-
-                case "signHmac":
-                    return this.signHmac(acc, opts.secret, opts.algorithm || "sha256", opts.digest || "hex");
-
-                case "base64Encode":
-                    return this.base64Encode(acc);
-
-                case "base64urlEncode":
-                    return this.base64urlEncode(acc);
-
-                case "hexEncode":
-                    return this.hexEncode(acc);
-
-                case "encrypt":
-                    return this.encrypt(acc, opts.secretKey);
-
-                case "generateJWT":
-                    return this.generateJWT(acc, opts.secretOrPrivateKey, opts.algorithm || "RS256");
-
-                case "concat":
-                case "format":
-                    return `${opts.prefix || ""}${acc}${opts.suffix || ""}`;
-
-                case "jsonStringify":
-                    return JSON.stringify(acc);
-
-                default:
-                    if (typeof this[op] === "function") {
-                        return this[op](acc, opts);
-                    }
-                    return acc;
-            }
-        }, initialValue);
-    }
-}
-
-// Bind all static methods to Security.prototype so instance calls work
-Object.getOwnPropertyNames(Security).forEach(prop => {
-    if (typeof Security[prop] === "function" && prop !== "length" && prop !== "name" && prop !== "prototype") {
-        Security.prototype[prop] = Security[prop].bind(Security);
-    }
-});
-
-// Create a singleton instance containing class reference for hybrid object/instance/class usage
-const security = new Security();
-security.Security = Security;
-
-// Attach static methods directly onto singleton instance for fail-safe property invocation
-Object.getOwnPropertyNames(Security).forEach(prop => {
-    if (typeof Security[prop] === "function" && prop !== "length" && prop !== "name" && prop !== "prototype") {
-        security[prop] = Security[prop].bind(Security);
-    }
-});
-
-// Export all utility methods as named ESM exports for namespace imports (import * as security)
-const {
-    timingSafeEqual,
-    base64urlEncode,
-    base64urlDecode,
-    base64UrlEncode,
-    base64UrlDecode,
-    base64Encode,
-    hexEncode,
-    hash,
-    signHmac,
-    generateKeyPair,
-    generateApiKey,
-    verifyApiKey,
-    generateJWT,
-    verifyJWT,
-    decodeToken,
-    verifyToken,
-    generateToken,
-    encrypt,
-    decrypt,
-    createCSR,
-    readCertificateExpiry,
-    parsePrivateKey,
-    exportJwk,
-    getJwkThumbprint,
-    createJWS,
-    generateVapidKeys,
-    createVapidToken,
-    createOAuthAssertion,
-    createWebhookSignature,
-    createAwsSigV4Token,
-    transform
-} = Security;
-
-// Default export provides hybrid singleton instance with bound functions and embedded Class reference
-/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (security)));
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "rG", 0, /* binding */ security
-/* harmony export */ ]);
-
-
-/***/ },
-
 /***/ 6772
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
@@ -47246,7 +47640,7 @@ __webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 /* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4633);
 /* harmony import */ var _cocreate_db__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6156);
 /* harmony import */ var _cocreate_crud__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7872);
-/* harmony import */ var _cocreate_kms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8685);
+/* harmony import */ var _cocreate_kms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9874);
 /* harmony import */ var _cocreate_authenticate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9743);
 /* harmony import */ var _cocreate_authorize__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3067);
 /* harmony import */ var _cocreate_api__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4277);
@@ -47308,7 +47702,7 @@ try {
 
     _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.db = await _cocreate_db__WEBPACK_IMPORTED_MODULE_3__/* ["default"].init */ .Ay.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
     _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.crud = await _cocreate_crud__WEBPACK_IMPORTED_MODULE_4__/* ["default"].init */ .Ay.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
-    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.kms = await _cocreate_kms__WEBPACK_IMPORTED_MODULE_5__/* ["default"].init */ .A.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.kms = await _cocreate_kms__WEBPACK_IMPORTED_MODULE_5__/* ["default"].init */ .Ay.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
 
     _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.authenticate = _cocreate_authenticate__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .A.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
     _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.authorize = _cocreate_authorize__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Ay;

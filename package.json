@@ -61,7 +61,7 @@
     "@cocreate/crud": "^2.0.4",
     "@cocreate/db": "^1.0.0",
     "@cocreate/file": "^2.0.1",
-    "@cocreate/kms": "^1.0.0",
+    "@cocreate/kms": "^1.1.0",
     "@cocreate/mcp": "^0.1.0",
     "@cocreate/notification": "^2.0.2",
     "@cocreate/socket": "^3.0.0",
