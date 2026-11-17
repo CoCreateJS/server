@@ -50,6 +50,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@cocreate/ast": "^1.0.0",
     "@cocreate/ai": "^1.0.0",
     "@cocreate/api": "^2.1.1",
     "@cocreate/authenticate": "^2.0.1",

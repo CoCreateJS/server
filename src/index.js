@@ -26,6 +26,7 @@ import authenticate from '@cocreate/authenticate';
 import authorize from '@cocreate/authorize';
 import api from '@cocreate/api';
 import workflow from '@cocreate/workflows';
+import * as AST from '@cocreate/ast/server';
 
 try {
     const { server_id, host, organization_id } = await config.prompt({
@@ -45,6 +46,7 @@ try {
     server.authenticate = authenticate.init(server);
     server.authorize = authorize;
     server.api = await api.init(server);
+    server.ast = AST;
     server.workflow = await workflow.init(server);
 
     if (server.isPrimary) {

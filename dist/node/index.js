@@ -20,12 +20,12 @@ import { createRequire as __WEBPACK_EXTERNAL_createRequire } from "node:module";
 const __WEBPACK_EXTERNAL_createRequire_require = __WEBPACK_EXTERNAL_createRequire(import.meta.url);
 /******/ var __webpack_modules__ = ({
 
-/***/ 9586
+/***/ 2559
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
-const { EMPTY_BUFFER } = __webpack_require__(3998);
+const { EMPTY_BUFFER } = __webpack_require__(2363);
 
 const FastBuffer = Buffer[Symbol.species];
 
@@ -158,7 +158,7 @@ if (!process.env.WS_NO_BUFFER_UTIL) {
 
 /***/ },
 
-/***/ 3998
+/***/ 2363
 (module) {
 
 
@@ -184,12 +184,12 @@ module.exports = {
 
 /***/ },
 
-/***/ 1901
+/***/ 8854
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
-const { kForOnEventAttribute, kListener } = __webpack_require__(3998);
+const { kForOnEventAttribute, kListener } = __webpack_require__(2363);
 
 const kCode = Symbol('kCode');
 const kData = Symbol('kData');
@@ -483,12 +483,12 @@ function callListener(listener, thisArg, event) {
 
 /***/ },
 
-/***/ 1966
+/***/ 1787
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
-const { tokenChars } = __webpack_require__(1696);
+const { tokenChars } = __webpack_require__(1395);
 
 /**
  * Adds an offer to the map of extension offers or a parameter to the map of
@@ -693,7 +693,7 @@ module.exports = { format, parse };
 
 /***/ },
 
-/***/ 5983
+/***/ 1458
 (module) {
 
 
@@ -755,16 +755,16 @@ module.exports = Limiter;
 
 /***/ },
 
-/***/ 6659
+/***/ 3556
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
 const zlib = __webpack_require__(3106);
 
-const bufferUtil = __webpack_require__(9586);
-const Limiter = __webpack_require__(5983);
-const { kStatusCode } = __webpack_require__(3998);
+const bufferUtil = __webpack_require__(2559);
+const Limiter = __webpack_require__(1458);
+const { kStatusCode } = __webpack_require__(2363);
 
 const FastBuffer = Buffer[Symbol.species];
 const TRAILER = Buffer.from([0x00, 0x00, 0xff, 0xff]);
@@ -1292,22 +1292,22 @@ function inflateOnError(err) {
 
 /***/ },
 
-/***/ 2838
+/***/ 537
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
 const { Writable } = __webpack_require__(2203);
 
-const PerMessageDeflate = __webpack_require__(6659);
+const PerMessageDeflate = __webpack_require__(3556);
 const {
   BINARY_TYPES,
   EMPTY_BUFFER,
   kStatusCode,
   kWebSocket
-} = __webpack_require__(3998);
-const { concat, toArrayBuffer, unmask } = __webpack_require__(9586);
-const { isValidStatusCode, isValidUTF8 } = __webpack_require__(1696);
+} = __webpack_require__(2363);
+const { concat, toArrayBuffer, unmask } = __webpack_require__(2559);
+const { isValidStatusCode, isValidUTF8 } = __webpack_require__(1395);
 
 const FastBuffer = Buffer[Symbol.species];
 
@@ -2042,7 +2042,7 @@ module.exports = Receiver;
 
 /***/ },
 
-/***/ 5690
+/***/ 649
 (module, __unused_webpack_exports, __webpack_require__) {
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^Duplex" }] */
@@ -2055,10 +2055,10 @@ const {
   types: { isUint8Array }
 } = __webpack_require__(9023);
 
-const PerMessageDeflate = __webpack_require__(6659);
-const { EMPTY_BUFFER, kWebSocket, NOOP } = __webpack_require__(3998);
-const { isBlob, isValidStatusCode } = __webpack_require__(1696);
-const { mask: applyMask, toBuffer } = __webpack_require__(9586);
+const PerMessageDeflate = __webpack_require__(3556);
+const { EMPTY_BUFFER, kWebSocket, NOOP } = __webpack_require__(2363);
+const { isBlob, isValidStatusCode } = __webpack_require__(1395);
+const { mask: applyMask, toBuffer } = __webpack_require__(2559);
 
 const kByteLength = Symbol('kByteLength');
 const maskBuffer = Buffer.alloc(4);
@@ -2656,13 +2656,13 @@ function onError(sender, err, cb) {
 
 /***/ },
 
-/***/ 7119
+/***/ 4368
 (module, __unused_webpack_exports, __webpack_require__) {
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^WebSocket$" }] */
 
 
-const WebSocket = __webpack_require__(9420);
+const WebSocket = __webpack_require__(1125);
 const { Duplex } = __webpack_require__(2203);
 
 /**
@@ -2824,12 +2824,12 @@ module.exports = createWebSocketStream;
 
 /***/ },
 
-/***/ 2085
+/***/ 6696
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
-const { tokenChars } = __webpack_require__(1696);
+const { tokenChars } = __webpack_require__(1395);
 
 /**
  * Parses the `Sec-WebSocket-Protocol` header into a set of subprotocol names.
@@ -2893,14 +2893,14 @@ module.exports = { parse };
 
 /***/ },
 
-/***/ 1696
+/***/ 1395
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
 const { isUtf8 } = __webpack_require__(181);
 
-const { hasBlob } = __webpack_require__(3998);
+const { hasBlob } = __webpack_require__(2363);
 
 //
 // Allowed token characters:
@@ -3052,7 +3052,7 @@ if (isUtf8) {
 
 /***/ },
 
-/***/ 2610
+/***/ 4133
 (module, __unused_webpack_exports, __webpack_require__) {
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^Duplex$", "caughtErrors": "none" }] */
@@ -3064,11 +3064,11 @@ const http = __webpack_require__(8611);
 const { Duplex } = __webpack_require__(2203);
 const { createHash } = __webpack_require__(6982);
 
-const extension = __webpack_require__(1966);
-const PerMessageDeflate = __webpack_require__(6659);
-const subprotocol = __webpack_require__(2085);
-const WebSocket = __webpack_require__(9420);
-const { CLOSE_TIMEOUT, GUID, kWebSocket } = __webpack_require__(3998);
+const extension = __webpack_require__(1787);
+const PerMessageDeflate = __webpack_require__(3556);
+const subprotocol = __webpack_require__(6696);
+const WebSocket = __webpack_require__(1125);
+const { CLOSE_TIMEOUT, GUID, kWebSocket } = __webpack_require__(2363);
 
 const keyRegex = /^[+/0-9A-Za-z]{22}==$/;
 
@@ -3621,7 +3621,7 @@ function abortHandshakeOrEmitwsClientError(
 
 /***/ },
 
-/***/ 9420
+/***/ 1125
 (module, __unused_webpack_exports, __webpack_require__) {
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^Duplex|Readable$", "caughtErrors": "none" }] */
@@ -3637,10 +3637,10 @@ const { randomBytes, createHash } = __webpack_require__(6982);
 const { Duplex, Readable } = __webpack_require__(2203);
 const { URL } = __webpack_require__(7016);
 
-const PerMessageDeflate = __webpack_require__(6659);
-const Receiver = __webpack_require__(2838);
-const Sender = __webpack_require__(5690);
-const { isBlob } = __webpack_require__(1696);
+const PerMessageDeflate = __webpack_require__(3556);
+const Receiver = __webpack_require__(537);
+const Sender = __webpack_require__(649);
+const { isBlob } = __webpack_require__(1395);
 
 const {
   BINARY_TYPES,
@@ -3652,12 +3652,12 @@ const {
   kStatusCode,
   kWebSocket,
   NOOP
-} = __webpack_require__(3998);
+} = __webpack_require__(2363);
 const {
   EventTarget: { addEventListener, removeEventListener }
-} = __webpack_require__(1901);
-const { format, parse } = __webpack_require__(1966);
-const { toBuffer } = __webpack_require__(9586);
+} = __webpack_require__(8854);
+const { format, parse } = __webpack_require__(1787);
+const { toBuffer } = __webpack_require__(2559);
 
 const kAborted = Symbol('kAborted');
 const protocolVersions = [8, 13];
@@ -5035,12 +5035,12 @@ function socketOnError() {
 
 /***/ },
 
-/***/ 1223
+/***/ 1276
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
-const { EMPTY_BUFFER } = __webpack_require__(9011);
+const { EMPTY_BUFFER } = __webpack_require__(7160);
 
 const FastBuffer = Buffer[Symbol.species];
 
@@ -5173,7 +5173,7 @@ if (!process.env.WS_NO_BUFFER_UTIL) {
 
 /***/ },
 
-/***/ 9011
+/***/ 7160
 (module) {
 
 
@@ -5199,12 +5199,12 @@ module.exports = {
 
 /***/ },
 
-/***/ 3870
+/***/ 7699
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
-const { kForOnEventAttribute, kListener } = __webpack_require__(9011);
+const { kForOnEventAttribute, kListener } = __webpack_require__(7160);
 
 const kCode = Symbol('kCode');
 const kData = Symbol('kData');
@@ -5498,12 +5498,12 @@ function callListener(listener, thisArg, event) {
 
 /***/ },
 
-/***/ 6339
+/***/ 3984
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
-const { tokenChars } = __webpack_require__(9883);
+const { tokenChars } = __webpack_require__(8058);
 
 /**
  * Adds an offer to the map of extension offers or a parameter to the map of
@@ -5708,7 +5708,7 @@ module.exports = { format, parse };
 
 /***/ },
 
-/***/ 9034
+/***/ 3557
 (module) {
 
 
@@ -5770,16 +5770,16 @@ module.exports = Limiter;
 
 /***/ },
 
-/***/ 6764
+/***/ 8837
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
 const zlib = __webpack_require__(3106);
 
-const bufferUtil = __webpack_require__(1223);
-const Limiter = __webpack_require__(9034);
-const { kStatusCode } = __webpack_require__(9011);
+const bufferUtil = __webpack_require__(1276);
+const Limiter = __webpack_require__(3557);
+const { kStatusCode } = __webpack_require__(7160);
 
 const FastBuffer = Buffer[Symbol.species];
 const TRAILER = Buffer.from([0x00, 0x00, 0xff, 0xff]);
@@ -6307,22 +6307,22 @@ function inflateOnError(err) {
 
 /***/ },
 
-/***/ 9121
+/***/ 5468
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
 const { Writable } = __webpack_require__(2203);
 
-const PerMessageDeflate = __webpack_require__(6764);
+const PerMessageDeflate = __webpack_require__(8837);
 const {
   BINARY_TYPES,
   EMPTY_BUFFER,
   kStatusCode,
   kWebSocket
-} = __webpack_require__(9011);
-const { concat, toArrayBuffer, unmask } = __webpack_require__(1223);
-const { isValidStatusCode, isValidUTF8 } = __webpack_require__(9883);
+} = __webpack_require__(7160);
+const { concat, toArrayBuffer, unmask } = __webpack_require__(1276);
+const { isValidStatusCode, isValidUTF8 } = __webpack_require__(8058);
 
 const FastBuffer = Buffer[Symbol.species];
 
@@ -7057,7 +7057,7 @@ module.exports = Receiver;
 
 /***/ },
 
-/***/ 1857
+/***/ 6020
 (module, __unused_webpack_exports, __webpack_require__) {
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^Duplex" }] */
@@ -7070,10 +7070,10 @@ const {
   types: { isUint8Array }
 } = __webpack_require__(9023);
 
-const PerMessageDeflate = __webpack_require__(6764);
-const { EMPTY_BUFFER, kWebSocket, NOOP } = __webpack_require__(9011);
-const { isBlob, isValidStatusCode } = __webpack_require__(9883);
-const { mask: applyMask, toBuffer } = __webpack_require__(1223);
+const PerMessageDeflate = __webpack_require__(8837);
+const { EMPTY_BUFFER, kWebSocket, NOOP } = __webpack_require__(7160);
+const { isBlob, isValidStatusCode } = __webpack_require__(8058);
+const { mask: applyMask, toBuffer } = __webpack_require__(1276);
 
 const kByteLength = Symbol('kByteLength');
 const maskBuffer = Buffer.alloc(4);
@@ -7671,13 +7671,13 @@ function onError(sender, err, cb) {
 
 /***/ },
 
-/***/ 1416
+/***/ 9141
 (module, __unused_webpack_exports, __webpack_require__) {
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^WebSocket$" }] */
 
 
-const WebSocket = __webpack_require__(1693);
+const WebSocket = __webpack_require__(7433);
 const { Duplex } = __webpack_require__(2203);
 
 /**
@@ -7839,12 +7839,12 @@ module.exports = createWebSocketStream;
 
 /***/ },
 
-/***/ 2080
+/***/ 3283
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
-const { tokenChars } = __webpack_require__(9883);
+const { tokenChars } = __webpack_require__(8058);
 
 /**
  * Parses the `Sec-WebSocket-Protocol` header into a set of subprotocol names.
@@ -7908,14 +7908,14 @@ module.exports = { parse };
 
 /***/ },
 
-/***/ 9883
+/***/ 8058
 (module, __unused_webpack_exports, __webpack_require__) {
 
 
 
 const { isUtf8 } = __webpack_require__(181);
 
-const { hasBlob } = __webpack_require__(9011);
+const { hasBlob } = __webpack_require__(7160);
 
 //
 // Allowed token characters:
@@ -8067,7 +8067,7 @@ if (isUtf8) {
 
 /***/ },
 
-/***/ 4618
+/***/ 5664
 (module, __unused_webpack_exports, __webpack_require__) {
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^Duplex$", "caughtErrors": "none" }] */
@@ -8079,11 +8079,11 @@ const http = __webpack_require__(8611);
 const { Duplex } = __webpack_require__(2203);
 const { createHash } = __webpack_require__(6982);
 
-const extension = __webpack_require__(6339);
-const PerMessageDeflate = __webpack_require__(6764);
-const subprotocol = __webpack_require__(2080);
-const WebSocket = __webpack_require__(1693);
-const { CLOSE_TIMEOUT, GUID, kWebSocket } = __webpack_require__(9011);
+const extension = __webpack_require__(3984);
+const PerMessageDeflate = __webpack_require__(8837);
+const subprotocol = __webpack_require__(3283);
+const WebSocket = __webpack_require__(7433);
+const { CLOSE_TIMEOUT, GUID, kWebSocket } = __webpack_require__(7160);
 
 const keyRegex = /^[+/0-9A-Za-z]{22}==$/;
 
@@ -8636,7 +8636,7 @@ function abortHandshakeOrEmitwsClientError(
 
 /***/ },
 
-/***/ 1693
+/***/ 7433
 (module, __unused_webpack_exports, __webpack_require__) {
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^Duplex|Readable$", "caughtErrors": "none" }] */
@@ -8652,10 +8652,10 @@ const { randomBytes, createHash } = __webpack_require__(6982);
 const { Duplex, Readable } = __webpack_require__(2203);
 const { URL } = __webpack_require__(7016);
 
-const PerMessageDeflate = __webpack_require__(6764);
-const Receiver = __webpack_require__(9121);
-const Sender = __webpack_require__(1857);
-const { isBlob } = __webpack_require__(9883);
+const PerMessageDeflate = __webpack_require__(8837);
+const Receiver = __webpack_require__(5468);
+const Sender = __webpack_require__(6020);
+const { isBlob } = __webpack_require__(8058);
 
 const {
   BINARY_TYPES,
@@ -8667,12 +8667,12 @@ const {
   kStatusCode,
   kWebSocket,
   NOOP
-} = __webpack_require__(9011);
+} = __webpack_require__(7160);
 const {
   EventTarget: { addEventListener, removeEventListener }
-} = __webpack_require__(3870);
-const { format, parse } = __webpack_require__(6339);
-const { toBuffer } = __webpack_require__(1223);
+} = __webpack_require__(7699);
+const { format, parse } = __webpack_require__(3984);
+const { toBuffer } = __webpack_require__(1276);
 
 const kAborted = Symbol('kAborted');
 const protocolVersions = [8, 13];
@@ -10079,7 +10079,7 @@ const x = (y) => {
 	const x = {}; __webpack_require__.d(x, y); return x
 } 
 const y = (x) => (() => (x))
-module.exports = x({ ["exec"]: () => (__WEBPACK_EXTERNAL_MODULE_node_child_process_7aa195c7__.exec), ["execFile"]: () => (__WEBPACK_EXTERNAL_MODULE_node_child_process_7aa195c7__.execFile), ["execSync"]: () => (__WEBPACK_EXTERNAL_MODULE_node_child_process_7aa195c7__.execSync) });
+module.exports = x({ ["exec"]: () => (__WEBPACK_EXTERNAL_MODULE_node_child_process_7aa195c7__.exec), ["execFile"]: () => (__WEBPACK_EXTERNAL_MODULE_node_child_process_7aa195c7__.execFile), ["execFileSync"]: () => (__WEBPACK_EXTERNAL_MODULE_node_child_process_7aa195c7__.execFileSync), ["execSync"]: () => (__WEBPACK_EXTERNAL_MODULE_node_child_process_7aa195c7__.execSync) });
 
 /***/ },
 
@@ -10101,7 +10101,7 @@ const x = (y) => {
 	const x = {}; __webpack_require__.d(x, y); return x
 } 
 const y = (x) => (() => (x))
-module.exports = x({ ["createCipheriv"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createCipheriv), ["createDecipheriv"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createDecipheriv), ["createHash"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createHash), ["createPrivateKey"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createPrivateKey), ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__["default"]), ["randomBytes"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.randomBytes), ["randomUUID"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.randomUUID) });
+module.exports = x({ ["createCipheriv"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createCipheriv), ["createDecipheriv"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createDecipheriv), ["createHash"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createHash), ["createPrivateKey"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.createPrivateKey), ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__["default"]), ["randomBytes"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.randomBytes), ["randomUUID"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.randomUUID), ["timingSafeEqual"]: () => (__WEBPACK_EXTERNAL_MODULE_node_crypto_803ecaf5__.timingSafeEqual) });
 
 /***/ },
 
@@ -10325,15 +10325,1120 @@ module.exports = __WEBPACK_EXTERNAL_createRequire_require("zlib");
 
 /***/ },
 
-/***/ 5440
+/***/ 7075
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4633);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4276);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(50);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(623);
+/********************************************************************************
+ * Copyright (C) 2023 CoCreate and Contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ ********************************************************************************/
+
+/**
+ * Commercial Licensing Information:
+ * For commercial use of this software without the copyleft provisions of the AGPLv3,
+ * you must obtain a commercial license from CoCreate LLC.
+ * For details, visit <https://CoCreateJS.com/licenses/> or contact us at sales@CoCreateJS.com
+ */
+
+
+
+let indexedDbFunction;
+const isBrowser = typeof window !== "undefined";
+
+function getSortPlan(filter) {
+    const sort = filter?.sort?.filter((item) => item?.key) || [];
+    const primary = sort[0];
+    return {
+        sort,
+        primary,
+        indexName: primary && primary.key !== "_id" && !primary.key.includes("-")
+            ? primary.key
+            : undefined,
+        direction: primary?.direction === "desc" ? "prev" : "next"
+    };
+}
+
+function countRecords(source) {
+    return new Promise((resolve, reject) => {
+        const request = source.count();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function getFilterStorage(filter, storage, database, array) {
+    if (!filter) return;
+    if (!Array.isArray(filter.storages)) filter.storages = [];
+
+    let metadata = filter.storages.find(
+        (item) =>
+            item.storage === storage &&
+            item.database === database &&
+            item.array === array
+    );
+
+    if (!metadata) {
+        metadata = { storage, database, array };
+        filter.storages.push(metadata);
+    }
+
+    return metadata;
+}
+
+function includesReference(value, expected) {
+    const values = Array.isArray(value) ? value : [value];
+    return values.includes(expected);
+}
+
+function init() {
+    // Check for support.
+    if (!isBrowser) {
+        return;
+    } else if (!("indexedDB" in window)) {
+        console.log("This browser doesn't support IndexedDB.");
+        setStatus(false);
+        return;
+    } else {
+        try {
+            indexedDB.databases();
+            if (
+                window.CoCreateConfig &&
+                window.CoCreateConfig.indexeddb !== false
+            )
+                setStatus(true);
+        } catch (e) {
+            setStatus(false);
+        }
+    }
+}
+
+function setStatus(value) {
+    if (window.CoCreateConfig) window.CoCreateConfig.indexeddb = value;
+    else window.CoCreateConfig = { indexeddb: value };
+
+    if (!value) {
+        indexedDbFunction = indexedDb;
+        send = value;
+    } else if (!send) {
+        send = indexedDbFunction;
+        indexedDbFunction = true;
+    }
+}
+
+/**
+ * Route a CoCreate CRUD request to the matching database, array, or object operation.
+ *
+ * @public
+ * @environment client
+ */
+async function send(data) {
+    try {
+        let newData = [];
+
+        let type = data.method.split(".")[0];
+        if (type === "database") {
+            if (data.method === "database.get") {
+                return await processDatabase(data);
+            } else await processDatabase(data, newData, type);
+        } else {
+            if (!data["timeStamp"])
+                data["timeStamp"] = new Date().toISOString();
+
+            let databases = data.database;
+            if (!databases && data.organization_id)
+                databases = [data.organization_id];
+            if (!Array.isArray(databases)) databases = [databases];
+
+            let arrays = data.array || [];
+            if (!Array.isArray(arrays)) arrays = [arrays];
+
+            for (let i = 0; i < databases.length; i++) {
+                let database = databases[i];
+                if (type === "array") {
+                    await processArray(data, newData, database, type);
+                } else {
+                    for (let j = 0; j < arrays.length; j++) {
+                        if (type === "index")
+                            await processIndex(data, newData, database, type);
+                        else if (type === "object")
+                            await processObject(
+                                data,
+                                newData,
+                                database,
+                                arrays[j],
+                                type
+                            );
+                    }
+                }
+            }
+        }
+
+        return createData(data, newData, type);
+    } catch (error) {
+        errorHandler(data, error);
+    }
+}
+
+const dbVersion = new Map();
+const processDatabase = (data, newData, type) => {
+    return new Promise(
+        (resolve, reject) => {
+            if (!data) data = {};
+            if (!data[type]) data[type] = [];
+
+            if (data.method == "database.read") {
+                indexedDB.databases().then((databases) => {
+                    for (let database of databases) {
+                        if (data.filter && data.filter.query) {
+                            let isFilter = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .queryData */ .VR)(
+                                database,
+                                data.filter.query
+                            );
+                            if (isFilter)
+                                newData.push({
+                                    $storage: ["indexeddb"],
+                                    ...database
+                                });
+                        } else
+                            newData.push({
+                                $storage: ["indexeddb"],
+                                ...database
+                            });
+                    }
+
+                    resolve();
+                });
+            } else {
+                let databases;
+                if (data.method == "database.update")
+                    databases = Object.keys(data.database);
+                else databases = data.database;
+
+                if (!Array.isArray(databases)) databases = [databases];
+
+                for (let i = 0; i < databases.length; i++) {
+                    let openRequest,
+                        database = databases[i];
+                    switch (data.method) {
+                        case "database.get":
+                        case "database.create":
+                        case "database.update":
+                            openRequest = indexedDB.open(database);
+                            break;
+                        case "database.delete":
+                            openRequest =
+                                indexedDB.deleteprocessDatabase(database);
+                            break;
+                        default:
+                            errorHandler(data, "unknown method", database);
+                            resolve(data);
+                    }
+
+                    openRequest.onsuccess = function () {
+                        let db = openRequest.result;
+
+                        if (data.method == "database.update") {
+                            let objectStoreNames = Array.from(
+                                db.objectStoreNames
+                            );
+                            for (let array of objectStoreNames) {
+                                let request = array.openCursor();
+
+                                request.onsuccess = function () {
+                                    let cursor = request.result;
+                                    if (cursor) {
+                                        let value = cursor.value;
+
+                                        cursor.continue();
+                                    } else {
+                                        // -1
+                                    }
+                                };
+
+                                request.onerror = function () {
+                                    errorHandler(
+                                        data,
+                                        request.error,
+                                        database,
+                                        array
+                                    );
+                                };
+                            }
+                        } else if (data.upgrade === true) {
+                            db.close();
+
+                            let version =
+                                dbVersion.get(database) ||
+                                openRequest.result.version;
+                            resolve(
+                                indexedDB.open(database, Number((version += 1)))
+                            );
+                            dbVersion.set(database, version);
+                        } else if (data.array) {
+                            db.close();
+
+                            let version =
+                                dbVersion.get(database) ||
+                                openRequest.result.version;
+                            let request = indexedDB.open(
+                                database,
+                                Number((version += 1))
+                            );
+                            dbVersion.set(database, version);
+
+                            request.onupgradeneeded = function (event) {
+                                const db = event.target.result;
+
+                                let arrays = data.array;
+                                if (!Array.isArray(arrays)) arrays = [arrays];
+
+                                for (let j = 0; j < arrays.length; j++) {
+                                    if (
+                                        !db.objectStoreNames.contains(arrays[j])
+                                    ) {
+                                        try {
+                                            db.createObjectStore(arrays[j], {
+                                                keyPath: "_id",
+                                                autoIncrement: true
+                                            });
+                                        } catch (error) {
+                                            errorHandler(
+                                                data,
+                                                error,
+                                                database,
+                                                arrays[j]
+                                            );
+                                        }
+                                    }
+
+                                    if (data.indexName) {
+                                        const transaction =
+                                            event.target.transaction;
+                                        const objectStore =
+                                            transaction.objectStore(arrays[j]);
+                                        if (
+                                            !objectStore.indexNames.contains(
+                                                data.indexName
+                                            )
+                                        )
+                                            objectStore.createIndex(
+                                                data.indexName,
+                                                data.indexFields,
+                                                { unique: data.unique || false }
+                                            );
+                                    }
+                                }
+                            };
+
+                            request.onsuccess = function (event) {
+                                if (databases.length - 1 === i) {
+                                    if (data.method == "database.get")
+                                        resolve(event.target.result);
+                                    else resolve(data);
+                                }
+                            };
+
+                            request.onerror = function (event) {
+                                errorHandler(
+                                    data,
+                                    event.target.error,
+                                    database,
+                                    array
+                                );
+                                if (databases.length - 1 === i) {
+                                    if (data.method == "database.get")
+                                        resolve(event.target.result);
+                                    else resolve(data);
+                                }
+                            };
+                        } else if (databases.length - 1 === i) {
+                            if (data.method == "database.get") resolve(db);
+                            else resolve(data);
+                        }
+                    };
+
+                    openRequest.onerror = function () {
+                        errorHandler(data, openRequest.error, database);
+                        resolve(data);
+                    };
+                }
+            }
+        },
+        (error) => {
+            errorHandler(data, error);
+        }
+    );
+};
+
+async function processArray(data, newData, database, type) {
+    let db = await processDatabase({ method: "database.get", database });
+
+    let objectStoreNames = Array.from(db.objectStoreNames);
+    if (data.method == "array.read") {
+        if (!data[type]) data[type] = [];
+
+        if (!Array.isArray(data[type])) {
+            data[type] = [data[type]];
+        }
+
+        for (let i = 0; i < objectStoreNames.length; i++) {
+            if (data.filter && data.filter.query) {
+                let isFilter = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .queryData */ .VR)(
+                    { name: objectStoreNames[i] },
+                    data.filter.query
+                );
+                if (isFilter)
+                    newData.push({
+                        name: objectStoreNames[i],
+                        $storage: ["indexeddb"],
+                        $database: [database]
+                    });
+            } else
+                newData.push({
+                    name: objectStoreNames[i],
+                    $storage: ["indexeddb"],
+                    $database: [database]
+                });
+        }
+    } else {
+        db.close();
+
+        let request = await processDatabase({
+            method: "database.get",
+            database,
+            upgrade: true
+        });
+        await new Promise((resolve) => {
+            request.onupgradeneeded = function (event) {
+                let db = event.target.result;
+                let arrays;
+                if (data.method == "array.update")
+                    arrays = Object.keys(data[type]);
+                else arrays = data[type];
+                if (!Array.isArray(arrays)) arrays = [arrays];
+
+                for (let i = 0; i < arrays.length; i++) {
+                    let error,
+                        array = arrays[i];
+
+                    let arrayExist = db.objectStoreNames.contains(array);
+                    if (arrayExist && data.method == "array.create") {
+                        error = "array already exists";
+                    } else if (data.method == "array.delete") {
+                        if (objectStoreNames.includes(array)) {
+                            db.deleteObjectStore(array);
+                        } else {
+                            error = "the array does not exist";
+                        }
+                    } else {
+                        if (!arrayExist && data.method == "array.update")
+                            array = data[type][arrays[i]];
+
+                        if (arrayExist) {
+                            if (data.method == "array.update") {
+                                let transaction = event.target.transaction;
+                                let objectStore =
+                                    transaction.objectStore(array);
+
+                                if (
+                                    !objectStoreNames.includes(
+                                        data[type][arrays[i]]
+                                    )
+                                )
+                                    array = objectStore.name =
+                                        data[type][arrays[i]];
+                                else
+                                    error =
+                                        "An array with the new name already exist";
+                            }
+                        } else if (data.method == "array.update")
+                            error = "array does not exists";
+                    }
+
+                    if (!error)
+                        newData.push({
+                            name: array,
+                            $storage: ["indexeddb"],
+                            $database: [database]
+                        });
+                    else errorHandler(data, error, database);
+                }
+            };
+
+            request.onsuccess = function (event) {
+                event.target.result.close();
+                resolve();
+            };
+
+            request.onerror = function (event) {
+                errorHandler(data, event.target.error, database);
+                resolve();
+            };
+        });
+    }
+}
+
+async function processIndex(data, newData, database, array, type) {
+    let db = await processDatabase({ method: "database.get", database });
+    let arrayExist = db.objectStoreNames.contains(array);
+    if (arrayExist) {
+        // ToDO: switch here to types
+        let transaction = db.transaction(array, "readonly");
+        let objectStore = transaction.objectStore(array);
+        let indexNames = Array.from(objectStore.indexNames);
+
+        if (data.method == "index.read") {
+            for (let i = 0; i < indexNames.length; i++) {
+                let name = indexNames[i];
+                if (data.filter && data.filter.query)
+                    if (!(0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .queryData */ .VR)({ name }, data.filter.query)) continue;
+
+                newData.push({
+                    name,
+                    $storage: ["indexeddb"],
+                    $database: [database],
+                    $array: [array]
+                });
+            }
+            db.close();
+        } else {
+            db.close();
+            let indexes;
+            if (data.method == "index.update")
+                indexes = Object.keys(data[type]);
+            else indexes = data[type];
+
+            if (!Array.isArray(indexes)) indexes = [indexes];
+
+            for (let i = 0; i < indexes.length; i++) {
+                let error,
+                    index = indexes[i];
+                db = await processDatabase({
+                    method: "database.get",
+                    database,
+                    upgrade: true
+                });
+                let transaction = db.transaction;
+                let objectStore = transaction.objectStore(array);
+                let indexExist = indexNames.includes(index);
+
+                if (data.method == "index.create") {
+                    if (!indexExist)
+                        objectStore.createIndex(index, index, {
+                            unique: false
+                        });
+                    else error = "index already exist";
+                } else if (indexExist) {
+                    if (data.method == "index.delete")
+                        objectStore.deleteIndex(index);
+                    else if (
+                        data.method == "index.update" &&
+                        !indexNames.includes(data[type][indexes[i]])
+                    ) {
+                        if (!indexNames.includes(data[type][indexes[i]])) {
+                            let indexObj = objectStore.index(index);
+                            index = indexObj.name = data[type][indexes[i]];
+                        } else error = "new index name already exist";
+                    }
+                } else error = "index does not exist";
+
+                if (!error)
+                    newData.push({
+                        name: index,
+                        $storage: ["indexeddb"],
+                        $database: [database],
+                        $array: [array]
+                    });
+                else errorHandler(data, error, database, array);
+
+                db.result.close();
+            }
+        }
+    }
+}
+
+async function processObject(data, newData, database, array, type) {
+    let db = await processDatabase({ method: "database.get", database });
+
+    try {
+        if (!data[type]) data[type] = [];
+        else if (typeof data[type] === "string")
+            data[type] = [{ _id: data[type] }];
+        else if (!Array.isArray(data[type])) data[type] = [data[type]];
+
+        let isFilter = Boolean(
+            data.filter && data.filter.isFilter !== false
+        );
+        const filterStorage = isFilter
+            ? getFilterStorage(data.filter, "indexeddb", database, array)
+            : undefined;
+        const filterStartingIndex =
+            filterStorage?.index ?? data.filter?.index ?? 0;
+        if (filterStorage) filterStorage.startingIndex = filterStartingIndex;
+
+        let arrayExist = db.objectStoreNames.contains(array);
+        if (!arrayExist) {
+            db.close();
+            if (
+                data.method == "object.create" ||
+                data.method == "object.update"
+            ) {
+                db = await processDatabase({
+                    method: "database.get",
+                    database,
+                    array
+                });
+            } else {
+                return errorHandler(
+                    data,
+                    "array does not exist",
+                    database,
+                    array
+                );
+            }
+        }
+
+        if (!array || !db)
+            throw new Error({ error: "This is an error message.", db, array });
+
+        let lastItem;
+        if (
+            (isFilter && !data[type].length) ||
+            data.filter?.isFilter === true
+        ) {
+            if (data[type].length) lastItem = data[type][data[type].length - 1];
+            data[type] = [{ isFilter: "isEmptyObjectFilter" }];
+
+            // data[type].splice(0, 0, { isFilter: 'isEmptyObjectFilter' });
+        }
+
+        let transactionType = "readwrite";
+        if (data.method == "object.read") transactionType = "readonly";
+
+        let transaction = db.transaction([array], transactionType);
+        let objectStore = transaction.objectStore(array);
+
+        let globalOperators = getGlobalOperators(data);
+        let upsert = data.upsert;
+
+        for (let i = 0; i < data[type].length; i++) {
+            const reference = {
+                $storage: ["indexeddb"],
+                $database: [database],
+                $array: [array]
+            };
+
+            delete data[type][i].$storage;
+            delete data[type][i].$database;
+            delete data[type][i].$array;
+
+            if (data.method == "object.create") {
+                if (data.organization_id)
+                    data[type][i]["organization_id"] = data.organization_id;
+
+                if (!data[type][i]._id)
+                    data[type][i]["_id"] = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V)().toString();
+                data[type][i] = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .dotNotationToObject */ .O)(data[type][i]);
+                delete data[type][i].modified;
+
+                // TODO: user_id || clientId shohould be retrieved from CoCreate
+                const audit = {
+                    on: data.timeStamp,
+                    by: data.user_id || data.clientId
+                };
+                if (!data.synced) {
+                    data[type][i]["created"] = { ...audit };
+                    data[type][i]["updated"] = { ...audit };
+                }
+                data[type][i] = await add(objectStore, data[type][i]);
+                data[type][i] = { ...reference, ...data[type][i] };
+            } else {
+                if (data[type][i].filter) isFilter = true;
+
+                if (data.method == "object.update") {
+                    if (data.organization_id)
+                        data[type][i]["organization_id"] = data.organization_id;
+
+                    if (data[type][i].$upsert) upsert = data[type][i].$upsert;
+                    // TODO: user_id || clientId shohould be retrieved from CoCreate
+                    if (!data.synced)
+                        data[type][i].updated = {
+                            on: data.timeStamp,
+                            by: data.user_id || data.clientId
+                        };
+                    // Remove legacy object audit metadata from existing records.
+                    data[type][i].modified = undefined;
+                }
+
+                let index = 0,
+                    limit,
+                    range,
+                    direction;
+                if (data[type][i]._id) {
+                    range = IDBKeyRange.only(data[type][i]._id);
+                } else if (isFilter) {
+                    let indexName;
+                    let indexFields;
+
+                    if (data.filter) {
+                        const sortPlan = getSortPlan(data.filter);
+                        if (sortPlan.primary) {
+                            direction = sortPlan.direction;
+                            indexName = sortPlan.indexName;
+                            indexFields = sortPlan.primary.key;
+                        } else if (
+                            data.filter.query &&
+                            data.filter.query[0] &&
+                            data.filter.query[0].key
+                        ) {
+                            if (data.filter.query[0].operator === "$eq") {
+                                range = IDBKeyRange.only(
+                                    data.filter.query[0].value
+                                );
+                            } else if (
+                                data.filter.query[0].operator === "$gt"
+                            ) {
+                                range = IDBKeyRange.lowerBound(
+                                    data.filter.query[0].value,
+                                    true
+                                );
+                            } else if (
+                                data.filter.query[0].operator === "$lt"
+                            ) {
+                                range = IDBKeyRange.upperBound(
+                                    data.filter.query[0].value,
+                                    true
+                                );
+                            } else if (
+                                data.filter.query[0].operator === "$gte"
+                            ) {
+                                range = IDBKeyRange.lowerBound(
+                                    data.filter.query[0].value
+                                );
+                            } else if (
+                                data.filter.query[0].operator === "$lte"
+                            ) {
+                                range = IDBKeyRange.upperBound(
+                                    data.filter.query[0].value
+                                );
+                            }
+
+                            indexName = data.filter.query[0].key;
+                        }
+                    }
+
+                    if (indexName && !indexName.includes("-")) {
+                        // Check if the compound index exists; create it if not
+                        let indexNames = Array.from(objectStore.indexNames);
+                        if (!indexNames.includes(indexName)) {
+                            db.close();
+                            db = await processDatabase({
+                                method: "database.get",
+                                database,
+                                array,
+                                indexName,
+                                indexFields
+                            });
+                            transaction = db.transaction(array, "readwrite");
+                            objectStore = transaction.objectStore(array);
+                        }
+                        const selectedIndex = objectStore.index(indexName);
+                        if (getSortPlan(data.filter).primary) {
+                            const [recordCount, indexCount] = await Promise.all([
+                                countRecords(objectStore),
+                                countRecords(selectedIndex)
+                            ]);
+                            if (recordCount === indexCount)
+                                objectStore = selectedIndex;
+                            else direction = undefined;
+                        } else {
+                            objectStore = selectedIndex;
+                        }
+                    }
+
+                    let count = objectStore.count();
+                    count.onsuccess = function () {
+                        if (data.filter) {
+                            data.filter.count = count.result;
+                            filterStorage.count = count.result;
+                        }
+                        else if (data.object.filter)
+                            data.object.filter.count = count.result;
+                    };
+
+                    if (data.filter) {
+                        const sortPlan = getSortPlan(data.filter);
+                        if (!sortPlan.sort.length) {
+                            if (filterStartingIndex && !lastItem)
+                                index = filterStartingIndex;
+                            if (data.filter.limit) limit = data.filter.limit;
+                        }
+                    }
+
+                    if (data[type][i].filter) {
+                        if (data[type][i].filter.index)
+                            index = data[type][i].filter.index;
+                        if (data[type][i].filter.limit)
+                            limit = data[type][i].filter.limit;
+                    }
+                } else if (
+                    data.method == "object.delete" ||
+                    (data.method == "object.update" &&
+                        !range &&
+                        !upsert &&
+                        !isFilter)
+                ) {
+                    continue;
+                }
+
+                await openCursor(
+                    objectStore,
+                    range,
+                    direction,
+                    data,
+                    newData,
+                    isFilter,
+                    index,
+                    limit,
+                    database,
+                    array,
+                    upsert,
+                    type,
+                    i,
+                    globalOperators,
+                    reference
+                );
+
+            }
+        }
+
+        if (db.close) db.close();
+    } catch (error) {
+        errorHandler(data, error, database, array);
+        if (db.close) db.close();
+    }
+}
+
+function openCursor(
+    objectStore,
+    range,
+    direction,
+    data,
+    newData,
+    isFilter,
+    index,
+    limit,
+    database,
+    array,
+    upsert,
+    type,
+    i,
+    globalOperators,
+    reference
+) {
+    return new Promise(async (resolve, reject) => {
+        const request = objectStore.openCursor(range || null, direction); // next, prev
+
+        let hasUpdated,
+            matchedLength = 0,
+            hasSkipped;
+        request.onsuccess = async () => {
+            let cursor = request.result;
+
+            if (
+                data.method === "object.create" ||
+                (data.method === "object.update" &&
+                    ((!range && !isFilter && upsert) ||
+                        (!cursor && upsert && !hasUpdated)))
+            ) {
+                let isMatch = true;
+                if (isFilter) {
+                    if (cursor)
+                        isMatch = filter(
+                            objectStore,
+                            data[type][i],
+                            data[type][i],
+                            cursor.value
+                        );
+                    else if (data.method === "object.update" && !upsert)
+                        isMatch = false;
+                }
+
+                if (isMatch !== false) {
+                    try {
+                        data[type][i]._id = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V)(
+                            data[type][i]._id
+                        ).toString();
+                    } catch (error) {
+                        data[type][i]._id = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V)().toString();
+                    }
+
+                    let result;
+                    if (data.method == "object.create") {
+                        data[type][i] = await add(objectStore, data[type][i]);
+                    } else if (data.method == "object.update") {
+                        let update = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .createUpdate */ ._W)(
+                            cursor && cursor.value ? cursor.value : {},
+                            data[type][i],
+                            globalOperators
+                        );
+                        delete data[type][i].modified;
+                        if (update) {
+                            await put(objectStore, update);
+                            data[type][i].$update = update;
+                        }
+                    }
+                    data[type][i] = { ...reference, ...data[type][i] };
+
+                    matchedLength++;
+                }
+                resolve();
+            } else if (cursor) {
+                if (index && !hasSkipped) {
+                    cursor.advance(index);
+                    hasSkipped = true;
+                } else {
+                    let isMatch = true;
+                    if (isFilter)
+                        isMatch = filter(
+                            objectStore,
+                            data,
+                            data[type][i],
+                            cursor.value
+                        );
+
+                    if (isMatch !== false) {
+                        let result = cursor.value;
+
+                        if (data.method == "object.update") {
+                            let update = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .createUpdate */ ._W)(
+                                cursor.value,
+                                data[type][i],
+                                globalOperators
+                            );
+                            delete data[type][i].modified;
+                            if (update) await cursorUpdate(cursor, update);
+                            result = data[type][i];
+                            result.$update = update;
+                            // result = cursor.update(update)
+                            hasUpdated = true;
+                            // set dotnotation for keys with $operators for items that end in [] to be used by socket.id
+                            // TODO: if update.$<operator>.someKey[] requires the index of inerted item added to the field name. update.$<operator>.someKey[<index>]
+                            // TODO: if $addToSet get field name and item if it does not exist.
+                            // TODO: if $pull get field name and find if item exist and delete.
+                        } else if (data.method == "object.delete") {
+                            result = cursor.value;
+                            cursor.delete();
+                        }
+
+                        if (data[type][i]._id)
+                            data[type][i] = { ...reference, ...result };
+                        else {
+                            let object = data[type].find(
+                                (obj) => obj._id && obj._id === result._id
+                            );
+                            if (object)
+                                object = { ...reference, ...object, ...result };
+                            else newData.push({ ...reference, ...result });
+                        }
+                    }
+
+                    if (
+                        !limit ||
+                        (limit && limit > newData.length + matchedLength)
+                    ) {
+                        cursor.continue();
+                    } else {
+                        resolve();
+                    }
+                }
+            } else {
+                resolve();
+            }
+        };
+
+        request.onerror = () => {
+            reject(request.error);
+        };
+    });
+}
+
+function add(objectStore, object) {
+    return new Promise((resolve, reject) => {
+        const store = objectStore.objectStore || objectStore;
+        let request = store.add(object);
+        request.onsuccess = () => resolve(object);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function get(objectStore, object) {
+    return new Promise((resolve, reject) => {
+        const request = objectStore.get(object._id);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function put(objectStore, object) {
+    return new Promise((resolve, reject) => {
+        const store = objectStore.objectStore || objectStore;
+        let request = store.put(object);
+
+        request.onsuccess = () => resolve(object);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function deleteObject(objectStore, object) {
+    return new Promise((resolve, reject) => {
+        const request = objectStore.delete(object._id);
+        request.onsuccess = () => resolve(object);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function cursorUpdate(cursor, update) {
+    return new Promise((resolve, reject) => {
+        const request = cursor.update(update);
+        request.onsuccess = () => resolve(request.source.value);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function filter(objectStore, data, object, result) {
+    let isMatch = true;
+    let filter = data.filter || object.filter;
+    if (filter) {
+        if (filter.query) isMatch = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .queryData */ .VR)(result, filter.query);
+        if (isMatch && filter.search)
+            isMatch = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .searchData */ .Nw)(result, filter.search);
+    }
+
+    return isMatch;
+}
+
+function getGlobalOperators(data, object = {}) {
+    for (let operator of Object.keys(data)) {
+        if (!operator.startsWith("$")) return;
+        for (let key of Object.keys(data[operator]))
+            object[operator + "." + key] = data[operator][key];
+    }
+
+    return object;
+}
+
+function createData(data, newData, type) {
+    // data.request = data[type] || {}
+    if (
+        data[type] &&
+        data[type][0] &&
+        data[type][0].isFilter === "isEmptyObjectFilter"
+    ) {
+        data[type].shift();
+        data.filter.isFilter = true;
+    }
+
+    data[type].push(...newData);
+
+    if (data.filter) {
+        const sortPlan = getSortPlan(data.filter);
+        const startingIndex = data.filter.index || 0;
+        if (sortPlan.sort.length) {
+            data[type] = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .sortData */ .LT)(data[type], data.filter.sort);
+            data[type] = data[type].slice(
+                startingIndex,
+                data.filter.limit
+                    ? startingIndex + data.filter.limit
+                    : undefined
+            );
+        }
+
+        if (Array.isArray(data.filter.storages)) {
+            for (const metadata of data.filter.storages) {
+                if (metadata.storage !== "indexeddb") continue;
+
+                const returned = data[type].filter(
+                    (item) =>
+                        includesReference(item.$storage, metadata.storage) &&
+                        includesReference(item.$database, metadata.database) &&
+                        includesReference(item.$array, metadata.array)
+                ).length;
+
+                metadata.index = (metadata.startingIndex || 0) + returned;
+            }
+        }
+
+        data.filter.startingIndex = startingIndex;
+        data.filter.index = startingIndex + data[type].length;
+    }
+
+    return data;
+}
+
+function errorHandler(data, error, database, array) {
+    // console.error(error, data);
+    // if (typeof error == "object") error["storage"] = "indexeddb";
+    // else error = { storage: "indexeddb", message: error };
+
+    // if (database) error["database"] = database;
+    // if (array) error["array"] = array;
+    // if (data.error) data.error.push(error);
+    // else data.error = [error];
+}
+
+init();
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ send, ObjectId: _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V });
+
+/**
+ * Object identifier constructor exposed by the IndexedDB adapter.
+ *
+ * @name ObjectId
+ * @public
+ * @environment client
+ */
+
+/**
+ * A simple indexeddb component in vanilla javascript. Easily configured using HTML5 data-attributes and/or JavaScript API.
+ *
+ * @module indexeddb
+ * @environment client
+ */
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "default", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 4277
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony exports init, send, webhook, makeHttpRequest, getApiConfig */
 /* harmony import */ var node_url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9061);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5018);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1078);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5304);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9180);
+/* harmony import */ var _cocreate_ast_server__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9165);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8307);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5999);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(717);
 /********************************************************************************
  * Copyright (C) 2023-2026 CoCreate and Contributors.
  *
@@ -10355,6 +11460,7 @@ module.exports = __WEBPACK_EXTERNAL_createRequire_require("zlib");
  * @file Core API Handler module for dynamic multi-tenant integrations, webhook routing, and AST macro pipeline execution.
  * @module @cocreate/api-handler
  */
+
 
 
 
@@ -10456,8 +11562,8 @@ function createSandbox(context) {
         response: context.response,
         header: context.request?.headers || context.header || {},
         searchParams: context.searchParams,
-        objectToSearchParams: _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .objectToSearchParams */ .Z,
-        searchParamsToObject: _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .searchParamsToObject */ .f,
+        objectToSearchParams: _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .objectToSearchParams */ .Z,
+        searchParamsToObject: _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .searchParamsToObject */ .f,
         Buffer,
 
         crud: secureCrud,
@@ -10621,7 +11727,7 @@ async function send(data, parentContext = null) {
         delete request.data;
         request.data = requestData;
 
-        request = await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .astAsync */ .pK)({
+        request = await (0,_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_1__/* .astAsync */ .pK)({
             executeAST: request,
             // `$data` is the caller's original API envelope. Endpoint records
             // map from it while provider fields remain top-level variables.
@@ -10644,7 +11750,7 @@ async function send(data, parentContext = null) {
             url += request.endpoint.startsWith("/") ? request.endpoint : `/${request.endpoint}`;
         }
 
-        const searchParams = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .objectToSearchParams */ .Z)(request.searchParams);
+        const searchParams = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .objectToSearchParams */ .Z)(request.searchParams);
         url += searchParams && url.includes("?") ? `&${searchParams.slice(1)}` : searchParams;
 
         const resolvedHttpMethod = request.method?.trim().toUpperCase();
@@ -10660,7 +11766,7 @@ async function send(data, parentContext = null) {
         if (!["GET", "HEAD"].includes(resolvedHttpMethod) && request.data !== undefined) {
             if (typeof request.data === 'object' && request.data !== null) {
                 options.body = request.encoding === "form"
-                    ? (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .objectToSearchParams */ .Z)(request.data, false)
+                    ? (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .objectToSearchParams */ .Z)(request.data, false)
                     : JSON.stringify(request.data);
                 if (!options.headers["Content-Type"] && !options.headers["content-type"]) {
                     options.headers["Content-Type"] = "application/json; charset=utf-8";
@@ -10754,7 +11860,7 @@ async function webhook(req, res) {
         const context = {
             request: req,
             response: res,
-            searchParams: (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .searchParamsToObject */ .f)(urlObject.searchParams),
+            searchParams: (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .searchParamsToObject */ .f)(urlObject.searchParams),
             host: hostname,
             organization,
             organization_id: organization._id,
@@ -10764,7 +11870,7 @@ async function webhook(req, res) {
             config: apiConfig
         };
 
-        const result = await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .astAsync */ .pK)({
+        const result = await (0,_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_1__/* .astAsync */ .pK)({
             executeAST: webhookConfig,
             sandbox: createSandbox(context)
         });
@@ -10942,10 +12048,2428 @@ async function getApiConfig(data, name) {
 
 /***/ },
 
-/***/ 1642
+/***/ 2661
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9180);
+/* harmony import */ var _cocreate_utils_queryElements__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2554);
+
+
+function getElement(context) {
+    return context?.element || context?.$this || null;
+}
+
+function setScopedValue(context, name, value) {
+    Object.defineProperty(context, name, {
+        value,
+        writable: true,
+        configurable: true,
+        enumerable: true
+    });
+}
+
+const browserGlobals = {
+    get $window() { return typeof window !== "undefined" ? window : undefined; },
+    set $window(value) { setScopedValue(this, "$window", value); },
+    get $CoCreate() { return typeof window !== "undefined" ? window.CoCreate : undefined; },
+    set $CoCreate(value) { setScopedValue(this, "$CoCreate", value); },
+    get $organization_id() { return typeof localStorage !== "undefined" ? localStorage.getItem("organization_id") : ""; },
+    get $user_id() { return typeof localStorage !== "undefined" ? localStorage.getItem("user_id") : ""; },
+    get $client_id() { return typeof localStorage !== "undefined" ? localStorage.getItem("clientId") : ""; },
+    get $session_id() { return typeof localStorage !== "undefined" ? localStorage.getItem("session_id") : ""; },
+    get $this() { return getElement(this); },
+    set $this(value) { setScopedValue(this, "$this", value); },
+    get $value() {
+        const element = getElement(this);
+        if (!element) return "";
+        if (typeof element.getValueSync === "function") return element.getValueSync();
+        return typeof element.getValue === "function" ? element.getValue() : "";
+    },
+    get $innerWidth() { return typeof window !== "undefined" ? window.innerWidth : 0; },
+    get $innerHeight() { return typeof window !== "undefined" ? window.innerHeight : 0; },
+    get $href() { return typeof window !== "undefined" ? window.location.href.replace(/\/$/, "") : ""; },
+    get $origin() { return typeof window !== "undefined" ? window.location.origin : ""; },
+    get $protocol() { return typeof window !== "undefined" ? window.location.protocol : ""; },
+    get $hostname() { return typeof window !== "undefined" ? window.location.hostname : ""; },
+    get $host() { return typeof window !== "undefined" ? window.location.host : ""; },
+    get $port() { return typeof window !== "undefined" ? window.location.port : ""; },
+    get $pathname() { return typeof window !== "undefined" ? window.location.pathname.replace(/\/$/, "") : ""; },
+    get $hash() { return typeof window !== "undefined" ? window.location.hash : ""; },
+    get $subdomain() {
+        if (typeof window === "undefined") return "";
+        const parts = window.location.hostname.split(".");
+        return parts.length > 2 ? parts[0] : "";
+    },
+    get $relativePath() {
+        if (typeof window === "undefined") return "./";
+        const currentPath = window.location.pathname.replace(/\/[^\/]*$/, "");
+        const depth = currentPath.split("/").filter(Boolean).length;
+        return depth > 0 ? "../".repeat(depth) : "./";
+    },
+    get $path() {
+        if (typeof window === "undefined") return "";
+        let path = window.location.pathname;
+        if (path.split("/").pop().includes(".")) path = path.replace(/\/[^\/]+$/, "/");
+        return path === "/" ? "" : path;
+    },
+    $query: function (selector) {
+        const element = getElement(this);
+        if (typeof selector === "string") selector = selector.trim().replace(/^['"]|['"]$/g, "");
+        try {
+            const results = (0,_cocreate_utils_queryElements__WEBPACK_IMPORTED_MODULE_0__/* .queryElements */ .a5)({ element, selector });
+            return results && results.length > 0 ? results[0] : undefined;
+        } catch (error) {
+            console.warn(`[Browser Globals] Invalid $query selector => "${selector}"`, error);
+            return undefined;
+        }
+    },
+    $queryAll: function (selector) {
+        const element = getElement(this);
+        if (typeof selector === "string") {
+            selector = selector.trim().replace(/^['"]|['"]$/g, "");
+        }
+        try {
+            return (0,_cocreate_utils_queryElements__WEBPACK_IMPORTED_MODULE_0__/* .queryElementsAll */ .H3)({ element, selector });
+        } catch (error) {
+            console.warn(`[Browser Globals] Invalid $queryAll selector => "${selector}"`, error);
+            return [];
+        }
+	},
+	$attributes: function (value) {
+		return this.element.getAttribute(value);
+	},
+	$getAttribute: function (name) {
+		return getElement(this)?.getAttribute(name) ?? null;
+	},
+	$hasAttribute: function (name) {
+		return getElement(this)?.hasAttribute(name) ?? false;
+	},
+	$setAttribute: function (name, value) {
+		const element = getElement(this);
+		if (!element) return value;
+		element.setAttribute(name, value);
+		return value;
+	},
+	$setValue: function (...args) {
+		return this.element && typeof this.element.setValue === "function"
+			? this.element.setValue(...args) || ""
+			: "";
+	}
+};
+
+const browserGlobalsScope = browserGlobals;
+
+const browserGlobalOperators = new Map(
+    Object.entries(Object.getOwnPropertyDescriptors(browserGlobals)).map(([name, descriptor]) => [
+        name,
+        descriptor.get
+            ? function (...args) {
+                const value = descriptor.get.call(this);
+                return typeof value === "function" ? value.apply(this, args) : value;
+            }
+            : descriptor.value
+    ])
+);
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "B", 0, /* binding */ browserGlobalsScope,
+/* harmony export */   "n", 0, /* binding */ browserGlobalOperators
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 3269
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   KY: () => (/* binding */ registerASTGlobals),
+/* harmony export */   ev: () => (/* binding */ evaluateAST),
+/* harmony export */   gf: () => (/* binding */ astSync),
+/* harmony export */   pK: () => (/* binding */ astAsync)
+/* harmony export */ });
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4276);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(623);
+/* harmony import */ var _browserGlobals_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2661);
+/* harmony import */ var _sharedGlobals_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3045);
+/* harmony import */ var _operators_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5420);
+
+
+
+
+
+
+const isBrowser = typeof window !== 'undefined';
+const isomorphicSandbox = _sharedGlobals_js__WEBPACK_IMPORTED_MODULE_3__/* .sharedGlobalsScope */ .p;
+let baseSandboxScope = isBrowser ? Object.setPrototypeOf(_browserGlobals_js__WEBPACK_IMPORTED_MODULE_2__/* .browserGlobalsScope */ .B, _sharedGlobals_js__WEBPACK_IMPORTED_MODULE_3__/* .sharedGlobalsScope */ .p) : Object.create(_sharedGlobals_js__WEBPACK_IMPORTED_MODULE_3__/* .sharedGlobalsScope */ .p);
+
+// Register environment roots without adding server imports to the browser graph.
+function registerASTGlobals(globals) {
+    const descriptors = Object.getOwnPropertyDescriptors(globals);
+    Object.defineProperties(baseSandboxScope, descriptors);
+    for (const [name, descriptor] of Object.entries(descriptors)) {
+        _operators_js__WEBPACK_IMPORTED_MODULE_4__/* .globalOperatorNames */ .kg.add(name);
+        _operators_js__WEBPACK_IMPORTED_MODULE_4__/* .customOperators */ .Jd.set(name, descriptor.get
+            ? function (...args) {
+                const value = descriptor.get.call(this);
+                return typeof value === "function" ? value.apply(this, args) : value;
+            }
+            : descriptor.value);
+    }
+}
+
+// Private signals unwind nested expressions until their owning loop or entry point.
+class ASTControl {
+    constructor(type, value) {
+        this.type = type;
+        this.value = value;
+    }
+}
+
+function finishControl(control) {
+    if (!(control instanceof ASTControl)) throw control;
+    if (control.type === "$return") return control.value;
+    throw new SyntaxError(`AST '${control.type}' requires an enclosing loop in the same function.`);
+}
+
+function astSync(options = {}) {
+    try {
+        return executeSync(options);
+    } catch (control) {
+        return finishControl(control);
+    }
+}
+
+async function astAsync(options = {}) {
+    try {
+        return await executeAsync(options);
+    } catch (control) {
+        return finishControl(control);
+    }
+}
+
+const conditionalOperators = new Set([
+    "$eq",
+    "$ne",
+    "$not",
+    "$lt",
+    "$lte",
+    "$gt",
+    "$gte",
+    "$in",
+    "$nin",
+    "$all",
+    "$elemMatch",
+    "$size",
+    "$exists",
+    "$regex",
+    "$type",
+    "$mod"
+]);
+
+function resolveScopedPath(expression, registry, sandbox, bindFunction = false) {
+    if (typeof expression !== "string" || !/^\$[\w$-]+(?:\.[\w$-]+|\[\d+\])*$/.test(expression)) {
+        return { found: false, value: undefined };
+    }
+
+    const path = expression.slice(1).replace(/\[(\d+)\]/g, ".$1").split(".");
+    const root = path.shift();
+    const prefixedRoot = `$${root}`;
+    let value;
+
+    if (registry?.has(prefixedRoot)) {
+        value = registry.get(prefixedRoot);
+    } else if (registry?.has(root)) {
+        value = registry.get(root);
+    } else if (sandbox && (prefixedRoot in sandbox || root in sandbox)) {
+        value = prefixedRoot in sandbox ? sandbox[prefixedRoot] : sandbox[root];
+    } else {
+        return { found: false, value: undefined };
+    }
+
+    let owner = null;
+    for (const property of path) {
+        if (value === null || value === undefined || !(property in Object(value))) {
+            return { found: false, value: undefined };
+        }
+        owner = value;
+        value = value[property];
+    }
+
+    if (bindFunction && owner && typeof value === "function") {
+        value = value.bind(owner);
+    }
+
+    return { found: true, value };
+}
+
+function resolveOperator(expression, registry, sandbox) {
+    if (typeof expression !== "string" || !expression.startsWith("$")) {
+        return { found: false, value: undefined };
+    }
+
+    const [root, ...path] = expression
+        .replace(/\[(\d+)\]/g, ".$1")
+        .split(".");
+    const unprefixedRoot = root.slice(1);
+    let value;
+
+    if (registry?.has(root)) {
+        value = registry.get(root);
+    } else if (registry?.has(unprefixedRoot)) {
+        value = registry.get(unprefixedRoot);
+    } else if (sandbox && root in Object(sandbox)) {
+        value = sandbox[root];
+    } else if (sandbox && unprefixedRoot in Object(sandbox)) {
+        value = sandbox[unprefixedRoot];
+    } else if (_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .customOperators */ .Jd.has(root)) {
+        value = _operators_js__WEBPACK_IMPORTED_MODULE_4__/* .customOperators */ .Jd.get(root);
+    } else if (_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .customOperators */ .Jd.has(unprefixedRoot)) {
+        value = _operators_js__WEBPACK_IMPORTED_MODULE_4__/* .customOperators */ .Jd.get(unprefixedRoot);
+    } else {
+        return { found: false, value: undefined };
+    }
+
+    // Keep the root reference so the shared dot-notation writer can update
+    // sandbox or registry objects, including paths whose parents do not exist.
+    const assignmentScope = path.length && value !== null &&
+        (typeof value === "object" || typeof value === "function")
+        ? { [root]: value }
+        : undefined;
+    let owner = null;
+    for (const property of path) {
+        if (value === null || value === undefined || !(property in Object(value))) {
+            return { found: false, value: undefined, assignmentScope };
+        }
+        owner = value;
+        value = value[property];
+    }
+
+    if (owner && typeof value === "function") {
+        value = value.bind(owner);
+    }
+
+    return { found: true, value, assignmentScope };
+}
+
+function getForDefinition(definition) {
+    let shouldAwait = false;
+    const modifierEntries = Object.entries(definition || {});
+    if (modifierEntries.length === 1 && modifierEntries[0][0] === "$await") {
+        shouldAwait = true;
+        definition = modifierEntries[0][1];
+    }
+
+    const sourceEntries = Object.entries(definition || {});
+    if (sourceEntries.length !== 1) {
+        throw new Error("AST '$for' requires exactly one iterable source.");
+    }
+
+    const [source, scope] = sourceEntries[0];
+    if (!source.startsWith("$")) {
+        throw new Error(`AST '$for' source '${source}' must be a scoped value.`);
+    }
+
+    const scopeEntries = Object.entries(scope || {});
+    if (scopeEntries.length !== 1) {
+        throw new Error("AST '$for' requires exactly one scoped variable and iteration body.");
+    }
+
+    const [variable, body] = scopeEntries[0];
+    if (!/^[A-Za-z_][\w$]*$/.test(variable)) {
+        throw new Error(`AST '$for' has an invalid scoped variable '${variable}'.`);
+    }
+
+    return { source, variable, body, shouldAwait };
+}
+
+function getWhileDefinition(definition, keys) {
+    if (keys.length !== 2 || !keys.includes("$do") || !keys.includes("$while")) {
+        throw new Error("AST loops require exactly one '$do' body and one '$while' condition.");
+    }
+    return {
+        body: definition.$do,
+        condition: definition.$while,
+        doFirst: keys[0] === "$do"
+    };
+}
+
+function createIterationScope({ sandbox, registry, variable, value }) {
+    const iterationSandbox = sandbox instanceof Map
+        ? undefined
+        : Object.create(sandbox || null);
+
+    if (iterationSandbox) {
+        iterationSandbox[variable] = value;
+    }
+
+    const iterationRegistry = new Map(registry);
+    iterationRegistry.set(variable, value);
+    iterationRegistry.set(`$${variable}`, value);
+
+    return { iterationSandbox, iterationRegistry };
+}
+
+function createNestedScope(sandbox, registry) {
+    return {
+        nestedSandbox: sandbox instanceof Map
+            ? undefined
+            : Object.create(sandbox || null),
+        nestedRegistry: new Map(registry)
+    };
+}
+
+function getFunctionDefinition(definition) {
+    if (!definition || typeof definition !== "object" || Array.isArray(definition)) {
+        throw new TypeError("AST '$function' requires an object definition.");
+    }
+
+    const params = definition.params || [];
+    if (!Array.isArray(params) || params.some(param => typeof param !== "string")) {
+        throw new TypeError("AST '$function.params' must be an array of names.");
+    }
+    if (!Object.prototype.hasOwnProperty.call(definition, "body")) {
+        throw new Error("AST '$function' requires a body.");
+    }
+
+    if (Object.prototype.hasOwnProperty.call(definition, "async")) {
+        throw new TypeError("AST '$function.async' is not supported; wrap '$function' in '$async' instead.");
+    }
+
+    return { params, body: definition.body, bind: definition.bind };
+}
+
+function createFunctionScope({ sandbox, registry, params, args, thisArg }) {
+    const functionSandbox = sandbox instanceof Map
+        ? undefined
+        : Object.create(sandbox || null);
+    const functionRegistry = new Map(registry);
+
+    functionRegistry.set("$this", thisArg);
+    functionRegistry.set("this", thisArg);
+    if (functionSandbox) functionSandbox.$this = thisArg;
+
+    params.forEach((param, index) => {
+        const name = param.replace(/^\$/, "");
+        const value = args[index];
+        functionRegistry.set(name, value);
+        functionRegistry.set(`$${name}`, value);
+        if (functionSandbox) {
+            functionSandbox[name] = value;
+            functionSandbox[`$${name}`] = value;
+        }
+    });
+
+    return { functionSandbox, functionRegistry };
+}
+
+function createASTFunction(expression, { sandbox, node, registry }) {
+    const isAsync = Object.prototype.hasOwnProperty.call(expression, "$async");
+    let functionExpression = expression;
+    if (isAsync) {
+        functionExpression = expression.$async;
+        if (
+            !functionExpression || typeof functionExpression !== "object" ||
+            Array.isArray(functionExpression) || Object.keys(functionExpression).length !== 1 ||
+            !Object.prototype.hasOwnProperty.call(functionExpression, "$function")
+        ) {
+            throw new TypeError("AST '$async' requires a nested '$function' definition.");
+        }
+    }
+
+    const { params, body, bind } = getFunctionDefinition(functionExpression.$function);
+    const evaluate = isAsync ? astAsync : astSync;
+    const execute = (thisArg, args) => {
+        const { functionSandbox, functionRegistry } = createFunctionScope({
+            sandbox, registry, params, args, thisArg
+        });
+        return evaluate({
+            executeAST: body,
+            sandbox: functionSandbox,
+            node,
+            registry: functionRegistry,
+            sequential: true
+        });
+    };
+    const callback = isAsync
+        ? async function (...args) { return execute(this, args); }
+        : function (...args) { return execute(this, args); };
+
+    return { callback, bind };
+}
+
+function isClassLike(func) {
+    if (typeof func !== "function") return false;
+
+    const source = Function.prototype.toString.call(func);
+    if (/^class\s|^class{/.test(source)) return true;
+
+    return !!func.prototype && Object.getOwnPropertyNames(func.prototype)
+        .some(member => member !== "constructor");
+}
+
+function getIfDefinition(definition, expression = "$if") {
+    if (expression !== "$if") {
+        const parts = expression.split(".");
+        const operator = parts.pop();
+        const source = parts.slice(1).join(".");
+
+        if (parts[0] !== "$if" || !source.startsWith("$") || !conditionalOperators.has(operator)) {
+            throw new Error(`Invalid AST conditional expression '${expression}'.`);
+        }
+
+        return { source, operator, branches: definition };
+    }
+
+    const sourceEntries = Object.entries(definition || {});
+    if (sourceEntries.length !== 1) {
+        throw new Error("AST '$if' requires exactly one condition source.");
+    }
+
+    const [source, comparison] = sourceEntries[0];
+    if (!source.startsWith("$")) {
+        throw new Error(`AST '$if' source '${source}' must be a scoped value.`);
+    }
+
+    const comparisonEntries = Object.entries(comparison || {});
+    if (comparisonEntries.length !== 1) {
+        throw new Error("AST '$if' requires exactly one comparison operator.");
+    }
+
+    const [operator, branches] = comparisonEntries[0];
+    if (!conditionalOperators.has(operator)) {
+        throw new Error(`AST '$if' does not support comparison operator '${operator}'.`);
+    }
+
+    return { source, operator, branches };
+}
+
+function parseConditionalValue(value, evaluate) {
+    if (value === "$true") return true;
+    if (value === "$false") return false;
+    if (value === "$null") return null;
+    if (value === "$undefined") return undefined;
+    if (value.startsWith("$")) return evaluate(value);
+    return value;
+}
+
+function resolveConditionalValueSync(value, context) {
+    if (typeof value === "string" && value.startsWith("$")) {
+        const scoped = resolveScopedPath(value, context.registry, context.sandbox);
+        if (scoped.found || /^\$[\w$-]+(?:\.[\w$-]+|\[\d+\])*$/.test(value)) {
+            return scoped.value;
+        }
+    }
+
+    return executeSync({ executeAST: value, ...context });
+}
+
+async function resolveConditionalValueAsync(value, context) {
+    if (typeof value === "string" && value.startsWith("$")) {
+        const scoped = resolveScopedPath(value, context.registry, context.sandbox);
+        if (scoped.found || /^\$[\w$-]+(?:\.[\w$-]+|\[\d+\])*$/.test(value)) {
+            return scoped.value;
+        }
+    }
+
+    return await executeAsync({ executeAST: value, ...context });
+}
+
+function selectConditionalBranch({ definition, evaluate, exists }) {
+    const { source, operator, branches } = definition;
+    if (!branches || typeof branches !== "object" || Array.isArray(branches)) {
+        throw new TypeError("AST '$if' comparison branches must be an object.");
+    }
+
+    const sourceValue = evaluate(source);
+    const sourceExists = exists(source);
+    for (const [condition, branch] of Object.entries(branches)) {
+        if (condition === "$else") continue;
+
+        const conditionValue = parseConditionalValue(condition, evaluate);
+        const matches = operator === "$exists"
+            ? sourceExists === Boolean(conditionValue)
+            : (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .queryData */ .VR)(
+                { value: sourceValue },
+                { value: { [operator]: conditionValue } }
+            );
+        if (matches) {
+            return { found: true, branch };
+        }
+    }
+
+    return Object.prototype.hasOwnProperty.call(branches, "$else")
+        ? { found: true, branch: branches.$else }
+        : { found: false };
+}
+
+async function selectConditionalBranchAsync({ definition, evaluate, exists }) {
+    const { source, operator, branches } = definition;
+    if (!branches || typeof branches !== "object" || Array.isArray(branches)) {
+        throw new TypeError("AST '$if' comparison branches must be an object.");
+    }
+
+    const sourceValue = await evaluate(source);
+    const sourceExists = exists(source);
+    for (const [condition, branch] of Object.entries(branches)) {
+        if (condition === "$else") continue;
+
+        const conditionValue = await parseConditionalValue(condition, evaluate);
+        const matches = operator === "$exists"
+            ? sourceExists === Boolean(conditionValue)
+            : (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .queryData */ .VR)(
+                { value: sourceValue },
+                { value: { [operator]: conditionValue } }
+            );
+        if (matches) {
+            return { found: true, branch };
+        }
+    }
+
+    return Object.prototype.hasOwnProperty.call(branches, "$else")
+        ? { found: true, branch: branches.$else }
+        : { found: false };
+}
+
+function resolveNullishSync(values, context) {
+    if (!Array.isArray(values)) {
+        throw new TypeError("AST '$null' requires an array of candidate values.");
+    }
+
+    for (const value of values) {
+        const resolved = resolveConditionalValueSync(value, context);
+        if (resolved !== null && resolved !== undefined) return resolved;
+    }
+}
+
+async function resolveNullishAsync(values, context) {
+    if (!Array.isArray(values)) {
+        throw new TypeError("AST '$null' requires an array of candidate values.");
+    }
+
+    for (const value of values) {
+        const resolved = await resolveConditionalValueAsync(value, context);
+        if (resolved !== null && resolved !== undefined) return resolved;
+    }
+}
+
+function executeSync({ executeAST, sandbox, node, registry, sequential = false } = {}) {
+    const targetNode = executeAST !== undefined ? executeAST : node;
+    if (targetNode === null || targetNode === undefined) return targetNode;
+
+    if (!registry) {
+        if (!(sandbox instanceof Map)) {
+            const activeScope = Object.create(baseSandboxScope);
+            Object.assign(activeScope, sandbox || {});
+            if (node && activeScope.element === undefined) activeScope.element = node;
+            sandbox = activeScope;
+        }
+        registry = sandbox instanceof Map ? sandbox : new Map(Object.entries(sandbox));
+    }
+
+    // Leaf String Evaluator: route to OperatorJS engine
+    if (typeof targetNode === "string") {
+        if (targetNode === "$break" || targetNode === "$continue" || targetNode === "$return") {
+            throw new ASTControl(targetNode);
+        }
+        const scoped = resolveScopedPath(targetNode, registry, sandbox);
+        if (scoped.found) return scoped.value;
+
+        if (targetNode.includes("$") || targetNode.includes("ObjectId()") || targetNode.includes("`")) {
+            let resolved = (0,_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .processOperators */ .Rj)(node || null, targetNode, [], null, [], registry);
+            return (0,_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .unpackTokens */ .b$)(resolved, registry);
+        }
+        return targetNode;
+    }
+
+    // List Evaluator: maps items sequentially in a synchronous pipeline
+    if (Array.isArray(targetNode)) {
+        return targetNode.map(item => executeSync({ executeAST: item, sandbox, node, registry, sequential }));
+    }
+
+    if (typeof targetNode === "object") {
+        if (targetNode instanceof Date || targetNode instanceof RegExp) {
+            return targetNode;
+        }
+
+        const keys = Object.keys(targetNode);
+        if (keys.includes("$do") || keys.includes("$while")) {
+            const { body, condition, doFirst } = getWhileDefinition(targetNode, keys);
+            const context = { sandbox, node, registry, sequential: true };
+            let firstIteration = true;
+            let result;
+            while ((firstIteration && doFirst) || resolveConditionalValueSync(condition, context)) {
+                firstIteration = false;
+                try {
+                    result = executeSync({ executeAST: body, ...context });
+                } catch (control) {
+                    if (!(control instanceof ASTControl)) throw control;
+                    if (control.type === "$break") break;
+                    if (control.type === "$continue") continue;
+                    throw control;
+                }
+            }
+            return result;
+        }
+
+        const structuralKey = keys.length === 1 ? keys[0] : undefined;
+
+        const isConditionalExpression = structuralKey === "$if" || structuralKey?.startsWith("$if.");
+
+        if (structuralKey?.startsWith("$") && structuralKey.includes(".$") && !isConditionalExpression) {
+            throw new Error(`AST operators must be composed as nested objects, not '${structuralKey}'.`);
+        }
+
+        if (structuralKey === "$break" || structuralKey === "$continue") {
+            throw new ASTControl(structuralKey);
+        }
+
+        if (structuralKey === "$return") {
+            throw new ASTControl("$return", executeSync({
+                executeAST: targetNode.$return, sandbox, node, registry, sequential
+            }));
+        }
+
+        if (structuralKey === "$null") {
+            return resolveNullishSync(targetNode.$null, { sandbox, node, registry, sequential });
+        }
+
+        if (structuralKey === "$await") {
+            throw new Error("AST '$await' requires astAsync.");
+        }
+
+        if (structuralKey === "$function" || structuralKey === "$async") {
+            const { callback, bind } = createASTFunction(targetNode, { sandbox, node, registry });
+            if (bind === undefined) return callback;
+            const thisArg = executeSync({ executeAST: bind, sandbox, node, registry, sequential });
+            return callback.bind(thisArg);
+        }
+
+        if (isConditionalExpression) {
+            const context = { sandbox, node, registry, sequential };
+            const selected = selectConditionalBranch({
+                definition: getIfDefinition(targetNode[structuralKey], structuralKey),
+                evaluate: (value) => resolveConditionalValueSync(value, context),
+                exists: (value) => resolveScopedPath(value, registry, sandbox).found
+            });
+            return selected.found
+                ? executeSync({ executeAST: selected.branch, ...context })
+                : undefined;
+        }
+
+        if (structuralKey === "$for") {
+            const {
+                source: sourceExpression,
+                variable,
+                body,
+                shouldAwait
+            } = getForDefinition(targetNode.$for);
+            if (shouldAwait) {
+                throw new Error("AST '$for' with '$await' requires astAsync.");
+            }
+            const source = resolveConditionalValueSync(sourceExpression, { sandbox, node, registry, sequential });
+            if (!source || typeof source[Symbol.iterator] !== "function") {
+                throw new TypeError("AST '$for' source is not synchronously iterable.");
+            }
+
+            let result;
+            for (const value of source) {
+                const { iterationSandbox, iterationRegistry } = createIterationScope({
+                    sandbox,
+                    registry,
+                    variable,
+                    value
+                });
+                try {
+                    result = executeSync({
+                        executeAST: body,
+                        sandbox: iterationSandbox,
+                        node,
+                        registry: iterationRegistry,
+                        sequential: true
+                    });
+                } catch (control) {
+                    if (!(control instanceof ASTControl)) throw control;
+                    if (control.type === "$break") break;
+                    if (control.type === "$continue") continue;
+                    throw control;
+                }
+            }
+            return result;
+        }
+
+        // Context Function/Operator Evaluation for single key objects
+        if (keys.length === 1 && keys[0].startsWith("$")) {
+            const key = keys[0];
+
+            const resolvedOperator = resolveOperator(key, registry, sandbox);
+            let opFunc = resolvedOperator.value;
+            const { assignmentScope } = resolvedOperator;
+
+            if (opFunc !== undefined || assignmentScope) {
+                const { nestedSandbox, nestedRegistry } = createNestedScope(sandbox, registry);
+                const evaluatedParam = executeSync({
+                    executeAST: targetNode[key],
+                    sandbox: nestedSandbox,
+                    node,
+                    registry: nestedRegistry,
+                    sequential
+                });
+                if (assignmentScope && typeof opFunc !== "function") {
+                    (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .dotNotationToObject */ .O)({ [key]: evaluatedParam }, assignmentScope);
+                    return evaluatedParam;
+                }
+                let opCtx = { element: node, registry };
+                if (typeof opFunc === "function") {
+                    const args = Array.isArray(evaluatedParam) ? evaluatedParam : [evaluatedParam];
+
+                    if (isClassLike(opFunc)) {
+                        return new opFunc(...args);
+                    }
+
+                    // Attempt invocation as function, fallback to constructor on TypeError
+                    try {
+                        return opFunc.call(opCtx, ...args);
+                    } catch (e) {
+                        if (e instanceof TypeError && /cannot be invoked without 'new'|class constructor/i.test(e.message)) {
+                            return new opFunc(...args);
+                        }
+                        throw e;
+                    }
+                }
+                return opFunc;
+            }
+        }
+
+        const resolvedObject = {};
+        for (const key of keys) {
+            if (key === "$break" || key === "$continue") {
+                throw new ASTControl(key);
+            }
+            if (key === "$return") {
+                throw new ASTControl("$return", executeSync({
+                    executeAST: targetNode[key],
+                    sandbox,
+                    node,
+                    registry,
+                    sequential
+                }));
+            }
+
+            if (key !== "$return" && key.startsWith("$")) {
+                const operator = resolveOperator(key, registry, sandbox);
+                if (
+                    typeof operator.value === "function" ||
+                    operator.assignmentScope
+                ) {
+                    resolvedObject[key] = executeSync({
+                        executeAST: { [key]: targetNode[key] },
+                        sandbox,
+                        node,
+                        registry,
+                        sequential
+                    });
+                    continue;
+                }
+            }
+
+            let finalKey = key;
+
+            if (key.startsWith("$") && !["$array", "filter", "$storage", "$database"].includes(key)) {
+                const resolvedKey = executeSync({ executeAST: key, sandbox, node, registry, sequential });
+                if (typeof resolvedKey === "string" || typeof resolvedKey === "number") {
+                    finalKey = String(resolvedKey);
+                }
+            } else if (key.includes('{{') && key.includes('}}')) {
+                finalKey = resolveInlinePlaceholdersSync(key, { sandbox, node, registry, sequential });
+            }
+
+            let finalValue = targetNode[key];
+            if (typeof finalValue === "string") {
+                if (finalValue.startsWith("$") && !["$array", "filter", "$storage", "$database"].includes(finalValue)) {
+                    finalValue = executeSync({ executeAST: finalValue, sandbox, node, registry, sequential });
+                } else if (finalValue.includes('{{') && finalValue.includes('}}')) {
+                    finalValue = resolveInlinePlaceholdersSync(finalValue, { sandbox, node, registry, sequential });
+                }
+            } else if (Array.isArray(finalValue) || (typeof finalValue === "object" && finalValue !== null)) {
+                finalValue = executeSync({ executeAST: finalValue, sandbox, node, registry, sequential });
+            }
+
+            if (finalKey === '$return') {
+                throw new ASTControl("$return", finalValue);
+            }
+
+            resolvedObject[finalKey] = finalValue;
+            registry.set(finalKey, finalValue);
+            if (sandbox && typeof sandbox === 'object') {
+                sandbox[finalKey] = finalValue;
+            }
+        }
+        return resolvedObject;
+    }
+
+    return targetNode;
+}
+
+async function executeAsync({ executeAST, sandbox, node, registry, sequential = false } = {}) {
+    const targetNode = executeAST !== undefined ? executeAST : node;
+    if (targetNode === null || targetNode === undefined) return targetNode;
+
+    if (!registry) {
+        if (!(sandbox instanceof Map)) {
+            const activeScope = Object.create(baseSandboxScope);
+            Object.assign(activeScope, sandbox || {});
+            if (node && activeScope.element === undefined) activeScope.element = node;
+            sandbox = activeScope;
+        }
+        registry = sandbox instanceof Map ? sandbox : new Map(Object.entries(sandbox));
+    }
+
+    // Leaf String Evaluator: route to OperatorJS engine
+    if (typeof targetNode === "string") {
+        if (targetNode === "$break" || targetNode === "$continue" || targetNode === "$return") {
+            throw new ASTControl(targetNode);
+        }
+        const scoped = resolveScopedPath(targetNode, registry, sandbox);
+        if (scoped.found) return scoped.value;
+
+        if (targetNode.includes("$") || targetNode.includes("ObjectId()") || targetNode.includes("`")) {
+            let resolved = await (0,_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .processOperatorsAsync */ .PT)(node || null, targetNode, [], null, [], registry);
+            return (0,_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .unpackTokens */ .b$)(resolved, registry);
+        }
+        return targetNode;
+    }
+
+    // Statement arrays execute sequentially inside loops and functions.
+    if (Array.isArray(targetNode)) {
+        if (sequential) {
+            const results = [];
+            for (const item of targetNode) {
+                results.push(await executeAsync({ executeAST: item, sandbox, node, registry, sequential }));
+            }
+            return results;
+        }
+        return await Promise.all(
+            targetNode.map(item => executeAsync({ executeAST: item, sandbox, node, registry, sequential }))
+        );
+    }
+
+    if (typeof targetNode === "object") {
+        if (targetNode instanceof Date || targetNode instanceof RegExp) {
+            return targetNode;
+        }
+
+        const keys = Object.keys(targetNode);
+        if (keys.includes("$do") || keys.includes("$while")) {
+            const { body, condition, doFirst } = getWhileDefinition(targetNode, keys);
+            const context = { sandbox, node, registry, sequential: true };
+            let firstIteration = true;
+            let result;
+            while ((firstIteration && doFirst) || await resolveConditionalValueAsync(condition, context)) {
+                firstIteration = false;
+                try {
+                    result = await executeAsync({ executeAST: body, ...context });
+                } catch (control) {
+                    if (!(control instanceof ASTControl)) throw control;
+                    if (control.type === "$break") break;
+                    if (control.type === "$continue") continue;
+                    throw control;
+                }
+            }
+            return result;
+        }
+
+        const structuralKey = keys.length === 1 ? keys[0] : undefined;
+
+        const isConditionalExpression = structuralKey === "$if" || structuralKey?.startsWith("$if.");
+
+        if (structuralKey?.startsWith("$") && structuralKey.includes(".$") && !isConditionalExpression) {
+            throw new Error(`AST operators must be composed as nested objects, not '${structuralKey}'.`);
+        }
+
+        if (structuralKey === "$break" || structuralKey === "$continue") {
+            throw new ASTControl(structuralKey);
+        }
+
+        if (structuralKey === "$return") {
+            throw new ASTControl("$return", await executeAsync({
+                executeAST: targetNode.$return, sandbox, node, registry, sequential
+            }));
+        }
+
+        if (structuralKey === "$null") {
+            return await resolveNullishAsync(targetNode.$null, { sandbox, node, registry, sequential });
+        }
+
+        if (structuralKey === "$await") {
+            return await executeAsync({
+                executeAST: targetNode.$await,
+                sandbox,
+                node,
+                registry,
+                sequential
+            });
+        }
+
+        if (structuralKey === "$function" || structuralKey === "$async") {
+            const { callback, bind } = createASTFunction(targetNode, { sandbox, node, registry });
+            if (bind === undefined) return callback;
+            const thisArg = await executeAsync({ executeAST: bind, sandbox, node, registry, sequential });
+            return callback.bind(thisArg);
+        }
+
+        if (isConditionalExpression) {
+            const context = { sandbox, node, registry, sequential };
+            const selected = await selectConditionalBranchAsync({
+                definition: getIfDefinition(targetNode[structuralKey], structuralKey),
+                evaluate: (value) => resolveConditionalValueAsync(value, context),
+                exists: (value) => resolveScopedPath(value, registry, sandbox).found
+            });
+            return selected.found
+                ? await executeAsync({ executeAST: selected.branch, ...context })
+                : undefined;
+        }
+
+        if (structuralKey === "$for") {
+            const {
+                source: sourceExpression,
+                variable,
+                body,
+                shouldAwait
+            } = getForDefinition(targetNode.$for);
+            const source = await resolveConditionalValueAsync(sourceExpression, { sandbox, node, registry, sequential });
+            let result;
+            if (shouldAwait) {
+                const isIterable = source && (
+                    typeof source[Symbol.asyncIterator] === "function" ||
+                    typeof source[Symbol.iterator] === "function"
+                );
+                if (!isIterable) {
+                    throw new TypeError("AST '$for' '$await' source is not iterable.");
+                }
+
+                for await (const value of source) {
+                    const { iterationSandbox, iterationRegistry } = createIterationScope({
+                        sandbox,
+                        registry,
+                        variable,
+                        value
+                    });
+                    try {
+                        result = await executeAsync({
+                            executeAST: body,
+                            sandbox: iterationSandbox,
+                            node,
+                            registry: iterationRegistry,
+                            sequential: true
+                        });
+                    } catch (control) {
+                        if (!(control instanceof ASTControl)) throw control;
+                        if (control.type === "$break") break;
+                        if (control.type === "$continue") continue;
+                        throw control;
+                    }
+                }
+            } else {
+                if (!source || typeof source[Symbol.iterator] !== "function") {
+                    throw new TypeError("AST '$for' source is not synchronously iterable.");
+                }
+
+                for (const value of source) {
+                    const { iterationSandbox, iterationRegistry } = createIterationScope({
+                        sandbox,
+                        registry,
+                        variable,
+                        value
+                    });
+                    try {
+                        result = await executeAsync({
+                            executeAST: body,
+                            sandbox: iterationSandbox,
+                            node,
+                            registry: iterationRegistry,
+                            sequential: true
+                        });
+                    } catch (control) {
+                        if (!(control instanceof ASTControl)) throw control;
+                        if (control.type === "$break") break;
+                        if (control.type === "$continue") continue;
+                        throw control;
+                    }
+                }
+            }
+            return result;
+        }
+
+        // Context Function/Operator Evaluation for single key objects
+        if (keys.length === 1 && keys[0].startsWith("$")) {
+            const key = keys[0];
+
+            const resolvedOperator = resolveOperator(key, registry, sandbox);
+            let opFunc = resolvedOperator.value;
+            const { assignmentScope } = resolvedOperator;
+
+            if (opFunc !== undefined || assignmentScope) {
+                const { nestedSandbox, nestedRegistry } = createNestedScope(sandbox, registry);
+                const evaluatedParam = await executeAsync({
+                    executeAST: targetNode[key],
+                    sandbox: nestedSandbox,
+                    node,
+                    registry: nestedRegistry,
+                    sequential
+                });
+                if (assignmentScope && typeof opFunc !== "function") {
+                    (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .dotNotationToObject */ .O)({ [key]: evaluatedParam }, assignmentScope);
+                    return evaluatedParam;
+                }
+                let opCtx = { element: node, registry };
+                if (typeof opFunc === "function") {
+                    const args = Array.isArray(evaluatedParam) ? evaluatedParam : [evaluatedParam];
+
+                    if (isClassLike(opFunc)) {
+                        return new opFunc(...args);
+                    }
+
+                    // Attempt invocation as function, fallback to constructor on TypeError
+                    try {
+                        return await opFunc.call(opCtx, ...args);
+                    } catch (e) {
+                        if (e instanceof TypeError && /cannot be invoked without 'new'|class constructor/i.test(e.message)) {
+                            return new opFunc(...args);
+                        }
+                        throw e;
+                    }
+                }
+                return opFunc;
+            }
+        }
+
+        const resolvedObject = {};
+        for (const key of keys) {
+            if (key === "$break" || key === "$continue") {
+                throw new ASTControl(key);
+            }
+            if (key === "$return") {
+                throw new ASTControl("$return", await executeAsync({
+                    executeAST: targetNode[key],
+                    sandbox,
+                    node,
+                    registry,
+                    sequential
+                }));
+            }
+
+            if (key !== "$return" && key.startsWith("$")) {
+                const operator = resolveOperator(key, registry, sandbox);
+                if (
+                    typeof operator.value === "function" ||
+                    operator.assignmentScope
+                ) {
+                    resolvedObject[key] = await executeAsync({
+                        executeAST: { [key]: targetNode[key] },
+                        sandbox,
+                        node,
+                        registry,
+                        sequential
+                    });
+                    continue;
+                }
+            }
+
+            let finalKey = key;
+
+            if (key.startsWith("$") && !["$array", "filter", "$storage", "$database"].includes(key)) {
+                const resolvedKey = await executeAsync({ executeAST: key, sandbox, node, registry, sequential });
+                if (typeof resolvedKey === "string" || typeof resolvedKey === "number") {
+                    finalKey = String(resolvedKey);
+                }
+            } else if (key.includes('{{') && key.includes('}}')) {
+                finalKey = await resolveInlinePlaceholdersAsync(key, { sandbox, node, registry, sequential });
+            }
+
+            let finalValue = targetNode[key];
+            if (typeof finalValue === "string") {
+                if (finalValue.startsWith("$") && !["$array", "filter", "$storage", "$database"].includes(finalValue)) {
+                    finalValue = await executeAsync({ executeAST: finalValue, sandbox, node, registry, sequential });
+                } else if (finalValue.includes('{{') && finalValue.includes('}}')) {
+                    finalValue = await resolveInlinePlaceholdersAsync(finalValue, { sandbox, node, registry, sequential });
+                }
+            } else if (Array.isArray(finalValue) || (typeof finalValue === "object" && finalValue !== null)) {
+                finalValue = await executeAsync({ executeAST: finalValue, sandbox, node, registry, sequential });
+            }
+
+            if (finalKey === '$return') {
+                throw new ASTControl("$return", finalValue);
+            }
+
+            resolvedObject[finalKey] = finalValue;
+            registry.set(finalKey, finalValue);
+            if (sandbox && typeof sandbox === 'object') {
+                sandbox[finalKey] = finalValue;
+            }
+        }
+        return resolvedObject;
+    }
+
+    return targetNode;
+}
+
+function resolveInlinePlaceholdersSync(str, { sandbox, node, registry, sequential }) {
+    let result = str;
+    const regex = /\{\{\s*([\w\W]+?)\s*\}\}/g;
+    let match;
+
+    while ((match = regex.exec(str)) !== null) {
+        const placeholder = match[0];
+        const variablePath = match[1];
+        const evaluatedValue = executeSync({ executeAST: variablePath, sandbox, node, registry, sequential });
+        const replacement = typeof evaluatedValue === 'object' ? JSON.stringify(evaluatedValue) : String(evaluatedValue);
+        result = result.replace(placeholder, replacement);
+    }
+    return result;
+}
+
+async function resolveInlinePlaceholdersAsync(str, { sandbox, node, registry, sequential }) {
+    let result = str;
+    const regex = /\{\{\s*([\w\W]+?)\s*\}\}/g;
+    let match;
+
+    while ((match = regex.exec(str)) !== null) {
+        const placeholder = match[0];
+        const variablePath = match[1];
+        const evaluatedValue = await executeAsync({ executeAST: variablePath, sandbox, node, registry, sequential });
+        const replacement = typeof evaluatedValue === 'object' ? JSON.stringify(evaluatedValue) : String(evaluatedValue);
+        result = result.replace(placeholder, replacement);
+    }
+    return result;
+}
+
+async function evaluateAST({ node, executeAST, sandbox = {} } = {}) {
+    return await astAsync({ node, executeAST, sandbox });
+}
+
+;(0,_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .setASTEvaluators */ .pz)(astSync, astAsync);
+
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (astSync)));
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "FL", 0, /* binding */ isomorphicSandbox
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 5420
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   PT: () => (/* binding */ processOperatorsAsync),
+/* harmony export */   Rj: () => (/* binding */ processOperators),
+/* harmony export */   b$: () => (/* binding */ unpackTokens),
+/* harmony export */   pz: () => (/* binding */ setASTEvaluators)
+/* harmony export */ });
+/* unused harmony export safeParse */
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4633);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(617);
+/* harmony import */ var _cocreate_utils_queryElements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2554);
+/* harmony import */ var _browserGlobals_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2661);
+/* harmony import */ var _sharedGlobals_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3045);
+/********************************************************************************
+ * Copyright (C) 2026 CoCreate and Contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ ********************************************************************************/
+
+
+
+
+
+
+const isBrowser = typeof window !== "undefined";
+
+// Late-binding references dynamically set at boot time to decouple circular import loops
+let astSyncRef = null;
+let astAsyncRef = null;
+
+function setASTEvaluators(syncFn, asyncFn) {
+    astSyncRef = syncFn;
+    astAsyncRef = asyncFn;
+}
+
+function parseASTExpression(expression) {
+    if (typeof expression !== "string") return expression;
+
+    try {
+        return JSON.parse(expression);
+    } catch (error) {
+        console.warn("[Operator Engine] Invalid JSON passed to $ast.", error);
+        return "";
+    }
+}
+
+const mathConstants = { PI: Math.PI, E: Math.E };
+const mathFunctions = {
+    abs: Math.abs, ceil: Math.ceil, floor: Math.floor, round: Math.round,
+    max: Math.max, min: Math.min, pow: Math.pow, sqrt: Math.sqrt,
+    log: Math.log, sin: Math.sin, cos: Math.cos, tan: Math.tan,
+    Number: (v) => Number(v)
+};
+
+class Ref {
+    constructor(obj, prop) {
+        this.obj = obj;
+        this.prop = prop;
+
+        let isList = Array.isArray(obj) ||
+            (typeof NodeList !== "undefined" && obj instanceof NodeList) ||
+            (typeof HTMLCollection !== "undefined" && obj instanceof HTMLCollection);
+
+        this.isArrayContext = isList && !(prop in obj);
+
+        if (this.isArrayContext && !Array.isArray(this.obj)) {
+            this.obj = Array.from(this.obj);
+        }
+    }
+    get() {
+        if (this.isArrayContext) {
+            return this.obj.map(item => item ? item[this.prop] : undefined);
+        }
+        return this.obj ? this.obj[this.prop] : undefined;
+    }
+    set(val) {
+        if (this.isArrayContext) {
+            this.obj.forEach(item => { if (item) item[this.prop] = val; });
+            return val;
+        }
+        if (this.obj) this.obj[this.prop] = val;
+        return val;
+    }
+}
+
+function unref(val) {
+    return val instanceof Ref ? val.get() : val;
+}
+
+function isQuotedStringLiteral(value) {
+    const quote = value[0];
+    if ((quote !== "'" && quote !== '"') || value.at(-1) !== quote) return false;
+
+    for (let i = 1; i < value.length - 1; i++) {
+        if (value[i] === "\\") {
+            i++;
+        } else if (value[i] === quote) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function safeParse(expression, registry = new Map()) {
+    if (typeof expression !== "string") return expression;
+
+    let currentExpr = expression.trim();
+    if (!currentExpr) return null;
+
+    const tokenizerRegex = /('[^']*'|"[^"]*"|\d+(?:\.\d+)?|>=|<=|===|!==|==|!=|&&|\|\||[a-zA-Z_][a-zA-Z0-9_\.]*|[\+\-\*\/\%\(\)\?\:\>\<\!\,\=])/g;
+    const tokens = currentExpr.match(tokenizerRegex) || [];
+    let pos = 0;
+
+    function peek() { return tokens[pos]; }
+    function consume() { return tokens[pos++]; }
+
+    function parse() {
+        return parseAssignment();
+    }
+
+    function parseAssignment() {
+        let left = parseTernary();
+        if (peek() === "=") {
+            consume();
+            let right = unref(parseAssignment());
+            if (left instanceof Ref) {
+                return left.set(right);
+            }
+            return right;
+        }
+        return left;
+    }
+
+    function parseTernary() {
+        let left = parseLogical();
+        if (peek() === "?") {
+            consume();
+            let trueExpr = parseTernary();
+            if (peek() === ":") {
+                consume();
+                let falseExpr = parseTernary();
+                return unref(left) ? unref(trueExpr) : unref(falseExpr);
+            }
+        }
+        return left;
+    }
+
+    function parseLogical() {
+        let left = parseComparison();
+        while (peek() === "&&" || peek() === "||") {
+            let op = consume();
+            let right = parseComparison();
+            if (op === "&&") left = unref(left) && unref(right);
+            if (op === "||") left = unref(left) || unref(right);
+        }
+        return left;
+    }
+
+    function parseComparison() {
+        let left = parseAdditive();
+        while ([">", "<", ">=", "<=", "===", "!==", "==", "!="].includes(peek())) {
+            let op = consume();
+            let right = parseAdditive();
+            let l = unref(left), r = unref(right);
+            if (op === ">") left = l > r;
+            if (op === "<") left = l < r;
+            if (op === ">=") left = l >= r;
+            if (op === "<=") left = l <= r;
+            if (op === "===") left = l === r;
+            if (op === "!==") left = l !== r;
+            if (op === "==") left = l == r;
+            if (op === "!=") left = l != r;
+        }
+        return left;
+    }
+
+    function parseAdditive() {
+        let left = parseMultiplicative();
+        while (["+", "-"].includes(peek())) {
+            let op = consume();
+            let right = parseMultiplicative();
+            if (op === "+") left = unref(left) + unref(right);
+            if (op === "-") left = unref(left) - unref(right);
+        }
+        return left;
+    }
+
+    function parseMultiplicative() {
+        let left = parsePrimary();
+        while (["*", "/", "%"].includes(peek())) {
+            let op = consume();
+            let right = parsePrimary();
+            if (op === "*") left = unref(left) * unref(right);
+            if (op === "/") left = unref(left) / unref(right);
+            if (op === "%") left = unref(left) % unref(right);
+        }
+        return left;
+    }
+
+    function parsePrimary() {
+        let token = consume();
+        if (!token) return undefined;
+
+        if (/^\d/.test(token)) return parseFloat(token);
+
+        if (token.startsWith("'") || token.startsWith('"')) {
+            return token.slice(1, -1);
+        }
+
+        if (token === "true") return true;
+        if (token === "false") return false;
+
+        if (token === "(") {
+            let expr = unref(parse());
+            if (peek() === ")") consume();
+            return expr;
+        }
+
+        if (token === "-") return -unref(parsePrimary());
+        if (token === "!") return !unref(parsePrimary());
+
+        if (mathConstants.hasOwnProperty(token)) return mathConstants[token];
+
+        if (peek() === "(" && mathFunctions.hasOwnProperty(token)) {
+            consume();
+            let args = [];
+            if (peek() !== ")") {
+                args.push(unref(parse()));
+                while (peek() === ",") {
+                    consume();
+                    args.push(unref(parse()));
+                }
+            }
+            if (peek() === ")") consume();
+            return mathFunctions[token](...args);
+        }
+
+        let path = token.split(".");
+        let baseToken = path[0];
+        let val;
+
+        if (registry && typeof registry.get === 'function' && registry.has(baseToken)) {
+            val = registry.get(baseToken);
+        } else if (typeof window !== "undefined" && window[baseToken]) {
+            val = window[baseToken];
+        } else {
+            val = undefined;
+        }
+
+        if (path.length === 1) {
+            if (peek() === "(" && typeof val === "function") {
+                consume();
+                let args = [];
+                if (peek() !== ")") {
+                    args.push(unref(parse()));
+                    while (peek() === ",") {
+                        consume();
+                        args.push(unref(parse()));
+                    }
+                }
+                if (peek() === ")") consume();
+                return val(...args);
+            }
+            return val;
+        }
+
+        for (let i = 1; i < path.length - 1; i++) {
+            if (val !== null && val !== undefined) {
+                let isList = Array.isArray(val) || (typeof NodeList !== "undefined" && val instanceof NodeList) || (typeof HTMLCollection !== "undefined" && val instanceof HTMLCollection);
+                if (isList && !(path[i] in val)) {
+                    val = Array.from(val).map(item => item ? item[path[i]] : undefined);
+                } else {
+                    val = val[path[i]];
+                }
+            } else {
+                return undefined;
+            }
+        }
+
+        let ref = new Ref(val, path[path.length - 1]);
+
+        if (peek() === "(") {
+            consume();
+            let args = [];
+            if (peek() !== ")") {
+                args.push(unref(parse()));
+                while (peek() === ",") {
+                    consume();
+                    args.push(unref(parse()));
+                }
+            }
+            if (peek() === ")") consume();
+
+            if (ref.isArrayContext) {
+                return ref.obj.map(item => {
+                    let func = item ? item[ref.prop] : undefined;
+                    return typeof func === "function" ? func.apply(item, args) : undefined;
+                });
+            } else {
+                let func = ref.obj ? ref.obj[ref.prop] : undefined;
+                if (typeof func === "function") {
+                    return func.apply(ref.obj, args);
+                }
+            }
+        }
+
+        return ref;
+    }
+
+    try {
+        return unref(parse());
+    } catch (error) {
+        console.warn(`safeParse error: ${error.message} (Expr: "${expression}")`, error);
+        return null;
+    }
+}
+
+const globalOperatorNames = new Set(_sharedGlobals_js__WEBPACK_IMPORTED_MODULE_4__/* .sharedGlobalOperators */ .I.keys());
+
+const customOperators = new Map([
+	..._sharedGlobals_js__WEBPACK_IMPORTED_MODULE_4__/* .sharedGlobalOperators */ .I,
+	...(isBrowser ? _browserGlobals_js__WEBPACK_IMPORTED_MODULE_3__/* .browserGlobalOperators */ .n : []),
+    ...Object.entries({
+        "ObjectId()": () => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V)().toString(),
+        "$": function (expression) {
+            return safeParse(expression, this.registry);
+        },
+        $ast: function (expression) {
+            if (!astSyncRef) {
+                console.warn("[Operator Engine] AST Evaluator reference not registered.");
+                return expression;
+            }
+            return astSyncRef({
+                executeAST: parseASTExpression(expression),
+                node: this.element,
+                registry: this.registry
+            });
+        },
+        $astAsync: async function (expression) {
+            if (!astAsyncRef) {
+                console.warn("[Operator Engine] AST Async Evaluator reference not registered.");
+                return expression;
+            }
+            return await astAsyncRef({
+                executeAST: parseASTExpression(expression),
+                node: this.element,
+                registry: this.registry
+            });
+        },
+        $param: function (...args) { return args.length === 1 ? args[0] : args; },
+        $getObjectValue: function (obj, key) {
+            return (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .getValueFromObject */ .r)(obj, key);
+        },
+    })
+]
+);
+
+const isConstructor = (func, name) => {
+    try {
+        if (typeof func !== 'function') return false;
+        if (/^\s*class\s+/.test(func.toString())) return true;
+        if (!func.prototype) return false;
+        const n = name || func.name;
+        if (n && /^[A-Z]/.test(n)) return true;
+    } catch (e) { }
+    return false;
+};
+
+const findInnermostOperator = (expression) => {
+    let parens = [];
+    let stack = [];
+    let inSQ = false, inDQ = false;
+
+    for (let i = 0; i < expression.length; i++) {
+        const char = expression[i];
+        if (char === '\\') { i++; continue; }
+        if (char === '"' && !inSQ) inDQ = !inDQ;
+        if (char === "'" && !inDQ) inSQ = !inSQ;
+        if (inSQ || inDQ) continue;
+
+        if (char === "`") {
+            let layers = 1;
+            while (expression[i + layers] === "`") layers++;
+            let delimiter = "`".repeat(layers);
+            let end = expression.indexOf(delimiter, i + layers);
+            // Two adjacent backticks can also represent an empty string.
+            if (end === -1 && layers > 1) {
+                layers = 1;
+                delimiter = "`";
+                end = i + 1;
+            }
+            while (end !== -1) {
+                let escapes = 0;
+                for (let j = end - 1; j >= 0 && expression[j] === "\\"; j--) escapes++;
+                if (escapes % 2 === 0) break;
+                end = expression.indexOf(delimiter, end + delimiter.length);
+            }
+            if (end !== -1) {
+                return {
+                    stringLiteral: true,
+                    layers,
+                    start: i,
+                    args: expression.slice(i + layers, end),
+                    fullMatch: expression.slice(i, end + layers)
+                };
+            }
+        }
+
+        if (char === '(') {
+            stack.push(i);
+        } else if (char === ')') {
+            if (stack.length > 0) {
+                const start = stack.pop();
+                parens.push({ start: start, end: i, depth: stack.length });
+            }
+        }
+    }
+
+    parens.sort((a, b) => b.depth - a.depth || b.start - a.start);
+
+    function stripParentheses(str) {
+        let result = str.trim();
+        if (result.startsWith("(") && result.endsWith(")")) {
+            let balance = 0;
+            let isMatchedPair = true;
+            for (let i = 0; i < result.length - 1; i++) {
+                if (result[i] === '(') balance++;
+                else if (result[i] === ')') balance--;
+                if (balance === 0) { isMatchedPair = false; break; }
+            }
+            if (isMatchedPair && balance === 1) {
+                return result.substring(1, result.length - 1);
+            }
+        }
+        return result;
+    }
+
+    for (const p of parens) {
+        const insideParens = expression.substring(p.start + 1, p.end).trim();
+        const leftPart = expression.substring(0, p.start);
+
+        const match = leftPart.match(/(?:^|[^\w\$])(\$[\w\-]*|ObjectId\b)\s*$/);
+
+        if (match) {
+            let opName = match[1] === 'ObjectId' ? 'ObjectId()' : match[1];
+            if (customOperators.has(opName) || /^\$[\w\-]*$/.test(opName)) {
+                const spacesMatch = leftPart.match(/\s*$/);
+                const spacesAtEnd = spacesMatch ? spacesMatch[0].length : 0;
+                const fullMatchStart = match.index + match[0].length - match[1].length - spacesAtEnd;
+
+                return {
+                    operator: opName,
+                    start: fullMatchStart,
+                    args: insideParens,
+                    fullMatch: expression.substring(fullMatchStart, p.end + 1),
+                    rawContent: expression.substring(fullMatchStart, p.end + 1)
+                };
+            }
+        }
+    }
+
+    const bareRegex = /(?:^|[^\w\$])(\$[\w\-]+|ObjectId\b)/g;
+    let bareMatch;
+    let bareCandidates = [];
+
+    const unquotedExpression = expression.replace(
+        /'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/g,
+        literal => " ".repeat(literal.length)
+    );
+    while ((bareMatch = bareRegex.exec(unquotedExpression)) !== null) {
+        let possibleOp = bareMatch[1];
+        let opName = possibleOp === 'ObjectId' ? 'ObjectId()' : possibleOp;
+        let remainder = expression.substring(bareMatch.index + bareMatch[0].length);
+        if (!/^\s*\(/.test(remainder)) {
+            if (customOperators.has(opName) || /^\$[\w\-]+$/.test(opName)) {
+                bareCandidates.push({
+                    operator: opName,
+                    args: undefined,
+                    rawContent: possibleOp,
+                    fullMatch: possibleOp,
+                    start: bareMatch.index + (bareMatch[0].length - possibleOp.length)
+                });
+            }
+        }
+    }
+
+    if (bareCandidates.length > 0) {
+        bareCandidates.sort((a, b) => b.start - a.start);
+        return bareCandidates[0];
+    }
+
+    return { operator: null, args: stripParentheses(expression), rawContent: expression.trim() };
+};
+
+function processValues(elements, operator, args, parent, objectRegistry) {
+    let customOp = customOperators.get(operator);
+    let results = [];
+    let hasValidProperty = customOp ? true : false;
+    const preserveNullish = operator === "$undefined" || operator === "$null";
+
+    for (const el of elements) {
+        if (!el) continue;
+        let rawValue = customOp;
+        const propName = customOp ? null : operator.substring(1);
+        if (!customOp) {
+            if (propName in el) {
+                hasValidProperty = true;
+                rawValue = el[propName];
+            } else {
+                continue;
+            }
+        }
+
+        let preparedArgs = [];
+        const originalWasArray = Array.isArray(args);
+        const hasArgs = originalWasArray || args !== undefined;
+
+        if (operator === "$" && typeof args === "string") {
+            // safeParse consumes the expression, including its string delimiters.
+            preparedArgs = [args];
+        } else if (originalWasArray) {
+            preparedArgs = Array.from(args);
+        } else if (typeof args === "string") {
+            if (args === "") {
+                preparedArgs = [""];
+            } else {
+                let parsedArgs = [];
+                let currentArg = '';
+                let inSQ = false, inDQ = false;
+                let depth = 0;
+
+                for (let i = 0; i < args.length; i++) {
+                    const char = args[i];
+                    if (char === '\\') {
+                        currentArg += char;
+                        if (i + 1 < args.length) currentArg += args[++i];
+                        continue;
+                    }
+                    if (char === "'" && !inDQ) inSQ = !inSQ;
+                    if (char === '"' && !inSQ) inDQ = !inDQ;
+
+                    if (!inSQ && !inDQ) {
+                        if (char === '(' || char === '[' || char === '{') depth++;
+                        else if (char === ')' || char === ']' || char === '}') depth--;
+                    }
+
+                    if (char === ',' && !inSQ && !inDQ && depth === 0) {
+                        parsedArgs.push(currentArg.trim());
+                        currentArg = '';
+                    } else {
+                        currentArg += char;
+                    }
+                }
+                if (currentArg.trim() !== "") parsedArgs.push(currentArg.trim());
+
+                preparedArgs = parsedArgs.map(arg => {
+                    if (/^__OBJ_\d+__$/.test(arg) && objectRegistry && objectRegistry.has(arg)) {
+                        return objectRegistry.get(arg);
+                    }
+                    if (!isNaN(arg) && arg.trim() !== "") {
+                        return Number(arg);
+                    }
+                    if (arg === "true") return true;
+                    if (arg === "false") return false;
+                    if (arg === "null") return null;
+                    if (arg === "undefined") return undefined;
+
+                    if (isQuotedStringLiteral(arg)) {
+                        let unquoted = arg.slice(1, -1);
+                        if (unquoted.includes("__OBJ_")) {
+                            return unquoted.replace(/__OBJ_\d+__/g, (match) => {
+                                if (objectRegistry && objectRegistry.has(match)) {
+                                    let val = objectRegistry.get(match);
+                                    return typeof val === "object" ? JSON.stringify(val) : String(val);
+                                }
+                                return match;
+                            });
+                        }
+                        return unquoted;
+                    }
+
+                    if (typeof arg === "string" && arg.includes("__OBJ_")) {
+                        return arg.replace(/__OBJ_\d+__/g, (match) => {
+                            if (objectRegistry && objectRegistry.has(match)) {
+                                let val = objectRegistry.get(match);
+                                return typeof val === "object" ? JSON.stringify(val) : String(val);
+                            }
+                            return match;
+                        });
+                    }
+                    return arg;
+                });
+            }
+        } else if (hasArgs) {
+            preparedArgs = [args];
+        }
+
+        if (originalWasArray) {
+            preparedArgs = preparedArgs.map(a => {
+                if (typeof a === 'string' && /^__OBJ_\d+__$/.test(a) && objectRegistry && objectRegistry.has(a)) {
+                    return objectRegistry.get(a);
+                }
+                return a;
+            });
+        }
+
+        let resolvedArgs;
+        if (originalWasArray || preparedArgs.length > 1) {
+            resolvedArgs = preparedArgs;
+        } else if (preparedArgs.length === 1) {
+            resolvedArgs = preparedArgs[0];
+        } else {
+            resolvedArgs = undefined;
+        }
+
+        if (typeof rawValue === "function") {
+            try {
+                let execCtx = { element: el, registry: objectRegistry };
+                if (isConstructor(rawValue, propName)) {
+                    if (Array.isArray(resolvedArgs)) {
+                        rawValue = new rawValue(...resolvedArgs);
+                    } else if (resolvedArgs !== undefined) {
+                        rawValue = new rawValue(resolvedArgs);
+                    } else {
+                        rawValue = new rawValue();
+                    }
+                } else {
+                    if (Array.isArray(resolvedArgs)) {
+                        rawValue = rawValue.apply(execCtx, resolvedArgs);
+                    } else if (resolvedArgs !== undefined) {
+                        rawValue = rawValue.call(execCtx, resolvedArgs);
+                    } else {
+                        rawValue = rawValue.call(execCtx);
+                    }
+                }
+            } catch (err) {
+                console.warn(`Operator Engine: Failed to execute method or operator "${operator}"`, err);
+                continue;
+            }
+        } else if (hasArgs && propName) {
+            try {
+                el[propName] = resolvedArgs;
+                rawValue = el[propName];
+            } catch (err) {
+                console.warn(`Operator Engine: Failed to assign property "${propName}"`, err);
+                continue;
+            }
+        }
+
+        if (preserveNullish || (rawValue !== undefined && rawValue !== null)) {
+            results.push(rawValue);
+        }
+    }
+
+    if (!hasValidProperty) return undefined;
+    if (results.length === 0) return "";
+    if (results.length === 1) return results[0];
+    return results;
+}
+
+function unpackTokens(val, registry) {
+    if (typeof val === "string") {
+        const exactMatch = val.match(/^__OBJ_(\d+)__$/);
+        if (exactMatch && registry.has(val)) {
+            return registry.get(val);
+        }
+        if (val.includes("__OBJ_")) {
+            return val.replace(/__OBJ_\d+__(?:\.[a-zA-Z0-9_]+)*(?:\([^)]*\))?/g, (match) => {
+                const parsed = safeParse(match, registry);
+                if (parsed !== null && parsed !== undefined) {
+                    return typeof parsed === "object" ? JSON.stringify(parsed) : String(parsed);
+                }
+                const baseTokenMatch = match.match(/^__OBJ_\d+__/);
+                if (baseTokenMatch && registry.has(baseTokenMatch[0])) {
+                    const baseVal = registry.get(baseTokenMatch[0]);
+                    return typeof baseVal === "object" ? JSON.stringify(baseVal) : String(baseVal);
+                }
+                return "";
+            });
+        }
+    }
+    return val;
+}
+
+function resolveOperator(element, operator, args, parent, params, objectRegistry) {
+    if (params.some((p) => p instanceof Promise)) return "";
+    // Query operators receive selector syntax (for example "$closest form input").
+    // Let queryElements interpret its traversal tokens instead of treating
+    // them as nested AST operators.
+    if (
+        operator !== "$query" &&
+        operator !== "$queryAll" &&
+        args &&
+        typeof args === "string" &&
+        args.includes("$")
+    ) {
+        args = processOperators(element, args, [], operator, params, objectRegistry);
+    }
+
+    // Environment roots and `$()` do not require a DOM receiver.
+    let targetElements = element ? [element]
+        : operator === "$" || globalOperatorNames.has(operator) ? [{}] : [];
+    if (args && typeof args === "string") {
+        const objMatch = args.match(/^__OBJ_(\d+)__$/);
+        if (objMatch && objectRegistry.has(args)) {
+            let registeredVal = objectRegistry.get(args);
+            let isList = Array.isArray(registeredVal) || (typeof NodeList !== "undefined" && registeredVal instanceof NodeList) || (typeof HTMLCollection !== "undefined" && registeredVal instanceof HTMLCollection);
+            targetElements = isList ? Array.from(registeredVal) : [registeredVal];
+        } else if (!customOperators.has(operator) && (operator === "$query")) {
+            let qResults = (0,_cocreate_utils_queryElements__WEBPACK_IMPORTED_MODULE_2__/* .queryElements */ .a5)({ element, selector: args });
+            if (!qResults) {
+                targetElements = [];
+            } else {
+                let isList = Array.isArray(qResults) || (typeof NodeList !== "undefined" && qResults instanceof NodeList) || (typeof HTMLCollection !== "undefined" && qResults instanceof HTMLCollection);
+                targetElements = isList ? Array.from(qResults) : [qResults];
+            }
+            if (!targetElements.length) return undefined;
+        }
+    }
+
+    let value = processValues(targetElements, operator, args, parent, objectRegistry);
+    return value;
+}
+
+function processOperators(element, value, exclude = [], parent, params = [], objectRegistry = new Map()) {
+    if (typeof value !== "string" || (!value.includes("$") && !value.includes("ObjectId()") && !value.includes("`"))) return value;
+    let processedValue = value, hasPromise = false, unresolvedTokens = new Map();
+
+    while (typeof processedValue === "string" && (processedValue.includes("$") || processedValue.includes("ObjectId()") || processedValue.includes("`"))) {
+        const { operator, args, rawContent, fullMatch, stringLiteral, layers, start } = findInnermostOperator(processedValue);
+        if ((!operator && !stringLiteral) || (operator === "$param" && !args)) break;
+
+        const textToReplace = fullMatch || rawContent;
+        const replaceMatch = replacement =>
+            processedValue.slice(0, start) + replacement + processedValue.slice(start + textToReplace.length);
+        if (exclude.includes(operator)) {
+            const token = `__UNRESOLVED_${unresolvedTokens.size}__`;
+            unresolvedTokens.set(token, textToReplace);
+            processedValue = replaceMatch(token);
+            continue;
+        }
+
+        let resolvedValue;
+        if (stringLiteral && layers > 1) {
+            const delimiter = "`".repeat(layers - 1);
+            resolvedValue = delimiter + args + delimiter;
+        } else if (stringLiteral) {
+            const result = astSyncRef
+                ? astSyncRef({
+                    executeAST: args,
+                    node: element,
+                    registry: objectRegistry,
+                    sandbox: Object.assign(
+                        Object.create(isBrowser ? _browserGlobals_js__WEBPACK_IMPORTED_MODULE_3__/* .browserGlobalsScope */ .B : _sharedGlobals_js__WEBPACK_IMPORTED_MODULE_4__/* .sharedGlobalsScope */ .p),
+                        { element }
+                    )
+                })
+                : processOperators(element, args, exclude, null, params, objectRegistry);
+            resolvedValue = result instanceof Promise ? result.then(String) : String(result);
+        } else {
+            resolvedValue = resolveOperator(element, operator, args, parent, params, objectRegistry);
+        }
+        if (resolvedValue === undefined) {
+            if (operator === "$undefined" && processedValue.trim() === operator)
+                return undefined;
+            const token = `__UNRESOLVED_${unresolvedTokens.size}__`;
+            unresolvedTokens.set(token, textToReplace);
+            processedValue = replaceMatch(token);
+            continue;
+        }
+        if (resolvedValue === null && operator === "$null" && processedValue.trim() === operator) {
+            return null;
+        }
+        if (resolvedValue instanceof Promise) {
+            const paramIndex = params.length;
+            params.push(resolvedValue);
+            processedValue = replaceMatch(`$$PARAM_${paramIndex}$$`);
+            hasPromise = true;
+            break;
+        }
+        if (params.some((p) => p instanceof Promise)) { hasPromise = true; break; }
+
+        let replacement = "";
+        if (operator === "$param") params.push(resolvedValue);
+        else if (resolvedValue !== null && (typeof resolvedValue === "object" || typeof resolvedValue === "function" || typeof resolvedValue === "string")) {
+            const token = `__OBJ_${objectRegistry.size}__`;
+            objectRegistry.set(token, resolvedValue);
+            replacement = token;
+        } else replacement = resolvedValue ?? "";
+
+        if (processedValue === textToReplace) { processedValue = replacement; break; }
+        processedValue = replaceMatch(replacement);
+    }
+
+    if (typeof processedValue === "string") {
+        let keys = Array.from(unresolvedTokens.keys()).reverse();
+        for (const token of keys) {
+            processedValue = processedValue.replaceAll(token, unresolvedTokens.get(token));
+        }
+        if (!hasPromise && !parent) processedValue = unpackTokens(processedValue, objectRegistry);
+    }
+
+    if (hasPromise) return { value: processedValue, params, objectRegistry };
+    return processedValue;
+}
+
+async function processOperatorsAsync(element, value, exclude = [], parent, params = [], objectRegistry = new Map()) {
+    let result = processOperators(element, value, exclude, parent, params, objectRegistry);
+    while (result && typeof result === "object" && result.params) {
+        const resolvedParams = await Promise.all(result.params);
+        objectRegistry = result.objectRegistry || objectRegistry;
+        const resumedValue = result.value.replace(/\$\$PARAM_(\d+)\$\$/g, (_, index) => {
+            const token = `__OBJ_${objectRegistry.size}__`;
+            objectRegistry.set(token, resolvedParams[Number(index)]);
+            return token;
+        });
+        result = processOperators(element, resumedValue, exclude, parent, [], objectRegistry);
+    }
+    return parent ? result : unpackTokens(result, objectRegistry);
+}
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Jd", 0, /* binding */ customOperators,
+/* harmony export */   "kg", 0, /* binding */ globalOperatorNames
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 4122
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   gf: () => (/* binding */ astSync),
+/* harmony export */   pK: () => (/* binding */ astAsync)
+/* harmony export */ });
+/* harmony import */ var _index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3269);
+/* harmony import */ var _serverGlobals_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2888);
+
+
+
+(0,_index_js__WEBPACK_IMPORTED_MODULE_0__/* .registerASTGlobals */ .KY)(_serverGlobals_js__WEBPACK_IMPORTED_MODULE_1__/* .serverGlobalsScope */ .Q);
+
+// Keep registration with the server entry when bundlers follow these exports.
+function astSync(options) {
+    return (0,_index_js__WEBPACK_IMPORTED_MODULE_0__/* .astSync */ .gf)(options);
+}
+
+async function astAsync(options) {
+    return await (0,_index_js__WEBPACK_IMPORTED_MODULE_0__/* .astAsync */ .pK)(options);
+}
+
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (astSync)));
+
+
+/***/ },
+
+/***/ 2888
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* unused harmony export serverModules */
+/* harmony import */ var node_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7721);
+/* harmony import */ var node_buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1786);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(717);
+
+
+
+
+// Non-deprecated top-level Node modules. Keep inactive entries beside the active list
+// so runtime availability is visible without loading every module at startup.
+const serverModules = [
+    "assert", // Check invariants and compare expected results.
+    "async_hooks", // Track asynchronous resources and execution context.
+    "buffer", // Binary byte buffers and encoding utilities.
+    "child_process", // Start subprocesses and exchange data with them.
+    "cluster", // Run Node processes that can share server ports.
+    "console", // Log messages and inspect values.
+    "crypto", // Native hashing, signing, encryption, and key generation.
+    // "dgram", // UDP datagram sockets; not needed currently.
+    "diagnostics_channel", // Publish and subscribe to diagnostic events.
+    "dns", // Resolve domain names and query DNS records.
+    "events", // EventEmitter and event subscription utilities.
+    // "ffi", // Call native libraries; unavailable in the current Node 24 runtime.
+    "fs", // Read, write, watch, and manage files and directories.
+    "http", // HTTP/1 clients and servers.
+    "http2", // HTTP/2 clients, servers, and multiplexed streams.
+    "https", // HTTP over encrypted TLS connections.
+    "inspector", // Connect to V8 debugging and profiling tools.
+    "module", // Inspect and customize Node module loading.
+    "net", // TCP servers, client sockets, and local IPC connections.
+    "os", // Operating-system, CPU, memory, and network information.
+    "path", // Join, normalize, and inspect filesystem paths.
+    "perf_hooks", // Measure performance and observe timing events.
+    "process", // Process arguments, environment, lifecycle, and resource usage.
+    "querystring", // Parse and format URL query strings.
+    "readline", // Read text streams one line at a time.
+    // "repl", // Interactive read-eval-print loop; not needed currently.
+    "sea", // Access assets embedded in a Node single-executable application.
+    // "sqlite", // Embedded SQLite database; not needed currently.
+    "stream", // Process data incrementally with backpressure.
+    "string_decoder", // Decode byte chunks without splitting text characters.
+    "test", // Define and run Node's built-in tests.
+    "timers", // Schedule and cancel callbacks; includes promise-based timers.
+    "tls", // Create encrypted TLS connections and servers.
+    "trace_events", // Enable tracing of Node and V8 runtime activity.
+    "tty", // Detect and work with terminal input/output streams.
+    "url", // Parse, construct, and convert URLs and file URLs.
+    "util", // Promisify callbacks, inspect values, and access utility APIs.
+    "v8", // Inspect V8 heap data and serialize JavaScript values.
+    "vm", // Compile and run JavaScript in contexts in the current thread.
+    "wasi", // Provide operating-system interfaces to WebAssembly programs.
+    "worker_threads", // Run JavaScript in parallel threads in one process.
+    "zlib" // Compress and decompress data, including gzip and Brotli.
+];
+
+const serverGlobalsScope = {
+    $global: globalThis, // Node global object; also available as shared $globalThis.
+    $Buffer: node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer, // Native binary buffer constructor.
+    $security: _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .security */ .rG, // Existing CoCreate security helpers.
+    $setImmediate: globalThis.setImmediate, // Schedule a callback for the check phase.
+    $clearImmediate: globalThis.clearImmediate // Cancel a scheduled immediate callback.
+};
+
+for (const name of serverModules) {
+    const key = `$${name}`;
+    Object.defineProperty(serverGlobalsScope, key, {
+        enumerable: true,
+        configurable: true,
+        get() { return (0,node_process__WEBPACK_IMPORTED_MODULE_0__.getBuiltinModule)(`node:${name}`); },
+        set(value) {
+            Object.defineProperty(this, key, {
+                value, writable: true, configurable: true, enumerable: true
+            });
+        }
+    });
+}
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Q", 0, /* binding */ serverGlobalsScope
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 3045
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4633);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6772);
+/* harmony import */ var _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1679);
+/* harmony import */ var _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8583);
+
+
+
+
+function concatValues(values) {
+    return values
+        .flat()
+        .map((value) =>
+            typeof value === "object"
+                ? JSON.stringify(value)
+                : value
+        )
+        .join("");
+}
+
+function numericValue(value) {
+    if (value && typeof value === "object" && "value" in value) {
+        value = value.value;
+    }
+    const number = Number(value);
+    return Number.isFinite(number) ? number : 0;
+}
+
+const sharedGlobals = {
+    $Math: Math,
+    $Number: Number,
+    $String: String,
+    $Boolean: Boolean,
+    $Date: Date,
+    $JSON: JSON,
+    $Array: Array,
+    $Object: Object,
+    $encodeContent: _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_2__/* .encodeContent */ .s,
+    $decodeContent: _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_2__/* .decodeContent */ .K,
+    $getContentType: _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_3__/* .getContentType */ .gt,
+    $getExtension: _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_3__/* .getExtension */ .uQ,
+    $getExtensions: _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_3__/* .getExtensions */ .v5,
+    $isTextContentType: _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_3__/* .isTextContentType */ .tl,
+    $parseInt: parseInt,
+    $parseFloat: parseFloat,
+    $encodeURIComponent: encodeURIComponent,
+    $decodeURIComponent: decodeURIComponent,
+    $throw: (message) => {
+        throw new Error(String(message));
+    },
+    $error: function (error) {
+        const registry = this?.registry;
+        const payload = registry?.get?.("payload") ?? registry?.get?.("$payload");
+        if (!payload || typeof payload !== "object") return;
+
+        if (!Array.isArray(payload.error)) {
+            payload.error = payload.error == null ? [] : [payload.error];
+        }
+
+        if (Array.isArray(error)) payload.error.push(...error);
+        else payload.error.push(error);
+
+        return payload.error;
+    },
+    $btoa: (str) => {
+        if (typeof btoa === "function") return btoa(String(str));
+        return Buffer.from(String(str)).toString("base64");
+    },
+    $atob: (b64) => {
+        if (typeof atob === "function") return atob(b64);
+        return Buffer.from(String(b64), "base64").toString("utf-8");
+    },
+    $true: () => true,
+    $false: () => false,
+    $null: () => null,
+    $undefined: () => undefined,
+    $numberFormat: function (...args) {
+        const locale = args[0] || undefined;
+        const options = args[1] || {};
+        const numCandidate = args[2] !== undefined ? args[2] : args[0];
+        const number = parseFloat(numCandidate);
+        if (isNaN(number)) return String(numCandidate ?? "");
+        return new Intl.NumberFormat(locale, options).format(number);
+    },
+    $add: (...values) =>
+        values.flat(Infinity).reduce((sum, item) => sum + numericValue(item), 0),
+    $multiply: (...values) =>
+        values.flat(Infinity).reduce((product, item) => product * numericValue(item), 1),
+    $round: (value, precision = 0) => {
+        const factor = 10 ** Number(precision);
+        return Math.round((numericValue(value) + Number.EPSILON) * factor) / factor;
+    },
+    $concat: (value) =>
+        Array.isArray(value)
+            ? concatValues(value)
+            : String(value ?? ""),
+    get $object_id() { return (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V)().toString(); },
+    $uuid: (prefix) => (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .uuid */ .u)(prefix) || "",
+    $randomColor: () => `hsla(${Math.floor(Math.random() * 360)}, 75%, 58%, 1)`,
+    $parse: (value = "") => {
+        try {
+            return JSON.parse(value);
+        } catch {
+            return value;
+        }
+    },
+    $await: {
+        all: async (promises) => {
+            if (promises && typeof promises === "object" && !Array.isArray(promises)) {
+                const keys = Object.keys(promises);
+                const results = await Promise.all(keys.map((key) => promises[key]));
+                return Object.fromEntries(keys.map((key, index) => [key, results[index]]));
+            }
+            return Promise.all(Array.isArray(promises) ? promises : [promises]);
+        },
+        any: async (promises) => {
+            if (promises && typeof promises === "object" && !Array.isArray(promises)) {
+                return Promise.any(Object.values(promises));
+            }
+            return Promise.any(Array.isArray(promises) ? promises : [promises]);
+        },
+        race: async (promises) => {
+            if (promises && typeof promises === "object" && !Array.isArray(promises)) {
+                return Promise.race(Object.values(promises));
+            }
+            return Promise.race(Array.isArray(promises) ? promises : [promises]);
+        },
+        allSettled: async (promises) => {
+            if (promises && typeof promises === "object" && !Array.isArray(promises)) {
+                const keys = Object.keys(promises);
+                const results = await Promise.allSettled(keys.map((key) => promises[key]));
+                return Object.fromEntries(keys.map((key, index) => [key, results[index]]));
+            }
+            return Promise.allSettled(Array.isArray(promises) ? promises : [promises]);
+        },
+        delay: (ms) => new Promise((resolve) => setTimeout(resolve, Number(ms) || 0))
+    }
+};
+
+// Standard JavaScript and Web API roots shared by browsers and Node.
+// Getters preserve native objects and leave unavailable APIs undefined.
+const nativeGlobals = [
+    "globalThis", "Function", "Promise", "RegExp", "Map", "Set", "WeakMap", "WeakSet", "WeakRef",
+    "FinalizationRegistry", "Symbol", "BigInt", "Intl", "Reflect", "Proxy",
+    "ArrayBuffer", "SharedArrayBuffer", "DataView", "Atomics",
+    "Int8Array", "Uint8Array", "Uint8ClampedArray", "Int16Array", "Uint16Array",
+    "Int32Array", "Uint32Array", "Float16Array", "Float32Array", "Float64Array",
+    "BigInt64Array", "BigUint64Array",
+    "Error", "AggregateError", "EvalError", "RangeError", "ReferenceError",
+    "SyntaxError", "TypeError", "URIError", "DOMException",
+    "fetch", "Request", "Response", "Headers", "FormData", "Blob", "File",
+    "console", "crypto", "Crypto", "CryptoKey", "SubtleCrypto", "performance", "navigator",
+    "URL", "URLSearchParams", "URLPattern", "TextEncoder", "TextDecoder",
+    "TextEncoderStream", "TextDecoderStream",
+    "AbortController", "AbortSignal", "Event", "EventTarget", "CustomEvent",
+    "BroadcastChannel", "MessageChannel", "MessagePort", "MessageEvent", "EventSource",
+    "ReadableStream", "ReadableStreamDefaultReader", "ReadableStreamBYOBReader",
+    "ReadableStreamBYOBRequest", "ReadableByteStreamController",
+    "ReadableStreamDefaultController", "WritableStream", "WritableStreamDefaultWriter",
+    "WritableStreamDefaultController", "TransformStream", "TransformStreamDefaultController",
+    "ByteLengthQueuingStrategy", "CountQueuingStrategy", "CompressionStream",
+    "DecompressionStream", "WebAssembly", "WebSocket",
+    "setTimeout", "clearTimeout", "setInterval", "clearInterval",
+    "queueMicrotask", "structuredClone", "isNaN", "isFinite", "encodeURI", "decodeURI"
+];
+
+// Global functions keep their native global receiver when called by AST.
+const nativeGlobalFunctions = new Set([
+    "fetch", "setTimeout", "clearTimeout", "setInterval", "clearInterval",
+    "queueMicrotask", "structuredClone"
+]);
+
+for (const name of nativeGlobals) {
+    const key = `$${name}`;
+    Object.defineProperty(sharedGlobals, key, {
+        enumerable: true,
+        configurable: true,
+        get() {
+            const value = globalThis[name];
+            return typeof value === "function" && nativeGlobalFunctions.has(name)
+                ? value.bind(globalThis)
+                : value;
+        },
+        set(value) {
+            Object.defineProperty(this, key, {
+                value, writable: true, configurable: true, enumerable: true
+            });
+        }
+    });
+}
+
+const sharedGlobalsScope = sharedGlobals;
+
+const sharedGlobalOperators = new Map(
+    Object.entries(Object.getOwnPropertyDescriptors(sharedGlobals))
+        .map(([name, descriptor]) => [
+            name,
+            descriptor.get
+                ? function (...args) {
+                    const value = descriptor.get.call(this);
+                    return typeof value === "function"
+                        ? value.apply(this, args)
+                        : value;
+                }
+                : descriptor.value
+        ])
+);
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "I", 0, /* binding */ sharedGlobalOperators,
+/* harmony export */   "p", 0, /* binding */ sharedGlobalsScope
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 9165
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   FL: () => (/* reexport safe */ _modules_ast_index_js__WEBPACK_IMPORTED_MODULE_1__.FL),
+/* harmony export */   Jd: () => (/* reexport safe */ _modules_ast_operators_js__WEBPACK_IMPORTED_MODULE_2__.Jd),
+/* harmony export */   KY: () => (/* reexport safe */ _modules_ast_index_js__WEBPACK_IMPORTED_MODULE_1__.KY),
+/* harmony export */   PT: () => (/* reexport safe */ _modules_ast_operators_js__WEBPACK_IMPORTED_MODULE_2__.PT),
+/* harmony export */   Rj: () => (/* reexport safe */ _modules_ast_operators_js__WEBPACK_IMPORTED_MODULE_2__.Rj),
+/* harmony export */   ev: () => (/* reexport safe */ _modules_ast_index_js__WEBPACK_IMPORTED_MODULE_1__.ev),
+/* harmony export */   gf: () => (/* reexport safe */ _modules_ast_server_js__WEBPACK_IMPORTED_MODULE_0__.gf),
+/* harmony export */   pK: () => (/* reexport safe */ _modules_ast_server_js__WEBPACK_IMPORTED_MODULE_0__.pK)
+/* harmony export */ });
+/* harmony import */ var _modules_ast_server_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4122);
+/* harmony import */ var _modules_ast_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3269);
+/* harmony import */ var _modules_ast_operators_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5420);
+
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_modules_ast_server_js__WEBPACK_IMPORTED_MODULE_0__/* .astSync */ .gf);
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 9743
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(717);
 /********************************************************************************
  * Copyright (C) 2023-2026 CoCreate and Contributors.
  *
@@ -11262,14 +14786,15 @@ const authenticate = {
 
 /***/ },
 
-/***/ 3084
+/***/ 3067
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony exports check, request */
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2623);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7076);
-/* harmony import */ var _cocreate_crud_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4143);
-/* harmony import */ var _cocreate_crud_server__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4323);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4276);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(617);
+/* harmony import */ var _cocreate_crud_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5716);
+/* harmony import */ var _cocreate_crud_server__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7872);
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2561);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -11286,6 +14811,7 @@ const authenticate = {
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  ********************************************************************************/
+
 
 
 
@@ -11352,21 +14878,8 @@ async function updateAuthorization(data) {
     const { array, object, organization_id } = data;
 
     if (array === "keys" && Array.isArray(object) && object.length > 0) {
-        const authorization = object[0];
-
-        if (
-            authorization &&
-            authorization.key &&
-            organizations[organization_id] &&
-            organizations[organization_id][authorization.key]
-        ) {
-            // Fetch latest authorization and refresh cache
-            const newAuthorization = await readAuthorization(
-                authorization.key,
-                data
-            );
-            organizations[organization_id][authorization.key] = newAuthorization;
-        }
+        // Clear the tenant cache so user API key rotation takes effect immediately.
+        delete organizations[organization_id];
     }
 }
 
@@ -11382,16 +14895,7 @@ async function deleteAuthorization(data) {
     const { array, object, organization_id } = data;
 
     if (array === "keys" && Array.isArray(object) && object.length > 0) {
-        const authorization = object[0];
-
-        if (
-            authorization &&
-            authorization.key &&
-            organizations[organization_id] &&
-            organizations[organization_id][authorization.key]
-        ) {
-            delete organizations[organization_id][authorization.key];
-        }
+        delete organizations[organization_id];
     }
 }
 
@@ -11442,6 +14946,7 @@ async function readAuthorization(key, data) {
     try {
         const { organization_id, host } = data;
         if (!organization_id) return { error: "An organization_id is required" };
+        const apiKeyHash = key ? (0,node_crypto__WEBPACK_IMPORTED_MODULE_4__.createHash)("sha256").update(key).digest("hex") : null;
 
         const request = {
             method: "object.read",
@@ -11451,7 +14956,7 @@ async function readAuthorization(key, data) {
             filter: {
                 query: {
                     $or: key
-                        ? [{ default: true }, { default: "true" }, { default: 1 }, { key }]
+                        ? [{ default: true }, { key }, { api_key_hash: apiKeyHash }, { default: "true" }, { default: 1 }]
                         : [{ default: true }, { default: "true" }, { default: 1 }]
                 }
             }
@@ -11462,7 +14967,10 @@ async function readAuthorization(key, data) {
         if (authRes && Array.isArray(authRes.object) && authRes.object.length) {
             const objs = authRes.object;
             const defaultDocs = objs.filter((o) => o && parseBoolean(o.default) === true);
-            const keyDoc = key ? objs.find((o) => o && o.key === key) : undefined;
+            const keyDoc = key
+                ? objs.find((o) => o && o.key === key) ||
+                    objs.find((o) => o && o.api_key_hash === apiKeyHash)
+                : undefined;
 
             // Preserve the existing override order: configured defaults overlay
             // the supplied key. Every matching default participates in the merge.
@@ -12018,7 +15526,7 @@ async function request(data, user_id) {
 
 /***/ },
 
-/***/ 400
+/***/ 4125
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -12086,7 +15594,7 @@ function startServerCleanup(server) {
 
 /***/ },
 
-/***/ 7448
+/***/ 91
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -12096,7 +15604,7 @@ function startServerCleanup(server) {
 /* harmony export */   s7: () => (/* binding */ getDensityTarget)
 /* harmony export */ });
 /* unused harmony exports calculateHaversineDistance, findNearestDnsLocations, findNearestCloudRegion, calculateWeightedCentroid, getCloudProvider */
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7076);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(617);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -12454,16 +15962,19 @@ function getCloudProvider(clients, options = {}) {
 
 /***/ },
 
-/***/ 6160
+/***/ 8457
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-/* unused harmony exports loadAutoscaleConfig, resolveClusterConfig, determineScaleOutTarget, determineDeployment, scaleOut, runWorkflow, determineScaleInTarget, scaleIn, init */
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   init: () => (/* binding */ init)
+/* harmony export */ });
+/* unused harmony exports loadAutoscaleConfig, resolveClusterConfig, determineScaleOutTarget, determineDeployment, scaleOut, runWorkflow, determineScaleInTarget, scaleIn */
 /* harmony import */ var node_cluster__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8698);
-/* harmony import */ var _cleanup_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(400);
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9298);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2623);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7076);
-/* harmony import */ var _geoScaling_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7448);
+/* harmony import */ var _cleanup_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4125);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7869);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4276);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(617);
+/* harmony import */ var _geoScaling_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(91);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -12511,7 +16022,7 @@ function isAutoscalingEnabled() {
 
 /**
  * Uses this server's cluster as the baseline, then applies matching system and
- * servers_config records in their configured order.
+ * configs records in their configured order.
  *
  * Autoscaler is the sole module responsible for loading and resolving configuration early
  * in the pipeline before passing the resolved object to downstream modules like GeoScaling.
@@ -13558,9 +17069,9 @@ async function init(serverInstance) {
     };
 }
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && ({
     init
-});
+})));
 
 /**
  * Decentralized, masterless P2P autoscaling engine for CoCreate Server. Executes autonomous horizontal and vertical multi-cloud adjustments driven by real-time tenant telemetry.
@@ -13569,14 +17080,10 @@ async function init(serverInstance) {
  * @environment server
  */
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ ]);
-
 
 /***/ },
 
-/***/ 1232
+/***/ 661
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -13584,14 +17091,14 @@ async function init(serverInstance) {
 /* harmony export */   zu: () => (/* reexport default export from named module */ _lib_websocket_server_js__WEBPACK_IMPORTED_MODULE_7__)
 /* harmony export */ });
 /* unused harmony import specifier */ var WebSocket;
-/* harmony import */ var _lib_stream_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7119);
-/* harmony import */ var _lib_extension_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1966);
-/* harmony import */ var _lib_permessage_deflate_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6659);
-/* harmony import */ var _lib_receiver_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2838);
-/* harmony import */ var _lib_sender_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5690);
-/* harmony import */ var _lib_subprotocol_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2085);
-/* harmony import */ var _lib_websocket_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9420);
-/* harmony import */ var _lib_websocket_server_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2610);
+/* harmony import */ var _lib_stream_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4368);
+/* harmony import */ var _lib_extension_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1787);
+/* harmony import */ var _lib_permessage_deflate_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3556);
+/* harmony import */ var _lib_receiver_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(537);
+/* harmony import */ var _lib_sender_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(649);
+/* harmony import */ var _lib_subprotocol_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6696);
+/* harmony import */ var _lib_websocket_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1125);
+/* harmony import */ var _lib_websocket_server_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(4133);
 
 
 
@@ -13608,11 +17115,11 @@ async function init(serverInstance) {
 
 /***/ },
 
-/***/ 6810
+/***/ 2995
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export init */
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9298);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7869);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -13674,14 +17181,14 @@ async function init(server) {
 
 /***/ },
 
-/***/ 6653
+/***/ 2330
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   A: () => (/* binding */ Fetch)
 /* harmony export */ });
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3030);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5758);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1679);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8583);
 
 
 async function readResponseData(response) {
@@ -13729,7 +17236,7 @@ async function Fetch(input, init = {}) {
 
 /***/ },
 
-/***/ 1154
+/***/ 7709
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export getDeployment */
@@ -14121,12 +17628,12 @@ async function getDeployment(fallbackId, existing = {}) {
 
 /***/ },
 
-/***/ 6265
+/***/ 6612
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony import */ var node_http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9316);
 /* harmony import */ var node_https__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(965);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3105);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6772);
 
 
 
@@ -14139,10 +17646,7 @@ async function getDeployment(fallbackId, existing = {}) {
  * @environment server
  */
 async function init(server) {
-    const HTTP_PORT = process.env.HTTP_PORT || 80;
     const HTTPS_PORT = process.env.HTTPS_PORT || 443;
-    const BIND_IP = process.env.BIND_IP || '0.0.0.0';
-
     const httpsOptions = server.tls.createHttpsOptions(server);
     server.https = node_https__WEBPACK_IMPORTED_MODULE_1__["default"].createServer(httpsOptions, (req, res) => handleRequest(server, req, res));
 
@@ -14161,6 +17665,8 @@ async function init(server) {
         res.end();
     });
 
+    server.socket?.attach();
+
     const reportListening = state => {
         if (process.connected) {
             process.send({ type: 'listening_state', state });
@@ -14169,13 +17675,6 @@ async function init(server) {
 
     server.http.on('listening', () => reportListening(true));
     server.http.on('close', () => reportListening(false));
-    server.http.listen(HTTP_PORT, BIND_IP, () => {
-        console.log(`[@cocreate/cluster] [WORKER ${server.workerId}] HTTP listening on ${BIND_IP}:${HTTP_PORT}`);
-    });
-
-    server.https.listen(HTTPS_PORT, BIND_IP, () => {
-        console.log(`[@cocreate/cluster] [WORKER ${server.workerId}] HTTPS listening on ${BIND_IP}:${HTTPS_PORT}`);
-    });
 }
 
 /**
@@ -14403,26 +17902,26 @@ function sendJson(res, status, body, headers = {}) {
 
 /***/ },
 
-/***/ 7805
+/***/ 750
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export CoCreateServer */
 /* harmony import */ var node_events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2849);
-/* harmony import */ var _mesh_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2035);
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9298);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5159);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5264);
-/* harmony import */ var _getDeployment_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1154);
-/* harmony import */ var _manager_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6590);
-/* harmony import */ var _fetch_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6653);
-/* harmony import */ var _http_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6265);
-/* harmony import */ var _ipc_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(4875);
-/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(2464);
-/* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(5648);
-/* harmony import */ var _log_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6579);
-/* harmony import */ var _apikey_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(6810);
-/* harmony import */ var _repository_index_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(3882);
-/* harmony import */ var _workers_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(5002);
+/* harmony import */ var _mesh_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1478);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7869);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5240);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4633);
+/* harmony import */ var _getDeployment_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7709);
+/* harmony import */ var _manager_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7649);
+/* harmony import */ var _fetch_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2330);
+/* harmony import */ var _http_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6612);
+/* harmony import */ var _ipc_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5196);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(2331);
+/* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(4711);
+/* harmony import */ var _cocreate_log__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(1691);
+/* harmony import */ var _apikey_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(2995);
+/* harmony import */ var _repository_index_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(3207);
+/* harmony import */ var _workers_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(853);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -14479,7 +17978,6 @@ class CoCreateServer {
 
         // Dynamic route registry (Map key: route path, value: request handler callback)
         this.routes = new Map();
-        this.initializers = null;
 
         // The local worker collection also owns its process lifecycle.
         this.workers = new _workers_js__WEBPACK_IMPORTED_MODULE_15__/* ["default"] */ .A(this);
@@ -14487,10 +17985,11 @@ class CoCreateServer {
 
         // Directly bind cluster instance properties to parent server instance
         this.isPrimary = this.workers.isPrimary;
-        this.isWorker = null;
+        this.isWorker = !this.isPrimary;
 
         // Initialize reactive cluster storage bound to cluster IPC promises
         this.storage = _storage_js__WEBPACK_IMPORTED_MODULE_10__/* ["default"].init */ .A.init(this, this.workers.pendingPromises);
+        this.send = _ipc_js__WEBPACK_IMPORTED_MODULE_9__/* ["default"].init */ .A.init(this, this.workers.pendingPromises);
     }
 
     /** Public Event API delegates (keeps prototype clean from standard EventEmitter bloat)  * @private
@@ -14539,9 +18038,8 @@ class CoCreateServer {
 
         this.isInitialized = true;
 
-        this.log = await _log_js__WEBPACK_IMPORTED_MODULE_12__/* ["default"].init */ .Ay.init(this);
+        this.log = await _cocreate_log__WEBPACK_IMPORTED_MODULE_12__/* ["default"].init */ .Ay.init(this);
         this.state = await _state_js__WEBPACK_IMPORTED_MODULE_11__/* ["default"].init */ .Ay.init(this);
-        this.send = _ipc_js__WEBPACK_IMPORTED_MODULE_9__/* ["default"].init */ .A.init(this, this.workers.pendingPromises);
 
         const config = await _cocreate_config__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .A.prompt({
             'organization_id': '',
@@ -14568,13 +18066,11 @@ class CoCreateServer {
         // Configure the local worker collection
         this.workers.configureWorkers(_cocreate_config__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .A.get('workers'));
 
-        await this.initializers?.sharedData?.(this);
         try {
             await _apikey_js__WEBPACK_IMPORTED_MODULE_13__/* ["default"].init */ .A.init(this);
         } catch {
             console.error('[@cocreate/cluster] Unable to initialize the node organization API key.');
         }
-        await this.initializers?.sharedServices?.(this);
         await _manager_js__WEBPACK_IMPORTED_MODULE_6__/* ["default"].init */ .A.init(this);
         if (!this.isPrimary) await this.cluster.init(this);
 
@@ -14598,7 +18094,6 @@ class CoCreateServer {
                 ...this.deployment,
                 location: { ...persistedServer?.deployment?.location, ...location }
             });
-            await this.initializers?.primaryServices?.(this);
             await this.cluster.init(this);
 
             // Reset logs array for a fresh logging session on master startup
@@ -14614,7 +18109,6 @@ class CoCreateServer {
             this.repository = await _repository_index_js__WEBPACK_IMPORTED_MODULE_14__/* ["default"].init */ .A.init(this);
 
             if (await this.workers.setupMasterCluster()) {
-                await this.initializers?.primaryReady?.(this);
                 return this;
             }
         }
@@ -14627,8 +18121,6 @@ class CoCreateServer {
             if (!this.isPrimary) {
                 console.log(`[@cocreate/cluster] [WORKER ${this.workerId}] running with PID: ${process.pid} (Server ID: ${this.id})`);
             }
-
-            await this.initializers?.workerTelemetry?.(this);
 
             if (!this.ip) {
                 this.ip = process.env.SERVER_IP || (await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .getClientInfo */ .m4)()).ip;
@@ -14647,9 +18139,7 @@ class CoCreateServer {
                 this.deployment.location = await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .getClientInfo */ .m4)(this.id);
             }
 
-            await this.initializers?.workerServices?.(this);
             await _http_js__WEBPACK_IMPORTED_MODULE_8__/* ["default"] */ .A.init(this);
-            await this.initializers?.workerEdge?.(this);
 
             // Publish worker active running state object to DB upon creation/startup
             await this.state.save('running');
@@ -14658,10 +18148,7 @@ class CoCreateServer {
         if (this.isPrimary) {
             try { await this.repository?.publish(); }
             catch { console.error('[@cocreate/cluster] Initial repository publication failed; inspect its reservation and retry on a later startup.'); }
-            await this.initializers?.primaryReady?.(this);
         }
-
-        if (this.isWorker) await this.initializers?.workerReady?.(this);
 
         return this;
     }
@@ -14692,13 +18179,13 @@ class CoCreateServer {
 
 /***/ },
 
-/***/ 4875
+/***/ 5196
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export init */
 /* harmony import */ var node_cluster__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8698);
-/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4172);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3105);
+/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1681);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6772);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -14916,323 +18403,11 @@ function init(server, pendingPromises) {
 
 /***/ },
 
-/***/ 6579
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* unused harmony exports loadLogConfig, log, handleIncomingWorkerLog, enqueueLog, save, start, stop, init */
-/* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4472);
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9298);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2623);
-/********************************************************************************
- * Copyright (C) 2026 CoCreate and Contributors.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- ********************************************************************************/
-
-
-
-
-
-let server = null;
-let logQueue = [];
-let recentLogs = [];
-let isLoggingInternal = false; // Recursion guard against infinite loops
-let flushTimer = null;
-let isConsolePatched = false;
-
-let logConfig = {
-    maxLogs: 100, // Capped ring buffer size on server document
-    flushIntervalMs: 1500, // Time-window flush in milliseconds
-    maxBatchSize: 20 // Trigger immediate flush if queue exceeds size
-};
-
-// Preserve native console methods for uninhibited terminal stdout/stderr
-const originalConsole = {
-    log: console.log.bind(console),
-    info: console.info.bind(console),
-    warn: console.warn.bind(console),
-    error: console.error.bind(console)
-};
-
-/**
- * Loads system configuration using @cocreate/config and queries database overrides
- * for 'logger' configurations.
- * 
- * @returns {Promise<Object>} Resolved logging configuration object
- */
-async function loadLogConfig() {
-    const sysConfig = await _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.get('logger');
-
-    let dbConfig = null;
-    if (server && server.organization_id) {
-        dbConfig = await _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.query({
-            type: 'logger',
-            organization_id: server.organization_id,
-            server: server.host,
-            cluster: server.cluster_id
-        });
-    }
-
-    if (sysConfig) {
-        (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .dotNotationToObject */ .O)(logConfig, sysConfig);
-    }
-
-    if (dbConfig) {
-        (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .dotNotationToObject */ .O)(logConfig, dbConfig);
-    }
-
-    return logConfig;
-}
-
-/**
- * Attaches IPC event listeners on the master process to receive logs from workers.
- */
-function setupIPCListeners() {
-    if (server?.isPrimary) {
-        server.on('server.log', (message) => {
-            if (message && message.log) {
-                handleIncomingWorkerLog(message.log);
-            }
-        });
-    }
-}
-
-/**
- * Patches global console log/info/warn/error methods to capture stdout/stderr output.
- */
-function patchConsole() {
-    if (isConsolePatched) return;
-
-    const createConsoleProxy = (level, originalFn) => {
-        return function (...args) {
-            // Always execute original console method to print to standard stdout/stderr
-            originalFn.apply(console, args);
-
-            // Skip log capture if internal logging recursion flag is active
-            if (isLoggingInternal) return;
-
-            try {
-                const message = args.map(arg => {
-                    if (typeof arg === 'string') return arg;
-                    if (arg instanceof Error) return arg.stack || arg.message;
-                    return node_util__WEBPACK_IMPORTED_MODULE_0__["default"].inspect(arg, { depth: 3, colors: false });
-                }).join(' ');
-
-                log(level, message);
-            } catch (err) {
-                // Fail gracefully to ensure native console execution is never disrupted
-            }
-        };
-    };
-
-    console.log = createConsoleProxy('info', originalConsole.log);
-    console.info = createConsoleProxy('info', originalConsole.info);
-    console.warn = createConsoleProxy('warn', originalConsole.warn);
-    console.error = createConsoleProxy('error', originalConsole.error);
-
-    isConsolePatched = true;
-}
-
-/**
- * Restores original console behavior.
- */
-function unpatchConsole() {
-    if (!isConsolePatched) return;
-
-    console.log = originalConsole.log;
-    console.info = originalConsole.info;
-    console.warn = originalConsole.warn;
-    console.error = originalConsole.error;
-
-    isConsolePatched = false;
-}
-
-/**
- * Dispatches a log entry from either master or worker process.
- * 
- * @param {string} level - Log severity level ('info', 'warn', 'error')
- * @param {string} message - Formatted log message text
- * @param {Object|null} metadata - Optional contextual metadata object
- */
-function log(level = 'info', message = '', metadata = null) {
-    if (isLoggingInternal) return;
-
-    const sourceWorker = server?.isPrimary ? 'master' : (server?.workerId || 1);
-
-    const logEntry = {
-        timestamp: Date.now(),
-        workerId: sourceWorker,
-        level,
-        message,
-        ...(metadata && typeof metadata === 'object' ? { metadata } : {})
-    };
-
-    if (!server?.isPrimary) {
-        // Worker Process: Relay log entry to Master Orchestrator over IPC
-        if (typeof server?.send === 'function') {
-            server.send({
-                method: 'server.log',
-                log: logEntry
-            });
-        } else if (process.send && process.connected) {
-            try {
-                process.send({
-                    method: 'server.log',
-                    log: logEntry
-                });
-            } catch (err) {
-                originalConsole.error('[@cocreate/cluster] [WORKER LOG IPC ERROR]', err.message);
-            }
-        }
-    } else {
-        // Master Process: Append directly to local log queue
-        enqueueLog(logEntry);
-    }
-}
-
-/**
- * Handles incoming IPC log entries dispatched from cluster workers.
- * 
- * @param {Object} logEntry - Received log object
- */
-function handleIncomingWorkerLog(logEntry) {
-    if (!server?.isPrimary || !logEntry) return;
-    enqueueLog(logEntry);
-}
-
-/**
- * Enqueues a log entry into the processing queue and checks threshold conditions.
- * 
- * @param {Object} logEntry - Log item to queue
- */
-function enqueueLog(logEntry) {
-    logQueue.push(logEntry);
-
-    // Immediately flush if queue hits batch limit or if an error level log is emitted
-    if (logQueue.length >= logConfig.maxBatchSize || logEntry.level === 'error') {
-        save();
-    }
-}
-
-/**
- * Configures interval timer for periodic buffer flushing on the master node.
- */
-function setupFlushTimer() {
-    if (!server?.isPrimary) return;
-
-    if (flushTimer) {
-        clearInterval(flushTimer);
-    }
-
-    flushTimer = setInterval(() => {
-        save();
-    }, logConfig.flushIntervalMs);
-
-    if (flushTimer.unref) {
-        flushTimer.unref();
-    }
-}
-
-/**
- * Flushes pending log items from the queue to the database server object ring buffer.
- */
-async function save() {
-    if (!server?.isPrimary || logQueue.length === 0 || isLoggingInternal) return;
-
-    isLoggingInternal = true;
-
-    try {
-        const pendingLogs = [...logQueue];
-        logQueue = [];
-
-        // Maintain capped ring buffer of recent logs on Master
-        recentLogs = [...recentLogs, ...pendingLogs].slice(-logConfig.maxLogs);
-
-        // Persist updated log ring buffer to the server object in DB
-        const payload = server.state.getServerObject({ logs: recentLogs });
-        await server.crud.send(payload);
-    } finally {
-        isLoggingInternal = false;
-    }
-}
-
-/**
- * Starts or resumes the logging service (patches console and sets flush timer).
- */
-function start() {
-    patchConsole();
-    setupFlushTimer();
-}
-
-/**
- * Stops or pauses the logging service (flushes remaining queue, stops timer, unpatches console).
- * 
- * @returns {Promise<void>}
- */
-async function stop() {
-    if (flushTimer) {
-        clearInterval(flushTimer);
-        flushTimer = null;
-    }
-
-    // Perform final sync/flush of any queued logs before shutting down console listeners
-    if (logQueue.length > 0) {
-        await save();
-    }
-
-    unpatchConsole();
-}
-
-/**
- * Initializes the LogManager service and starts logging.
- * 
- * @param {Object} serverInstance - Core server instance
- * @returns {Promise<Object>} Initialized module functions and data references
- */
-async function init(serverInstance) {
-    server = serverInstance;
-    server.log = log;
-
-    await loadLogConfig();
-    setupIPCListeners();
-    start();
-
-    return {
-        config: logConfig,
-        recentLogs,
-        save,
-        start,
-        stop
-    };
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-    init
-});
-/* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ ]);
-
-
-/***/ },
-
-/***/ 6590
+/***/ 7649
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export init */
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9298);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7869);
 
 
 /** Frozen platform connection; sends standard envelopes over HTTP and awaits their responses. */
@@ -15303,13 +18478,13 @@ async function init(server) {
 
 /***/ },
 
-/***/ 7822
+/***/ 4811
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   O: () => (/* binding */ ServerMeshInbound)
 /* harmony export */ });
-/* harmony import */ var ws__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1232);
+/* harmony import */ var ws__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(661);
 /* harmony import */ var node_https__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(965);
 /* harmony import */ var node_fs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9627);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5663);
@@ -15323,6 +18498,35 @@ async function init(server) {
 
 
 
+
+function closePort(port) {
+    if (process.platform === 'win32') {
+        const output = (0,node_child_process__WEBPACK_IMPORTED_MODULE_5__.execFileSync)('netstat', ['-ano', '-p', 'tcp'], { encoding: 'utf8' });
+        const pids = [...new Set(output.split('\n').flatMap(line => {
+            const fields = line.trim().split(/\s+/);
+            const localPort = Number(fields[1]?.split(':').at(-1));
+            return fields[0] === 'TCP' && localPort === Number(port) && fields[3] === 'LISTENING'
+                ? [Number(fields[4])]
+                : [];
+        }))];
+        for (const pid of pids) {
+            (0,node_child_process__WEBPACK_IMPORTED_MODULE_5__.execFileSync)('taskkill', ['/PID', String(pid), '/T', '/F'], { stdio: 'ignore' });
+        }
+        return;
+    }
+
+    try {
+        ;(0,node_child_process__WEBPACK_IMPORTED_MODULE_5__.execFileSync)('sudo', ['-n', 'fuser', '-k', `${port}/tcp`], { stdio: 'ignore' });
+    } catch (err) {
+        try {
+            ;(0,node_child_process__WEBPACK_IMPORTED_MODULE_5__.execFileSync)('fuser', ['-k', `${port}/tcp`], { stdio: 'ignore' });
+        } catch (fallbackError) {
+            if (err.code !== 'ENOENT' && fallbackError.code !== 'ENOENT' && fallbackError.status !== 1) {
+                throw fallbackError;
+            }
+        }
+    }
+}
 
 /**
  * ServerMeshInbound manages inbound HTTPS and WebSocket secure listening transports,
@@ -15414,7 +18618,14 @@ class ServerMeshInbound {
             throw new Error("Unable to boot secure mesh server: TLS credential generation failed.");
         }
 
-        this.secureMeshServer = node_https__WEBPACK_IMPORTED_MODULE_1__["default"].createServer(credentials);
+        const existingServer = this.secureMeshServer;
+        const secureMeshServer = node_https__WEBPACK_IMPORTED_MODULE_1__["default"].createServer(credentials);
+        if (existingServer) {
+            console.log(`[@cocreate/server-mesh/inbound] Closing existing mesh listener on port ${this.meshPort} before listening again.`);
+            await this.close();
+        }
+        closePort(this.meshPort);
+        this.secureMeshServer = secureMeshServer;
 
         this.secureMeshServer.on('error', (err) => {
             if (err.code === 'EADDRINUSE') {
@@ -15580,19 +18791,31 @@ class ServerMeshInbound {
             this.heartbeatInterval = null;
         }
 
-        if (this.meshWss) {
-            try { this.meshWss.close(); } catch {}
+        const meshWss = this.meshWss;
+        const secureMeshServer = this.secureMeshServer;
+        this.meshWss = null;
+        this.secureMeshServer = null;
+
+        if (meshWss) {
+            for (const socket of meshWss.clients) {
+                try { socket.terminate(); } catch {}
+            }
+            try { meshWss.close(); } catch {}
         }
 
-        return new Promise((resolve) => {
-            if (this.secureMeshServer) {
-                this.secureMeshServer.close(() => {
+        if (!secureMeshServer) return;
+
+        await new Promise((resolve) => {
+            secureMeshServer.close((err) => {
+                if (err?.code === 'ERR_SERVER_NOT_RUNNING') {
+                    console.log(`[@cocreate/server-mesh/inbound] Secure listener on port ${this.meshPort} was already closed.`);
+                } else if (err) {
+                    console.error(`[@cocreate/server-mesh/inbound] Failed to release secure port ${this.meshPort}:`, err.message);
+                } else {
                     console.log(`[@cocreate/server-mesh/inbound] Secure port ${this.meshPort} successfully released.`);
-                    resolve();
-                });
-            } else {
+                }
                 resolve();
-            }
+            });
         });
     }
 }
@@ -15600,14 +18823,14 @@ class ServerMeshInbound {
 
 /***/ },
 
-/***/ 2035
+/***/ 1478
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony exports ServerMesh, serverMesh */
 /* harmony import */ var node_events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2849);
 /* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2561);
-/* harmony import */ var _inbound_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7822);
-/* harmony import */ var _outbound_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9395);
+/* harmony import */ var _inbound_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4811);
+/* harmony import */ var _outbound_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7860);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -16243,13 +19466,13 @@ const serverMesh = new ServerMesh();
 
 /***/ },
 
-/***/ 9395
+/***/ 7860
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   b: () => (/* binding */ ServerMeshOutbound)
 /* harmony export */ });
-/* harmony import */ var ws__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1232);
+/* harmony import */ var ws__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(661);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -16503,7 +19726,7 @@ class ServerMeshOutbound {
 
 /***/ },
 
-/***/ 8810
+/***/ 9315
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -16516,7 +19739,7 @@ class ServerMeshOutbound {
 /* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8298);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5663);
 /* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4472);
-/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1663);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7586);
 
 
 
@@ -16641,14 +19864,14 @@ async function saveRepository({ server, localFsRoot, settings = {}, reason = 'sh
 
 /***/ },
 
-/***/ 3882
+/***/ 3207
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export init */
-/* harmony import */ var _startup_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2019);
-/* harmony import */ var _git_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8810);
-/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1663);
-/* harmony import */ var _upload_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2473);
+/* harmony import */ var _startup_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3390);
+/* harmony import */ var _git_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9315);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7586);
+/* harmony import */ var _upload_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3598);
 
 
 
@@ -16762,7 +19985,7 @@ async function init(server) {
 
 /***/ },
 
-/***/ 2019
+/***/ 3390
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -16772,8 +19995,8 @@ async function init(server) {
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
 /* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6564);
 /* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4472);
-/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1663);
-/* harmony import */ var _git_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8810);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7586);
+/* harmony import */ var _git_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9315);
 
 
 
@@ -16840,7 +20063,7 @@ async function initializeRepository({ server, config }) {
 
 /***/ },
 
-/***/ 2473
+/***/ 3598
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -16942,7 +20165,7 @@ async function publishRepository(server, entry, { signal, runUpload = upload } =
 
 /***/ },
 
-/***/ 1663
+/***/ 7586
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -16986,15 +20209,15 @@ async function ensureRepositoryPaths(settings, projectRoot) {
 
 /***/ },
 
-/***/ 5648
+/***/ 4711
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony exports runShutdownHandlers, shutdownWorker, loadStateConfig, getServerObject, save, cordon, shed, drain, restart, reboot, shutdown, triggerGlobalShutdown, evaluateMasterFallback, init */
 /* harmony import */ var node_http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9316);
 /* harmony import */ var node_https__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(965);
 /* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6564);
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9298);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2623);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7869);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4276);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -17709,7 +20932,7 @@ async function init(serverInstance) {
 
 /***/ },
 
-/***/ 2464
+/***/ 2331
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export init */
@@ -17887,14 +21110,14 @@ function init(server) {
 
 /***/ },
 
-/***/ 5002
+/***/ 853
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export Workers */
 /* harmony import */ var node_events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2849);
 /* harmony import */ var node_cluster__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8698);
 /* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6674);
-/* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5648);
+/* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4711);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -18204,15 +21427,15 @@ class Workers extends Map {
 
 /***/ },
 
-/***/ 2546
+/***/ 3641
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ZZ: () => (/* binding */ registerAdapter)
 /* harmony export */ });
 /* unused harmony exports get, set, del, remove, has, clear, prompt, request, query, delete */
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2623);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7076);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4276);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(617);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -18585,7 +21808,7 @@ function isTargetMatch(docTarget, currentTargetId) {
  * @param {Object} [scope] - Runtime target scope ({ cluster, server, worker })
  * @returns {Object} Consolidated operational configuration state
  */
-function mergeServerConfigs(docs = [], scope = {}) {
+function mergeConfigs(docs = [], scope = {}) {
     const consolidated = {};
 
     for (const doc of docs) {
@@ -18604,7 +21827,7 @@ function mergeServerConfigs(docs = [], scope = {}) {
 }
 
 /**
- * Asynchronously queries the `servers_config` collection via CoCreate CRUD (`object.read`)
+ * Asynchronously queries the `configs` collection via CoCreate CRUD (`object.read`)
  * matching the target runtime scope (`cluster`, `server`, `worker`) and merges them into an operational object.
  * 
  * @param {Object} [options={}] - Query filters and runtime scope targets; type may be a string or array
@@ -18635,7 +21858,7 @@ async function query(options = {}, crud) {
 
     const crudRequest = {
         method: "object.read",
-        array: "servers_config",
+        array: "configs",
         organization_id,
         filter: {
             query: queryFilter,
@@ -18647,7 +21870,7 @@ async function query(options = {}, crud) {
     if (crud?.send) {
         const response = await crud.send(crudRequest);
         const docs = response?.data || response?.object || [];
-        return mergeServerConfigs(docs, { cluster, server, worker });
+        return mergeConfigs(docs, { cluster, server, worker });
     }
 
     return {};
@@ -18676,7 +21899,7 @@ const configAPI = request;
 
 /***/ },
 
-/***/ 9298
+/***/ 7869
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony import */ var node_fs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9627);
@@ -18685,7 +21908,7 @@ const configAPI = request;
 /* harmony import */ var node_readline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9182);
 /* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4472);
 /* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6564);
-/* harmony import */ var _core_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2546);
+/* harmony import */ var _core_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3641);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -18877,11 +22100,11 @@ async function saveConfig(filePath, content) {
 
 /***/ },
 
-/***/ 6651
+/***/ 5754
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7805);
+/* harmony import */ var _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(750);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -19584,14 +22807,14 @@ init();
 
 /***/ },
 
-/***/ 4143
+/***/ 5716
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-/* harmony import */ var _cocreate_socket__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9734);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5264);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8170);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7076);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8791);
+/* harmony import */ var _cocreate_socket__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5583);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4633);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8101);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(617);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8830);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -19625,7 +22848,7 @@ let dbInstance = null;
 // Dynamic environmental lazy loading of browser-only storage engines (IndexedDB)
 // using a non-awaited promise chain to avoid Node.js require() async errors.
 if (isBrowser) {
-    Promise.resolve(/* import() */).then(() => (__webpack_require__(3351)))
+    Promise.resolve(/* import() */).then(() => (__webpack_require__(7075)))
         .then((indexeddbModule) => {
             const rawIndexeddb = indexeddbModule.default || indexeddbModule;
             dbInstance = rawIndexeddb && (rawIndexeddb.default || rawIndexeddb);
@@ -19642,7 +22865,7 @@ const CoCreateCRUD = {
  * @environment client
  * @environment server
  */
-    socket: _cocreate_socket__WEBPACK_IMPORTED_MODULE_0__/* .SocketClient */ .vI,
+    socket: _cocreate_socket__WEBPACK_IMPORTED_MODULE_0__.SocketClient,
     /**
      *
  * @public
@@ -19988,7 +23211,7 @@ if (isBrowser) {
 
 /***/ },
 
-/***/ 944
+/***/ 1383
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export GetOrganization */
@@ -20189,15 +23412,15 @@ const getOrganizationInstance = new GetOrganization();
 
 /***/ },
 
-/***/ 4323
+/***/ 7872
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony exports loadCrudConfig, init, getFilterCount */
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9298);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7869);
 /* harmony import */ var node_events__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2849);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2623);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(900);
-/* harmony import */ var _getOrganization_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(944);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4276);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(623);
+/* harmony import */ var _getOrganization_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1383);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -20452,7 +23675,7 @@ const serverModule = {
 };
 
 
-/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (serverModule)));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (serverModule);
 
 /**
  * High-performance, multi-tenant server-side CRUD orchestration engine supporting parallel multi-database writing, real-time sync, and tenant-isolated data routing across 20+ database engines.
@@ -20462,13 +23685,14 @@ const serverModule = {
  */
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__,
 /* harmony export */   "wA", 0, /* binding */ serverModule
 /* harmony export */ ]);
 
 
 /***/ },
 
-/***/ 1391
+/***/ 2982
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -20477,13 +23701,13 @@ const serverModule = {
 /* harmony export */   eC: () => (/* binding */ ensureArray),
 /* harmony export */   lp: () => (/* binding */ adjustArrayLength)
 /* harmony export */ });
-/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3981);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5264);
-/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2244);
-/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4811);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1150);
-/* harmony import */ var _database_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5379);
-/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2965);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9814);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4633);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4621);
+/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2218);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2875);
+/* harmony import */ var _database_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9276);
+/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2498);
 
 
 
@@ -20575,7 +23799,7 @@ async function sendArray(root, index, method, data) {
 
 /***/ },
 
-/***/ 5082
+/***/ 8375
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -20639,7 +23863,7 @@ function flushFileBytes(root) {
 
 /***/ },
 
-/***/ 5379
+/***/ 9276
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -20648,12 +23872,12 @@ function flushFileBytes(root) {
 /* harmony export */   bk: () => (/* binding */ materializeDatabase),
 /* harmony export */   c_: () => (/* binding */ ensureDatabase)
 /* harmony export */ });
-/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3981);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5264);
-/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2244);
-/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4811);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1150);
-/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2965);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9814);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4633);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4621);
+/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2218);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2875);
+/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2498);
 
 
 
@@ -20750,7 +23974,7 @@ async function sendDatabase(root, index, method, data) {
 
 /***/ },
 
-/***/ 2106
+/***/ 7363
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -20767,7 +23991,7 @@ function resolveDirectory({ directory, cwd = process.cwd() } = {}) {
 
 /***/ },
 
-/***/ 5647
+/***/ 9884
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -20775,7 +23999,7 @@ function resolveDirectory({ directory, cwd = process.cwd() } = {}) {
 /* harmony export */   tm: () => (/* binding */ createDistributionIndex)
 /* harmony export */ });
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
-/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6978);
+/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9059);
 
 
 
@@ -20994,7 +24218,7 @@ function distributionReferences({ organization_id, storageFileId, databaseFileId
 
 /***/ },
 
-/***/ 2509
+/***/ 9476
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -21002,7 +24226,7 @@ function distributionReferences({ organization_id, storageFileId, databaseFileId
 /* harmony export */   qd: () => (/* binding */ arrayDigest)
 /* harmony export */ });
 /* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2561);
-/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2244);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4621);
 
 
 
@@ -21046,7 +24270,7 @@ const entryKey = entry => JSON.stringify([entry.key, entry.type, entry.indexed])
 
 /***/ },
 
-/***/ 1150
+/***/ 2875
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -21055,7 +24279,7 @@ const entryKey = entry => JSON.stringify([entry.key, entry.type, entry.indexed])
 /* harmony export */ });
 /* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2561);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
-/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9074);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5425);
 
 
 
@@ -21090,20 +24314,16 @@ const stableId = value => (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.createHash
 
 /***/ },
 
-/***/ 3449
+/***/ 6156
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   bN: () => (/* reexport safe */ _server_js__WEBPACK_IMPORTED_MODULE_5__.bN)
-/* harmony export */ });
-/* unused harmony import specifier */ var createIndex;
-/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6978);
-/* harmony import */ var _directory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2106);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1150);
-/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5647);
-/* harmony import */ var _scoped_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2465);
-/* harmony import */ var _server_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4390);
-/* harmony import */ var _persistence_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5825);
+/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9059);
+/* harmony import */ var _directory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7363);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2875);
+/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9884);
+/* harmony import */ var _scoped_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5658);
+/* harmony import */ var _server_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2705);
+/* harmony import */ var _persistence_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6324);
 /********************************************************************************
  * Copyright (C) 2023-2026 CoCreate and Contributors.
  *
@@ -21127,12 +24347,16 @@ const stableId = value => (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.createHash
 
 
 
-/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (createIndex)));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_server_js__WEBPACK_IMPORTED_MODULE_5__/* .CoCreateDB */ .bN);
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ ]);
 
 
 /***/ },
 
-/***/ 4644
+/***/ 2183
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -21167,20 +24391,20 @@ async function index(method, data, target) {
 
 /***/ },
 
-/***/ 6978
+/***/ 9059
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export createIndex */
-/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3981);
-/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2244);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9814);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4621);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5663);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3105);
-/* harmony import */ var _entries_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2509);
-/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9074);
-/* harmony import */ var _partition_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3999);
-/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(4934);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1150);
-/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(8247);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6772);
+/* harmony import */ var _entries_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9476);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5425);
+/* harmony import */ var _partition_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6446);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(4885);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(2875);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(1544);
 /********************************************************************************
  * Copyright (C) 2023-2026 CoCreate and Contributors.
  *
@@ -22303,7 +25527,7 @@ function createIndex({
 
 /***/ },
 
-/***/ 3981
+/***/ 9814
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -22314,10 +25538,10 @@ function createIndex({
 /* harmony export */ });
 /* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
-/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5634);
-/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4934);
-/* harmony import */ var _bytes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5082);
-/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8247);
+/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(667);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4885);
+/* harmony import */ var _bytes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8375);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1544);
 
 
 
@@ -22367,7 +25591,7 @@ async function readdir(path, options) {
 
 /***/ },
 
-/***/ 4934
+/***/ 4885
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -22384,7 +25608,7 @@ async function readdir(path, options) {
 /* harmony export */ });
 /* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
-/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9074);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5425);
 
 
 
@@ -22492,7 +25716,7 @@ function markMemoryRemoval(path) {
 
 /***/ },
 
-/***/ 9074
+/***/ 5425
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -22604,34 +25828,34 @@ function prepareMutation(record) {
 
 /***/ },
 
-/***/ 2001
+/***/ 5426
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   r: () => (/* binding */ createDB)
 /* harmony export */ });
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1150);
-/* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(257);
-/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3981);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5264);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9487);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(900);
-/* harmony import */ var _array_index_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(1391);
-/* harmony import */ var _database_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5379);
-/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6978);
-/* harmony import */ var _peers_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(7432);
-/* harmony import */ var _index_crud_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(4644);
-/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5647);
-/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(2244);
-/* harmony import */ var _query_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(7961);
-/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(2965);
-/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(4811);
-/* harmony import */ var _entries_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(2509);
-/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(9074);
-/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(5634);
-/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(4934);
-/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(8247);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2875);
+/* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8914);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9814);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4633);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(50);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(623);
+/* harmony import */ var _array_index_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2982);
+/* harmony import */ var _database_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(9276);
+/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(9059);
+/* harmony import */ var _peers_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(9653);
+/* harmony import */ var _index_crud_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(2183);
+/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(9884);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(4621);
+/* harmony import */ var _query_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(9508);
+/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(2498);
+/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(2218);
+/* harmony import */ var _entries_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(9476);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(5425);
+/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(667);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(4885);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(1544);
 
 
 
@@ -23915,7 +27139,7 @@ function createDB({
 
 /***/ },
 
-/***/ 3999
+/***/ 6446
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -23942,7 +27166,7 @@ function encodePartitionEnvelope({ value, ...routing }) {
 
 /***/ },
 
-/***/ 7432
+/***/ 9653
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -24084,7 +27308,7 @@ function createPeerDistribution(localId) {
 
 /***/ },
 
-/***/ 5634
+/***/ 667
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -24094,8 +27318,8 @@ function createPeerDistribution(localId) {
 /* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
 /* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2561);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5663);
-/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4934);
-/* harmony import */ var _bytes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5082);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4885);
+/* harmony import */ var _bytes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8375);
 
 
 
@@ -24233,7 +27457,7 @@ function createPersistence({ directory, canFlush = () => true, storage, write, r
 
 /***/ },
 
-/***/ 3131
+/***/ 6448
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -24309,14 +27533,14 @@ async function getPersistenceDriver(provider) {
 
 /***/ },
 
-/***/ 3720
+/***/ 169
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Z: () => (/* binding */ localReadRequest),
 /* harmony export */   j: () => (/* binding */ persistenceReadRequest)
 /* harmony export */ });
-/* harmony import */ var _query_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7961);
+/* harmony import */ var _query_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9508);
 
 
 // Copy request/view containers only; database-owned values remain live internally.
@@ -24361,7 +27585,7 @@ function persistenceReadRequest(request) {
 
 /***/ },
 
-/***/ 5825
+/***/ 6324
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -24369,8 +27593,8 @@ function persistenceReadRequest(request) {
 /* harmony export */   Sy: () => (/* reexport safe */ _driver_js__WEBPACK_IMPORTED_MODULE_0__.Sy),
 /* harmony export */   oO: () => (/* binding */ getPersistence)
 /* harmony export */ });
-/* harmony import */ var _driver_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3131);
-/* harmony import */ var _response_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(102);
+/* harmony import */ var _driver_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6448);
+/* harmony import */ var _response_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7405);
 
 
 
@@ -24425,7 +27649,7 @@ async function sendPersistence(data, { organization, organizationId = data?.orga
 
 /***/ },
 
-/***/ 102
+/***/ 7405
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -24468,7 +27692,7 @@ function readPersistenceResponse(response, data) {
 
 /***/ },
 
-/***/ 7961
+/***/ 9508
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -24476,7 +27700,7 @@ function readPersistenceResponse(response, data) {
 /* harmony export */   GC: () => (/* binding */ normalizeQuery),
 /* harmony export */   PW: () => (/* binding */ hasQueryConditions)
 /* harmony export */ });
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(900);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(623);
 
 
 const typeOf = value => value === null ? 'null' :
@@ -24858,16 +28082,16 @@ async function queryIndexCandidates(index, database, array, query, { readObject 
 
 /***/ },
 
-/***/ 2965
+/***/ 2498
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   H: () => (/* binding */ applyReadFilter)
 /* harmony export */ });
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(900);
-/* harmony import */ var _query_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7961);
-/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9074);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1150);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(623);
+/* harmony import */ var _query_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9508);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5425);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2875);
 
 
 
@@ -25007,7 +28231,7 @@ function applyReadFilter(records, request, { database, array, query = {} }) {
 
 /***/ },
 
-/***/ 4811
+/***/ 2218
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -25020,14 +28244,14 @@ function applyReadFilter(records, request, { database, array, query = {} }) {
 /* harmony export */   oP: () => (/* binding */ reconcileEntrySets),
 /* harmony export */   vL: () => (/* binding */ updateRecord)
 /* harmony export */ });
-/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3981);
-/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2244);
-/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4934);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(900);
-/* harmony import */ var _entries_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2509);
-/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9074);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1150);
-/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(8247);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9814);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4621);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4885);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(623);
+/* harmony import */ var _entries_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9476);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5425);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2875);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(1544);
 
 
 
@@ -25117,7 +28341,7 @@ async function readRecords(index, database, array, fileForId, query = {}) {
 
 /***/ },
 
-/***/ 8247
+/***/ 1544
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -25128,7 +28352,7 @@ async function readRecords(index, database, array, fileForId, query = {}) {
 /* harmony export */ });
 /* harmony import */ var node_async_hooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4579);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1150);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2875);
 
 
 
@@ -25190,7 +28414,7 @@ function forgetResolvedPath(path, recursive = false) {
 
 /***/ },
 
-/***/ 257
+/***/ 8914
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -25198,8 +28422,8 @@ function forgetResolvedPath(path, recursive = false) {
 /* harmony export */   XD: () => (/* binding */ readRoot)
 /* harmony export */ });
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
-/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3981);
-/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2244);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9814);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4621);
 
 
 
@@ -25241,27 +28465,27 @@ async function ensureRoot(directory, index, database, array, field, onChange) {
 
 /***/ },
 
-/***/ 2465
+/***/ 5658
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   r: () => (/* binding */ createDB)
 /* harmony export */ });
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1150);
-/* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(257);
-/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6978);
-/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3981);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5264);
-/* harmony import */ var _object_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2001);
-/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5647);
-/* harmony import */ var _peers_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(7432);
-/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5634);
-/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(4934);
-/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(2244);
-/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(4811);
-/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(2965);
-/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(8247);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2875);
+/* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8914);
+/* harmony import */ var _index_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9059);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9814);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4633);
+/* harmony import */ var _object_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5426);
+/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9884);
+/* harmony import */ var _peers_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(9653);
+/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(667);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(4885);
+/* harmony import */ var _storage_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(4621);
+/* harmony import */ var _records_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(2218);
+/* harmony import */ var _read_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(2498);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(1544);
 
 
 
@@ -25708,22 +28932,22 @@ function createDB(options = {}) {
 
 /***/ },
 
-/***/ 4390
+/***/ 2705
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony exports DB_PROVIDER, init, initLocal, initializeServerDB */
-/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4172);
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9298);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1150);
-/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5647);
-/* harmony import */ var _peers_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7432);
-/* harmony import */ var _scoped_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2465);
-/* harmony import */ var _directory_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2106);
+/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1681);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7869);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2875);
+/* harmony import */ var _distribution_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9884);
+/* harmony import */ var _peers_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9653);
+/* harmony import */ var _scoped_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5658);
+/* harmony import */ var _directory_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7363);
 /* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2561);
-/* harmony import */ var _persistence_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5825);
-/* harmony import */ var _partition_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(3999);
-/* harmony import */ var _persistence_envelopes_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(3720);
-/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8247);
+/* harmony import */ var _persistence_index_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6324);
+/* harmony import */ var _partition_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6446);
+/* harmony import */ var _persistence_envelopes_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(169);
+/* harmony import */ var _resolution_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(1544);
 
 
 
@@ -26477,7 +29701,7 @@ function initializeServerDB(server, {
 
 /***/ },
 
-/***/ 2244
+/***/ 4621
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -26497,14 +29721,14 @@ function initializeServerDB(server, {
 /* harmony export */ });
 /* unused harmony exports EXISTS_INDEX_PREFIX, typeOf */
 /* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
-/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3981);
-/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5634);
+/* harmony import */ var _io_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9814);
+/* harmony import */ var _persistence_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(667);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5663);
 /* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2561);
-/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4934);
-/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9074);
-/* harmony import */ var _bytes_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5082);
-/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1150);
+/* harmony import */ var _memory_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4885);
+/* harmony import */ var _mutation_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5425);
+/* harmony import */ var _bytes_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(8375);
+/* harmony import */ var _files_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(2875);
 
 
 
@@ -26675,241 +29899,7 @@ async function replaceJSON(file, value) {
 
 /***/ },
 
-/***/ 7891
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   z6: () => (/* binding */ check)
-/* harmony export */ });
-/* unused harmony exports encodeXML, parseHtml, createEntry, buildSitemapXml */
-/* unused harmony import specifier */ var HTMLScanner;
-
-
-/**
- * Escapes special XML characters to prevent XML parsing syntax errors.
- * @param {string|number} str - String or numeric input
- * @returns {string} XML safe string
- */
-function encodeXML(str) {
-  if (str === null || str === undefined) return "";
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
-
-/**
- * Scans raw HTML source within a file object to populate structured sitemap metadata.
- * Uses HTMLScanner to query elements with [sitemap] attributes and document head tags.
- * @param {Object} file - File object containing HTML source string
- */
-function parseHtml(file) {
-  if (!file || !file.src || typeof file.src !== "string") return;
-
-  if (!file.sitemap) {
-    file.sitemap = {};
-  }
-
-  const doc = new HTMLScanner(file.src);
-  const elements = doc.querySelectorAll({ attributes: ["sitemap"] });
-  const types = ["image", "video", "news"];
-
-  // Reset any pre-existing entry arrays for fresh parsing
-  for (const type of types) {
-    delete file.sitemap[type];
-  }
-
-  for (const el of elements) {
-    const tagName = el.tagName;
-    let type = "";
-    let entryObject = {};
-
-    if (tagName === "IMG") {
-      type = "image";
-      entryObject = {
-        loc: el.getAttribute("src") || "",
-        title: el.getAttribute("sitemap-title") || el.getAttribute("title") || el.getAttribute("alt") || "",
-        caption: el.getAttribute("sitemap-caption") || el.getAttribute("alt") || el.getAttribute("sitemap-title") || el.getAttribute("title") || "",
-        geo_location: el.getAttribute("sitemap-geo-location") || ""
-      };
-    } else if (tagName === "VIDEO") {
-      type = "video";
-      entryObject = {
-        content_loc: el.getAttribute("src") || "",
-        title: el.getAttribute("sitemap-title") || el.getAttribute("title") || "",
-        description: el.getAttribute("description") || el.getAttribute("sitemap-description") || "",
-        thumbnail_loc: el.getAttribute("sitemap-thumbnail") || el.getAttribute("poster") || "",
-        duration: el.getAttribute("sitemap-duration") || ""
-      };
-    } else {
-      type = "news";
-      file.sitemap.type = "news";
-
-      // Query title tag using standard scanner query
-      const titleHandles = doc.querySelectorAll({ tags: ["TITLE"] });
-      const docTitle = titleHandles.length > 0 ? titleHandles[0].getInnerHTML().trim() : "";
-
-      // Query meta tags using standard scanner query
-      const metaHandles = doc.querySelectorAll({ tags: ["META"] });
-      const keywordsMeta = metaHandles.find(h => h.getAttribute("name") === "keywords");
-      const docKeywords = keywordsMeta ? keywordsMeta.getAttribute("content") : "";
-
-      // Extract HTML lang attribute
-      const htmlHandles = doc.querySelectorAll({ tags: ["HTML"] });
-      const docLang = htmlHandles.length > 0 ? htmlHandles[0].getAttribute("lang") : "en";
-
-      entryObject = {
-        title: el.getAttribute("sitemap-title") || docTitle,
-        publication: {
-          name: el.getAttribute("sitemap-publication-name") || "",
-          language: el.getAttribute("sitemap-publication-language") || docLang
-        },
-        publication_date: el.getAttribute("sitemap-publication-date") || file.modified?.on || new Date().toISOString(),
-        keywords: el.getAttribute("sitemap-keywords") || docKeywords,
-        genres: el.getAttribute("sitemap-genres") || ""
-      };
-    }
-
-    // Strip empty string keys
-    Object.keys(entryObject).forEach(key => {
-      if (entryObject[key] === "" || entryObject[key] === null || entryObject[key] === undefined) {
-        delete entryObject[key];
-      }
-    });
-
-    if (!file.sitemap[type]) {
-      file.sitemap[type] = [];
-    }
-    file.sitemap[type].push(entryObject);
-  }
-
-  if (!["news", "image", "video"].includes(file.sitemap.type)) {
-    const metaHandles = doc.querySelectorAll({ tags: ["META"] });
-
-    const priorityMeta = metaHandles.find(h => h.getAttribute("name") === "sitemap-priority");
-    if (priorityMeta && priorityMeta.getAttribute("content")) {
-      file.sitemap.priority = priorityMeta.getAttribute("content");
-    }
-
-    const changefreqMeta = metaHandles.find(h => h.getAttribute("name") === "sitemap-changefreq");
-    if (changefreqMeta && changefreqMeta.getAttribute("content")) {
-      file.sitemap.changefreq = changefreqMeta.getAttribute("content");
-    } else if (!file.sitemap.changefreq) {
-      file.sitemap.changefreq = "monthly";
-    }
-  }
-}
-
-/**
- * Determines if a file object is eligible for inclusion in the sitemap index.
- * @param {Object} file - File record to test
- * @returns {boolean} True if eligible
- */
-function check(file) {
-  if (!file) return false;
-  if (file.public === false || String(file.public) === "false") return false;
-  if (file.sitemap && (file.sitemap.enable === false || String(file.sitemap.enable) === "false")) return false;
-  const path = file.path || file.pathname || "";
-  if (path.startsWith("/_") || path.startsWith("/api/")) return false;
-  return true;
-}
-
-/**
- * Constructs XML node strings for individual sitemap entries.
- * @param {string} loc - Full URL location of the page
- * @param {Object} sitemap - Sitemap metadata block
- * @returns {string} Single <url> XML block
- */
-function createEntry(loc, sitemap = {}) {
-  let xml = `  <url>\n    <loc>${encodeXML(loc)}</loc>\n`;
-
-  if (sitemap.lastmod) {
-    xml += `    <lastmod>${encodeXML(sitemap.lastmod)}</lastmod>\n`;
-  }
-  if (sitemap.changefreq) {
-    xml += `    <changefreq>${encodeXML(sitemap.changefreq)}</changefreq>\n`;
-  }
-  if (sitemap.priority) {
-    xml += `    <priority>${encodeXML(sitemap.priority)}</priority>\n`;
-  }
-
-  // Image extension nodes
-  if (Array.isArray(sitemap.image)) {
-    for (const img of sitemap.image) {
-      xml += `    <image:image>\n      <image:loc>${encodeXML(img.loc)}</image:loc>\n`;
-      if (img.title) xml += `      <image:title>${encodeXML(img.title)}</image:title>\n`;
-      if (img.caption) xml += `      <image:caption>${encodeXML(img.caption)}</image:caption>\n`;
-      if (img.geo_location) xml += `      <image:geo_location>${encodeXML(img.geo_location)}</image:geo_location>\n`;
-      xml += `    </image:image>\n`;
-    }
-  }
-
-  // Video extension nodes
-  if (Array.isArray(sitemap.video)) {
-    for (const vid of sitemap.video) {
-      xml += `    <video:video>\n      <video:content_loc>${encodeXML(vid.content_loc)}</video:content_loc>\n`;
-      if (vid.title) xml += `      <video:title>${encodeXML(vid.title)}</video:title>\n`;
-      if (vid.description) xml += `      <video:description>${encodeXML(vid.description)}</video:description>\n`;
-      if (vid.thumbnail_loc) xml += `      <video:thumbnail_loc>${encodeXML(vid.thumbnail_loc)}</video:thumbnail_loc>\n`;
-      if (vid.duration) xml += `      <video:duration>${encodeXML(vid.duration)}</video:duration>\n`;
-      xml += `    </video:video>\n`;
-    }
-  }
-
-  // News extension nodes
-  if (Array.isArray(sitemap.news)) {
-    for (const newsItem of sitemap.news) {
-      xml += `    <news:news>\n`;
-      if (newsItem.publication) {
-        xml += `      <news:publication>\n`;
-        xml += `        <news:name>${encodeXML(newsItem.publication.name)}</news:name>\n`;
-        xml += `        <news:language>${encodeXML(newsItem.publication.language)}</news:language>\n`;
-        xml += `      </news:publication>\n`;
-      }
-      if (newsItem.publication_date) xml += `      <news:publication_date>${encodeXML(newsItem.publication_date)}</news:publication_date>\n`;
-      if (newsItem.title) xml += `      <news:title>${encodeXML(newsItem.title)}</news:title>\n`;
-      if (newsItem.keywords) xml += `      <news:keywords>${encodeXML(newsItem.keywords)}</news:keywords>\n`;
-      xml += `    </news:news>\n`;
-    }
-  }
-
-  xml += `  </url>\n`;
-  return xml;
-}
-
-/**
- * Assembles a complete XML sitemap document from a list of file objects and host domain.
- * @param {Array<Object>} files - Array of file objects
- * @param {string} domain - Host domain (e.g. "https://example.com")
- * @returns {string} Fully formed sitemap.xml content string
- */
-function buildSitemapXml(files = [], domain = "") {
-  const cleanDomain = domain.replace(/\/+$/, "");
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-  xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n`;
-  xml += `        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"\n`;
-  xml += `        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"\n`;
-  xml += `        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n`;
-
-  for (const file of files) {
-    if (!check(file)) continue;
-
-    parseHtml(file);
-
-    const pathname = file.pathname || file.path || "/";
-    const loc = `${cleanDomain}${pathname.startsWith("/") ? "" : "/"}${pathname}`;
-    xml += createEntry(loc, file.sitemap);
-  }
-
-  xml += `</urlset>`;
-  return xml;
-}
-
-/***/ },
-
-/***/ 2013
+/***/ 6258
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -27003,17 +29993,20 @@ function responseCacheControl(policies = []) {
 
 /***/ },
 
-/***/ 6929
+/***/ 8690
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-/* unused harmony export init */
-/* harmony import */ var _cocreate_render_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3951);
-/* harmony import */ var _cocreate_sitemap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7891);
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9298);
-/* harmony import */ var _cachePolicy_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2013);
-/* harmony import */ var _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3030);
-/* harmony import */ var _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5758);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2623);
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   init: () => (/* binding */ init)
+/* harmony export */ });
+/* harmony import */ var _cocreate_render_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9184);
+/* harmony import */ var _cocreate_sitemap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7923);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7869);
+/* harmony import */ var _cachePolicy_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6258);
+/* harmony import */ var _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1679);
+/* harmony import */ var _cocreate_utils_file__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8583);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(4276);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -27745,13 +30738,13 @@ async function init(serverInstance) {
  */
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "A", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */   "default", 0, __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ ]);
 
 
 /***/ },
 
-/***/ 5446
+/***/ 8685
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export init */
@@ -28437,15 +31430,327 @@ function init(server) {
 
 /***/ },
 
-/***/ 9058
+/***/ 1691
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* unused harmony exports loadLogConfig, log, handleIncomingWorkerLog, enqueueLog, save, start, stop, init */
+/* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4472);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7869);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4276);
+/********************************************************************************
+ * Copyright (C) 2026 CoCreate and Contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ ********************************************************************************/
+
+
+
+
+
+let server = null;
+let logQueue = [];
+let recentLogs = [];
+let isLoggingInternal = false; // Recursion guard against infinite loops
+let flushTimer = null;
+let isConsolePatched = false;
+
+let logConfig = {
+    maxLogs: 100, // Capped ring buffer size on server document
+    flushIntervalMs: 1500, // Time-window flush in milliseconds
+    maxBatchSize: 20 // Trigger immediate flush if queue exceeds size
+};
+
+// Preserve native console methods for uninhibited terminal stdout/stderr
+const originalConsole = {
+    log: console.log.bind(console),
+    info: console.info.bind(console),
+    warn: console.warn.bind(console),
+    error: console.error.bind(console)
+};
+
+/**
+ * Loads system configuration using @cocreate/config and queries database overrides
+ * for 'logger' configurations.
+ *
+ * @returns {Promise<Object>} Resolved logging configuration object
+ */
+async function loadLogConfig() {
+    const sysConfig = await _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.get('logger');
+
+    let dbConfig = null;
+    if (server && server.organization_id) {
+        dbConfig = await _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.query({
+            type: 'logger',
+            organization_id: server.organization_id,
+            server: server.host,
+            cluster: server.cluster_id
+        });
+    }
+
+    if (sysConfig) {
+        (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .dotNotationToObject */ .O)(logConfig, sysConfig);
+    }
+
+    if (dbConfig) {
+        (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .dotNotationToObject */ .O)(logConfig, dbConfig);
+    }
+
+    return logConfig;
+}
+
+/**
+ * Attaches IPC event listeners on the master process to receive logs from workers.
+ */
+function setupIPCListeners() {
+    if (server?.isPrimary) {
+        server.on('server.log', (message) => {
+            if (message && message.log) {
+                handleIncomingWorkerLog(message.log);
+            }
+        });
+    }
+}
+
+/**
+ * Patches global console log/info/warn/error methods to capture stdout/stderr output.
+ */
+function patchConsole() {
+    if (isConsolePatched) return;
+
+    const createConsoleProxy = (level, originalFn) => {
+        return function (...args) {
+            // Always execute original console method to print to standard stdout/stderr
+            originalFn.apply(console, args);
+
+            // Skip log capture if internal logging recursion flag is active
+            if (isLoggingInternal) return;
+
+            try {
+                const message = args.map(arg => {
+                    if (typeof arg === 'string') return arg;
+                    if (arg instanceof Error) return arg.stack || arg.message;
+                    return node_util__WEBPACK_IMPORTED_MODULE_0__["default"].inspect(arg, { depth: 3, colors: false });
+                }).join(' ');
+
+                log(level, message);
+            } catch (err) {
+                // Fail gracefully to ensure native console execution is never disrupted
+            }
+        };
+    };
+
+    console.log = createConsoleProxy('info', originalConsole.log);
+    console.info = createConsoleProxy('info', originalConsole.info);
+    console.warn = createConsoleProxy('warn', originalConsole.warn);
+    console.error = createConsoleProxy('error', originalConsole.error);
+
+    isConsolePatched = true;
+}
+
+/**
+ * Restores original console behavior.
+ */
+function unpatchConsole() {
+    if (!isConsolePatched) return;
+
+    console.log = originalConsole.log;
+    console.info = originalConsole.info;
+    console.warn = originalConsole.warn;
+    console.error = originalConsole.error;
+
+    isConsolePatched = false;
+}
+
+/**
+ * Dispatches a log entry from either master or worker process.
+ *
+ * @param {string} level - Log severity level ('info', 'warn', 'error')
+ * @param {string} message - Formatted log message text
+ * @param {Object|null} metadata - Optional contextual metadata object
+ */
+function log(level = 'info', message = '', metadata = null) {
+    if (isLoggingInternal) return;
+
+    const sourceWorker = server?.isPrimary ? 'master' : (server?.workerId || 1);
+
+    const logEntry = {
+        timestamp: Date.now(),
+        workerId: sourceWorker,
+        level,
+        message,
+        ...(metadata && typeof metadata === 'object' ? { metadata } : {})
+    };
+
+    if (!server?.isPrimary) {
+        // Worker Process: Relay log entry to Master Orchestrator over IPC
+        if (typeof server?.send === 'function') {
+            server.send({
+                method: 'server.log',
+                log: logEntry
+            });
+        } else if (process.send && process.connected) {
+            try {
+                process.send({
+                    method: 'server.log',
+                    log: logEntry
+                });
+            } catch (err) {
+                originalConsole.error('[@cocreate/cluster] [WORKER LOG IPC ERROR]', err.message);
+            }
+        }
+    } else {
+        // Master Process: Append directly to local log queue
+        enqueueLog(logEntry);
+    }
+}
+
+/**
+ * Handles incoming IPC log entries dispatched from cluster workers.
+ *
+ * @param {Object} logEntry - Received log object
+ */
+function handleIncomingWorkerLog(logEntry) {
+    if (!server?.isPrimary || !logEntry) return;
+    enqueueLog(logEntry);
+}
+
+/**
+ * Enqueues a log entry into the processing queue and checks threshold conditions.
+ *
+ * @param {Object} logEntry - Log item to queue
+ */
+function enqueueLog(logEntry) {
+    logQueue.push(logEntry);
+
+    // Immediately flush if queue hits batch limit or if an error level log is emitted
+    if (logQueue.length >= logConfig.maxBatchSize || logEntry.level === 'error') {
+        save();
+    }
+}
+
+/**
+ * Configures interval timer for periodic buffer flushing on the master node.
+ */
+function setupFlushTimer() {
+    if (!server?.isPrimary) return;
+
+    if (flushTimer) {
+        clearInterval(flushTimer);
+    }
+
+    flushTimer = setInterval(() => {
+        save();
+    }, logConfig.flushIntervalMs);
+
+    if (flushTimer.unref) {
+        flushTimer.unref();
+    }
+}
+
+/**
+ * Flushes pending log items from the queue to the database server object ring buffer.
+ */
+async function save() {
+    if (!server?.isPrimary || logQueue.length === 0 || isLoggingInternal) return;
+
+    isLoggingInternal = true;
+
+    try {
+        const pendingLogs = [...logQueue];
+        logQueue = [];
+
+        // Maintain capped ring buffer of recent logs on Master
+        recentLogs = [...recentLogs, ...pendingLogs].slice(-logConfig.maxLogs);
+
+        // Persist updated log ring buffer to the server object in DB
+        const payload = server.state.getServerObject({ logs: recentLogs });
+        await server.crud.send(payload);
+    } finally {
+        isLoggingInternal = false;
+    }
+}
+
+/**
+ * Starts or resumes the logging service (patches console and sets flush timer).
+ */
+function start() {
+    patchConsole();
+    setupFlushTimer();
+}
+
+/**
+ * Stops or pauses the logging service (flushes remaining queue, stops timer, unpatches console).
+ *
+ * @returns {Promise<void>}
+ */
+async function stop() {
+    if (flushTimer) {
+        clearInterval(flushTimer);
+        flushTimer = null;
+    }
+
+    // Perform final sync/flush of any queued logs before shutting down console listeners
+    if (logQueue.length > 0) {
+        await save();
+    }
+
+    unpatchConsole();
+}
+
+/**
+ * Initializes the LogManager service and starts logging.
+ *
+ * @param {Object} serverInstance - Core server instance
+ * @returns {Promise<Object>} Initialized module functions and data references
+ */
+async function init(serverInstance) {
+    server = serverInstance;
+    server.log = log;
+
+    await loadLogConfig();
+    setupIPCListeners();
+    start();
+
+    return {
+        config: logConfig,
+        recentLogs,
+        save,
+        start,
+        stop
+    };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+    init
+});
+/* harmony export */ __webpack_require__.d(__webpack_exports__, [
+/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ ]);
+
+
+/***/ },
+
+/***/ 8321
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Pw: () => (/* binding */ resolveAIConfig)
 /* harmony export */ });
 /* unused harmony export defaults */
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9298);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2623);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7869);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4276);
 
 
 
@@ -28486,7 +31791,7 @@ async function resolveAIConfig(server, options = {}) {
 
 /***/ },
 
-/***/ 176
+/***/ 1553
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -28534,7 +31839,7 @@ function getMissingCredentialKeys(profile = {}, keys = []) {
 
 /***/ },
 
-/***/ 7436
+/***/ 7631
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -28576,7 +31881,7 @@ function createMcpCrudTool(server) {
             host: context.host,
             apikey: context.apikey,
             filter: { query, key: { _id: 1, name: 1, singularName: 1, path: 1, array: 1, filter: 1 }, limit }
-        });
+        }, context.user_id);
         return (await server.crud.send(request))?.object ?? [];
     };
 
@@ -28622,6 +31927,9 @@ function createMcpCrudTool(server) {
         }
         const { fields, limit, projection, query, skip, sort, ...request } = input;
         if (Array.isArray(request.array) && request.array.length === 1) request.array = request.array[0];
+        if (request.array === 'secrets') {
+            throw new Error('The MCP CRUD tool does not expose the secrets array. Use configured API credential tools instead.');
+        }
 
         let app;
         if (/^object\./.test(request.method) && typeof request.array === 'string' && request.array !== 'apps') {
@@ -28793,7 +32101,7 @@ function createAppTools(server) {
 
 /***/ },
 
-/***/ 3651
+/***/ 8336
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -28849,26 +32157,26 @@ function createPermissionHandler(server, organization_id, tools) {
 
 /***/ },
 
-/***/ 3803
+/***/ 3204
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   G: () => (/* binding */ createPortedRegistry)
 /* harmony export */ });
-/* harmony import */ var _tools_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4638);
-/* harmony import */ var _tools_autoscaler_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9912);
-/* harmony import */ var _tools_coc_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1265);
-/* harmony import */ var _tools_command_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8851);
-/* harmony import */ var _tools_files_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5601);
-/* harmony import */ var _tools_git_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5294);
-/* harmony import */ var _tools_routes_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6822);
-/* harmony import */ var _tools_send_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(4954);
-/* harmony import */ var _tools_servers_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1446);
-/* harmony import */ var _tools_socket_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(4857);
-/* harmony import */ var _tools_storage_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(4355);
-/* harmony import */ var _crud_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(7436);
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(3651);
-/* harmony import */ var _credentials_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(176);
+/* harmony import */ var _tools_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3795);
+/* harmony import */ var _tools_autoscaler_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5376);
+/* harmony import */ var _tools_coc_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8572);
+/* harmony import */ var _tools_command_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9974);
+/* harmony import */ var _tools_files_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1728);
+/* harmony import */ var _tools_git_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9379);
+/* harmony import */ var _tools_routes_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2993);
+/* harmony import */ var _tools_send_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(7821);
+/* harmony import */ var _tools_servers_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(8811);
+/* harmony import */ var _tools_socket_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(5734);
+/* harmony import */ var _tools_storage_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(4206);
+/* harmony import */ var _crud_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(7631);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(8336);
+/* harmony import */ var _credentials_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(1553);
 
 
 
@@ -28940,13 +32248,19 @@ const fixedToolConfigs = {
 
 function trusted(context, payload) {
     const { organization_id: _org, host: _host, apikey: _key, user_id: _user, ...operation } = payload;
-    return { ...operation, organization_id: context.organization_id, host: context.host, apikey: context.apikey };
+    return {
+        ...operation,
+        organization_id: context.organization_id,
+        host: context.host,
+        apikey: context.apikey,
+        ...(context.user_id && { user_id: context.user_id })
+    };
 }
 
 function scopedServer(server, context) {
     const crud = Object.create(server.crud);
     crud.send = async payload => {
-        const authorized = await server.authorize.request(trusted(context, payload));
+        const authorized = await server.authorize.request(trusted(context, payload), context.user_id);
         return server.crud.send(authorized);
     };
 
@@ -28954,14 +32268,14 @@ function scopedServer(server, context) {
     scoped.crud = crud;
     if (typeof server.send === 'function') {
         scoped.send = async payload => {
-            const authorized = await server.authorize.request(trusted(context, payload));
+            const authorized = await server.authorize.request(trusted(context, payload), context.user_id);
             return server.send(authorized);
         };
     }
     if (server.api?.send) {
         const api = Object.create(server.api);
         api.send = async payload => {
-            const authorized = await server.authorize.request(trusted(context, payload));
+            const authorized = await server.authorize.request(trusted(context, payload), context.user_id);
             return server.api.send(authorized);
         };
         scoped.api = api;
@@ -29074,7 +32388,7 @@ function createInstructionTools(server) {
                     const fileRequest = await server.authorize.request(trusted(context, {
                         method: 'object.read', array: 'files',
                         filter: { query: { $or: [{ pathname }, { path: pathname }] }, key: { name: 1, pathname: 1, path: 1, src: 1, content: 1, 'content-type': 1, updated: 1 }, limit: 1 }
-                    }));
+                    }), context.user_id);
                     const file = (await server.crud.send(fileRequest))?.object?.[0];
                     sources.push(file
                         ? { ...source, name: source.name ?? file.name, pathname: file.pathname ?? file.path ?? pathname, content: file.src ?? file.content ?? '', contentType: file['content-type'], updated: file.updated, found: true }
@@ -29132,7 +32446,7 @@ function createRenderCrudTool(server) {
             const appRequest = await server.authorize.request(trusted(context, {
                 method: 'object.read', array: 'apps',
                 filter: { query: { array: request.array }, key: { _id: 1, path: 1, array: 1 }, limit: 20 }
-            }));
+            }), context.user_id);
             const app = (await server.crud.send(appRequest))?.object?.find(item =>
                 (Array.isArray(item.array) ? item.array : [item.array]).includes(request.array));
             return { reference: {
@@ -29185,7 +32499,7 @@ function createPortedRegistry(server, aiConfig, context, { mcpPath = '/mcp' } = 
 
 /***/ },
 
-/***/ 4638
+/***/ 3795
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -29241,13 +32555,13 @@ function createApiTool({ server, organization_id, host }) {
 
 /***/ },
 
-/***/ 9912
+/***/ 5376
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   m: () => (/* binding */ createAutoscalerTool)
 /* harmony export */ });
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3651);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8336);
 
 
 /**
@@ -29286,7 +32600,7 @@ function createAutoscalerTool({ server }) {
 
 /***/ },
 
-/***/ 1265
+/***/ 8572
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -29294,8 +32608,8 @@ function createAutoscalerTool({ server }) {
 /* harmony export */ });
 /* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
-/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9391);
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3651);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7046);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8336);
 
 
 
@@ -29503,7 +32817,7 @@ function createCocTool({
 
 /***/ },
 
-/***/ 8851
+/***/ 9974
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -29512,8 +32826,8 @@ function createCocTool({
 /* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6564);
 /* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8298);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5663);
-/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9391);
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3651);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7046);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8336);
 
 
 
@@ -29624,7 +32938,7 @@ function createCommandTool({
 
 /***/ },
 
-/***/ 5601
+/***/ 1728
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -29632,8 +32946,8 @@ function createCommandTool({
 /* harmony export */ });
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5663);
 /* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8298);
-/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9391);
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3651);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7046);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8336);
 
 
 
@@ -30069,7 +33383,7 @@ function createFileTools({
 
 /***/ },
 
-/***/ 5294
+/***/ 9379
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -30077,8 +33391,8 @@ function createFileTools({
 /* harmony export */ });
 /* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6564);
 /* harmony import */ var node_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4472);
-/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9391);
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3651);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7046);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8336);
 
 
 
@@ -30361,13 +33675,13 @@ function createGitTool({
 
 /***/ },
 
-/***/ 6822
+/***/ 2993
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Q: () => (/* binding */ createRouteTool)
 /* harmony export */ });
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3651);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8336);
 
 
 /**
@@ -30420,13 +33734,13 @@ function createRouteTool({ server }) {
 
 /***/ },
 
-/***/ 4954
+/***/ 7821
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   v: () => (/* binding */ createSendTool)
 /* harmony export */ });
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3651);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8336);
 
 
 /**
@@ -30463,13 +33777,13 @@ function createSendTool({ server, organization_id }) {
 
 /***/ },
 
-/***/ 1446
+/***/ 8811
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   S: () => (/* binding */ createServerClusterTool)
 /* harmony export */ });
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3651);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8336);
 
 
 /**
@@ -30614,7 +33928,7 @@ function createServerClusterTool({ server }) {
 
 /***/ },
 
-/***/ 4857
+/***/ 5734
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -30659,13 +33973,13 @@ function createSocketTool({ server }) {
 
 /***/ },
 
-/***/ 4355
+/***/ 4206
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   _: () => (/* binding */ createStorageTool)
 /* harmony export */ });
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3651);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8336);
 
 
 /**
@@ -30704,7 +34018,7 @@ function createStorageTool({ server }) {
 
 /***/ },
 
-/***/ 9391
+/***/ 7046
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -30717,7 +34031,7 @@ function createStorageTool({ server }) {
 /* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5663);
 /* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6674);
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3651);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8336);
 
 
 
@@ -30836,13 +34150,276 @@ async function createRuntimeDirectories(server, organization_id, { useRepository
 
 /***/ },
 
-/***/ 8512
+/***/ 187
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-/* unused harmony export init */
-/* harmony import */ var _tools_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8019);
-/* harmony import */ var _capabilities_registry_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3803);
-/* harmony import */ var _capabilities_config_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9058);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   y: () => (/* binding */ createOAuth)
+/* harmony export */ });
+/* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2561);
+
+
+const STORE_ARRAY = 'mcp-oauth';
+const ACCESS_TTL = 10 * 60;
+const REFRESH_TTL = 30 * 24 * 60 * 60;
+const CODE_TTL = 5 * 60;
+const DEFAULT_SCOPE = 'mcp';
+
+const hash = value => (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.createHash)('sha256').update(value).digest('hex');
+const randomToken = () => (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.randomBytes)(32).toString('base64url');
+const equal = (a, b) => {
+    const left = Buffer.from(String(a));
+    const right = Buffer.from(String(b));
+    return left.length === right.length && (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.timingSafeEqual)(left, right);
+};
+
+function json(res, status, body, headers = {}) {
+    res.writeHead(status, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+        Pragma: 'no-cache',
+        ...headers
+    });
+    res.end(JSON.stringify(body));
+}
+
+async function body(req) {
+    const chunks = [];
+    let size = 0;
+    for await (const chunk of req) {
+        size += chunk.length;
+        if (size > 32 * 1024) throw Object.assign(new Error('Request body is too large.'), { status: 413 });
+        chunks.push(chunk);
+    }
+    const text = Buffer.concat(chunks).toString('utf8');
+    if ((req.headers['content-type'] || '').includes('application/json')) {
+        try { return JSON.parse(text); } catch { throw Object.assign(new Error('Invalid JSON body.'), { status: 400 }); }
+    }
+    return Object.fromEntries(new URLSearchParams(text));
+}
+
+async function hostContext(server, req) {
+    const host = new URL(`https://${req.headers.host || ''}`).hostname;
+    const configuredHost = server.host ? new URL(`https://${server.host}`).hostname : null;
+    const organization = server.organization_id && configuredHost === host
+        ? { _id: server.organization_id }
+        : await server.crud.getOrganization({ host });
+    if (!organization?._id || organization.error) throw Object.assign(new Error('Organization not found.'), { status: 404 });
+    return { host, organization_id: organization._id };
+}
+
+function store(server, context) {
+    const base = { ...context, array: STORE_ARRAY };
+    return {
+        async read(query) {
+            const result = await server.crud.send({ method: 'object.read', ...base, filter: { query, limit: 2 } });
+            return Array.isArray(result?.object) ? result.object : result?.object ? [result.object] : [];
+        },
+        async create(object) {
+            return server.crud.send({ method: 'object.create', ...base, object: { _id: (0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.randomBytes)(12).toString('hex'), ...object } });
+        },
+        async update(id, object) {
+            return server.crud.send({ method: 'object.update', ...base, object: { _id: id, ...object }, upsert: false });
+        },
+        async remove(id) {
+            return server.crud.send({ method: 'object.delete', ...base, object: { _id: id } });
+        }
+    };
+}
+
+function verifierValid(verifier, challenge) {
+    return typeof verifier === 'string' && verifier.length >= 43 && verifier.length <= 128 &&
+        /^[A-Za-z0-9._~-]+$/.test(verifier) &&
+        equal((0,node_crypto__WEBPACK_IMPORTED_MODULE_0__.createHash)('sha256').update(verifier).digest('base64url'), challenge);
+}
+
+function cookieToken(req) {
+    const cookie = req.headers.cookie || '';
+    const match = cookie.match(/(?:^|;\s*)token=([^;]+)/);
+    if (!match) return '';
+    try { return decodeURIComponent(match[1]); } catch { return ''; }
+}
+
+function redirectWith(url, fields) {
+    const target = new URL(url);
+    for (const [key, value] of Object.entries(fields)) target.searchParams.set(key, value);
+    return target.toString();
+}
+
+function createOAuth(server, { mcpPath = '/mcp', authorizationPage = '/auth/oauth.html' } = {}) {
+    const issuerFor = req => new URL('/', `https://${req.headers.host}`).origin;
+    const resourceFor = req => new URL(mcpPath, issuerFor(req)).toString();
+    const pageFor = req => new URL(authorizationPage, issuerFor(req)).toString();
+
+    async function metadata(req, res) {
+        const issuer = issuerFor(req);
+        return json(res, 200, {
+            issuer,
+            authorization_endpoint: new URL('/oauth/authorize', issuer).toString(),
+            token_endpoint: new URL('/oauth/token', issuer).toString(),
+            registration_endpoint: new URL('/oauth/register', issuer).toString(),
+            revocation_endpoint: new URL('/oauth/revoke', issuer).toString(),
+            response_types_supported: ['code'],
+            grant_types_supported: ['authorization_code', 'refresh_token'],
+            code_challenge_methods_supported: ['S256'],
+            token_endpoint_auth_methods_supported: ['none'],
+            revocation_endpoint_auth_methods_supported: ['none'],
+            scopes_supported: [DEFAULT_SCOPE],
+            client_id_metadata_document_supported: false
+        });
+    }
+
+    async function route(req, res) {
+        let context;
+        try { context = await hostContext(server, req); }
+        catch (error) { return json(res, error.status || 500, { error: 'server_error', error_description: error.message }); }
+        const db = store(server, context);
+        const url = new URL(req.url, `https://${req.headers.host}`);
+        const issuer = issuerFor(req);
+        const resource = resourceFor(req);
+
+        if (req.method === 'GET' && url.pathname === '/.well-known/oauth-authorization-server') return metadata(req, res);
+        if (req.method === 'GET' && url.pathname === `/.well-known/oauth-protected-resource${mcpPath}`) {
+            return json(res, 200, { resource, authorization_servers: [issuer], bearer_methods_supported: ['header'], scopes_supported: [DEFAULT_SCOPE] });
+        }
+        if (req.method === 'GET' && url.pathname === '/.well-known/oauth-protected-resource') {
+            return json(res, 200, { resource, authorization_servers: [issuer], bearer_methods_supported: ['header'], scopes_supported: [DEFAULT_SCOPE] });
+        }
+        if (req.method === 'POST' && url.pathname === '/oauth/register') {
+            let input;
+            try { input = await body(req); } catch (error) { return json(res, error.status || 400, { error: 'invalid_client_metadata' }); }
+            const redirects = input.redirect_uris;
+            if (!Array.isArray(redirects) || !redirects.length || redirects.length > 10 || redirects.some(value => {
+                try {
+                    const target = new URL(value);
+                    const secureRedirect = target.protocol === 'https:';
+                    const loopbackRedirect = target.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(target.hostname);
+                    return (!secureRedirect && !loopbackRedirect) || target.username || target.password || target.hash;
+                } catch { return true; }
+            })) return json(res, 400, { error: 'invalid_redirect_uri' });
+            const clientId = randomToken();
+            await db.create({ type: 'client', client_id: clientId, redirect_uris: redirects, client_name: String(input.client_name || 'MCP client').slice(0, 100), created_at: Date.now() });
+            return json(res, 201, { client_id: clientId, client_id_issued_at: Math.floor(Date.now() / 1000), redirect_uris: redirects, client_name: String(input.client_name || 'MCP client').slice(0, 100), token_endpoint_auth_method: 'none', grant_types: ['authorization_code', 'refresh_token'], response_types: ['code'] });
+        }
+        if (req.method === 'GET' && url.pathname === '/oauth/authorize') {
+            const p = url.searchParams;
+            const client = (await db.read({ type: 'client', client_id: p.get('client_id') }))[0];
+            const redirectUri = p.get('redirect_uri');
+            const state = p.get('state');
+            const challenge = p.get('code_challenge');
+            if (!client || !client.redirect_uris?.includes(redirectUri)) return json(res, 400, { error: 'invalid_request', error_description: 'Unknown client or redirect URI.' });
+            if (p.get('response_type') !== 'code' || p.get('code_challenge_method') !== 'S256' ||
+                !/^[A-Za-z0-9_-]{43,128}$/.test(challenge || '') || !state || state.length > 4096 || p.get('resource') !== resource) {
+                return json(res, 400, { error: 'invalid_request', error_description: 'Authorization Code with PKCE S256 and the MCP resource are required.' });
+            }
+            const scope = (p.get('scope') || DEFAULT_SCOPE).split(/\s+/).filter(Boolean);
+            if (scope.some(item => item !== DEFAULT_SCOPE)) return json(res, 400, { error: 'invalid_scope' });
+            const requestId = randomToken();
+            await db.create({ type: 'authorization', request_id: hash(requestId), client_id: client.client_id, redirect_uri: redirectUri, state, challenge, scope, resource, expires_at: Date.now() + CODE_TTL * 1000 });
+            const page = new URL(pageFor(req));
+            page.searchParams.set('request', requestId);
+            return res.writeHead(302, { Location: page.toString(), 'Cache-Control': 'no-store' }), res.end();
+        }
+        if (req.method === 'GET' && url.pathname === '/oauth/request') {
+            const id = url.searchParams.get('id') || '';
+            const tx = (await db.read({ type: 'authorization', request_id: hash(id) }))[0];
+            if (!tx || tx.expires_at < Date.now()) return json(res, 400, { error: 'invalid_request' });
+            const client = (await db.read({ type: 'client', client_id: tx.client_id }))[0];
+            return json(res, 200, { client_name: client?.client_name || 'MCP client', scope: tx.scope });
+        }
+        if (req.method === 'POST' && url.pathname === '/oauth/decision') {
+            const origin = req.headers.origin;
+            if (origin !== issuer) return json(res, 403, { error: 'access_denied' });
+            let input;
+            try { input = await body(req); } catch { return json(res, 400, { error: 'invalid_request' }); }
+            const id = String(input.request || '');
+            const tx = (await db.read({ type: 'authorization', request_id: hash(id) }))[0];
+            if (!tx || tx.expires_at < Date.now()) return json(res, 400, { error: 'invalid_request' });
+            if (input.approved !== true) {
+                await db.remove(tx._id);
+                return json(res, 200, { redirect: redirectWith(tx.redirect_uri, { error: 'access_denied', state: tx.state }) });
+            }
+            const sessionToken = cookieToken(req);
+            if (!sessionToken || !server.authenticate?.decodeToken) return json(res, 401, { error: 'login_required' });
+            const session = await server.authenticate.decodeToken(sessionToken, context.organization_id, undefined, context.host);
+            if (!session?.user_id) return json(res, 401, { error: 'login_required' });
+            const code = randomToken();
+            await db.remove(tx._id);
+            await db.create({ type: 'code', code_hash: hash(code), client_id: tx.client_id, redirect_uri: tx.redirect_uri, challenge: tx.challenge, scope: tx.scope, resource: tx.resource, user_id: session.user_id, expires_at: Date.now() + CODE_TTL * 1000 });
+            return json(res, 200, { redirect: redirectWith(tx.redirect_uri, { code, state: tx.state }) });
+        }
+        if (req.method === 'POST' && url.pathname === '/oauth/token') {
+            let input;
+            try { input = await body(req); } catch { return json(res, 400, { error: 'invalid_request' }); }
+            if (input.grant_type === 'authorization_code') {
+                const codeRecord = (await db.read({ type: 'code', code_hash: hash(input.code || '') }))[0];
+                if (!codeRecord || codeRecord.expires_at < Date.now() || codeRecord.client_id !== input.client_id || codeRecord.redirect_uri !== input.redirect_uri || codeRecord.resource !== input.resource || !verifierValid(input.code_verifier, codeRecord.challenge)) return json(res, 400, { error: 'invalid_grant' });
+                await db.remove(codeRecord._id);
+                const accessToken = randomToken();
+                const refreshToken = randomToken();
+                await db.create({ type: 'token', token_hash: hash(accessToken), user_id: codeRecord.user_id, client_id: codeRecord.client_id, scope: codeRecord.scope, resource: codeRecord.resource, expires_at: Date.now() + ACCESS_TTL * 1000, refresh_hash: hash(refreshToken), refresh_expires_at: Date.now() + REFRESH_TTL * 1000 });
+                return json(res, 200, { access_token: accessToken, token_type: 'Bearer', expires_in: ACCESS_TTL, refresh_token: refreshToken, scope: codeRecord.scope.join(' ') });
+            }
+            if (input.grant_type === 'refresh_token') {
+                const token = (await db.read({ type: 'token', refresh_hash: hash(input.refresh_token || '') }))[0];
+                if (!token || token.refresh_expires_at < Date.now() || token.client_id !== input.client_id || token.resource !== input.resource) return json(res, 400, { error: 'invalid_grant' });
+                await db.remove(token._id);
+                const accessToken = randomToken();
+                const refreshToken = randomToken();
+                await db.create({ type: 'token', token_hash: hash(accessToken), user_id: token.user_id, client_id: token.client_id, scope: token.scope, resource: token.resource, expires_at: Date.now() + ACCESS_TTL * 1000, refresh_hash: hash(refreshToken), refresh_expires_at: Date.now() + REFRESH_TTL * 1000 });
+                return json(res, 200, { access_token: accessToken, token_type: 'Bearer', expires_in: ACCESS_TTL, refresh_token: refreshToken, scope: token.scope.join(' ') });
+            }
+            return json(res, 400, { error: 'unsupported_grant_type' });
+        }
+        if (req.method === 'POST' && url.pathname === '/oauth/revoke') {
+            let input;
+            try { input = await body(req); } catch { return json(res, 400, { error: 'invalid_request' }); }
+            const valueHash = hash(input.token || '');
+            const access = await db.read({ type: 'token', token_hash: valueHash });
+            const refresh = await db.read({ type: 'token', refresh_hash: valueHash });
+            for (const record of [...access, ...refresh]) await db.remove(record._id);
+            return json(res, 200, {});
+        }
+        return json(res, 404, { error: 'not_found' });
+    }
+
+    async function authenticate(req) {
+        const bearer = req.headers.authorization?.match(/^Bearer\s+(\S+)$/i)?.[1];
+        if (!bearer) return null;
+        const context = await hostContext(server, req);
+        const records = await store(server, context).read({ type: 'token', token_hash: hash(bearer) });
+        const token = records[0];
+        if (!token || token.expires_at <= Date.now() || token.resource !== resourceFor(req) || !token.scope?.includes(DEFAULT_SCOPE)) return null;
+        return { ...context, user_id: token.user_id, oauth: true, scope: token.scope || [] };
+    }
+
+    const safeRoute = async (req, res) => {
+        try {
+            await route(req, res);
+        } catch (error) {
+            if (!res.headersSent && !res.writableEnded) {
+                json(res, error.status || 500, { error: 'server_error', error_description: error.status ? error.message : 'OAuth request failed.' });
+            } else if (!res.writableEnded) res.end();
+        }
+    };
+    return { route: safeRoute, authenticate, resourceFor };
+}
+
+
+/***/ },
+
+/***/ 5277
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   init: () => (/* binding */ init)
+/* harmony export */ });
+/* harmony import */ var _tools_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4395);
+/* harmony import */ var _capabilities_registry_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3204);
+/* harmony import */ var _capabilities_config_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8321);
+/* harmony import */ var _oauth_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(187);
+
 
 
 
@@ -30855,6 +34432,9 @@ const SUPPORTED_VERSIONS = new Set([
     '2025-06-18',
     '2025-11-25'
 ]);
+const responseProtocolVersion = req => SUPPORTED_VERSIONS.has(req.headers['mcp-protocol-version'])
+    ? req.headers['mcp-protocol-version']
+    : PROTOCOL_VERSION;
 const RESERVED_TOOL_NAMES = new Set([
     'crud', 'list_apps', 'list_ai_instructions', 'get_ai_instructions',
     'render_crud', 'describe_api_credentials', 'execute_server_api',
@@ -30873,6 +34453,15 @@ function jsonRpcError(id, code, message) {
 
 function jsonRpcResult(id, result) {
     return { jsonrpc: '2.0', id, result };
+}
+
+function authenticationRequired(id, metadata, description = 'A valid OAuth access token is required.') {
+    const challenge = `Bearer resource_metadata="${metadata}", scope="mcp", error="invalid_token", error_description="${description}"`;
+    return jsonRpcResult(id, {
+        content: [{ type: 'text', text: description }],
+        _meta: { 'mcp/www_authenticate': [challenge] },
+        isError: true
+    });
 }
 
 function sendJson(res, status, body, headers = {}) {
@@ -30903,7 +34492,7 @@ async function readJson(req) {
     }
 }
 
-async function authenticateRequest(server, req) {
+async function authenticateApiKey(server, req) {
     const host = new URL(`https://${req.headers.host || ''}`).hostname;
     const configuredHost = server.host
         ? new URL(`https://${server.host}`).hostname
@@ -30915,14 +34504,10 @@ async function authenticateRequest(server, req) {
         throw Object.assign(new Error('Organization not found for this host.'), { status: 404 });
     }
 
-    const bearer = req.headers.authorization?.match(/^Bearer\s+(\S+)$/i)?.[1];
     const apiKeyHeader = req.headers['x-api-key'];
-    if (bearer && apiKeyHeader && bearer !== apiKeyHeader) {
-        throw Object.assign(new Error('Conflicting API keys were provided.'), { status: 401 });
-    }
-    const apikey = apiKeyHeader || bearer;
+    const apikey = apiKeyHeader;
     if (typeof apikey !== 'string' || !apikey.trim()) {
-        throw Object.assign(new Error('A valid API key is required.'), { status: 401 });
+        throw Object.assign(new Error('An OAuth access token or X-Api-Key is required.'), { status: 401 });
     }
 
     return {
@@ -30952,7 +34537,8 @@ function withTrustedContext(payload, context) {
         ...operation,
         organization_id: context.organization_id,
         host: context.host,
-        apikey: context.apikey
+        apikey: context.apikey,
+        ...(context.user_id && { user_id: context.user_id })
     };
 }
 
@@ -30968,6 +34554,7 @@ function normalizeTool(tool) {
         description: tool.description || tool.name,
         inputSchema: tool.inputSchema || { type: 'object', properties: {} },
         ...(tool.annotations && { annotations: tool.annotations }),
+        _meta: { securitySchemes: [{ type: 'oauth2', scopes: ['mcp'] }], ...(tool._meta || {}) },
         authorize: tool.authorize,
         handler: tool.handler
     };
@@ -31001,6 +34588,7 @@ function init(server, options = {}) {
 
     const path = options.path || DEFAULT_PATH;
     if (server.routes.has(path)) throw new Error(`CoCreate route is already registered: ${path}`);
+    const oauth = (0,_oauth_js__WEBPACK_IMPORTED_MODULE_3__/* .createOAuth */ .y)(server, { mcpPath: path, authorizationPage: options.authorizationPage });
     let aiConfigError;
     const aiConfigPromise = Promise.resolve(options.aiConfig
         ? options.aiConfig
@@ -31072,23 +34660,63 @@ function init(server, options = {}) {
 
         let context;
         try {
-            context = await authenticateRequest(server, req);
-            await server.authorize.request({
-                method: 'mcp.connect',
-                organization_id: context.organization_id,
-                host: context.host,
-                apikey: context.apikey
-            });
+            const bootstrap = ['initialize', 'notifications/initialized', 'ping', 'tools/list'].includes(message.method);
+            if (req.headers.authorization) context = await oauth.authenticate(req);
+            if (!context && message.method === 'tools/call' && req.headers['x-api-key']) {
+                context = await authenticateApiKey(server, req);
+            }
+            if (!context && bootstrap && req.headers['x-api-key']) {
+                context = await authenticateApiKey(server, req);
+            }
+            if (!context && bootstrap) {
+                const host = new URL(`https://${req.headers.host || ''}`).hostname;
+                const configuredHost = server.host ? new URL(`https://${server.host}`).hostname : null;
+                const organization = server.organization_id && configuredHost === host
+                    ? { _id: server.organization_id }
+                    : await server.crud.getOrganization({ host });
+                if (!organization?._id || organization.error) throw Object.assign(new Error('Organization not found for this host.'), { status: 404 });
+                context = { organization_id: organization._id, host };
+            }
+            if (context?.apikey) {
+                await server.authorize.request({
+                    method: 'mcp.connect',
+                    organization_id: context.organization_id,
+                    host: context.host,
+                    apikey: context.apikey
+                });
+            } else if (!context && !bootstrap) {
+                const metadata = new URL(`/.well-known/oauth-protected-resource${path}`, `https://${req.headers.host}`).toString();
+                if (message.method === 'tools/call') {
+                    if (notification) return sendJson(res, 202);
+                    return sendJson(res, 200, authenticationRequired(message.id, metadata), {
+                        'MCP-Protocol-Version': responseProtocolVersion(req),
+                        ...corsHeaders
+                    });
+                }
+                return sendJson(res, 401, notification ? undefined : jsonRpcError(message.id, -32001, 'A valid OAuth access token or API key is required.'), {
+                    'WWW-Authenticate': `Bearer resource_metadata="${metadata}", scope="mcp"`,
+                    ...corsHeaders
+                });
+            }
         } catch (error) {
             const status = error.status || (error.code === 'AUTHORIZATION_DENIED' ? 403 : 401);
+            const metadata = new URL(`/.well-known/oauth-protected-resource${path}`, `https://${req.headers.host}`).toString();
+            if (status === 401 && message.method === 'tools/call') {
+                if (notification) return sendJson(res, 202);
+                return sendJson(res, 200, authenticationRequired(message.id, metadata), {
+                    'MCP-Protocol-Version': responseProtocolVersion(req),
+                    ...corsHeaders
+                });
+            }
             return sendJson(res, status,
                 notification ? undefined : jsonRpcError(message.id, -32001,
-                    status === 403 ? 'MCP access is not authorized.' : error.message));
+                    status === 403 ? 'MCP access is not authorized.' : error.message), {
+                    ...(status === 401 && { 'WWW-Authenticate': `Bearer resource_metadata="${metadata}", scope="mcp"` }),
+                    ...corsHeaders
+                });
         }
 
-        let responseVersion = SUPPORTED_VERSIONS.has(req.headers['mcp-protocol-version'])
-            ? req.headers['mcp-protocol-version']
-            : PROTOCOL_VERSION;
+        let responseVersion = responseProtocolVersion(req);
         const respond = body => sendJson(res, 200, body, {
             'MCP-Protocol-Version': responseVersion,
             ...corsHeaders
@@ -31121,7 +34749,7 @@ function init(server, options = {}) {
                 try {
                     const operation = await tool.authorize(args, context);
                     const authorizedRequest = await server.authorize.request(
-                        withTrustedContext(operation, context)
+                        withTrustedContext(operation, context), context.user_id
                     );
                     const result = await tool.handler(authorizedRequest, context);
                     const content = typeof result === 'string'
@@ -31147,7 +34775,19 @@ function init(server, options = {}) {
         }
     };
 
+    const oauthPaths = [
+        '/oauth/register', '/oauth/authorize', '/oauth/request', '/oauth/decision',
+        '/oauth/token', '/oauth/revoke', '/.well-known/oauth-authorization-server',
+        '/.well-known/oauth-protected-resource', `/.well-known/oauth-protected-resource${path}`
+    ];
+    const registeredPaths = new Set([path, ...oauthPaths]);
+    for (const routePath of registeredPaths) {
+        if (server.routes.has(routePath)) throw new Error(`CoCreate route is already registered: ${routePath}`);
+    }
     server.routes.set(path, route);
+    for (const oauthPath of oauthPaths) {
+        server.routes.set(oauthPath, oauth.route);
+    }
     return {
         tools: {
             register(definition) {
@@ -31162,6 +34802,7 @@ function init(server, options = {}) {
         },
         close() {
             if (server.routes.get(path) === route) server.routes.delete(path);
+            for (const oauthPath of oauthPaths) if (server.routes.get(oauthPath) === oauth.route) server.routes.delete(oauthPath);
             tools.clear();
         }
     };
@@ -31170,13 +34811,13 @@ function init(server, options = {}) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ init });
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "A", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */   "default", 0, __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ ]);
 
 
 /***/ },
 
-/***/ 8019
+/***/ 4395
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -31194,11 +34835,17 @@ function getPath(value, pathname) {
 
 function trusted(context, payload) {
     const { organization_id: _organizationId, host: _host, apikey: _apikey, user_id: _userId, ...operation } = payload;
-    return { ...operation, organization_id: context.organization_id, host: context.host, apikey: context.apikey };
+    return {
+        ...operation,
+        organization_id: context.organization_id,
+        host: context.host,
+        apikey: context.apikey,
+        ...(context.user_id && { user_id: context.user_id })
+    };
 }
 
 async function authorize(server, context, payload) {
-    return server.authorize.request(trusted(context, payload));
+    return server.authorize.request(trusted(context, payload), context.user_id);
 }
 
 async function sendCrud(server, context, payload) {
@@ -31230,7 +34877,7 @@ function createBuiltInTools(server, { mcpPath = '/mcp' } = {}) {
 
     tools.push(tool(
         'execute_server_api',
-        'Call a configured CoCreate API. The API method and endpoint permissions are checked for this API key.',
+        'Call a configured CoCreate API. The API method and endpoint permissions are checked for the authenticated CoCreate account or API key.',
         { type: 'object', properties: { method: string, api: string, endpoint: string, url: string, data: {}, searchParams: {}, headers: {}, timeout: { type: 'number' } }, required: ['method'], additionalProperties: true },
         input => {
             if (typeof input.method !== 'string' || !input.method.trim()) throw new Error('A configured API method is required.');
@@ -31244,7 +34891,7 @@ function createBuiltInTools(server, { mcpPath = '/mcp' } = {}) {
 
     tools.push(tool(
         'run_workflow',
-        'Run a named, configured CoCreate workflow. The workflow method must be authorized for this API key.',
+        'Run a named, configured CoCreate workflow. The workflow method must be authorized for the authenticated CoCreate account or API key.',
         object({ method: string, data: {}, input: {} }, ['method']),
         input => {
             if (typeof input.method !== 'string' || !/^workflow\.[A-Za-z0-9_-]+$/.test(input.method)) {
@@ -31400,16 +35047,16 @@ function createBuiltInTools(server, { mcpPath = '/mcp' } = {}) {
 
 /***/ },
 
-/***/ 3951
+/***/ 9184
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   g: () => (/* binding */ HTML)
 /* harmony export */ });
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5264);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9455);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6496);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5281);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4633);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(670);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7957);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8304);
 
 
 
@@ -32192,7 +35839,392 @@ async function HTML({
 
 /***/ },
 
-/***/ 2237
+/***/ 7923
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   z6: () => (/* binding */ check)
+/* harmony export */ });
+/* unused harmony exports encodeXML, parseHtml, createEntry, buildSitemapXml */
+/* unused harmony import specifier */ var HTMLScanner;
+
+
+/**
+ * Escapes special XML characters to prevent XML parsing syntax errors.
+ * @param {string|number} str - String or numeric input
+ * @returns {string} XML safe string
+ * @public
+ * @environment server
+ */
+function encodeXML(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+/**
+ * Scans raw HTML source within a file object to populate structured sitemap metadata.
+ * Uses HTMLScanner to query elements with [sitemap] attributes and document head tags.
+ * @param {Object} file - File object containing HTML source string
+ * @public
+ * @environment server
+ */
+function parseHtml(file) {
+  if (!file || !file.src || typeof file.src !== "string") return;
+
+  if (!file.sitemap) {
+    file.sitemap = {};
+  }
+
+  const doc = new HTMLScanner(file.src);
+  const elements = doc.querySelectorAll({ attributes: ["sitemap"] });
+  const types = ["image", "video", "news"];
+
+  // Reset any pre-existing entry arrays for fresh parsing
+  for (const type of types) {
+    delete file.sitemap[type];
+  }
+
+  for (const el of elements) {
+    const tagName = el.tagName;
+    let type = "";
+    let entryObject = {};
+
+    if (tagName === "IMG") {
+      type = "image";
+      entryObject = {
+        loc: el.getAttribute("src") || "",
+        title: el.getAttribute("sitemap-title") || el.getAttribute("title") || el.getAttribute("alt") || "",
+        caption: el.getAttribute("sitemap-caption") || el.getAttribute("alt") || el.getAttribute("sitemap-title") || el.getAttribute("title") || "",
+        geo_location: el.getAttribute("sitemap-geo-location") || ""
+      };
+    } else if (tagName === "VIDEO") {
+      type = "video";
+      entryObject = {
+        content_loc: el.getAttribute("src") || "",
+        title: el.getAttribute("sitemap-title") || el.getAttribute("title") || "",
+        description: el.getAttribute("description") || el.getAttribute("sitemap-description") || "",
+        thumbnail_loc: el.getAttribute("sitemap-thumbnail") || el.getAttribute("poster") || "",
+        duration: el.getAttribute("sitemap-duration") || ""
+      };
+    } else {
+      type = "news";
+      file.sitemap.type = "news";
+
+      // Query title tag using standard scanner query
+      const titleHandles = doc.querySelectorAll({ tags: ["TITLE"] });
+      const docTitle = titleHandles.length > 0 ? titleHandles[0].getInnerHTML().trim() : "";
+
+      // Query meta tags using standard scanner query
+      const metaHandles = doc.querySelectorAll({ tags: ["META"] });
+      const keywordsMeta = metaHandles.find(h => h.getAttribute("name") === "keywords");
+      const docKeywords = keywordsMeta ? keywordsMeta.getAttribute("content") : "";
+
+      // Extract HTML lang attribute
+      const htmlHandles = doc.querySelectorAll({ tags: ["HTML"] });
+      const docLang = htmlHandles.length > 0 ? htmlHandles[0].getAttribute("lang") : "en";
+
+      entryObject = {
+        title: el.getAttribute("sitemap-title") || docTitle,
+        publication: {
+          name: el.getAttribute("sitemap-publication-name") || "",
+          language: el.getAttribute("sitemap-publication-language") || docLang
+        },
+        publication_date: el.getAttribute("sitemap-publication-date") || file.updated?.on || new Date().toISOString(),
+        keywords: el.getAttribute("sitemap-keywords") || docKeywords,
+        genres: el.getAttribute("sitemap-genres") || ""
+      };
+    }
+
+    // Strip empty string keys
+    Object.keys(entryObject).forEach(key => {
+      if (entryObject[key] === "" || entryObject[key] === null || entryObject[key] === undefined) {
+        delete entryObject[key];
+      }
+    });
+
+    if (!file.sitemap[type]) {
+      file.sitemap[type] = [];
+    }
+    file.sitemap[type].push(entryObject);
+  }
+
+  if (!["news", "image", "video"].includes(file.sitemap.type)) {
+    const metaHandles = doc.querySelectorAll({ tags: ["META"] });
+
+    const priorityMeta = metaHandles.find(h => h.getAttribute("name") === "sitemap-priority");
+    if (priorityMeta && priorityMeta.getAttribute("content")) {
+      file.sitemap.priority = priorityMeta.getAttribute("content");
+    }
+
+    const changefreqMeta = metaHandles.find(h => h.getAttribute("name") === "sitemap-changefreq");
+    if (changefreqMeta && changefreqMeta.getAttribute("content")) {
+      file.sitemap.changefreq = changefreqMeta.getAttribute("content");
+    } else if (!file.sitemap.changefreq) {
+      file.sitemap.changefreq = "monthly";
+    }
+  }
+}
+
+/**
+ * Determines if a file object is eligible for inclusion in the sitemap index.
+ * @param {Object} file - File record to test
+ * @returns {boolean} True if eligible
+ * @public
+ * @environment server
+ */
+function check(file) {
+  if (!file) return false;
+  if (file.public === false || String(file.public) === "false") return false;
+  if (file.sitemap && (file.sitemap.enable === false || String(file.sitemap.enable) === "false")) return false;
+  const path = file.path || file.pathname || "";
+  if (path.startsWith("/_") || path.startsWith("/api/")) return false;
+  return true;
+}
+
+/**
+ * Constructs XML node strings for individual sitemap entries.
+ * @param {string} loc - Full URL location of the page
+ * @param {Object} sitemap - Sitemap metadata block
+ * @returns {string} Single <url> XML block
+ * @public
+ * @environment server
+ */
+function createEntry(loc, sitemap = {}) {
+  let xml = `  <url>\n    <loc>${encodeXML(loc)}</loc>\n`;
+
+  if (sitemap.lastmod) {
+    xml += `    <lastmod>${encodeXML(sitemap.lastmod)}</lastmod>\n`;
+  }
+  if (sitemap.changefreq) {
+    xml += `    <changefreq>${encodeXML(sitemap.changefreq)}</changefreq>\n`;
+  }
+  if (sitemap.priority) {
+    xml += `    <priority>${encodeXML(sitemap.priority)}</priority>\n`;
+  }
+
+  // Image extension nodes
+  if (Array.isArray(sitemap.image)) {
+    for (const img of sitemap.image) {
+      xml += `    <image:image>\n      <image:loc>${encodeXML(img.loc)}</image:loc>\n`;
+      if (img.title) xml += `      <image:title>${encodeXML(img.title)}</image:title>\n`;
+      if (img.caption) xml += `      <image:caption>${encodeXML(img.caption)}</image:caption>\n`;
+      if (img.geo_location) xml += `      <image:geo_location>${encodeXML(img.geo_location)}</image:geo_location>\n`;
+      xml += `    </image:image>\n`;
+    }
+  }
+
+  // Video extension nodes
+  if (Array.isArray(sitemap.video)) {
+    for (const vid of sitemap.video) {
+      xml += `    <video:video>\n      <video:content_loc>${encodeXML(vid.content_loc)}</video:content_loc>\n`;
+      if (vid.title) xml += `      <video:title>${encodeXML(vid.title)}</video:title>\n`;
+      if (vid.description) xml += `      <video:description>${encodeXML(vid.description)}</video:description>\n`;
+      if (vid.thumbnail_loc) xml += `      <video:thumbnail_loc>${encodeXML(vid.thumbnail_loc)}</video:thumbnail_loc>\n`;
+      if (vid.duration) xml += `      <video:duration>${encodeXML(vid.duration)}</video:duration>\n`;
+      xml += `    </video:video>\n`;
+    }
+  }
+
+  // News extension nodes
+  if (Array.isArray(sitemap.news)) {
+    for (const newsItem of sitemap.news) {
+      xml += `    <news:news>\n`;
+      if (newsItem.publication) {
+        xml += `      <news:publication>\n`;
+        xml += `        <news:name>${encodeXML(newsItem.publication.name)}</news:name>\n`;
+        xml += `        <news:language>${encodeXML(newsItem.publication.language)}</news:language>\n`;
+        xml += `      </news:publication>\n`;
+      }
+      if (newsItem.publication_date) xml += `      <news:publication_date>${encodeXML(newsItem.publication_date)}</news:publication_date>\n`;
+      if (newsItem.title) xml += `      <news:title>${encodeXML(newsItem.title)}</news:title>\n`;
+      if (newsItem.keywords) xml += `      <news:keywords>${encodeXML(newsItem.keywords)}</news:keywords>\n`;
+      xml += `    </news:news>\n`;
+    }
+  }
+
+  xml += `  </url>\n`;
+  return xml;
+}
+
+/**
+ * Assembles a complete XML sitemap document from a list of file objects and host domain.
+ * @param {Array<Object>} files - Array of file objects
+ * @param {string} domain - Host domain (e.g. "https://example.com")
+ * @returns {string} Fully formed sitemap.xml content string
+ * @public
+ * @environment server
+ */
+function buildSitemapXml(files = [], domain = "") {
+  const cleanDomain = domain.replace(/\/+$/, "");
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+  xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n`;
+  xml += `        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"\n`;
+  xml += `        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"\n`;
+  xml += `        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n`;
+
+  for (const file of files) {
+    if (!check(file)) continue;
+
+    parseHtml(file);
+
+    const pathname = file.pathname || file.path || "/";
+    const loc = `${cleanDomain}${pathname.startsWith("/") ? "" : "/"}${pathname}`;
+    xml += createEntry(loc, file.sitemap);
+  }
+
+  xml += `</urlset>`;
+  return xml;
+}
+
+/**
+ *
+ * @name alt
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name content
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name description
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name lang
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name name
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name poster
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-caption
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-description
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-duration
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-genres
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-geo-location
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-keywords
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-publication-date
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-publication-language
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-publication-name
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-thumbnail
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name sitemap-title
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name src
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ *
+ * @name title
+ * @kind attribute
+ * @environment server
+ */
+
+/**
+ * Server-side XML sitemap engine with image, video, and news metadata extraction and dynamic sitemap sharding.
+ *
+ * @module sitemap
+ * @environment server
+ */
+
+
+/***/ },
+
+/***/ 4322
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
@@ -32206,14 +36238,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   extension: () => (/* reexport default export from named module */ _lib_extension_js__WEBPACK_IMPORTED_MODULE_1__),
 /* harmony export */   subprotocol: () => (/* reexport default export from named module */ _lib_subprotocol_js__WEBPACK_IMPORTED_MODULE_5__)
 /* harmony export */ });
-/* harmony import */ var _lib_stream_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1416);
-/* harmony import */ var _lib_extension_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6339);
-/* harmony import */ var _lib_permessage_deflate_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6764);
-/* harmony import */ var _lib_receiver_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9121);
-/* harmony import */ var _lib_sender_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1857);
-/* harmony import */ var _lib_subprotocol_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2080);
-/* harmony import */ var _lib_websocket_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1693);
-/* harmony import */ var _lib_websocket_server_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(4618);
+/* harmony import */ var _lib_stream_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9141);
+/* harmony import */ var _lib_extension_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3984);
+/* harmony import */ var _lib_permessage_deflate_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8837);
+/* harmony import */ var _lib_receiver_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5468);
+/* harmony import */ var _lib_sender_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6020);
+/* harmony import */ var _lib_subprotocol_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3283);
+/* harmony import */ var _lib_websocket_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7433);
+/* harmony import */ var _lib_websocket_server_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5664);
 
 
 
@@ -32234,14 +36266,14 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ },
 
-/***/ 1128
+/***/ 8639
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export SocketClient */
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5159);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5264);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3105);
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9298);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5240);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4633);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6772);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7869);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -32297,7 +36329,7 @@ async function getWebSocketClass() {
     if (isBrowser) {
         webSocketClass = window.WebSocket;
     } else {
-        const wsModule = await Promise.resolve(/* import() */).then(() => (__webpack_require__(2237)));
+        const wsModule = await Promise.resolve(/* import() */).then(() => (__webpack_require__(4322)));
         webSocketClass = wsModule.default || wsModule;
     }
     return webSocketClass;
@@ -32308,6 +36340,7 @@ const socketsById = new Map();
 const delay = 1000 + Math.floor(Math.random() * 3000);
 
 let organizationPromise = null;
+let clientInitialization = Promise.resolve();
 
 async function getOrganization() {
     let organization_id = _cocreate_config__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .A.get("organization_id");
@@ -32425,7 +36458,7 @@ const CoCreateSocketClient = {
     },
 
     async init() {
-        this.clientId = _cocreate_config__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .A.get("clientId");
+        this.clientId = await _cocreate_config__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .A.get("clientId");
         this.clientInfo = await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .getClientInfo */ .m4)();
         if (!this.clientId || this.clientId === "undefined") {
             this.clientId = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .ObjectId */ .V)().toString()
@@ -32481,6 +36514,8 @@ const CoCreateSocketClient = {
 
     async create(data = {}) {
         const self = this;
+
+        await clientInitialization;
 
         if (this.organization === "canceled") return;
 
@@ -32935,7 +36970,7 @@ const CoCreateSocketClient = {
     }
 };
 
-CoCreateSocketClient.init();
+clientInitialization = CoCreateSocketClient.init();
 
 if (isBrowser) {
     window.onstorage = async (e) => {
@@ -32968,32 +37003,34 @@ if (isBrowser) {
 
 /***/ },
 
-/***/ 9734
+/***/ 5583
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
+__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   $e: () => (/* reexport safe */ _server_index_js__WEBPACK_IMPORTED_MODULE_1__.$),
-/* harmony export */   vI: () => (/* reexport safe */ _client_index_js__WEBPACK_IMPORTED_MODULE_0__.A)
+/* harmony export */   SocketClient: () => (/* reexport safe */ _client_index_js__WEBPACK_IMPORTED_MODULE_0__.A),
+/* harmony export */   SocketServer: () => (/* reexport safe */ _server_index_js__WEBPACK_IMPORTED_MODULE_1__.$),
+/* harmony export */   "default": () => (/* reexport safe */ _client_index_js__WEBPACK_IMPORTED_MODULE_0__.A)
 /* harmony export */ });
-/* harmony import */ var _client_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1128);
-/* harmony import */ var _server_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(652);
+/* harmony import */ var _client_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8639);
+/* harmony import */ var _server_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7731);
 
 
 
 
 /***/ },
 
-/***/ 652
+/***/ 7731
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   $: () => (/* binding */ SocketServer)
 /* harmony export */ });
 /* harmony import */ var node_events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2849);
-/* harmony import */ var ws__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2237);
+/* harmony import */ var ws__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4322);
 /* harmony import */ var node_url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9061);
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9298);
-/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4172);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7869);
+/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1681);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -33064,12 +37101,11 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
         this.wss.on("headers", this._handleHeaders.bind(this));
         this.wss.on("error", this._handleWssError.bind(this));
 
-        if (server.https) {
-            server.https.on("upgrade", this._upgradeWss.bind(this));
-        }
-        if (server.http) {
-            server.http.on("upgrade", this._upgradeWs.bind(this));
-        }
+        this.upgradeWss = this._upgradeWss.bind(this);
+        this.upgradeWs = this._upgradeWs.bind(this);
+        this.attachedHttp = null;
+        this.attachedHttps = null;
+        this.attach();
 
         // Hook up process-level events to allow other modules (Telemetry, CoCreateServer) to invoke evictions
         process.on('socket.destroyAll', () => {
@@ -33108,6 +37144,18 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
     close() {
         clearInterval(this.heartbeatInterval);
         this.wss.close();
+    }
+
+    attach() {
+        if (this.server.https && this.attachedHttps !== this.server.https) {
+            this.server.https.on("upgrade", this.upgradeWss);
+            this.attachedHttps = this.server.https;
+        }
+        if (this.server.http && this.attachedHttp !== this.server.http) {
+            this.server.http.on("upgrade", this.upgradeWs);
+            this.attachedHttp = this.server.http;
+        }
+        return this;
     }
 
     _handleHeaders(headers, request) {
@@ -33189,7 +37237,7 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
 
                 socket.organization_id = organization_id;
                 socket.id = options.socketId;
-                socket.clientId = options.clientId;
+                socket.clientId = options.clientId || socket.id;
                 socket.clientInfo = options.clientInfo;
                 socket.pathname = request.url;
                 socket.origin = request.headers.origin;
@@ -33363,7 +37411,9 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
     getDistributionClients(data) {
         const clients = new Map();
         const organization = this.organizations.get(data.organization_id);
-        const origin = (!data.serverId || data.serverId === this.serverId) && (data.workerId == null || data.workerId === this.workerId) && this.sockets.get(data.socketId);
+        const origin = (!data.serverId || data.serverId === this.serverId) &&
+            (data.workerId == null || this.workerId == null || String(data.workerId) === String(this.workerId)) &&
+            this.sockets.get(data.socketId);
         const clientIds = /\.(create|update|delete)$/.test(data.method)
             ? (0,_cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_4__/* .getDistribution */ .f)(this.distribution, data.distributionKeys) : new Set();
         if (origin && origin.organization_id === data.organization_id) clientIds.add(origin.clientId);
@@ -34030,14 +38080,15 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
 
 /***/ },
 
-/***/ 4944
+/***/ 5947
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
+__webpack_require__.r(__webpack_exports__);
 /* harmony import */ var node_fs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9627);
 /* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6674);
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9298);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2623);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7076);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7869);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4276);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(617);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -34931,24 +38982,32 @@ async function init(serverInstance) {
  */
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "A", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */   "default", 0, __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ ]);
 
 
 /***/ },
 
-/***/ 9526
+/***/ 3833
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-/* unused harmony exports certificatesConfig, isLocalHost, ensureLocalSelfSignedCert, getHttpsOptions, createHttpsOptions, SNICallback, checkCertificate, init */
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SNICallback: () => (/* binding */ SNICallback),
+/* harmony export */   checkCertificate: () => (/* binding */ checkCertificate),
+/* harmony export */   ensureLocalSelfSignedCert: () => (/* binding */ ensureLocalSelfSignedCert),
+/* harmony export */   getHttpsOptions: () => (/* binding */ getHttpsOptions),
+/* harmony export */   init: () => (/* binding */ init),
+/* harmony export */   isLocalHost: () => (/* binding */ isLocalHost)
+/* harmony export */ });
 /* harmony import */ var node_fs_promises__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8298);
 /* harmony import */ var node_fs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9627);
 /* harmony import */ var node_tls__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7893);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5663);
 /* harmony import */ var node_dns_promises__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3538);
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9298);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2623);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9180);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7869);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(4276);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(717);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -36126,19 +40185,25 @@ async function init(serverInstance = null, options = {}) {
  */
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */   "certificatesConfig", 0, /* binding */ certificatesConfig,
+/* harmony export */   "createHttpsOptions", 0, /* binding */ createHttpsOptions,
+/* harmony export */   "default", 0, __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ ]);
 
 
 /***/ },
 
-/***/ 5444
+/***/ 5335
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
-/* unused harmony exports calculatePayloadBytes, calculatePrice */
-/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9298);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2623);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7076);
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   calculatePayloadBytes: () => (/* binding */ calculatePayloadBytes),
+/* harmony export */   calculatePrice: () => (/* binding */ calculatePrice)
+/* harmony export */ });
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7869);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4276);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(617);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -37384,15 +41449,16 @@ async function init(serverInstance, options = {}) {
  */
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */   "default", 0, __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ ]);
 
 
 /***/ },
 
-/***/ 6884
+/***/ 2365
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
+__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   init: () => (/* binding */ init)
 /* harmony export */ });
@@ -38065,7 +42131,7 @@ function init(serverInstance) {
 
 /***/ },
 
-/***/ 1767
+/***/ 8648
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -38151,7 +42217,7 @@ function decodeCodePoint(codePoint) {
 
 /***/ },
 
-/***/ 1303
+/***/ 9028
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -38164,8 +42230,8 @@ function decodeCodePoint(codePoint) {
 /* empty/unused harmony star reexport */
 /* empty/unused harmony star reexport */
 /* unused harmony import specifier */ var xmlDecodeTree;
-/* harmony import */ var _generated_decode_data_html_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3742);
-/* harmony import */ var _decode_codepoint_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1767);
+/* harmony import */ var _generated_decode_data_html_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2185);
+/* harmony import */ var _decode_codepoint_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8648);
 
 
 
@@ -38666,7 +42732,7 @@ function decodeXML(xmlString) {
 
 /***/ },
 
-/***/ 3742
+/***/ 2185
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 // Generated using scripts/write-decode-map.ts
@@ -38683,13 +42749,13 @@ const htmlDecodeTree = /* #__PURE__ */ new Uint16Array(
 
 /***/ },
 
-/***/ 5264
+/***/ 4633
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   V: () => (/* binding */ ObjectId)
 /* harmony export */ });
-/* harmony import */ var _getClockOffset_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7531);
+/* harmony import */ var _getClockOffset_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4842);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -38756,2394 +42822,7 @@ function ObjectId(inputId) {
 
 /***/ },
 
-/***/ 2419
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony import */ var _queryElements_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(593);
-
-
-function getElement(context) {
-    return context?.element || context?.$this || null;
-}
-
-function setScopedValue(context, name, value) {
-    Object.defineProperty(context, name, {
-        value,
-        writable: true,
-        configurable: true,
-        enumerable: true
-    });
-}
-
-const browserGlobals = {
-    get $window() { return typeof window !== "undefined" ? window : undefined; },
-    set $window(value) { setScopedValue(this, "$window", value); },
-    get $CoCreate() { return typeof window !== "undefined" ? window.CoCreate : undefined; },
-    set $CoCreate(value) { setScopedValue(this, "$CoCreate", value); },
-    get $organization_id() { return typeof localStorage !== "undefined" ? localStorage.getItem("organization_id") : ""; },
-    get $user_id() { return typeof localStorage !== "undefined" ? localStorage.getItem("user_id") : ""; },
-    get $client_id() { return typeof localStorage !== "undefined" ? localStorage.getItem("clientId") : ""; },
-    get $session_id() { return typeof localStorage !== "undefined" ? localStorage.getItem("session_id") : ""; },
-    get $this() { return getElement(this); },
-    set $this(value) { setScopedValue(this, "$this", value); },
-    get $value() {
-        const element = getElement(this);
-        if (!element) return "";
-        if (typeof element.getValueSync === "function") return element.getValueSync();
-        return typeof element.getValue === "function" ? element.getValue() : "";
-    },
-    get $innerWidth() { return typeof window !== "undefined" ? window.innerWidth : 0; },
-    get $innerHeight() { return typeof window !== "undefined" ? window.innerHeight : 0; },
-    get $href() { return typeof window !== "undefined" ? window.location.href.replace(/\/$/, "") : ""; },
-    get $origin() { return typeof window !== "undefined" ? window.location.origin : ""; },
-    get $protocol() { return typeof window !== "undefined" ? window.location.protocol : ""; },
-    get $hostname() { return typeof window !== "undefined" ? window.location.hostname : ""; },
-    get $host() { return typeof window !== "undefined" ? window.location.host : ""; },
-    get $port() { return typeof window !== "undefined" ? window.location.port : ""; },
-    get $pathname() { return typeof window !== "undefined" ? window.location.pathname.replace(/\/$/, "") : ""; },
-    get $hash() { return typeof window !== "undefined" ? window.location.hash : ""; },
-    get $subdomain() {
-        if (typeof window === "undefined") return "";
-        const parts = window.location.hostname.split(".");
-        return parts.length > 2 ? parts[0] : "";
-    },
-    get $relativePath() {
-        if (typeof window === "undefined") return "./";
-        const currentPath = window.location.pathname.replace(/\/[^\/]*$/, "");
-        const depth = currentPath.split("/").filter(Boolean).length;
-        return depth > 0 ? "../".repeat(depth) : "./";
-    },
-    get $path() {
-        if (typeof window === "undefined") return "";
-        let path = window.location.pathname;
-        if (path.split("/").pop().includes(".")) path = path.replace(/\/[^\/]+$/, "/");
-        return path === "/" ? "" : path;
-    },
-    $query: function (selector) {
-        const element = getElement(this);
-        if (typeof selector === "string") selector = selector.trim().replace(/^['"]|['"]$/g, "");
-        try {
-            const results = (0,_queryElements_js__WEBPACK_IMPORTED_MODULE_0__/* .queryElements */ .a5)({ element, selector });
-            return results && results.length > 0 ? results[0] : undefined;
-        } catch (error) {
-            console.warn(`[Browser Globals] Invalid $query selector => "${selector}"`, error);
-            return undefined;
-        }
-    },
-    $queryAll: function (selector) {
-        const element = getElement(this);
-        if (typeof selector === "string") {
-            selector = selector.trim().replace(/^['"]|['"]$/g, "");
-        }
-        try {
-            return (0,_queryElements_js__WEBPACK_IMPORTED_MODULE_0__/* .queryElementsAll */ .H3)({ element, selector });
-        } catch (error) {
-            console.warn(`[Browser Globals] Invalid $queryAll selector => "${selector}"`, error);
-            return [];
-        }
-	},
-	$attributes: function (value) {
-		return this.element.getAttribute(value);
-	},
-	$getAttribute: function (name) {
-		return getElement(this)?.getAttribute(name) ?? null;
-	},
-	$hasAttribute: function (name) {
-		return getElement(this)?.hasAttribute(name) ?? false;
-	},
-	$setAttribute: function (name, value) {
-		const element = getElement(this);
-		if (!element) return value;
-		element.setAttribute(name, value);
-		return value;
-	},
-	$setValue: function (...args) {
-		return this.element && typeof this.element.setValue === "function"
-			? this.element.setValue(...args) || ""
-			: "";
-	}
-};
-
-const browserGlobalsScope = browserGlobals;
-
-const browserGlobalOperators = new Map(
-    Object.entries(Object.getOwnPropertyDescriptors(browserGlobals)).map(([name, descriptor]) => [
-        name,
-        descriptor.get
-            ? function (...args) {
-                const value = descriptor.get.call(this);
-                return typeof value === "function" ? value.apply(this, args) : value;
-            }
-            : descriptor.value
-    ])
-);
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "B", 0, /* binding */ browserGlobalsScope,
-/* harmony export */   "n", 0, /* binding */ browserGlobalOperators
-/* harmony export */ ]);
-
-
-/***/ },
-
-/***/ 99
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   KY: () => (/* binding */ registerASTGlobals),
-/* harmony export */   pK: () => (/* binding */ astAsync)
-/* harmony export */ });
-/* unused harmony exports isomorphicSandbox, astSync, evaluateAST */
-/* unused harmony import specifier */ var sharedGlobalsScope;
-/* harmony import */ var _dotNotationToObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2623);
-/* harmony import */ var _dataQuery_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(900);
-/* harmony import */ var _browserGlobals_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2419);
-/* harmony import */ var _sharedGlobals_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1092);
-/* harmony import */ var _operators_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(5866);
-
-
-
-
-
-
-
-
-const isBrowser = typeof window !== 'undefined';
-const isomorphicSandbox = (/* unused pure expression or super */ null && (sharedGlobalsScope));
-let baseSandboxScope = isBrowser ? Object.setPrototypeOf(_browserGlobals_js__WEBPACK_IMPORTED_MODULE_2__/* .browserGlobalsScope */ .B, _sharedGlobals_js__WEBPACK_IMPORTED_MODULE_3__/* .sharedGlobalsScope */ .p) : Object.create(_sharedGlobals_js__WEBPACK_IMPORTED_MODULE_3__/* .sharedGlobalsScope */ .p);
-
-// Register environment roots without adding server imports to the browser graph.
-function registerASTGlobals(globals) {
-    const descriptors = Object.getOwnPropertyDescriptors(globals);
-    Object.defineProperties(baseSandboxScope, descriptors);
-    for (const [name, descriptor] of Object.entries(descriptors)) {
-        _operators_js__WEBPACK_IMPORTED_MODULE_4__/* .globalOperatorNames */ .kg.add(name);
-        _operators_js__WEBPACK_IMPORTED_MODULE_4__/* .customOperators */ .Jd.set(name, descriptor.get
-            ? function (...args) {
-                const value = descriptor.get.call(this);
-                return typeof value === "function" ? value.apply(this, args) : value;
-            }
-            : descriptor.value);
-    }
-}
-
-// Private signals unwind nested expressions until their owning loop or entry point.
-class ASTControl {
-    constructor(type, value) {
-        this.type = type;
-        this.value = value;
-    }
-}
-
-function finishControl(control) {
-    if (!(control instanceof ASTControl)) throw control;
-    if (control.type === "$return") return control.value;
-    throw new SyntaxError(`AST '${control.type}' requires an enclosing loop in the same function.`);
-}
-
-function astSync(options = {}) {
-    try {
-        return executeSync(options);
-    } catch (control) {
-        return finishControl(control);
-    }
-}
-
-async function astAsync(options = {}) {
-    try {
-        return await executeAsync(options);
-    } catch (control) {
-        return finishControl(control);
-    }
-}
-
-const conditionalOperators = new Set([
-    "$eq",
-    "$ne",
-    "$not",
-    "$lt",
-    "$lte",
-    "$gt",
-    "$gte",
-    "$in",
-    "$nin",
-    "$all",
-    "$elemMatch",
-    "$size",
-    "$exists",
-    "$regex",
-    "$type",
-    "$mod"
-]);
-
-function resolveScopedPath(expression, registry, sandbox, bindFunction = false) {
-    if (typeof expression !== "string" || !/^\$[\w$-]+(?:\.[\w$-]+|\[\d+\])*$/.test(expression)) {
-        return { found: false, value: undefined };
-    }
-
-    const path = expression.slice(1).replace(/\[(\d+)\]/g, ".$1").split(".");
-    const root = path.shift();
-    const prefixedRoot = `$${root}`;
-    let value;
-
-    if (registry?.has(prefixedRoot)) {
-        value = registry.get(prefixedRoot);
-    } else if (registry?.has(root)) {
-        value = registry.get(root);
-    } else if (sandbox && (prefixedRoot in sandbox || root in sandbox)) {
-        value = prefixedRoot in sandbox ? sandbox[prefixedRoot] : sandbox[root];
-    } else {
-        return { found: false, value: undefined };
-    }
-
-    let owner = null;
-    for (const property of path) {
-        if (value === null || value === undefined || !(property in Object(value))) {
-            return { found: false, value: undefined };
-        }
-        owner = value;
-        value = value[property];
-    }
-
-    if (bindFunction && owner && typeof value === "function") {
-        value = value.bind(owner);
-    }
-
-    return { found: true, value };
-}
-
-function resolveOperator(expression, registry, sandbox) {
-    if (typeof expression !== "string" || !expression.startsWith("$")) {
-        return { found: false, value: undefined };
-    }
-
-    const [root, ...path] = expression
-        .replace(/\[(\d+)\]/g, ".$1")
-        .split(".");
-    const unprefixedRoot = root.slice(1);
-    let value;
-
-    if (registry?.has(root)) {
-        value = registry.get(root);
-    } else if (registry?.has(unprefixedRoot)) {
-        value = registry.get(unprefixedRoot);
-    } else if (sandbox && root in Object(sandbox)) {
-        value = sandbox[root];
-    } else if (sandbox && unprefixedRoot in Object(sandbox)) {
-        value = sandbox[unprefixedRoot];
-    } else if (_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .customOperators */ .Jd.has(root)) {
-        value = _operators_js__WEBPACK_IMPORTED_MODULE_4__/* .customOperators */ .Jd.get(root);
-    } else if (_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .customOperators */ .Jd.has(unprefixedRoot)) {
-        value = _operators_js__WEBPACK_IMPORTED_MODULE_4__/* .customOperators */ .Jd.get(unprefixedRoot);
-    } else {
-        return { found: false, value: undefined };
-    }
-
-    // Keep the root reference so the shared dot-notation writer can update
-    // sandbox or registry objects, including paths whose parents do not exist.
-    const assignmentScope = path.length && value !== null &&
-        (typeof value === "object" || typeof value === "function")
-        ? { [root]: value }
-        : undefined;
-    let owner = null;
-    for (const property of path) {
-        if (value === null || value === undefined || !(property in Object(value))) {
-            return { found: false, value: undefined, assignmentScope };
-        }
-        owner = value;
-        value = value[property];
-    }
-
-    if (owner && typeof value === "function") {
-        value = value.bind(owner);
-    }
-
-    return { found: true, value, assignmentScope };
-}
-
-function getForDefinition(definition) {
-    let shouldAwait = false;
-    const modifierEntries = Object.entries(definition || {});
-    if (modifierEntries.length === 1 && modifierEntries[0][0] === "$await") {
-        shouldAwait = true;
-        definition = modifierEntries[0][1];
-    }
-
-    const sourceEntries = Object.entries(definition || {});
-    if (sourceEntries.length !== 1) {
-        throw new Error("AST '$for' requires exactly one iterable source.");
-    }
-
-    const [source, scope] = sourceEntries[0];
-    if (!source.startsWith("$")) {
-        throw new Error(`AST '$for' source '${source}' must be a scoped value.`);
-    }
-
-    const scopeEntries = Object.entries(scope || {});
-    if (scopeEntries.length !== 1) {
-        throw new Error("AST '$for' requires exactly one scoped variable and iteration body.");
-    }
-
-    const [variable, body] = scopeEntries[0];
-    if (!/^[A-Za-z_][\w$]*$/.test(variable)) {
-        throw new Error(`AST '$for' has an invalid scoped variable '${variable}'.`);
-    }
-
-    return { source, variable, body, shouldAwait };
-}
-
-function getWhileDefinition(definition, keys) {
-    if (keys.length !== 2 || !keys.includes("$do") || !keys.includes("$while")) {
-        throw new Error("AST loops require exactly one '$do' body and one '$while' condition.");
-    }
-    return {
-        body: definition.$do,
-        condition: definition.$while,
-        doFirst: keys[0] === "$do"
-    };
-}
-
-function createIterationScope({ sandbox, registry, variable, value }) {
-    const iterationSandbox = sandbox instanceof Map
-        ? undefined
-        : Object.create(sandbox || null);
-
-    if (iterationSandbox) {
-        iterationSandbox[variable] = value;
-    }
-
-    const iterationRegistry = new Map(registry);
-    iterationRegistry.set(variable, value);
-    iterationRegistry.set(`$${variable}`, value);
-
-    return { iterationSandbox, iterationRegistry };
-}
-
-function createNestedScope(sandbox, registry) {
-    return {
-        nestedSandbox: sandbox instanceof Map
-            ? undefined
-            : Object.create(sandbox || null),
-        nestedRegistry: new Map(registry)
-    };
-}
-
-function getFunctionDefinition(definition) {
-    if (!definition || typeof definition !== "object" || Array.isArray(definition)) {
-        throw new TypeError("AST '$function' requires an object definition.");
-    }
-
-    const params = definition.params || [];
-    if (!Array.isArray(params) || params.some(param => typeof param !== "string")) {
-        throw new TypeError("AST '$function.params' must be an array of names.");
-    }
-    if (!Object.prototype.hasOwnProperty.call(definition, "body")) {
-        throw new Error("AST '$function' requires a body.");
-    }
-
-    if (Object.prototype.hasOwnProperty.call(definition, "async")) {
-        throw new TypeError("AST '$function.async' is not supported; wrap '$function' in '$async' instead.");
-    }
-
-    return { params, body: definition.body, bind: definition.bind };
-}
-
-function createFunctionScope({ sandbox, registry, params, args, thisArg }) {
-    const functionSandbox = sandbox instanceof Map
-        ? undefined
-        : Object.create(sandbox || null);
-    const functionRegistry = new Map(registry);
-
-    functionRegistry.set("$this", thisArg);
-    functionRegistry.set("this", thisArg);
-    if (functionSandbox) functionSandbox.$this = thisArg;
-
-    params.forEach((param, index) => {
-        const name = param.replace(/^\$/, "");
-        const value = args[index];
-        functionRegistry.set(name, value);
-        functionRegistry.set(`$${name}`, value);
-        if (functionSandbox) {
-            functionSandbox[name] = value;
-            functionSandbox[`$${name}`] = value;
-        }
-    });
-
-    return { functionSandbox, functionRegistry };
-}
-
-function createASTFunction(expression, { sandbox, node, registry }) {
-    const isAsync = Object.prototype.hasOwnProperty.call(expression, "$async");
-    let functionExpression = expression;
-    if (isAsync) {
-        functionExpression = expression.$async;
-        if (
-            !functionExpression || typeof functionExpression !== "object" ||
-            Array.isArray(functionExpression) || Object.keys(functionExpression).length !== 1 ||
-            !Object.prototype.hasOwnProperty.call(functionExpression, "$function")
-        ) {
-            throw new TypeError("AST '$async' requires a nested '$function' definition.");
-        }
-    }
-
-    const { params, body, bind } = getFunctionDefinition(functionExpression.$function);
-    const evaluate = isAsync ? astAsync : astSync;
-    const execute = (thisArg, args) => {
-        const { functionSandbox, functionRegistry } = createFunctionScope({
-            sandbox, registry, params, args, thisArg
-        });
-        return evaluate({
-            executeAST: body,
-            sandbox: functionSandbox,
-            node,
-            registry: functionRegistry,
-            sequential: true
-        });
-    };
-    const callback = isAsync
-        ? async function (...args) { return execute(this, args); }
-        : function (...args) { return execute(this, args); };
-
-    return { callback, bind };
-}
-
-function isClassLike(func) {
-    if (typeof func !== "function") return false;
-
-    const source = Function.prototype.toString.call(func);
-    if (/^class\s|^class{/.test(source)) return true;
-
-    return !!func.prototype && Object.getOwnPropertyNames(func.prototype)
-        .some(member => member !== "constructor");
-}
-
-function getIfDefinition(definition, expression = "$if") {
-    if (expression !== "$if") {
-        const parts = expression.split(".");
-        const operator = parts.pop();
-        const source = parts.slice(1).join(".");
-
-        if (parts[0] !== "$if" || !source.startsWith("$") || !conditionalOperators.has(operator)) {
-            throw new Error(`Invalid AST conditional expression '${expression}'.`);
-        }
-
-        return { source, operator, branches: definition };
-    }
-
-    const sourceEntries = Object.entries(definition || {});
-    if (sourceEntries.length !== 1) {
-        throw new Error("AST '$if' requires exactly one condition source.");
-    }
-
-    const [source, comparison] = sourceEntries[0];
-    if (!source.startsWith("$")) {
-        throw new Error(`AST '$if' source '${source}' must be a scoped value.`);
-    }
-
-    const comparisonEntries = Object.entries(comparison || {});
-    if (comparisonEntries.length !== 1) {
-        throw new Error("AST '$if' requires exactly one comparison operator.");
-    }
-
-    const [operator, branches] = comparisonEntries[0];
-    if (!conditionalOperators.has(operator)) {
-        throw new Error(`AST '$if' does not support comparison operator '${operator}'.`);
-    }
-
-    return { source, operator, branches };
-}
-
-function parseConditionalValue(value, evaluate) {
-    if (value === "$true") return true;
-    if (value === "$false") return false;
-    if (value === "$null") return null;
-    if (value === "$undefined") return undefined;
-    if (value.startsWith("$")) return evaluate(value);
-    return value;
-}
-
-function resolveConditionalValueSync(value, context) {
-    if (typeof value === "string" && value.startsWith("$")) {
-        const scoped = resolveScopedPath(value, context.registry, context.sandbox);
-        if (scoped.found || /^\$[\w$-]+(?:\.[\w$-]+|\[\d+\])*$/.test(value)) {
-            return scoped.value;
-        }
-    }
-
-    return executeSync({ executeAST: value, ...context });
-}
-
-async function resolveConditionalValueAsync(value, context) {
-    if (typeof value === "string" && value.startsWith("$")) {
-        const scoped = resolveScopedPath(value, context.registry, context.sandbox);
-        if (scoped.found || /^\$[\w$-]+(?:\.[\w$-]+|\[\d+\])*$/.test(value)) {
-            return scoped.value;
-        }
-    }
-
-    return await executeAsync({ executeAST: value, ...context });
-}
-
-function selectConditionalBranch({ definition, evaluate, exists }) {
-    const { source, operator, branches } = definition;
-    if (!branches || typeof branches !== "object" || Array.isArray(branches)) {
-        throw new TypeError("AST '$if' comparison branches must be an object.");
-    }
-
-    const sourceValue = evaluate(source);
-    const sourceExists = exists(source);
-    for (const [condition, branch] of Object.entries(branches)) {
-        if (condition === "$else") continue;
-
-        const conditionValue = parseConditionalValue(condition, evaluate);
-        const matches = operator === "$exists"
-            ? sourceExists === Boolean(conditionValue)
-            : (0,_dataQuery_js__WEBPACK_IMPORTED_MODULE_1__/* .queryData */ .VR)(
-                { value: sourceValue },
-                { value: { [operator]: conditionValue } }
-            );
-        if (matches) {
-            return { found: true, branch };
-        }
-    }
-
-    return Object.prototype.hasOwnProperty.call(branches, "$else")
-        ? { found: true, branch: branches.$else }
-        : { found: false };
-}
-
-async function selectConditionalBranchAsync({ definition, evaluate, exists }) {
-    const { source, operator, branches } = definition;
-    if (!branches || typeof branches !== "object" || Array.isArray(branches)) {
-        throw new TypeError("AST '$if' comparison branches must be an object.");
-    }
-
-    const sourceValue = await evaluate(source);
-    const sourceExists = exists(source);
-    for (const [condition, branch] of Object.entries(branches)) {
-        if (condition === "$else") continue;
-
-        const conditionValue = await parseConditionalValue(condition, evaluate);
-        const matches = operator === "$exists"
-            ? sourceExists === Boolean(conditionValue)
-            : (0,_dataQuery_js__WEBPACK_IMPORTED_MODULE_1__/* .queryData */ .VR)(
-                { value: sourceValue },
-                { value: { [operator]: conditionValue } }
-            );
-        if (matches) {
-            return { found: true, branch };
-        }
-    }
-
-    return Object.prototype.hasOwnProperty.call(branches, "$else")
-        ? { found: true, branch: branches.$else }
-        : { found: false };
-}
-
-function resolveNullishSync(values, context) {
-    if (!Array.isArray(values)) {
-        throw new TypeError("AST '$null' requires an array of candidate values.");
-    }
-
-    for (const value of values) {
-        const resolved = resolveConditionalValueSync(value, context);
-        if (resolved !== null && resolved !== undefined) return resolved;
-    }
-}
-
-async function resolveNullishAsync(values, context) {
-    if (!Array.isArray(values)) {
-        throw new TypeError("AST '$null' requires an array of candidate values.");
-    }
-
-    for (const value of values) {
-        const resolved = await resolveConditionalValueAsync(value, context);
-        if (resolved !== null && resolved !== undefined) return resolved;
-    }
-}
-
-function executeSync({ executeAST, sandbox, node, registry, sequential = false } = {}) {
-    const targetNode = executeAST !== undefined ? executeAST : node;
-    if (targetNode === null || targetNode === undefined) return targetNode;
-
-    if (!registry) {
-        if (!(sandbox instanceof Map)) {
-            const activeScope = Object.create(baseSandboxScope);
-            Object.assign(activeScope, sandbox || {});
-            if (node && activeScope.element === undefined) activeScope.element = node;
-            sandbox = activeScope;
-        }
-        registry = sandbox instanceof Map ? sandbox : new Map(Object.entries(sandbox));
-    }
-
-    // Leaf String Evaluator: route to OperatorJS engine
-    if (typeof targetNode === "string") {
-        if (targetNode === "$break" || targetNode === "$continue" || targetNode === "$return") {
-            throw new ASTControl(targetNode);
-        }
-        const scoped = resolveScopedPath(targetNode, registry, sandbox);
-        if (scoped.found) return scoped.value;
-
-        if (targetNode.includes("$") || targetNode.includes("ObjectId()") || targetNode.includes("`")) {
-            let resolved = (0,_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .processOperators */ .Rj)(node || null, targetNode, [], null, [], registry);
-            return (0,_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .unpackTokens */ .b$)(resolved, registry);
-        }
-        return targetNode;
-    }
-
-    // List Evaluator: maps items sequentially in a synchronous pipeline
-    if (Array.isArray(targetNode)) {
-        return targetNode.map(item => executeSync({ executeAST: item, sandbox, node, registry, sequential }));
-    }
-
-    if (typeof targetNode === "object") {
-        if (targetNode instanceof Date || targetNode instanceof RegExp) {
-            return targetNode;
-        }
-
-        const keys = Object.keys(targetNode);
-        if (keys.includes("$do") || keys.includes("$while")) {
-            const { body, condition, doFirst } = getWhileDefinition(targetNode, keys);
-            const context = { sandbox, node, registry, sequential: true };
-            let firstIteration = true;
-            let result;
-            while ((firstIteration && doFirst) || resolveConditionalValueSync(condition, context)) {
-                firstIteration = false;
-                try {
-                    result = executeSync({ executeAST: body, ...context });
-                } catch (control) {
-                    if (!(control instanceof ASTControl)) throw control;
-                    if (control.type === "$break") break;
-                    if (control.type === "$continue") continue;
-                    throw control;
-                }
-            }
-            return result;
-        }
-
-        const structuralKey = keys.length === 1 ? keys[0] : undefined;
-
-        const isConditionalExpression = structuralKey === "$if" || structuralKey?.startsWith("$if.");
-
-        if (structuralKey?.startsWith("$") && structuralKey.includes(".$") && !isConditionalExpression) {
-            throw new Error(`AST operators must be composed as nested objects, not '${structuralKey}'.`);
-        }
-
-        if (structuralKey === "$break" || structuralKey === "$continue") {
-            throw new ASTControl(structuralKey);
-        }
-
-        if (structuralKey === "$return") {
-            throw new ASTControl("$return", executeSync({
-                executeAST: targetNode.$return, sandbox, node, registry, sequential
-            }));
-        }
-
-        if (structuralKey === "$null") {
-            return resolveNullishSync(targetNode.$null, { sandbox, node, registry, sequential });
-        }
-
-        if (structuralKey === "$await") {
-            throw new Error("AST '$await' requires astAsync.");
-        }
-
-        if (structuralKey === "$function" || structuralKey === "$async") {
-            const { callback, bind } = createASTFunction(targetNode, { sandbox, node, registry });
-            if (bind === undefined) return callback;
-            const thisArg = executeSync({ executeAST: bind, sandbox, node, registry, sequential });
-            return callback.bind(thisArg);
-        }
-
-        if (isConditionalExpression) {
-            const context = { sandbox, node, registry, sequential };
-            const selected = selectConditionalBranch({
-                definition: getIfDefinition(targetNode[structuralKey], structuralKey),
-                evaluate: (value) => resolveConditionalValueSync(value, context),
-                exists: (value) => resolveScopedPath(value, registry, sandbox).found
-            });
-            return selected.found
-                ? executeSync({ executeAST: selected.branch, ...context })
-                : undefined;
-        }
-
-        if (structuralKey === "$for") {
-            const {
-                source: sourceExpression,
-                variable,
-                body,
-                shouldAwait
-            } = getForDefinition(targetNode.$for);
-            if (shouldAwait) {
-                throw new Error("AST '$for' with '$await' requires astAsync.");
-            }
-            const source = resolveConditionalValueSync(sourceExpression, { sandbox, node, registry, sequential });
-            if (!source || typeof source[Symbol.iterator] !== "function") {
-                throw new TypeError("AST '$for' source is not synchronously iterable.");
-            }
-
-            let result;
-            for (const value of source) {
-                const { iterationSandbox, iterationRegistry } = createIterationScope({
-                    sandbox,
-                    registry,
-                    variable,
-                    value
-                });
-                try {
-                    result = executeSync({
-                        executeAST: body,
-                        sandbox: iterationSandbox,
-                        node,
-                        registry: iterationRegistry,
-                        sequential: true
-                    });
-                } catch (control) {
-                    if (!(control instanceof ASTControl)) throw control;
-                    if (control.type === "$break") break;
-                    if (control.type === "$continue") continue;
-                    throw control;
-                }
-            }
-            return result;
-        }
-        
-        // Context Function/Operator Evaluation for single key objects
-        if (keys.length === 1 && keys[0].startsWith("$")) {
-            const key = keys[0];
-
-            const resolvedOperator = resolveOperator(key, registry, sandbox);
-            let opFunc = resolvedOperator.value;
-            const { assignmentScope } = resolvedOperator;
-
-            if (opFunc !== undefined || assignmentScope) {
-                const { nestedSandbox, nestedRegistry } = createNestedScope(sandbox, registry);
-                const evaluatedParam = executeSync({
-                    executeAST: targetNode[key],
-                    sandbox: nestedSandbox,
-                    node,
-                    registry: nestedRegistry,
-                    sequential
-                });
-                if (assignmentScope && typeof opFunc !== "function") {
-                    (0,_dotNotationToObject_js__WEBPACK_IMPORTED_MODULE_0__/* .dotNotationToObject */ .O)({ [key]: evaluatedParam }, assignmentScope);
-                    return evaluatedParam;
-                }
-                let opCtx = { element: node, registry };
-                if (typeof opFunc === "function") {
-                    const args = Array.isArray(evaluatedParam) ? evaluatedParam : [evaluatedParam];
-
-                    if (isClassLike(opFunc)) {
-                        return new opFunc(...args);
-                    }
-
-                    // Attempt invocation as function, fallback to constructor on TypeError
-                    try {
-                        return opFunc.call(opCtx, ...args);
-                    } catch (e) {
-                        if (e instanceof TypeError && /cannot be invoked without 'new'|class constructor/i.test(e.message)) {
-                            return new opFunc(...args);
-                        }
-                        throw e;
-                    }
-                }
-                return opFunc;
-            }
-        }
-
-        const resolvedObject = {};
-        for (const key of keys) {
-            if (key === "$break" || key === "$continue") {
-                throw new ASTControl(key);
-            }
-            if (key === "$return") {
-                throw new ASTControl("$return", executeSync({
-                    executeAST: targetNode[key],
-                    sandbox,
-                    node,
-                    registry,
-                    sequential
-                }));
-            }
-
-            if (key !== "$return" && key.startsWith("$")) {
-                const operator = resolveOperator(key, registry, sandbox);
-                if (
-                    typeof operator.value === "function" ||
-                    operator.assignmentScope
-                ) {
-                    resolvedObject[key] = executeSync({
-                        executeAST: { [key]: targetNode[key] },
-                        sandbox,
-                        node,
-                        registry,
-                        sequential
-                    });
-                    continue;
-                }
-            }
-
-            let finalKey = key;
-
-            if (key.startsWith("$") && !["$array", "filter", "$storage", "$database"].includes(key)) {
-                const resolvedKey = executeSync({ executeAST: key, sandbox, node, registry, sequential });
-                if (typeof resolvedKey === "string" || typeof resolvedKey === "number") {
-                    finalKey = String(resolvedKey);
-                }
-            } else if (key.includes('{{') && key.includes('}}')) {
-                finalKey = resolveInlinePlaceholdersSync(key, { sandbox, node, registry, sequential });
-            }
-
-            let finalValue = targetNode[key];
-            if (typeof finalValue === "string") {
-                if (finalValue.startsWith("$") && !["$array", "filter", "$storage", "$database"].includes(finalValue)) {
-                    finalValue = executeSync({ executeAST: finalValue, sandbox, node, registry, sequential });
-                } else if (finalValue.includes('{{') && finalValue.includes('}}')) {
-                    finalValue = resolveInlinePlaceholdersSync(finalValue, { sandbox, node, registry, sequential });
-                }
-            } else if (Array.isArray(finalValue) || (typeof finalValue === "object" && finalValue !== null)) {
-                finalValue = executeSync({ executeAST: finalValue, sandbox, node, registry, sequential });
-            }
-
-            if (finalKey === '$return') {
-                throw new ASTControl("$return", finalValue);
-            }
-
-            resolvedObject[finalKey] = finalValue;
-            registry.set(finalKey, finalValue);
-            if (sandbox && typeof sandbox === 'object') {
-                sandbox[finalKey] = finalValue;
-            }
-        }
-        return resolvedObject;
-    }
-
-    return targetNode;
-}
-
-async function executeAsync({ executeAST, sandbox, node, registry, sequential = false } = {}) {
-    const targetNode = executeAST !== undefined ? executeAST : node;
-    if (targetNode === null || targetNode === undefined) return targetNode;
-
-    if (!registry) {
-        if (!(sandbox instanceof Map)) {
-            const activeScope = Object.create(baseSandboxScope);
-            Object.assign(activeScope, sandbox || {});
-            if (node && activeScope.element === undefined) activeScope.element = node;
-            sandbox = activeScope;
-        }
-        registry = sandbox instanceof Map ? sandbox : new Map(Object.entries(sandbox));
-    }
-
-    // Leaf String Evaluator: route to OperatorJS engine
-    if (typeof targetNode === "string") {
-        if (targetNode === "$break" || targetNode === "$continue" || targetNode === "$return") {
-            throw new ASTControl(targetNode);
-        }
-        const scoped = resolveScopedPath(targetNode, registry, sandbox);
-        if (scoped.found) return scoped.value;
-
-        if (targetNode.includes("$") || targetNode.includes("ObjectId()") || targetNode.includes("`")) {
-            let resolved = await (0,_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .processOperatorsAsync */ .PT)(node || null, targetNode, [], null, [], registry);
-            return (0,_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .unpackTokens */ .b$)(resolved, registry);
-        }
-        return targetNode;
-    }
-
-    // Statement arrays execute sequentially inside loops and functions.
-    if (Array.isArray(targetNode)) {
-        if (sequential) {
-            const results = [];
-            for (const item of targetNode) {
-                results.push(await executeAsync({ executeAST: item, sandbox, node, registry, sequential }));
-            }
-            return results;
-        }
-        return await Promise.all(
-            targetNode.map(item => executeAsync({ executeAST: item, sandbox, node, registry, sequential }))
-        );
-    }
-
-    if (typeof targetNode === "object") {
-        if (targetNode instanceof Date || targetNode instanceof RegExp) {
-            return targetNode;
-        }
-
-        const keys = Object.keys(targetNode);
-        if (keys.includes("$do") || keys.includes("$while")) {
-            const { body, condition, doFirst } = getWhileDefinition(targetNode, keys);
-            const context = { sandbox, node, registry, sequential: true };
-            let firstIteration = true;
-            let result;
-            while ((firstIteration && doFirst) || await resolveConditionalValueAsync(condition, context)) {
-                firstIteration = false;
-                try {
-                    result = await executeAsync({ executeAST: body, ...context });
-                } catch (control) {
-                    if (!(control instanceof ASTControl)) throw control;
-                    if (control.type === "$break") break;
-                    if (control.type === "$continue") continue;
-                    throw control;
-                }
-            }
-            return result;
-        }
-
-        const structuralKey = keys.length === 1 ? keys[0] : undefined;
-
-        const isConditionalExpression = structuralKey === "$if" || structuralKey?.startsWith("$if.");
-
-        if (structuralKey?.startsWith("$") && structuralKey.includes(".$") && !isConditionalExpression) {
-            throw new Error(`AST operators must be composed as nested objects, not '${structuralKey}'.`);
-        }
-
-        if (structuralKey === "$break" || structuralKey === "$continue") {
-            throw new ASTControl(structuralKey);
-        }
-
-        if (structuralKey === "$return") {
-            throw new ASTControl("$return", await executeAsync({
-                executeAST: targetNode.$return, sandbox, node, registry, sequential
-            }));
-        }
-
-        if (structuralKey === "$null") {
-            return await resolveNullishAsync(targetNode.$null, { sandbox, node, registry, sequential });
-        }
-
-        if (structuralKey === "$await") {
-            return await executeAsync({
-                executeAST: targetNode.$await,
-                sandbox,
-                node,
-                registry,
-                sequential
-            });
-        }
-
-        if (structuralKey === "$function" || structuralKey === "$async") {
-            const { callback, bind } = createASTFunction(targetNode, { sandbox, node, registry });
-            if (bind === undefined) return callback;
-            const thisArg = await executeAsync({ executeAST: bind, sandbox, node, registry, sequential });
-            return callback.bind(thisArg);
-        }
-
-        if (isConditionalExpression) {
-            const context = { sandbox, node, registry, sequential };
-            const selected = await selectConditionalBranchAsync({
-                definition: getIfDefinition(targetNode[structuralKey], structuralKey),
-                evaluate: (value) => resolveConditionalValueAsync(value, context),
-                exists: (value) => resolveScopedPath(value, registry, sandbox).found
-            });
-            return selected.found
-                ? await executeAsync({ executeAST: selected.branch, ...context })
-                : undefined;
-        }
-
-        if (structuralKey === "$for") {
-            const {
-                source: sourceExpression,
-                variable,
-                body,
-                shouldAwait
-            } = getForDefinition(targetNode.$for);
-            const source = await resolveConditionalValueAsync(sourceExpression, { sandbox, node, registry, sequential });
-            let result;
-            if (shouldAwait) {
-                const isIterable = source && (
-                    typeof source[Symbol.asyncIterator] === "function" ||
-                    typeof source[Symbol.iterator] === "function"
-                );
-                if (!isIterable) {
-                    throw new TypeError("AST '$for' '$await' source is not iterable.");
-                }
-
-                for await (const value of source) {
-                    const { iterationSandbox, iterationRegistry } = createIterationScope({
-                        sandbox,
-                        registry,
-                        variable,
-                        value
-                    });
-                    try {
-                        result = await executeAsync({
-                            executeAST: body,
-                            sandbox: iterationSandbox,
-                            node,
-                            registry: iterationRegistry,
-                            sequential: true
-                        });
-                    } catch (control) {
-                        if (!(control instanceof ASTControl)) throw control;
-                        if (control.type === "$break") break;
-                        if (control.type === "$continue") continue;
-                        throw control;
-                    }
-                }
-            } else {
-                if (!source || typeof source[Symbol.iterator] !== "function") {
-                    throw new TypeError("AST '$for' source is not synchronously iterable.");
-                }
-
-                for (const value of source) {
-                    const { iterationSandbox, iterationRegistry } = createIterationScope({
-                        sandbox,
-                        registry,
-                        variable,
-                        value
-                    });
-                    try {
-                        result = await executeAsync({
-                            executeAST: body,
-                            sandbox: iterationSandbox,
-                            node,
-                            registry: iterationRegistry,
-                            sequential: true
-                        });
-                    } catch (control) {
-                        if (!(control instanceof ASTControl)) throw control;
-                        if (control.type === "$break") break;
-                        if (control.type === "$continue") continue;
-                        throw control;
-                    }
-                }
-            }
-            return result;
-        }
-        
-        // Context Function/Operator Evaluation for single key objects
-        if (keys.length === 1 && keys[0].startsWith("$")) {
-            const key = keys[0];
-
-            const resolvedOperator = resolveOperator(key, registry, sandbox);
-            let opFunc = resolvedOperator.value;
-            const { assignmentScope } = resolvedOperator;
-
-            if (opFunc !== undefined || assignmentScope) {
-                const { nestedSandbox, nestedRegistry } = createNestedScope(sandbox, registry);
-                const evaluatedParam = await executeAsync({
-                    executeAST: targetNode[key],
-                    sandbox: nestedSandbox,
-                    node,
-                    registry: nestedRegistry,
-                    sequential
-                });
-                if (assignmentScope && typeof opFunc !== "function") {
-                    (0,_dotNotationToObject_js__WEBPACK_IMPORTED_MODULE_0__/* .dotNotationToObject */ .O)({ [key]: evaluatedParam }, assignmentScope);
-                    return evaluatedParam;
-                }
-                let opCtx = { element: node, registry };
-                if (typeof opFunc === "function") {
-                    const args = Array.isArray(evaluatedParam) ? evaluatedParam : [evaluatedParam];
-
-                    if (isClassLike(opFunc)) {
-                        return new opFunc(...args);
-                    }
-
-                    // Attempt invocation as function, fallback to constructor on TypeError
-                    try {
-                        return await opFunc.call(opCtx, ...args);
-                    } catch (e) {
-                        if (e instanceof TypeError && /cannot be invoked without 'new'|class constructor/i.test(e.message)) {
-                            return new opFunc(...args);
-                        }
-                        throw e;
-                    }
-                }
-                return opFunc;
-            }
-        }
-
-        const resolvedObject = {};
-        for (const key of keys) {
-            if (key === "$break" || key === "$continue") {
-                throw new ASTControl(key);
-            }
-            if (key === "$return") {
-                throw new ASTControl("$return", await executeAsync({
-                    executeAST: targetNode[key],
-                    sandbox,
-                    node,
-                    registry,
-                    sequential
-                }));
-            }
-
-            if (key !== "$return" && key.startsWith("$")) {
-                const operator = resolveOperator(key, registry, sandbox);
-                if (
-                    typeof operator.value === "function" ||
-                    operator.assignmentScope
-                ) {
-                    resolvedObject[key] = await executeAsync({
-                        executeAST: { [key]: targetNode[key] },
-                        sandbox,
-                        node,
-                        registry,
-                        sequential
-                    });
-                    continue;
-                }
-            }
-
-            let finalKey = key;
-
-            if (key.startsWith("$") && !["$array", "filter", "$storage", "$database"].includes(key)) {
-                const resolvedKey = await executeAsync({ executeAST: key, sandbox, node, registry, sequential });
-                if (typeof resolvedKey === "string" || typeof resolvedKey === "number") {
-                    finalKey = String(resolvedKey);
-                }
-            } else if (key.includes('{{') && key.includes('}}')) {
-                finalKey = await resolveInlinePlaceholdersAsync(key, { sandbox, node, registry, sequential });
-            }
-
-            let finalValue = targetNode[key];
-            if (typeof finalValue === "string") {
-                if (finalValue.startsWith("$") && !["$array", "filter", "$storage", "$database"].includes(finalValue)) {
-                    finalValue = await executeAsync({ executeAST: finalValue, sandbox, node, registry, sequential });
-                } else if (finalValue.includes('{{') && finalValue.includes('}}')) {
-                    finalValue = await resolveInlinePlaceholdersAsync(finalValue, { sandbox, node, registry, sequential });
-                }
-            } else if (Array.isArray(finalValue) || (typeof finalValue === "object" && finalValue !== null)) {
-                finalValue = await executeAsync({ executeAST: finalValue, sandbox, node, registry, sequential });
-            }
-
-            if (finalKey === '$return') {
-                throw new ASTControl("$return", finalValue);
-            }
-
-            resolvedObject[finalKey] = finalValue;
-            registry.set(finalKey, finalValue);
-            if (sandbox && typeof sandbox === 'object') {
-                sandbox[finalKey] = finalValue;
-            }
-        }
-        return resolvedObject;
-    }
-
-    return targetNode;
-}
-
-function resolveInlinePlaceholdersSync(str, { sandbox, node, registry, sequential }) {
-    let result = str;
-    const regex = /\{\{\s*([\w\W]+?)\s*\}\}/g;
-    let match;
-
-    while ((match = regex.exec(str)) !== null) {
-        const placeholder = match[0];
-        const variablePath = match[1];
-        const evaluatedValue = executeSync({ executeAST: variablePath, sandbox, node, registry, sequential });
-        const replacement = typeof evaluatedValue === 'object' ? JSON.stringify(evaluatedValue) : String(evaluatedValue);
-        result = result.replace(placeholder, replacement);
-    }
-    return result;
-}
-
-async function resolveInlinePlaceholdersAsync(str, { sandbox, node, registry, sequential }) {
-    let result = str;
-    const regex = /\{\{\s*([\w\W]+?)\s*\}\}/g;
-    let match;
-
-    while ((match = regex.exec(str)) !== null) {
-        const placeholder = match[0];
-        const variablePath = match[1];
-        const evaluatedValue = await executeAsync({ executeAST: variablePath, sandbox, node, registry, sequential });
-        const replacement = typeof evaluatedValue === 'object' ? JSON.stringify(evaluatedValue) : String(evaluatedValue);
-        result = result.replace(placeholder, replacement);
-    }
-    return result;
-}
-
-async function evaluateAST({ node, executeAST, sandbox = {} } = {}) {
-    return await astAsync({ node, executeAST, sandbox });
-}
-
-;(0,_operators_js__WEBPACK_IMPORTED_MODULE_4__/* .setASTEvaluators */ .pz)(astSync, astAsync);
-
-/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (astSync)));
-
-
-/***/ },
-
-/***/ 5866
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   PT: () => (/* binding */ processOperatorsAsync),
-/* harmony export */   Rj: () => (/* binding */ processOperators),
-/* harmony export */   b$: () => (/* binding */ unpackTokens),
-/* harmony export */   pz: () => (/* binding */ setASTEvaluators)
-/* harmony export */ });
-/* unused harmony export safeParse */
-/* harmony import */ var _getValueFromObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7076);
-/* harmony import */ var _queryElements_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(593);
-/* harmony import */ var _ObjectId_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5264);
-/* harmony import */ var _browserGlobals_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2419);
-/* harmony import */ var _sharedGlobals_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1092);
-/********************************************************************************
- * Copyright (C) 2026 CoCreate and Contributors.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- ********************************************************************************/
-
-
-
-
-
-
-
-const isBrowser = typeof window !== "undefined";
-
-// Late-binding references dynamically set at boot time to decouple circular import loops
-let astSyncRef = null;
-let astAsyncRef = null;
-
-function setASTEvaluators(syncFn, asyncFn) {
-    astSyncRef = syncFn;
-    astAsyncRef = asyncFn;
-}
-
-function parseASTExpression(expression) {
-    if (typeof expression !== "string") return expression;
-
-    try {
-        return JSON.parse(expression);
-    } catch (error) {
-        console.warn("[Operator Engine] Invalid JSON passed to $ast.", error);
-        return "";
-    }
-}
-
-const mathConstants = { PI: Math.PI, E: Math.E };
-const mathFunctions = {
-    abs: Math.abs, ceil: Math.ceil, floor: Math.floor, round: Math.round,
-    max: Math.max, min: Math.min, pow: Math.pow, sqrt: Math.sqrt,
-    log: Math.log, sin: Math.sin, cos: Math.cos, tan: Math.tan,
-    Number: (v) => Number(v)
-};
-
-class Ref {
-    constructor(obj, prop) {
-        this.obj = obj;
-        this.prop = prop;
-
-        let isList = Array.isArray(obj) ||
-            (typeof NodeList !== "undefined" && obj instanceof NodeList) ||
-            (typeof HTMLCollection !== "undefined" && obj instanceof HTMLCollection);
-
-        this.isArrayContext = isList && !(prop in obj);
-
-        if (this.isArrayContext && !Array.isArray(this.obj)) {
-            this.obj = Array.from(this.obj);
-        }
-    }
-    get() {
-        if (this.isArrayContext) {
-            return this.obj.map(item => item ? item[this.prop] : undefined);
-        }
-        return this.obj ? this.obj[this.prop] : undefined;
-    }
-    set(val) {
-        if (this.isArrayContext) {
-            this.obj.forEach(item => { if (item) item[this.prop] = val; });
-            return val;
-        }
-        if (this.obj) this.obj[this.prop] = val;
-        return val;
-    }
-}
-
-function unref(val) {
-    return val instanceof Ref ? val.get() : val;
-}
-
-function isQuotedStringLiteral(value) {
-    const quote = value[0];
-    if ((quote !== "'" && quote !== '"') || value.at(-1) !== quote) return false;
-
-    for (let i = 1; i < value.length - 1; i++) {
-        if (value[i] === "\\") {
-            i++;
-        } else if (value[i] === quote) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-function safeParse(expression, registry = new Map()) {
-    if (typeof expression !== "string") return expression;
-
-    let currentExpr = expression.trim();
-    if (!currentExpr) return null;
-
-    const tokenizerRegex = /('[^']*'|"[^"]*"|\d+(?:\.\d+)?|>=|<=|===|!==|==|!=|&&|\|\||[a-zA-Z_][a-zA-Z0-9_\.]*|[\+\-\*\/\%\(\)\?\:\>\<\!\,\=])/g;
-    const tokens = currentExpr.match(tokenizerRegex) || [];
-    let pos = 0;
-
-    function peek() { return tokens[pos]; }
-    function consume() { return tokens[pos++]; }
-
-    function parse() {
-        return parseAssignment();
-    }
-
-    function parseAssignment() {
-        let left = parseTernary();
-        if (peek() === "=") {
-            consume();
-            let right = unref(parseAssignment());
-            if (left instanceof Ref) {
-                return left.set(right);
-            }
-            return right;
-        }
-        return left;
-    }
-
-    function parseTernary() {
-        let left = parseLogical();
-        if (peek() === "?") {
-            consume();
-            let trueExpr = parseTernary();
-            if (peek() === ":") {
-                consume();
-                let falseExpr = parseTernary();
-                return unref(left) ? unref(trueExpr) : unref(falseExpr);
-            }
-        }
-        return left;
-    }
-
-    function parseLogical() {
-        let left = parseComparison();
-        while (peek() === "&&" || peek() === "||") {
-            let op = consume();
-            let right = parseComparison();
-            if (op === "&&") left = unref(left) && unref(right);
-            if (op === "||") left = unref(left) || unref(right);
-        }
-        return left;
-    }
-
-    function parseComparison() {
-        let left = parseAdditive();
-        while ([">", "<", ">=", "<=", "===", "!==", "==", "!="].includes(peek())) {
-            let op = consume();
-            let right = parseAdditive();
-            let l = unref(left), r = unref(right);
-            if (op === ">") left = l > r;
-            if (op === "<") left = l < r;
-            if (op === ">=") left = l >= r;
-            if (op === "<=") left = l <= r;
-            if (op === "===") left = l === r;
-            if (op === "!==") left = l !== r;
-            if (op === "==") left = l == r;
-            if (op === "!=") left = l != r;
-        }
-        return left;
-    }
-
-    function parseAdditive() {
-        let left = parseMultiplicative();
-        while (["+", "-"].includes(peek())) {
-            let op = consume();
-            let right = parseMultiplicative();
-            if (op === "+") left = unref(left) + unref(right);
-            if (op === "-") left = unref(left) - unref(right);
-        }
-        return left;
-    }
-
-    function parseMultiplicative() {
-        let left = parsePrimary();
-        while (["*", "/", "%"].includes(peek())) {
-            let op = consume();
-            let right = parsePrimary();
-            if (op === "*") left = unref(left) * unref(right);
-            if (op === "/") left = unref(left) / unref(right);
-            if (op === "%") left = unref(left) % unref(right);
-        }
-        return left;
-    }
-
-    function parsePrimary() {
-        let token = consume();
-        if (!token) return undefined;
-
-        if (/^\d/.test(token)) return parseFloat(token);
-
-        if (token.startsWith("'") || token.startsWith('"')) {
-            return token.slice(1, -1);
-        }
-
-        if (token === "true") return true;
-        if (token === "false") return false;
-
-        if (token === "(") {
-            let expr = unref(parse());
-            if (peek() === ")") consume();
-            return expr;
-        }
-
-        if (token === "-") return -unref(parsePrimary());
-        if (token === "!") return !unref(parsePrimary());
-
-        if (mathConstants.hasOwnProperty(token)) return mathConstants[token];
-
-        if (peek() === "(" && mathFunctions.hasOwnProperty(token)) {
-            consume();
-            let args = [];
-            if (peek() !== ")") {
-                args.push(unref(parse()));
-                while (peek() === ",") {
-                    consume();
-                    args.push(unref(parse()));
-                }
-            }
-            if (peek() === ")") consume();
-            return mathFunctions[token](...args);
-        }
-
-        let path = token.split(".");
-        let baseToken = path[0];
-        let val;
-
-        if (registry && typeof registry.get === 'function' && registry.has(baseToken)) {
-            val = registry.get(baseToken);
-        } else if (typeof window !== "undefined" && window[baseToken]) {
-            val = window[baseToken];
-        } else {
-            val = undefined;
-        }
-
-        if (path.length === 1) {
-            if (peek() === "(" && typeof val === "function") {
-                consume();
-                let args = [];
-                if (peek() !== ")") {
-                    args.push(unref(parse()));
-                    while (peek() === ",") {
-                        consume();
-                        args.push(unref(parse()));
-                    }
-                }
-                if (peek() === ")") consume();
-                return val(...args);
-            }
-            return val;
-        }
-
-        for (let i = 1; i < path.length - 1; i++) {
-            if (val !== null && val !== undefined) {
-                let isList = Array.isArray(val) || (typeof NodeList !== "undefined" && val instanceof NodeList) || (typeof HTMLCollection !== "undefined" && val instanceof HTMLCollection);
-                if (isList && !(path[i] in val)) {
-                    val = Array.from(val).map(item => item ? item[path[i]] : undefined);
-                } else {
-                    val = val[path[i]];
-                }
-            } else {
-                return undefined;
-            }
-        }
-
-        let ref = new Ref(val, path[path.length - 1]);
-
-        if (peek() === "(") {
-            consume();
-            let args = [];
-            if (peek() !== ")") {
-                args.push(unref(parse()));
-                while (peek() === ",") {
-                    consume();
-                    args.push(unref(parse()));
-                }
-            }
-            if (peek() === ")") consume();
-
-            if (ref.isArrayContext) {
-                return ref.obj.map(item => {
-                    let func = item ? item[ref.prop] : undefined;
-                    return typeof func === "function" ? func.apply(item, args) : undefined;
-                });
-            } else {
-                let func = ref.obj ? ref.obj[ref.prop] : undefined;
-                if (typeof func === "function") {
-                    return func.apply(ref.obj, args);
-                }
-            }
-        }
-
-        return ref;
-    }
-
-    try {
-        return unref(parse());
-    } catch (error) {
-        console.warn(`safeParse error: ${error.message} (Expr: "${expression}")`, error);
-        return null;
-    }
-}
-
-const globalOperatorNames = new Set(_sharedGlobals_js__WEBPACK_IMPORTED_MODULE_4__/* .sharedGlobalOperators */ .I.keys());
-
-const customOperators = new Map([
-	..._sharedGlobals_js__WEBPACK_IMPORTED_MODULE_4__/* .sharedGlobalOperators */ .I,
-	...(isBrowser ? _browserGlobals_js__WEBPACK_IMPORTED_MODULE_3__/* .browserGlobalOperators */ .n : []),
-    ...Object.entries({
-        "ObjectId()": () => (0,_ObjectId_js__WEBPACK_IMPORTED_MODULE_2__/* .ObjectId */ .V)().toString(),
-        "$": function (expression) {
-            return safeParse(expression, this.registry);
-        },
-        $ast: function (expression) {
-            if (!astSyncRef) {
-                console.warn("[Operator Engine] AST Evaluator reference not registered.");
-                return expression;
-            }
-            return astSyncRef({
-                executeAST: parseASTExpression(expression),
-                node: this.element,
-                registry: this.registry
-            });
-        },
-        $astAsync: async function (expression) {
-            if (!astAsyncRef) {
-                console.warn("[Operator Engine] AST Async Evaluator reference not registered.");
-                return expression;
-            }
-            return await astAsyncRef({
-                executeAST: parseASTExpression(expression),
-                node: this.element,
-                registry: this.registry
-            });
-        },
-        $param: function (...args) { return args.length === 1 ? args[0] : args; },
-        $getObjectValue: function (obj, key) {
-            return (0,_getValueFromObject_js__WEBPACK_IMPORTED_MODULE_0__/* .getValueFromObject */ .r)(obj, key);
-        },
-    })
-]
-);
-
-const isConstructor = (func, name) => {
-    try {
-        if (typeof func !== 'function') return false;
-        if (/^\s*class\s+/.test(func.toString())) return true;
-        if (!func.prototype) return false;
-        const n = name || func.name;
-        if (n && /^[A-Z]/.test(n)) return true;
-    } catch (e) { }
-    return false;
-};
-
-const findInnermostOperator = (expression) => {
-    let parens = [];
-    let stack = [];
-    let inSQ = false, inDQ = false;
-
-    for (let i = 0; i < expression.length; i++) {
-        const char = expression[i];
-        if (char === '\\') { i++; continue; }
-        if (char === '"' && !inSQ) inDQ = !inDQ;
-        if (char === "'" && !inDQ) inSQ = !inSQ;
-        if (inSQ || inDQ) continue;
-
-        if (char === "`") {
-            let layers = 1;
-            while (expression[i + layers] === "`") layers++;
-            let delimiter = "`".repeat(layers);
-            let end = expression.indexOf(delimiter, i + layers);
-            // Two adjacent backticks can also represent an empty string.
-            if (end === -1 && layers > 1) {
-                layers = 1;
-                delimiter = "`";
-                end = i + 1;
-            }
-            while (end !== -1) {
-                let escapes = 0;
-                for (let j = end - 1; j >= 0 && expression[j] === "\\"; j--) escapes++;
-                if (escapes % 2 === 0) break;
-                end = expression.indexOf(delimiter, end + delimiter.length);
-            }
-            if (end !== -1) {
-                return {
-                    stringLiteral: true,
-                    layers,
-                    start: i,
-                    args: expression.slice(i + layers, end),
-                    fullMatch: expression.slice(i, end + layers)
-                };
-            }
-        }
-
-        if (char === '(') {
-            stack.push(i);
-        } else if (char === ')') {
-            if (stack.length > 0) {
-                const start = stack.pop();
-                parens.push({ start: start, end: i, depth: stack.length });
-            }
-        }
-    }
-
-    parens.sort((a, b) => b.depth - a.depth || b.start - a.start);
-
-    function stripParentheses(str) {
-        let result = str.trim();
-        if (result.startsWith("(") && result.endsWith(")")) {
-            let balance = 0;
-            let isMatchedPair = true;
-            for (let i = 0; i < result.length - 1; i++) {
-                if (result[i] === '(') balance++;
-                else if (result[i] === ')') balance--;
-                if (balance === 0) { isMatchedPair = false; break; }
-            }
-            if (isMatchedPair && balance === 1) {
-                return result.substring(1, result.length - 1);
-            }
-        }
-        return result;
-    }
-
-    for (const p of parens) {
-        const insideParens = expression.substring(p.start + 1, p.end).trim();
-        const leftPart = expression.substring(0, p.start);
-
-        const match = leftPart.match(/(?:^|[^\w\$])(\$[\w\-]*|ObjectId\b)\s*$/);
-
-        if (match) {
-            let opName = match[1] === 'ObjectId' ? 'ObjectId()' : match[1];
-            if (customOperators.has(opName) || /^\$[\w\-]*$/.test(opName)) {
-                const spacesMatch = leftPart.match(/\s*$/);
-                const spacesAtEnd = spacesMatch ? spacesMatch[0].length : 0;
-                const fullMatchStart = match.index + match[0].length - match[1].length - spacesAtEnd;
-
-                return {
-                    operator: opName,
-                    start: fullMatchStart,
-                    args: insideParens,
-                    fullMatch: expression.substring(fullMatchStart, p.end + 1),
-                    rawContent: expression.substring(fullMatchStart, p.end + 1)
-                };
-            }
-        }
-    }
-
-    const bareRegex = /(?:^|[^\w\$])(\$[\w\-]+|ObjectId\b)/g;
-    let bareMatch;
-    let bareCandidates = [];
-
-    const unquotedExpression = expression.replace(
-        /'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/g,
-        literal => " ".repeat(literal.length)
-    );
-    while ((bareMatch = bareRegex.exec(unquotedExpression)) !== null) {
-        let possibleOp = bareMatch[1];
-        let opName = possibleOp === 'ObjectId' ? 'ObjectId()' : possibleOp;
-        let remainder = expression.substring(bareMatch.index + bareMatch[0].length);
-        if (!/^\s*\(/.test(remainder)) {
-            if (customOperators.has(opName) || /^\$[\w\-]+$/.test(opName)) {
-                bareCandidates.push({
-                    operator: opName,
-                    args: undefined,
-                    rawContent: possibleOp,
-                    fullMatch: possibleOp,
-                    start: bareMatch.index + (bareMatch[0].length - possibleOp.length)
-                });
-            }
-        }
-    }
-
-    if (bareCandidates.length > 0) {
-        bareCandidates.sort((a, b) => b.start - a.start);
-        return bareCandidates[0];
-    }
-
-    return { operator: null, args: stripParentheses(expression), rawContent: expression.trim() };
-};
-
-function processValues(elements, operator, args, parent, objectRegistry) {
-    let customOp = customOperators.get(operator);
-    let results = [];
-    let hasValidProperty = customOp ? true : false;
-    const preserveNullish = operator === "$undefined" || operator === "$null";
-
-    for (const el of elements) {
-        if (!el) continue;
-        let rawValue = customOp;
-        const propName = customOp ? null : operator.substring(1);
-        if (!customOp) {
-            if (propName in el) {
-                hasValidProperty = true;
-                rawValue = el[propName];
-            } else {
-                continue;
-            }
-        }
-
-        let preparedArgs = [];
-        const originalWasArray = Array.isArray(args);
-        const hasArgs = originalWasArray || args !== undefined;
-
-        if (operator === "$" && typeof args === "string") {
-            // safeParse consumes the expression, including its string delimiters.
-            preparedArgs = [args];
-        } else if (originalWasArray) {
-            preparedArgs = Array.from(args);
-        } else if (typeof args === "string") {
-            if (args === "") {
-                preparedArgs = [""];
-            } else {
-                let parsedArgs = [];
-                let currentArg = '';
-                let inSQ = false, inDQ = false;
-                let depth = 0;
-
-                for (let i = 0; i < args.length; i++) {
-                    const char = args[i];
-                    if (char === '\\') {
-                        currentArg += char;
-                        if (i + 1 < args.length) currentArg += args[++i];
-                        continue;
-                    }
-                    if (char === "'" && !inDQ) inSQ = !inSQ;
-                    if (char === '"' && !inSQ) inDQ = !inDQ;
-
-                    if (!inSQ && !inDQ) {
-                        if (char === '(' || char === '[' || char === '{') depth++;
-                        else if (char === ')' || char === ']' || char === '}') depth--;
-                    }
-
-                    if (char === ',' && !inSQ && !inDQ && depth === 0) {
-                        parsedArgs.push(currentArg.trim());
-                        currentArg = '';
-                    } else {
-                        currentArg += char;
-                    }
-                }
-                if (currentArg.trim() !== "") parsedArgs.push(currentArg.trim());
-
-                preparedArgs = parsedArgs.map(arg => {
-                    if (/^__OBJ_\d+__$/.test(arg) && objectRegistry && objectRegistry.has(arg)) {
-                        return objectRegistry.get(arg);
-                    }
-                    if (!isNaN(arg) && arg.trim() !== "") {
-                        return Number(arg);
-                    }
-                    if (arg === "true") return true;
-                    if (arg === "false") return false;
-                    if (arg === "null") return null;
-                    if (arg === "undefined") return undefined;
-
-                    if (isQuotedStringLiteral(arg)) {
-                        let unquoted = arg.slice(1, -1);
-                        if (unquoted.includes("__OBJ_")) {
-                            return unquoted.replace(/__OBJ_\d+__/g, (match) => {
-                                if (objectRegistry && objectRegistry.has(match)) {
-                                    let val = objectRegistry.get(match);
-                                    return typeof val === "object" ? JSON.stringify(val) : String(val);
-                                }
-                                return match;
-                            });
-                        }
-                        return unquoted;
-                    }
-
-                    if (typeof arg === "string" && arg.includes("__OBJ_")) {
-                        return arg.replace(/__OBJ_\d+__/g, (match) => {
-                            if (objectRegistry && objectRegistry.has(match)) {
-                                let val = objectRegistry.get(match);
-                                return typeof val === "object" ? JSON.stringify(val) : String(val);
-                            }
-                            return match;
-                        });
-                    }
-                    return arg;
-                });
-            }
-        } else if (hasArgs) {
-            preparedArgs = [args];
-        }
-
-        if (originalWasArray) {
-            preparedArgs = preparedArgs.map(a => {
-                if (typeof a === 'string' && /^__OBJ_\d+__$/.test(a) && objectRegistry && objectRegistry.has(a)) {
-                    return objectRegistry.get(a);
-                }
-                return a;
-            });
-        }
-
-        let resolvedArgs;
-        if (originalWasArray || preparedArgs.length > 1) {
-            resolvedArgs = preparedArgs;
-        } else if (preparedArgs.length === 1) {
-            resolvedArgs = preparedArgs[0];
-        } else {
-            resolvedArgs = undefined;
-        }
-
-        if (typeof rawValue === "function") {
-            try {
-                let execCtx = { element: el, registry: objectRegistry };
-                if (isConstructor(rawValue, propName)) {
-                    if (Array.isArray(resolvedArgs)) {
-                        rawValue = new rawValue(...resolvedArgs);
-                    } else if (resolvedArgs !== undefined) {
-                        rawValue = new rawValue(resolvedArgs);
-                    } else {
-                        rawValue = new rawValue();
-                    }
-                } else {
-                    if (Array.isArray(resolvedArgs)) {
-                        rawValue = rawValue.apply(execCtx, resolvedArgs);
-                    } else if (resolvedArgs !== undefined) {
-                        rawValue = rawValue.call(execCtx, resolvedArgs);
-                    } else {
-                        rawValue = rawValue.call(execCtx);
-                    }
-                }
-            } catch (err) {
-                console.warn(`Operator Engine: Failed to execute method or operator "${operator}"`, err);
-                continue;
-            }
-        } else if (hasArgs && propName) {
-            try {
-                el[propName] = resolvedArgs;
-                rawValue = el[propName];
-            } catch (err) {
-                console.warn(`Operator Engine: Failed to assign property "${propName}"`, err);
-                continue;
-            }
-        }
-
-        if (preserveNullish || (rawValue !== undefined && rawValue !== null)) {
-            results.push(rawValue);
-        }
-    }
-
-    if (!hasValidProperty) return undefined;
-    if (results.length === 0) return "";
-    if (results.length === 1) return results[0];
-    return results;
-}
-
-function unpackTokens(val, registry) {
-    if (typeof val === "string") {
-        const exactMatch = val.match(/^__OBJ_(\d+)__$/);
-        if (exactMatch && registry.has(val)) {
-            return registry.get(val);
-        }
-        if (val.includes("__OBJ_")) {
-            return val.replace(/__OBJ_\d+__(?:\.[a-zA-Z0-9_]+)*(?:\([^)]*\))?/g, (match) => {
-                const parsed = safeParse(match, registry);
-                if (parsed !== null && parsed !== undefined) {
-                    return typeof parsed === "object" ? JSON.stringify(parsed) : String(parsed);
-                }
-                const baseTokenMatch = match.match(/^__OBJ_\d+__/);
-                if (baseTokenMatch && registry.has(baseTokenMatch[0])) {
-                    const baseVal = registry.get(baseTokenMatch[0]);
-                    return typeof baseVal === "object" ? JSON.stringify(baseVal) : String(baseVal);
-                }
-                return "";
-            });
-        }
-    }
-    return val;
-}
-
-function resolveOperator(element, operator, args, parent, params, objectRegistry) {
-    if (params.some((p) => p instanceof Promise)) return "";
-    // Query operators receive selector syntax (for example "$closest form input").
-    // Let queryElements interpret its traversal tokens instead of treating
-    // them as nested AST operators.
-    if (
-        operator !== "$query" &&
-        operator !== "$queryAll" &&
-        args &&
-        typeof args === "string" &&
-        args.includes("$")
-    ) {
-        args = processOperators(element, args, [], operator, params, objectRegistry);
-    }
-
-    // Environment roots and `$()` do not require a DOM receiver.
-    let targetElements = element ? [element]
-        : operator === "$" || globalOperatorNames.has(operator) ? [{}] : [];
-    if (args && typeof args === "string") {
-        const objMatch = args.match(/^__OBJ_(\d+)__$/);
-        if (objMatch && objectRegistry.has(args)) {
-            let registeredVal = objectRegistry.get(args);
-            let isList = Array.isArray(registeredVal) || (typeof NodeList !== "undefined" && registeredVal instanceof NodeList) || (typeof HTMLCollection !== "undefined" && registeredVal instanceof HTMLCollection);
-            targetElements = isList ? Array.from(registeredVal) : [registeredVal];
-        } else if (!customOperators.has(operator) && (operator === "$query")) {
-            let qResults = (0,_queryElements_js__WEBPACK_IMPORTED_MODULE_1__/* .queryElements */ .a5)({ element, selector: args });
-            if (!qResults) {
-                targetElements = [];
-            } else {
-                let isList = Array.isArray(qResults) || (typeof NodeList !== "undefined" && qResults instanceof NodeList) || (typeof HTMLCollection !== "undefined" && qResults instanceof HTMLCollection);
-                targetElements = isList ? Array.from(qResults) : [qResults];
-            }
-            if (!targetElements.length) return undefined;
-        }
-    }
-
-    let value = processValues(targetElements, operator, args, parent, objectRegistry);
-    return value;
-}
-
-function processOperators(element, value, exclude = [], parent, params = [], objectRegistry = new Map()) {
-    if (typeof value !== "string" || (!value.includes("$") && !value.includes("ObjectId()") && !value.includes("`"))) return value;
-    let processedValue = value, hasPromise = false, unresolvedTokens = new Map();
-
-    while (typeof processedValue === "string" && (processedValue.includes("$") || processedValue.includes("ObjectId()") || processedValue.includes("`"))) {
-        const { operator, args, rawContent, fullMatch, stringLiteral, layers, start } = findInnermostOperator(processedValue);
-        if ((!operator && !stringLiteral) || (operator === "$param" && !args)) break;
-
-        const textToReplace = fullMatch || rawContent;
-        const replaceMatch = replacement =>
-            processedValue.slice(0, start) + replacement + processedValue.slice(start + textToReplace.length);
-        if (exclude.includes(operator)) {
-            const token = `__UNRESOLVED_${unresolvedTokens.size}__`;
-            unresolvedTokens.set(token, textToReplace);
-            processedValue = replaceMatch(token);
-            continue;
-        }
-
-        let resolvedValue;
-        if (stringLiteral && layers > 1) {
-            const delimiter = "`".repeat(layers - 1);
-            resolvedValue = delimiter + args + delimiter;
-        } else if (stringLiteral) {
-            const result = astSyncRef
-                ? astSyncRef({
-                    executeAST: args,
-                    node: element,
-                    registry: objectRegistry,
-                    sandbox: Object.assign(
-                        Object.create(isBrowser ? _browserGlobals_js__WEBPACK_IMPORTED_MODULE_3__/* .browserGlobalsScope */ .B : _sharedGlobals_js__WEBPACK_IMPORTED_MODULE_4__/* .sharedGlobalsScope */ .p),
-                        { element }
-                    )
-                })
-                : processOperators(element, args, exclude, null, params, objectRegistry);
-            resolvedValue = result instanceof Promise ? result.then(String) : String(result);
-        } else {
-            resolvedValue = resolveOperator(element, operator, args, parent, params, objectRegistry);
-        }
-        if (resolvedValue === undefined) {
-            if (operator === "$undefined" && processedValue.trim() === operator)
-                return undefined;
-            const token = `__UNRESOLVED_${unresolvedTokens.size}__`;
-            unresolvedTokens.set(token, textToReplace);
-            processedValue = replaceMatch(token);
-            continue;
-        }
-        if (resolvedValue === null && operator === "$null" && processedValue.trim() === operator) {
-            return null;
-        }
-        if (resolvedValue instanceof Promise) {
-            const paramIndex = params.length;
-            params.push(resolvedValue);
-            processedValue = replaceMatch(`$$PARAM_${paramIndex}$$`);
-            hasPromise = true;
-            break;
-        }
-        if (params.some((p) => p instanceof Promise)) { hasPromise = true; break; }
-
-        let replacement = "";
-        if (operator === "$param") params.push(resolvedValue);
-        else if (resolvedValue !== null && (typeof resolvedValue === "object" || typeof resolvedValue === "function" || typeof resolvedValue === "string")) {
-            const token = `__OBJ_${objectRegistry.size}__`;
-            objectRegistry.set(token, resolvedValue);
-            replacement = token;
-        } else replacement = resolvedValue ?? "";
-
-        if (processedValue === textToReplace) { processedValue = replacement; break; }
-        processedValue = replaceMatch(replacement);
-    }
-
-    if (typeof processedValue === "string") {
-        let keys = Array.from(unresolvedTokens.keys()).reverse();
-        for (const token of keys) {
-            processedValue = processedValue.replaceAll(token, unresolvedTokens.get(token));
-        }
-        if (!hasPromise && !parent) processedValue = unpackTokens(processedValue, objectRegistry);
-    }
-
-    if (hasPromise) return { value: processedValue, params, objectRegistry };
-    return processedValue;
-}
-
-async function processOperatorsAsync(element, value, exclude = [], parent, params = [], objectRegistry = new Map()) {
-    let result = processOperators(element, value, exclude, parent, params, objectRegistry);
-    while (result && typeof result === "object" && result.params) {
-        const resolvedParams = await Promise.all(result.params);
-        objectRegistry = result.objectRegistry || objectRegistry;
-        const resumedValue = result.value.replace(/\$\$PARAM_(\d+)\$\$/g, (_, index) => {
-            const token = `__OBJ_${objectRegistry.size}__`;
-            objectRegistry.set(token, resolvedParams[Number(index)]);
-            return token;
-        });
-        result = processOperators(element, resumedValue, exclude, parent, [], objectRegistry);
-    }
-    return parent ? result : unpackTokens(result, objectRegistry);
-}
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "Jd", 0, /* binding */ customOperators,
-/* harmony export */   "kg", 0, /* binding */ globalOperatorNames
-/* harmony export */ ]);
-
-
-/***/ },
-
-/***/ 5304
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   pK: () => (/* binding */ astAsync)
-/* harmony export */ });
-/* unused harmony export astSync */
-/* unused harmony import specifier */ var evaluateSync;
-/* harmony import */ var _index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(99);
-/* harmony import */ var _serverGlobals_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8146);
-
-
-
-(0,_index_js__WEBPACK_IMPORTED_MODULE_0__/* .registerASTGlobals */ .KY)(_serverGlobals_js__WEBPACK_IMPORTED_MODULE_1__/* .serverGlobalsScope */ .Q);
-
-// Keep registration with the server entry when bundlers follow these exports.
-function astSync(options) {
-    return evaluateSync(options);
-}
-
-async function astAsync(options) {
-    return await (0,_index_js__WEBPACK_IMPORTED_MODULE_0__/* .astAsync */ .pK)(options);
-}
-
-/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (astSync)));
-
-
-/***/ },
-
-/***/ 8146
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* unused harmony export serverModules */
-/* harmony import */ var node_process__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7721);
-/* harmony import */ var node_buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1786);
-/* harmony import */ var _security_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9180);
-
-
-
-
-// Non-deprecated top-level Node modules. Keep inactive entries beside the active list
-// so runtime availability is visible without loading every module at startup.
-const serverModules = [
-    "assert", // Check invariants and compare expected results.
-    "async_hooks", // Track asynchronous resources and execution context.
-    "buffer", // Binary byte buffers and encoding utilities.
-    "child_process", // Start subprocesses and exchange data with them.
-    "cluster", // Run Node processes that can share server ports.
-    "console", // Log messages and inspect values.
-    "crypto", // Native hashing, signing, encryption, and key generation.
-    // "dgram", // UDP datagram sockets; not needed currently.
-    "diagnostics_channel", // Publish and subscribe to diagnostic events.
-    "dns", // Resolve domain names and query DNS records.
-    "events", // EventEmitter and event subscription utilities.
-    // "ffi", // Call native libraries; unavailable in the current Node 24 runtime.
-    "fs", // Read, write, watch, and manage files and directories.
-    "http", // HTTP/1 clients and servers.
-    "http2", // HTTP/2 clients, servers, and multiplexed streams.
-    "https", // HTTP over encrypted TLS connections.
-    "inspector", // Connect to V8 debugging and profiling tools.
-    "module", // Inspect and customize Node module loading.
-    "net", // TCP servers, client sockets, and local IPC connections.
-    "os", // Operating-system, CPU, memory, and network information.
-    "path", // Join, normalize, and inspect filesystem paths.
-    "perf_hooks", // Measure performance and observe timing events.
-    "process", // Process arguments, environment, lifecycle, and resource usage.
-    "querystring", // Parse and format URL query strings.
-    "readline", // Read text streams one line at a time.
-    // "repl", // Interactive read-eval-print loop; not needed currently.
-    "sea", // Access assets embedded in a Node single-executable application.
-    // "sqlite", // Embedded SQLite database; not needed currently.
-    "stream", // Process data incrementally with backpressure.
-    "string_decoder", // Decode byte chunks without splitting text characters.
-    "test", // Define and run Node's built-in tests.
-    "timers", // Schedule and cancel callbacks; includes promise-based timers.
-    "tls", // Create encrypted TLS connections and servers.
-    "trace_events", // Enable tracing of Node and V8 runtime activity.
-    "tty", // Detect and work with terminal input/output streams.
-    "url", // Parse, construct, and convert URLs and file URLs.
-    "util", // Promisify callbacks, inspect values, and access utility APIs.
-    "v8", // Inspect V8 heap data and serialize JavaScript values.
-    "vm", // Compile and run JavaScript in contexts in the current thread.
-    "wasi", // Provide operating-system interfaces to WebAssembly programs.
-    "worker_threads", // Run JavaScript in parallel threads in one process.
-    "zlib" // Compress and decompress data, including gzip and Brotli.
-];
-
-const serverGlobalsScope = {
-    $global: globalThis, // Node global object; also available as shared $globalThis.
-    $Buffer: node_buffer__WEBPACK_IMPORTED_MODULE_1__.Buffer, // Native binary buffer constructor.
-    $security: _security_js__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Ay, // Existing CoCreate security helpers.
-    $setImmediate: globalThis.setImmediate, // Schedule a callback for the check phase.
-    $clearImmediate: globalThis.clearImmediate // Cancel a scheduled immediate callback.
-};
-
-for (const name of serverModules) {
-    const key = `$${name}`;
-    Object.defineProperty(serverGlobalsScope, key, {
-        enumerable: true,
-        configurable: true,
-        get() { return (0,node_process__WEBPACK_IMPORTED_MODULE_0__.getBuiltinModule)(`node:${name}`); },
-        set(value) {
-            Object.defineProperty(this, key, {
-                value, writable: true, configurable: true, enumerable: true
-            });
-        }
-    });
-}
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "Q", 0, /* binding */ serverGlobalsScope
-/* harmony export */ ]);
-
-
-/***/ },
-
-/***/ 1092
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony import */ var _ObjectId_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5264);
-/* harmony import */ var _uuid_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3105);
-/* harmony import */ var _file_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3030);
-/* harmony import */ var _file_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5758);
-
-
-
-
-function concatValues(values) {
-    return values
-        .flat()
-        .map((value) =>
-            typeof value === "object"
-                ? JSON.stringify(value)
-                : value
-        )
-        .join("");
-}
-
-function numericValue(value) {
-    if (value && typeof value === "object" && "value" in value) {
-        value = value.value;
-    }
-    const number = Number(value);
-    return Number.isFinite(number) ? number : 0;
-}
-
-const sharedGlobals = {
-    $Math: Math,
-    $Number: Number,
-    $String: String,
-    $Boolean: Boolean,
-    $Date: Date,
-    $JSON: JSON,
-    $Array: Array,
-    $Object: Object,
-    $encodeContent: _file_index_js__WEBPACK_IMPORTED_MODULE_2__/* .encodeContent */ .s,
-    $decodeContent: _file_index_js__WEBPACK_IMPORTED_MODULE_2__/* .decodeContent */ .K,
-    $getContentType: _file_index_js__WEBPACK_IMPORTED_MODULE_3__/* .getContentType */ .gt,
-    $getExtension: _file_index_js__WEBPACK_IMPORTED_MODULE_3__/* .getExtension */ .uQ,
-    $getExtensions: _file_index_js__WEBPACK_IMPORTED_MODULE_3__/* .getExtensions */ .v5,
-    $isTextContentType: _file_index_js__WEBPACK_IMPORTED_MODULE_3__/* .isTextContentType */ .tl,
-    $parseInt: parseInt,
-    $parseFloat: parseFloat,
-    $encodeURIComponent: encodeURIComponent,
-    $decodeURIComponent: decodeURIComponent,
-    $throw: (message) => {
-        throw new Error(String(message));
-    },
-    $error: function (error) {
-        const registry = this?.registry;
-        const payload = registry?.get?.("payload") ?? registry?.get?.("$payload");
-        if (!payload || typeof payload !== "object") return;
-
-        if (!Array.isArray(payload.error)) {
-            payload.error = payload.error == null ? [] : [payload.error];
-        }
-
-        if (Array.isArray(error)) payload.error.push(...error);
-        else payload.error.push(error);
-
-        return payload.error;
-    },
-    $btoa: (str) => {
-        if (typeof btoa === "function") return btoa(String(str));
-        return Buffer.from(String(str)).toString("base64");
-    },
-    $atob: (b64) => {
-        if (typeof atob === "function") return atob(b64);
-        return Buffer.from(String(b64), "base64").toString("utf-8");
-    },
-    $true: () => true,
-    $false: () => false,
-    $null: () => null,
-    $undefined: () => undefined,
-    $numberFormat: function (...args) {
-        const locale = args[0] || undefined;
-        const options = args[1] || {};
-        const numCandidate = args[2] !== undefined ? args[2] : args[0];
-        const number = parseFloat(numCandidate);
-        if (isNaN(number)) return String(numCandidate ?? "");
-        return new Intl.NumberFormat(locale, options).format(number);
-    },
-    $add: (...values) =>
-        values.flat(Infinity).reduce((sum, item) => sum + numericValue(item), 0),
-    $multiply: (...values) =>
-        values.flat(Infinity).reduce((product, item) => product * numericValue(item), 1),
-    $round: (value, precision = 0) => {
-        const factor = 10 ** Number(precision);
-        return Math.round((numericValue(value) + Number.EPSILON) * factor) / factor;
-    },
-    $concat: (value) =>
-        Array.isArray(value)
-            ? concatValues(value)
-            : String(value ?? ""),
-    get $object_id() { return (0,_ObjectId_js__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V)().toString(); },
-    $uuid: (prefix) => (0,_uuid_js__WEBPACK_IMPORTED_MODULE_1__/* .uuid */ .u)(prefix) || "",
-    $randomColor: () => `hsla(${Math.floor(Math.random() * 360)}, 75%, 58%, 1)`,
-    $parse: (value = "") => {
-        try {
-            return JSON.parse(value);
-        } catch {
-            return value;
-        }
-    },
-    $await: {
-        all: async (promises) => {
-            if (promises && typeof promises === "object" && !Array.isArray(promises)) {
-                const keys = Object.keys(promises);
-                const results = await Promise.all(keys.map((key) => promises[key]));
-                return Object.fromEntries(keys.map((key, index) => [key, results[index]]));
-            }
-            return Promise.all(Array.isArray(promises) ? promises : [promises]);
-        },
-        any: async (promises) => {
-            if (promises && typeof promises === "object" && !Array.isArray(promises)) {
-                return Promise.any(Object.values(promises));
-            }
-            return Promise.any(Array.isArray(promises) ? promises : [promises]);
-        },
-        race: async (promises) => {
-            if (promises && typeof promises === "object" && !Array.isArray(promises)) {
-                return Promise.race(Object.values(promises));
-            }
-            return Promise.race(Array.isArray(promises) ? promises : [promises]);
-        },
-        allSettled: async (promises) => {
-            if (promises && typeof promises === "object" && !Array.isArray(promises)) {
-                const keys = Object.keys(promises);
-                const results = await Promise.allSettled(keys.map((key) => promises[key]));
-                return Object.fromEntries(keys.map((key, index) => [key, results[index]]));
-            }
-            return Promise.allSettled(Array.isArray(promises) ? promises : [promises]);
-        },
-        delay: (ms) => new Promise((resolve) => setTimeout(resolve, Number(ms) || 0))
-    }
-};
-
-// Standard JavaScript and Web API roots shared by browsers and Node.
-// Getters preserve native objects and leave unavailable APIs undefined.
-const nativeGlobals = [
-    "globalThis", "Function", "Promise", "RegExp", "Map", "Set", "WeakMap", "WeakSet", "WeakRef",
-    "FinalizationRegistry", "Symbol", "BigInt", "Intl", "Reflect", "Proxy",
-    "ArrayBuffer", "SharedArrayBuffer", "DataView", "Atomics",
-    "Int8Array", "Uint8Array", "Uint8ClampedArray", "Int16Array", "Uint16Array",
-    "Int32Array", "Uint32Array", "Float16Array", "Float32Array", "Float64Array",
-    "BigInt64Array", "BigUint64Array",
-    "Error", "AggregateError", "EvalError", "RangeError", "ReferenceError",
-    "SyntaxError", "TypeError", "URIError", "DOMException",
-    "fetch", "Request", "Response", "Headers", "FormData", "Blob", "File",
-    "console", "crypto", "Crypto", "CryptoKey", "SubtleCrypto", "performance", "navigator",
-    "URL", "URLSearchParams", "URLPattern", "TextEncoder", "TextDecoder",
-    "TextEncoderStream", "TextDecoderStream",
-    "AbortController", "AbortSignal", "Event", "EventTarget", "CustomEvent",
-    "BroadcastChannel", "MessageChannel", "MessagePort", "MessageEvent", "EventSource",
-    "ReadableStream", "ReadableStreamDefaultReader", "ReadableStreamBYOBReader",
-    "ReadableStreamBYOBRequest", "ReadableByteStreamController",
-    "ReadableStreamDefaultController", "WritableStream", "WritableStreamDefaultWriter",
-    "WritableStreamDefaultController", "TransformStream", "TransformStreamDefaultController",
-    "ByteLengthQueuingStrategy", "CountQueuingStrategy", "CompressionStream",
-    "DecompressionStream", "WebAssembly", "WebSocket",
-    "setTimeout", "clearTimeout", "setInterval", "clearInterval",
-    "queueMicrotask", "structuredClone", "isNaN", "isFinite", "encodeURI", "decodeURI"
-];
-
-// Global functions keep their native global receiver when called by AST.
-const nativeGlobalFunctions = new Set([
-    "fetch", "setTimeout", "clearTimeout", "setInterval", "clearInterval",
-    "queueMicrotask", "structuredClone"
-]);
-
-for (const name of nativeGlobals) {
-    const key = `$${name}`;
-    Object.defineProperty(sharedGlobals, key, {
-        enumerable: true,
-        configurable: true,
-        get() {
-            const value = globalThis[name];
-            return typeof value === "function" && nativeGlobalFunctions.has(name)
-                ? value.bind(globalThis)
-                : value;
-        },
-        set(value) {
-            Object.defineProperty(this, key, {
-                value, writable: true, configurable: true, enumerable: true
-            });
-        }
-    });
-}
-
-const sharedGlobalsScope = sharedGlobals;
-
-const sharedGlobalOperators = new Map(
-    Object.entries(Object.getOwnPropertyDescriptors(sharedGlobals))
-        .map(([name, descriptor]) => [
-            name,
-            descriptor.get
-                ? function (...args) {
-                    const value = descriptor.get.call(this);
-                    return typeof value === "function"
-                        ? value.apply(this, args)
-                        : value;
-                }
-                : descriptor.value
-        ])
-);
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "I", 0, /* binding */ sharedGlobalOperators,
-/* harmony export */   "p", 0, /* binding */ sharedGlobalsScope
-/* harmony export */ ]);
-
-
-/***/ },
-
-/***/ 8791
+/***/ 8830
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -41203,7 +42882,7 @@ function setAttributeNames(attributes, overWrite) {
 
 /***/ },
 
-/***/ 9455
+/***/ 670
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -41217,7 +42896,7 @@ function checkValue(value) {
 
 /***/ },
 
-/***/ 5187
+/***/ 4806
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony export cloudProviders */
@@ -41378,7 +43057,7 @@ const cloudProviders = [
 
 /***/ },
 
-/***/ 9487
+/***/ 50
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* empty/unused harmony star reexport */
@@ -41389,7 +43068,7 @@ const cloudProviders = [
 /* harmony export */ });
 /* unused harmony exports createUpdateChanges, mergeUpdateChanges */
 /* unused harmony import specifier */ var isEqualObject;
-/* harmony import */ var _dataQuery_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(900);
+/* harmony import */ var _dataQuery_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(623);
 
 
 
@@ -41677,7 +43356,7 @@ function mergeUpdateChanges(previous, next) {
 
 /***/ },
 
-/***/ 900
+/***/ 623
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -41687,7 +43366,7 @@ function mergeUpdateChanges(previous, next) {
 /* harmony export */   kh: () => (/* binding */ isEqualArray),
 /* harmony export */   ob: () => (/* binding */ isEqualObject)
 /* harmony export */ });
-/* harmony import */ var _getValueFromObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7076);
+/* harmony import */ var _getValueFromObject_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(617);
 
 
 function isEqualArray(arr1, arr2) {
@@ -42080,7 +43759,7 @@ function sortData(data, sort) {
 
 /***/ },
 
-/***/ 4172
+/***/ 1681
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -42107,7 +43786,7 @@ function getDistribution(distribution, references) {
 
 /***/ },
 
-/***/ 2623
+/***/ 4276
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -42209,14 +43888,14 @@ function dotNotationToObject(data = {}, obj = {}) {
 
 /***/ },
 
-/***/ 3030
+/***/ 1679
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   K: () => (/* binding */ decodeContent),
 /* harmony export */   s: () => (/* binding */ encodeContent)
 /* harmony export */ });
-/* harmony import */ var _contentType_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5758);
+/* harmony import */ var _contentType_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8583);
 
 
 const textEncoder = new TextEncoder();
@@ -42401,7 +44080,7 @@ function decodeContent({ format = "auto", charset = "utf-8", fatal = false, ...o
 
 /***/ },
 
-/***/ 5758
+/***/ 8583
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -42411,7 +44090,7 @@ function decodeContent({ format = "auto", charset = "utf-8", fatal = false, ...o
 /* harmony export */   v5: () => (/* binding */ getExtensions)
 /* harmony export */ });
 /* unused harmony export mimeTypes */
-/* harmony import */ var _contentTypes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9141);
+/* harmony import */ var _contentTypes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7026);
 
 
 const contentTypeIndex = new Map(_contentTypes_js__WEBPACK_IMPORTED_MODULE_0__/* .contentTypes */ .f.map(record => [record.contentType, record]));
@@ -42463,7 +44142,7 @@ function isTextContentType(contentType = "") {
 
 /***/ },
 
-/***/ 9141
+/***/ 7026
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /** MIME records maintained here; forward and reverse indexes are derived once. */
@@ -42551,15 +44230,15 @@ const contentTypes = Object.freeze([
 
 /***/ },
 
-/***/ 5159
+/***/ 5240
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   m4: () => (/* binding */ getClientInfo)
 /* harmony export */ });
 /* unused harmony export resolveInfo */
-/* harmony import */ var _getCountryLocation_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3659);
-/* harmony import */ var _cloudProviders_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5187);
+/* harmony import */ var _getCountryLocation_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5538);
+/* harmony import */ var _cloudProviders_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4806);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate LLC and Contributors.
  *
@@ -42920,7 +44599,7 @@ if (isBrowser) {
 
 /***/ },
 
-/***/ 7531
+/***/ 4842
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -42975,7 +44654,7 @@ function getClockOffset() {
 
 /***/ },
 
-/***/ 3659
+/***/ 5538
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony exports COUNTRY_LOCATIONS, getCountryLocation */
@@ -43264,7 +44943,7 @@ function getCountryLocation(countryCode) {
 
 /***/ },
 
-/***/ 7076
+/***/ 617
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -43299,7 +44978,7 @@ function getValueFromObject(object = {}, path = "", throwError = false) {
 
 /***/ },
 
-/***/ 6496
+/***/ 7957
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -43599,7 +45278,7 @@ class HTMLScanner {
 
 /***/ },
 
-/***/ 8170
+/***/ 8101
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -43626,7 +45305,7 @@ function isValidDate(value) {
 
 /***/ },
 
-/***/ 5018
+/***/ 8307
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -43663,7 +45342,7 @@ function objectToSearchParams(paramsObj, includePrefix = true) {
 
 /***/ },
 
-/***/ 593
+/***/ 2554
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -43934,7 +45613,7 @@ function queryElementsAll({ element, prefix, selector } = {}) {
 
 /***/ },
 
-/***/ 1078
+/***/ 5999
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -43968,7 +45647,7 @@ function searchParamsToObject(value) {
 
 /***/ },
 
-/***/ 9180
+/***/ 717
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony exports Security, timingSafeEqual, base64urlEncode, base64urlDecode, base64UrlEncode, base64UrlDecode, base64Encode, hexEncode, hash, signHmac, generateKeyPair, generateApiKey, verifyApiKey, generateJWT, verifyJWT, decodeToken, verifyToken, generateToken, encrypt, decrypt, createCSR, readCertificateExpiry, parsePrivateKey, exportJwk, getJwkThumbprint, createJWS, generateVapidKeys, createVapidToken, createOAuthAssertion, createWebhookSignature, createAwsSigV4Token, transform */
@@ -44867,17 +46546,16 @@ const {
 } = Security;
 
 // Default export provides hybrid singleton instance with bound functions and embedded Class reference
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (security);
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (security)));
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "Ay", 0, __WEBPACK_DEFAULT_EXPORT__,
 /* harmony export */   "rG", 0, /* binding */ security
 /* harmony export */ ]);
 
 
 /***/ },
 
-/***/ 3105
+/***/ 6772
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -44953,7 +46631,7 @@ function uuid(length = 36) {
 
 /***/ },
 
-/***/ 5281
+/***/ 8304
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -44962,7 +46640,7 @@ function uuid(length = 36) {
 /* harmony export */   oV: () => (/* binding */ transformValue)
 /* harmony export */ });
 /* unused harmony exports caseHandler, regex, encodeValue, decodeValue, parseJson, toBoolean, toArray */
-/* harmony import */ var entities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1303);
+/* harmony import */ var entities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9028);
 
 
 function valueAttributeName(element, name, prefix = "value") {
@@ -45272,11 +46950,11 @@ function convertValue(value, valueType = "") {
 
 /***/ },
 
-/***/ 7606
+/***/ 4875
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* unused harmony exports init, run */
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5304);
+/* harmony import */ var _cocreate_ast_server__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9165);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -45401,7 +47079,7 @@ async function executeWorkflowActions(actions, sandbox) {
 		: Object.entries(actions).map(([name, action]) => ({ [name]: action }));
 
 	for (const [index, step] of steps.entries()) {
-		const result = await (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .astAsync */ .pK)({ executeAST: step, sandbox });
+		const result = await (0,_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_0__/* .astAsync */ .pK)({ executeAST: step, sandbox });
 		if (Array.isArray(results)) results[index] = result;
 		else if (result && typeof result === "object") {
 			Object.assign(results, result);
@@ -45559,16 +47237,36 @@ const Workflows = { init, run };
 
 /***/ },
 
-/***/ 3351
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+/***/ 2173
+(__webpack_module__, __webpack_exports__, __webpack_require__) {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5264);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2623);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9487);
-/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(900);
+__webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+/* harmony import */ var _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(750);
+/* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7869);
+/* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4633);
+/* harmony import */ var _cocreate_db__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6156);
+/* harmony import */ var _cocreate_crud__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7872);
+/* harmony import */ var _cocreate_kms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8685);
+/* harmony import */ var _cocreate_authenticate__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9743);
+/* harmony import */ var _cocreate_authorize__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3067);
+/* harmony import */ var _cocreate_api__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4277);
+/* harmony import */ var _cocreate_workflows__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(4875);
+/* harmony import */ var _cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(9165);
+var _cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10___namespace_object = {};
+__webpack_require__.r(_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10___namespace_object);
+__webpack_require__.d(_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10___namespace_object, {
+	astAsync: () => (_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10__.pK),
+	astSync: () => (_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10__.gf),
+	customOperators: () => (_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10__.Jd),
+	"default": () => (_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10__.Ay),
+	evaluateAST: () => (_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10__.ev),
+	isomorphicSandbox: () => (_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10__.FL),
+	processOperators: () => (_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10__.Rj),
+	processOperatorsAsync: () => (_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10__.PT),
+	registerASTGlobals: () => (_cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10__.KY)
+});
 /********************************************************************************
- * Copyright (C) 2023 CoCreate and Contributors.
+ * Copyright (C) 2026 CoCreate and Contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
@@ -45582,1085 +47280,77 @@ __webpack_require__.r(__webpack_exports__);
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
  ********************************************************************************/
 
-/**
- * Commercial Licensing Information:
- * For commercial use of this software without the copyleft provisions of the AGPLv3,
- * you must obtain a commercial license from CoCreate LLC.
- * For details, visit <https://CoCreateJS.com/licenses/> or contact us at sales@CoCreateJS.com
- */
 
 
 
-let indexedDbFunction;
-const isBrowser = typeof window !== "undefined";
 
-function getSortPlan(filter) {
-    const sort = filter?.sort?.filter((item) => item?.key) || [];
-    const primary = sort[0];
-    return {
-        sort,
-        primary,
-        indexName: primary && primary.key !== "_id" && !primary.key.includes("-")
-            ? primary.key
-            : undefined,
-        direction: primary?.direction === "desc" ? "prev" : "next"
-    };
-}
 
-function countRecords(source) {
-    return new Promise((resolve, reject) => {
-        const request = source.count();
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
+
+
+
+
+
+
+
+try {
+    const { server_id, host, organization_id } = await _cocreate_config__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A.prompt({
+        organization_id: '',
+        host: '',
+        server_id: ''
     });
-}
 
-function getFilterStorage(filter, storage, database, array) {
-    if (!filter) return;
-    if (!Array.isArray(filter.storages)) filter.storages = [];
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.id = server_id || (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .ObjectId */ .V)().toString();
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.host = host || null;
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.organization_id = organization_id || null;
 
-    let metadata = filter.storages.find(
-        (item) =>
-            item.storage === storage &&
-            item.database === database &&
-            item.array === array
-    );
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.db = await _cocreate_db__WEBPACK_IMPORTED_MODULE_3__/* ["default"].init */ .Ay.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.crud = await _cocreate_crud__WEBPACK_IMPORTED_MODULE_4__/* ["default"].init */ .Ay.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.kms = await _cocreate_kms__WEBPACK_IMPORTED_MODULE_5__/* ["default"].init */ .A.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
 
-    if (!metadata) {
-        metadata = { storage, database, array };
-        filter.storages.push(metadata);
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.authenticate = _cocreate_authenticate__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .A.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.authorize = _cocreate_authorize__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Ay;
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.api = await _cocreate_api__WEBPACK_IMPORTED_MODULE_8__/* ["default"].init */ .Ay.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.ast = _cocreate_ast_server__WEBPACK_IMPORTED_MODULE_10___namespace_object;
+    _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.workflow = await _cocreate_workflows__WEBPACK_IMPORTED_MODULE_9__/* ["default"].init */ .Ay.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+
+    if (_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.isPrimary) {
+        const autoscaler = await Promise.resolve(/* import() */).then(() => (__webpack_require__(8457)));
+        _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.autoscaler = await autoscaler.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+        await Promise.resolve(/* import() */).then(() => (__webpack_require__(5754)));
     }
 
-    return metadata;
-}
+    if (_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.isWorker) {
+        _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.telemetry = await (await Promise.resolve(/* import() */).then(() => (__webpack_require__(5947)))).default.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+        _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.usage = await (await Promise.resolve(/* import() */).then(() => (__webpack_require__(5335)))).default.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+        _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.tls = await (await Promise.resolve(/* import() */).then(() => (__webpack_require__(3833)))).default.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+        _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.files = await (await Promise.resolve(/* import() */).then(() => (__webpack_require__(8690)))).default.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+        _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.mcp = await (await Promise.resolve(/* import() */).then(() => (__webpack_require__(5277)))).default.init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+        _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.socket = new (await Promise.resolve(/* import() */).then(() => (__webpack_require__(5583)))).SocketServer(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
+        await (await Promise.resolve(/* import() */).then(() => (__webpack_require__(2365)))).init(_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay);
 
-function includesReference(value, expected) {
-    const values = Array.isArray(value) ? value : [value];
-    return values.includes(expected);
-}
-
-function init() {
-    // Check for support.
-    if (!isBrowser) {
-        return;
-    } else if (!("indexedDB" in window)) {
-        console.log("This browser doesn't support IndexedDB.");
-        setStatus(false);
-        return;
-    } else {
-        try {
-            indexedDB.databases();
-            if (
-                window.CoCreateConfig &&
-                window.CoCreateConfig.indexeddb !== false
-            )
-                setStatus(true);
-        } catch (e) {
-            setStatus(false);
-        }
     }
-}
 
-function setStatus(value) {
-    if (window.CoCreateConfig) window.CoCreateConfig.indexeddb = value;
-    else window.CoCreateConfig = { indexeddb: value };
+    await _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.init();
 
-    if (!value) {
-        indexedDbFunction = indexedDb;
-        send = value;
-    } else if (!send) {
-        send = indexedDbFunction;
-        indexedDbFunction = true;
-    }
-}
-
-/**
- * Route a CoCreate CRUD request to the matching database, array, or object operation.
- *
- * @public
- * @environment client
- */
-async function send(data) {
-    try {
-        let newData = [];
-
-        let type = data.method.split(".")[0];
-        if (type === "database") {
-            if (data.method === "database.get") {
-                return await processDatabase(data);
-            } else await processDatabase(data, newData, type);
-        } else {
-            if (!data["timeStamp"])
-                data["timeStamp"] = new Date().toISOString();
-
-            let databases = data.database;
-            if (!databases && data.organization_id)
-                databases = [data.organization_id];
-            if (!Array.isArray(databases)) databases = [databases];
-
-            let arrays = data.array || [];
-            if (!Array.isArray(arrays)) arrays = [arrays];
-
-            for (let i = 0; i < databases.length; i++) {
-                let database = databases[i];
-                if (type === "array") {
-                    await processArray(data, newData, database, type);
-                } else {
-                    for (let j = 0; j < arrays.length; j++) {
-                        if (type === "index")
-                            await processIndex(data, newData, database, type);
-                        else if (type === "object")
-                            await processObject(
-                                data,
-                                newData,
-                                database,
-                                arrays[j],
-                                type
-                            );
-                    }
-                }
-            }
-        }
-
-        return createData(data, newData, type);
-    } catch (error) {
-        errorHandler(data, error);
-    }
-}
-
-const dbVersion = new Map();
-const processDatabase = (data, newData, type) => {
-    return new Promise(
-        (resolve, reject) => {
-            if (!data) data = {};
-            if (!data[type]) data[type] = [];
-
-            if (data.method == "database.read") {
-                indexedDB.databases().then((databases) => {
-                    for (let database of databases) {
-                        if (data.filter && data.filter.query) {
-                            let isFilter = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .queryData */ .VR)(
-                                database,
-                                data.filter.query
-                            );
-                            if (isFilter)
-                                newData.push({
-                                    $storage: ["indexeddb"],
-                                    ...database
-                                });
-                        } else
-                            newData.push({
-                                $storage: ["indexeddb"],
-                                ...database
-                            });
-                    }
-
-                    resolve();
-                });
-            } else {
-                let databases;
-                if (data.method == "database.update")
-                    databases = Object.keys(data.database);
-                else databases = data.database;
-
-                if (!Array.isArray(databases)) databases = [databases];
-
-                for (let i = 0; i < databases.length; i++) {
-                    let openRequest,
-                        database = databases[i];
-                    switch (data.method) {
-                        case "database.get":
-                        case "database.create":
-                        case "database.update":
-                            openRequest = indexedDB.open(database);
-                            break;
-                        case "database.delete":
-                            openRequest =
-                                indexedDB.deleteprocessDatabase(database);
-                            break;
-                        default:
-                            errorHandler(data, "unknown method", database);
-                            resolve(data);
-                    }
-
-                    openRequest.onsuccess = function () {
-                        let db = openRequest.result;
-
-                        if (data.method == "database.update") {
-                            let objectStoreNames = Array.from(
-                                db.objectStoreNames
-                            );
-                            for (let array of objectStoreNames) {
-                                let request = array.openCursor();
-
-                                request.onsuccess = function () {
-                                    let cursor = request.result;
-                                    if (cursor) {
-                                        let value = cursor.value;
-
-                                        cursor.continue();
-                                    } else {
-                                        // -1
-                                    }
-                                };
-
-                                request.onerror = function () {
-                                    errorHandler(
-                                        data,
-                                        request.error,
-                                        database,
-                                        array
-                                    );
-                                };
-                            }
-                        } else if (data.upgrade === true) {
-                            db.close();
-
-                            let version =
-                                dbVersion.get(database) ||
-                                openRequest.result.version;
-                            resolve(
-                                indexedDB.open(database, Number((version += 1)))
-                            );
-                            dbVersion.set(database, version);
-                        } else if (data.array) {
-                            db.close();
-
-                            let version =
-                                dbVersion.get(database) ||
-                                openRequest.result.version;
-                            let request = indexedDB.open(
-                                database,
-                                Number((version += 1))
-                            );
-                            dbVersion.set(database, version);
-
-                            request.onupgradeneeded = function (event) {
-                                const db = event.target.result;
-
-                                let arrays = data.array;
-                                if (!Array.isArray(arrays)) arrays = [arrays];
-
-                                for (let j = 0; j < arrays.length; j++) {
-                                    if (
-                                        !db.objectStoreNames.contains(arrays[j])
-                                    ) {
-                                        try {
-                                            db.createObjectStore(arrays[j], {
-                                                keyPath: "_id",
-                                                autoIncrement: true
-                                            });
-                                        } catch (error) {
-                                            errorHandler(
-                                                data,
-                                                error,
-                                                database,
-                                                arrays[j]
-                                            );
-                                        }
-                                    }
-
-                                    if (data.indexName) {
-                                        const transaction =
-                                            event.target.transaction;
-                                        const objectStore =
-                                            transaction.objectStore(arrays[j]);
-                                        if (
-                                            !objectStore.indexNames.contains(
-                                                data.indexName
-                                            )
-                                        )
-                                            objectStore.createIndex(
-                                                data.indexName,
-                                                data.indexFields,
-                                                { unique: data.unique || false }
-                                            );
-                                    }
-                                }
-                            };
-
-                            request.onsuccess = function (event) {
-                                if (databases.length - 1 === i) {
-                                    if (data.method == "database.get")
-                                        resolve(event.target.result);
-                                    else resolve(data);
-                                }
-                            };
-
-                            request.onerror = function (event) {
-                                errorHandler(
-                                    data,
-                                    event.target.error,
-                                    database,
-                                    array
-                                );
-                                if (databases.length - 1 === i) {
-                                    if (data.method == "database.get")
-                                        resolve(event.target.result);
-                                    else resolve(data);
-                                }
-                            };
-                        } else if (databases.length - 1 === i) {
-                            if (data.method == "database.get") resolve(db);
-                            else resolve(data);
-                        }
-                    };
-
-                    openRequest.onerror = function () {
-                        errorHandler(data, openRequest.error, database);
-                        resolve(data);
-                    };
-                }
-            }
-        },
-        (error) => {
-            errorHandler(data, error);
-        }
-    );
-};
-
-async function processArray(data, newData, database, type) {
-    let db = await processDatabase({ method: "database.get", database });
-
-    let objectStoreNames = Array.from(db.objectStoreNames);
-    if (data.method == "array.read") {
-        if (!data[type]) data[type] = [];
-
-        if (!Array.isArray(data[type])) {
-            data[type] = [data[type]];
-        }
-
-        for (let i = 0; i < objectStoreNames.length; i++) {
-            if (data.filter && data.filter.query) {
-                let isFilter = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .queryData */ .VR)(
-                    { name: objectStoreNames[i] },
-                    data.filter.query
-                );
-                if (isFilter)
-                    newData.push({
-                        name: objectStoreNames[i],
-                        $storage: ["indexeddb"],
-                        $database: [database]
-                    });
-            } else
-                newData.push({
-                    name: objectStoreNames[i],
-                    $storage: ["indexeddb"],
-                    $database: [database]
-                });
-        }
-    } else {
-        db.close();
-
-        let request = await processDatabase({
-            method: "database.get",
-            database,
-            upgrade: true
+    if (_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.isWorker) {
+        _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.http.listen(80, () => {
+            console.log(`[@cocreate/cluster] [WORKER ${_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.workerId}] HTTP listening on ${80}`);
         });
-        await new Promise((resolve) => {
-            request.onupgradeneeded = function (event) {
-                let db = event.target.result;
-                let arrays;
-                if (data.method == "array.update")
-                    arrays = Object.keys(data[type]);
-                else arrays = data[type];
-                if (!Array.isArray(arrays)) arrays = [arrays];
 
-                for (let i = 0; i < arrays.length; i++) {
-                    let error,
-                        array = arrays[i];
-
-                    let arrayExist = db.objectStoreNames.contains(array);
-                    if (arrayExist && data.method == "array.create") {
-                        error = "array already exists";
-                    } else if (data.method == "array.delete") {
-                        if (objectStoreNames.includes(array)) {
-                            db.deleteObjectStore(array);
-                        } else {
-                            error = "the array does not exist";
-                        }
-                    } else {
-                        if (!arrayExist && data.method == "array.update")
-                            array = data[type][arrays[i]];
-
-                        if (arrayExist) {
-                            if (data.method == "array.update") {
-                                let transaction = event.target.transaction;
-                                let objectStore =
-                                    transaction.objectStore(array);
-
-                                if (
-                                    !objectStoreNames.includes(
-                                        data[type][arrays[i]]
-                                    )
-                                )
-                                    array = objectStore.name =
-                                        data[type][arrays[i]];
-                                else
-                                    error =
-                                        "An array with the new name already exist";
-                            }
-                        } else if (data.method == "array.update")
-                            error = "array does not exists";
-                    }
-
-                    if (!error)
-                        newData.push({
-                            name: array,
-                            $storage: ["indexeddb"],
-                            $database: [database]
-                        });
-                    else errorHandler(data, error, database);
-                }
-            };
-
-            request.onsuccess = function (event) {
-                event.target.result.close();
-                resolve();
-            };
-
-            request.onerror = function (event) {
-                errorHandler(data, event.target.error, database);
-                resolve();
-            };
+        _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.https.listen(443, () => {
+            console.log(`[@cocreate/cluster] [WORKER ${_cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.workerId}] HTTPS listening on ${443}`);
         });
     }
+} catch (error) {
+    console.error('[@cocreate/server] Critical error during server bootstrap:', error);
+    process.exit(1);
 }
 
-async function processIndex(data, newData, database, array, type) {
-    let db = await processDatabase({ method: "database.get", database });
-    let arrayExist = db.objectStoreNames.contains(array);
-    if (arrayExist) {
-        // ToDO: switch here to types
-        let transaction = db.transaction(array, "readonly");
-        let objectStore = transaction.objectStore(array);
-        let indexNames = Array.from(objectStore.indexNames);
-
-        if (data.method == "index.read") {
-            for (let i = 0; i < indexNames.length; i++) {
-                let name = indexNames[i];
-                if (data.filter && data.filter.query)
-                    if (!(0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .queryData */ .VR)({ name }, data.filter.query)) continue;
-
-                newData.push({
-                    name,
-                    $storage: ["indexeddb"],
-                    $database: [database],
-                    $array: [array]
-                });
-            }
-            db.close();
-        } else {
-            db.close();
-            let indexes;
-            if (data.method == "index.update")
-                indexes = Object.keys(data[type]);
-            else indexes = data[type];
-
-            if (!Array.isArray(indexes)) indexes = [indexes];
-
-            for (let i = 0; i < indexes.length; i++) {
-                let error,
-                    index = indexes[i];
-                db = await processDatabase({
-                    method: "database.get",
-                    database,
-                    upgrade: true
-                });
-                let transaction = db.transaction;
-                let objectStore = transaction.objectStore(array);
-                let indexExist = indexNames.includes(index);
-
-                if (data.method == "index.create") {
-                    if (!indexExist)
-                        objectStore.createIndex(index, index, {
-                            unique: false
-                        });
-                    else error = "index already exist";
-                } else if (indexExist) {
-                    if (data.method == "index.delete")
-                        objectStore.deleteIndex(index);
-                    else if (
-                        data.method == "index.update" &&
-                        !indexNames.includes(data[type][indexes[i]])
-                    ) {
-                        if (!indexNames.includes(data[type][indexes[i]])) {
-                            let indexObj = objectStore.index(index);
-                            index = indexObj.name = data[type][indexes[i]];
-                        } else error = "new index name already exist";
-                    }
-                } else error = "index does not exist";
-
-                if (!error)
-                    newData.push({
-                        name: index,
-                        $storage: ["indexeddb"],
-                        $database: [database],
-                        $array: [array]
-                    });
-                else errorHandler(data, error, database, array);
-
-                db.result.close();
-            }
-        }
-    }
-}
-
-async function processObject(data, newData, database, array, type) {
-    let db = await processDatabase({ method: "database.get", database });
-
-    try {
-        if (!data[type]) data[type] = [];
-        else if (typeof data[type] === "string")
-            data[type] = [{ _id: data[type] }];
-        else if (!Array.isArray(data[type])) data[type] = [data[type]];
-
-        let isFilter = Boolean(
-            data.filter && data.filter.isFilter !== false
-        );
-        const filterStorage = isFilter
-            ? getFilterStorage(data.filter, "indexeddb", database, array)
-            : undefined;
-        const filterStartingIndex =
-            filterStorage?.index ?? data.filter?.index ?? 0;
-        if (filterStorage) filterStorage.startingIndex = filterStartingIndex;
-
-        let arrayExist = db.objectStoreNames.contains(array);
-        if (!arrayExist) {
-            db.close();
-            if (
-                data.method == "object.create" ||
-                data.method == "object.update"
-            ) {
-                db = await processDatabase({
-                    method: "database.get",
-                    database,
-                    array
-                });
-            } else {
-                return errorHandler(
-                    data,
-                    "array does not exist",
-                    database,
-                    array
-                );
-            }
-        }
-
-        if (!array || !db)
-            throw new Error({ error: "This is an error message.", db, array });
-
-        let lastItem;
-        if (
-            (isFilter && !data[type].length) ||
-            data.filter?.isFilter === true
-        ) {
-            if (data[type].length) lastItem = data[type][data[type].length - 1];
-            data[type] = [{ isFilter: "isEmptyObjectFilter" }];
-
-            // data[type].splice(0, 0, { isFilter: 'isEmptyObjectFilter' });
-        }
-
-        let transactionType = "readwrite";
-        if (data.method == "object.read") transactionType = "readonly";
-
-        let transaction = db.transaction([array], transactionType);
-        let objectStore = transaction.objectStore(array);
-
-        let globalOperators = getGlobalOperators(data);
-        let upsert = data.upsert;
-
-        for (let i = 0; i < data[type].length; i++) {
-            const reference = {
-                $storage: ["indexeddb"],
-                $database: [database],
-                $array: [array]
-            };
-
-            delete data[type][i].$storage;
-            delete data[type][i].$database;
-            delete data[type][i].$array;
-
-            if (data.method == "object.create") {
-                if (data.organization_id)
-                    data[type][i]["organization_id"] = data.organization_id;
-
-                if (!data[type][i]._id)
-                    data[type][i]["_id"] = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V)().toString();
-                data[type][i] = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_1__/* .dotNotationToObject */ .O)(data[type][i]);
-                delete data[type][i].modified;
-
-                // TODO: user_id || clientId shohould be retrieved from CoCreate
-                const audit = {
-                    on: data.timeStamp,
-                    by: data.user_id || data.clientId
-                };
-                if (!data.synced) {
-                    data[type][i]["created"] = { ...audit };
-                    data[type][i]["updated"] = { ...audit };
-                }
-                data[type][i] = await add(objectStore, data[type][i]);
-                data[type][i] = { ...reference, ...data[type][i] };
-            } else {
-                if (data[type][i].filter) isFilter = true;
-
-                if (data.method == "object.update") {
-                    if (data.organization_id)
-                        data[type][i]["organization_id"] = data.organization_id;
-
-                    if (data[type][i].$upsert) upsert = data[type][i].$upsert;
-                    // TODO: user_id || clientId shohould be retrieved from CoCreate
-                    if (!data.synced)
-                        data[type][i].updated = {
-                            on: data.timeStamp,
-                            by: data.user_id || data.clientId
-                        };
-                    // Remove legacy object audit metadata from existing records.
-                    data[type][i].modified = undefined;
-                }
-
-                let index = 0,
-                    limit,
-                    range,
-                    direction;
-                if (data[type][i]._id) {
-                    range = IDBKeyRange.only(data[type][i]._id);
-                } else if (isFilter) {
-                    let indexName;
-                    let indexFields;
-
-                    if (data.filter) {
-                        const sortPlan = getSortPlan(data.filter);
-                        if (sortPlan.primary) {
-                            direction = sortPlan.direction;
-                            indexName = sortPlan.indexName;
-                            indexFields = sortPlan.primary.key;
-                        } else if (
-                            data.filter.query &&
-                            data.filter.query[0] &&
-                            data.filter.query[0].key
-                        ) {
-                            if (data.filter.query[0].operator === "$eq") {
-                                range = IDBKeyRange.only(
-                                    data.filter.query[0].value
-                                );
-                            } else if (
-                                data.filter.query[0].operator === "$gt"
-                            ) {
-                                range = IDBKeyRange.lowerBound(
-                                    data.filter.query[0].value,
-                                    true
-                                );
-                            } else if (
-                                data.filter.query[0].operator === "$lt"
-                            ) {
-                                range = IDBKeyRange.upperBound(
-                                    data.filter.query[0].value,
-                                    true
-                                );
-                            } else if (
-                                data.filter.query[0].operator === "$gte"
-                            ) {
-                                range = IDBKeyRange.lowerBound(
-                                    data.filter.query[0].value
-                                );
-                            } else if (
-                                data.filter.query[0].operator === "$lte"
-                            ) {
-                                range = IDBKeyRange.upperBound(
-                                    data.filter.query[0].value
-                                );
-                            }
-
-                            indexName = data.filter.query[0].key;
-                        }
-                    }
-
-                    if (indexName && !indexName.includes("-")) {
-                        // Check if the compound index exists; create it if not
-                        let indexNames = Array.from(objectStore.indexNames);
-                        if (!indexNames.includes(indexName)) {
-                            db.close();
-                            db = await processDatabase({
-                                method: "database.get",
-                                database,
-                                array,
-                                indexName,
-                                indexFields
-                            });
-                            transaction = db.transaction(array, "readwrite");
-                            objectStore = transaction.objectStore(array);
-                        }
-                        const selectedIndex = objectStore.index(indexName);
-                        if (getSortPlan(data.filter).primary) {
-                            const [recordCount, indexCount] = await Promise.all([
-                                countRecords(objectStore),
-                                countRecords(selectedIndex)
-                            ]);
-                            if (recordCount === indexCount)
-                                objectStore = selectedIndex;
-                            else direction = undefined;
-                        } else {
-                            objectStore = selectedIndex;
-                        }
-                    }
-
-                    let count = objectStore.count();
-                    count.onsuccess = function () {
-                        if (data.filter) {
-                            data.filter.count = count.result;
-                            filterStorage.count = count.result;
-                        }
-                        else if (data.object.filter)
-                            data.object.filter.count = count.result;
-                    };
-
-                    if (data.filter) {
-                        const sortPlan = getSortPlan(data.filter);
-                        if (!sortPlan.sort.length) {
-                            if (filterStartingIndex && !lastItem)
-                                index = filterStartingIndex;
-                            if (data.filter.limit) limit = data.filter.limit;
-                        }
-                    }
-
-                    if (data[type][i].filter) {
-                        if (data[type][i].filter.index)
-                            index = data[type][i].filter.index;
-                        if (data[type][i].filter.limit)
-                            limit = data[type][i].filter.limit;
-                    }
-                } else if (
-                    data.method == "object.delete" ||
-                    (data.method == "object.update" &&
-                        !range &&
-                        !upsert &&
-                        !isFilter)
-                ) {
-                    continue;
-                }
-
-                await openCursor(
-                    objectStore,
-                    range,
-                    direction,
-                    data,
-                    newData,
-                    isFilter,
-                    index,
-                    limit,
-                    database,
-                    array,
-                    upsert,
-                    type,
-                    i,
-                    globalOperators,
-                    reference
-                );
-
-            }
-        }
-
-        if (db.close) db.close();
-    } catch (error) {
-        errorHandler(data, error, database, array);
-        if (db.close) db.close();
-    }
-}
-
-function openCursor(
-    objectStore,
-    range,
-    direction,
-    data,
-    newData,
-    isFilter,
-    index,
-    limit,
-    database,
-    array,
-    upsert,
-    type,
-    i,
-    globalOperators,
-    reference
-) {
-    return new Promise(async (resolve, reject) => {
-        const request = objectStore.openCursor(range || null, direction); // next, prev
-
-        let hasUpdated,
-            matchedLength = 0,
-            hasSkipped;
-        request.onsuccess = async () => {
-            let cursor = request.result;
-
-            if (
-                data.method === "object.create" ||
-                (data.method === "object.update" &&
-                    ((!range && !isFilter && upsert) ||
-                        (!cursor && upsert && !hasUpdated)))
-            ) {
-                let isMatch = true;
-                if (isFilter) {
-                    if (cursor)
-                        isMatch = filter(
-                            objectStore,
-                            data[type][i],
-                            data[type][i],
-                            cursor.value
-                        );
-                    else if (data.method === "object.update" && !upsert)
-                        isMatch = false;
-                }
-
-                if (isMatch !== false) {
-                    try {
-                        data[type][i]._id = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V)(
-                            data[type][i]._id
-                        ).toString();
-                    } catch (error) {
-                        data[type][i]._id = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V)().toString();
-                    }
-
-                    let result;
-                    if (data.method == "object.create") {
-                        data[type][i] = await add(objectStore, data[type][i]);
-                    } else if (data.method == "object.update") {
-                        let update = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .createUpdate */ ._W)(
-                            cursor && cursor.value ? cursor.value : {},
-                            data[type][i],
-                            globalOperators
-                        );
-                        delete data[type][i].modified;
-                        if (update) {
-                            await put(objectStore, update);
-                            data[type][i].$update = update;
-                        }
-                    }
-                    data[type][i] = { ...reference, ...data[type][i] };
-
-                    matchedLength++;
-                }
-                resolve();
-            } else if (cursor) {
-                if (index && !hasSkipped) {
-                    cursor.advance(index);
-                    hasSkipped = true;
-                } else {
-                    let isMatch = true;
-                    if (isFilter)
-                        isMatch = filter(
-                            objectStore,
-                            data,
-                            data[type][i],
-                            cursor.value
-                        );
-
-                    if (isMatch !== false) {
-                        let result = cursor.value;
-
-                        if (data.method == "object.update") {
-                            let update = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_2__/* .createUpdate */ ._W)(
-                                cursor.value,
-                                data[type][i],
-                                globalOperators
-                            );
-                            delete data[type][i].modified;
-                            if (update) await cursorUpdate(cursor, update);
-                            result = data[type][i];
-                            result.$update = update;
-                            // result = cursor.update(update)
-                            hasUpdated = true;
-                            // set dotnotation for keys with $operators for items that end in [] to be used by socket.id
-                            // TODO: if update.$<operator>.someKey[] requires the index of inerted item added to the field name. update.$<operator>.someKey[<index>]
-                            // TODO: if $addToSet get field name and item if it does not exist.
-                            // TODO: if $pull get field name and find if item exist and delete.
-                        } else if (data.method == "object.delete") {
-                            result = cursor.value;
-                            cursor.delete();
-                        }
-
-                        if (data[type][i]._id)
-                            data[type][i] = { ...reference, ...result };
-                        else {
-                            let object = data[type].find(
-                                (obj) => obj._id && obj._id === result._id
-                            );
-                            if (object)
-                                object = { ...reference, ...object, ...result };
-                            else newData.push({ ...reference, ...result });
-                        }
-                    }
-
-                    if (
-                        !limit ||
-                        (limit && limit > newData.length + matchedLength)
-                    ) {
-                        cursor.continue();
-                    } else {
-                        resolve();
-                    }
-                }
-            } else {
-                resolve();
-            }
-        };
-
-        request.onerror = () => {
-            reject(request.error);
-        };
-    });
-}
-
-function add(objectStore, object) {
-    return new Promise((resolve, reject) => {
-        const store = objectStore.objectStore || objectStore;
-        let request = store.add(object);
-        request.onsuccess = () => resolve(object);
-        request.onerror = () => reject(request.error);
-    });
-}
-
-function get(objectStore, object) {
-    return new Promise((resolve, reject) => {
-        const request = objectStore.get(object._id);
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-    });
-}
-
-function put(objectStore, object) {
-    return new Promise((resolve, reject) => {
-        const store = objectStore.objectStore || objectStore;
-        let request = store.put(object);
-
-        request.onsuccess = () => resolve(object);
-        request.onerror = () => reject(request.error);
-    });
-}
-
-function deleteObject(objectStore, object) {
-    return new Promise((resolve, reject) => {
-        const request = objectStore.delete(object._id);
-        request.onsuccess = () => resolve(object);
-        request.onerror = () => reject(request.error);
-    });
-}
-
-function cursorUpdate(cursor, update) {
-    return new Promise((resolve, reject) => {
-        const request = cursor.update(update);
-        request.onsuccess = () => resolve(request.source.value);
-        request.onerror = () => reject(request.error);
-    });
-}
-
-function filter(objectStore, data, object, result) {
-    let isMatch = true;
-    let filter = data.filter || object.filter;
-    if (filter) {
-        if (filter.query) isMatch = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .queryData */ .VR)(result, filter.query);
-        if (isMatch && filter.search)
-            isMatch = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .searchData */ .Nw)(result, filter.search);
-    }
-
-    return isMatch;
-}
-
-function getGlobalOperators(data, object = {}) {
-    for (let operator of Object.keys(data)) {
-        if (!operator.startsWith("$")) return;
-        for (let key of Object.keys(data[operator]))
-            object[operator + "." + key] = data[operator][key];
-    }
-
-    return object;
-}
-
-function createData(data, newData, type) {
-    // data.request = data[type] || {}
-    if (
-        data[type] &&
-        data[type][0] &&
-        data[type][0].isFilter === "isEmptyObjectFilter"
-    ) {
-        data[type].shift();
-        data.filter.isFilter = true;
-    }
-
-    data[type].push(...newData);
-
-    if (data.filter) {
-        const sortPlan = getSortPlan(data.filter);
-        const startingIndex = data.filter.index || 0;
-        if (sortPlan.sort.length) {
-            data[type] = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_3__/* .sortData */ .LT)(data[type], data.filter.sort);
-            data[type] = data[type].slice(
-                startingIndex,
-                data.filter.limit
-                    ? startingIndex + data.filter.limit
-                    : undefined
-            );
-        }
-
-        if (Array.isArray(data.filter.storages)) {
-            for (const metadata of data.filter.storages) {
-                if (metadata.storage !== "indexeddb") continue;
-
-                const returned = data[type].filter(
-                    (item) =>
-                        includesReference(item.$storage, metadata.storage) &&
-                        includesReference(item.$database, metadata.database) &&
-                        includesReference(item.$array, metadata.array)
-                ).length;
-
-                metadata.index = (metadata.startingIndex || 0) + returned;
-            }
-        }
-
-        data.filter.startingIndex = startingIndex;
-        data.filter.index = startingIndex + data[type].length;
-    }
-
-    return data;
-}
-
-function errorHandler(data, error, database, array) {
-    // console.error(error, data);
-    // if (typeof error == "object") error["storage"] = "indexeddb";
-    // else error = { storage: "indexeddb", message: error };
-
-    // if (database) error["database"] = database;
-    // if (array) error["array"] = array;
-    // if (data.error) data.error.push(error);
-    // else data.error = [error];
-}
-
-init();
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ send, ObjectId: _cocreate_utils__WEBPACK_IMPORTED_MODULE_0__/* .ObjectId */ .V });
-
-/**
- * Object identifier constructor exposed by the IndexedDB adapter.
- *
- * @name ObjectId
- * @public
- * @environment client
- */
-
-/**
- * A simple indexeddb component in vanilla javascript. Easily configured using HTML5 data-attributes and/or JavaScript API.
- *
- * @module indexeddb
- * @environment client
- */
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, [
-/* harmony export */   "default", 0, __WEBPACK_DEFAULT_EXPORT__
-/* harmony export */ ]);
-
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } }, 1);
 
 /***/ }
 
@@ -46691,6 +47381,82 @@ init();
 /******/ }
 /******/ 
 /************************************************************************/
+/******/ /* webpack/runtime/async module */
+/******/ (() => {
+/******/ 	const webpackQueues = Symbol("webpack queues");
+/******/ 	const webpackExports = Symbol("webpack exports");
+/******/ 	const webpackError = Symbol("webpack error");
+/******/ 	
+/******/ 	const resolveQueue = (queue) => {
+/******/ 		if(queue?.d < 1) {
+/******/ 			queue.d = 1;
+/******/ 			queue.forEach((fn) => (fn.r--));
+/******/ 			queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
+/******/ 		}
+/******/ 	}
+/******/ 	const wrapDeps = (deps) => (deps.map((dep) => {
+/******/ 		if(dep !== null && typeof dep === "object") {
+/******/ 	
+/******/ 			if(dep[webpackQueues]) return dep;
+/******/ 			if(dep.then) {
+/******/ 				const queue = [];
+/******/ 				queue.d = 0;
+/******/ 				dep.then((r) => {
+/******/ 					obj[webpackExports] = r;
+/******/ 					resolveQueue(queue);
+/******/ 				}, (e) => {
+/******/ 					obj[webpackError] = e;
+/******/ 					resolveQueue(queue);
+/******/ 				});
+/******/ 				const obj = {};
+/******/ 	
+/******/ 				obj[webpackQueues] = (fn) => (fn(queue));
+/******/ 				return obj;
+/******/ 			}
+/******/ 		}
+/******/ 		const ret = {};
+/******/ 		ret[webpackQueues] = x => {};
+/******/ 		ret[webpackExports] = dep;
+/******/ 		return ret;
+/******/ 	}));
+/******/ 	__webpack_require__.a = (module, body, hasAwait) => {
+/******/ 		let queue;
+/******/ 		hasAwait && ((queue = []).d = -1);
+/******/ 		const depQueues = new Set();
+/******/ 		const exports = module.exports;
+/******/ 		let currentDeps;
+/******/ 		let outerResolve;
+/******/ 		let reject;
+/******/ 		const promise = new Promise((resolve, rej) => {
+/******/ 			reject = rej;
+/******/ 			outerResolve = resolve;
+/******/ 		});
+/******/ 		promise[webpackExports] = exports;
+/******/ 		promise[webpackQueues] = (fn) => (queue && fn(queue), depQueues.forEach(fn), promise["catch"](x => {}));
+/******/ 		module.exports = promise;
+/******/ 		const handle = (deps) => {
+/******/ 			currentDeps = wrapDeps(deps);
+/******/ 			let fn;
+/******/ 			const getResult = () => (currentDeps.map((d) => {
+/******/ 	
+/******/ 				if(d[webpackError]) throw d[webpackError];
+/******/ 				return d[webpackExports];
+/******/ 			}))
+/******/ 			const promise = new Promise((resolve) => {
+/******/ 				fn = () => (resolve(getResult));
+/******/ 				fn.r = 0;
+/******/ 				const fnQueue = (q) => (q !== queue && !depQueues.has(q) && (depQueues.add(q), q && !q.d && (fn.r++, q.push(fn))));
+/******/ 				currentDeps.forEach((dep) => (dep[webpackQueues](fnQueue)));
+/******/ 			});
+/******/ 			return fn.r ? promise : getResult();
+/******/ 		}
+/******/ 		const done = (err) => ((err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue))
+/******/ 	
+/******/ 		body(handle, done);
+/******/ 		queue?.d < 0 && (queue.d = 0);
+/******/ 	};
+/******/ })();
+/******/ 
 /******/ /* webpack/runtime/define property getters */
 /******/ // define getter/value functions for harmony exports
 /******/ __webpack_require__.d = (exports, definition) => {
@@ -46722,100 +47488,10 @@ init();
 /******/ };
 /******/ 
 /************************************************************************/
-/* harmony import */ var _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7805);
-/* harmony import */ var _cocreate_db__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3449);
-/* harmony import */ var _cocreate_crud__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4323);
-/* harmony import */ var _cocreate_kms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5446);
-/* harmony import */ var _cocreate_authenticate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1642);
-/* harmony import */ var _cocreate_authorize__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3084);
-/* harmony import */ var _cocreate_api__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5440);
-/* harmony import */ var _cocreate_workflows__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(7606);
-/* harmony import */ var _cocreate_autoscaler__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6160);
-/* harmony import */ var _cocreate_telemetry__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(4944);
-/* harmony import */ var _cocreate_usage__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(5444);
-/* harmony import */ var _cocreate_tls__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(9526);
-/* harmony import */ var _cocreate_file_server__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(6929);
-/* harmony import */ var _cocreate_mcp__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(8512);
-/* harmony import */ var _cocreate_socket__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(9734);
-/********************************************************************************
- * Copyright (C) 2026 CoCreate and Contributors.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- *
- ********************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-async function boot() {
-    try {
-        _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.initializers = {
-            sharedData: async instance => {
-                await _cocreate_db__WEBPACK_IMPORTED_MODULE_1__/* .CoCreateDB */ .bN.init(instance);
-                instance.crud = await _cocreate_crud__WEBPACK_IMPORTED_MODULE_2__/* .crudServer */ .wA.init(instance);
-                instance.kms = _cocreate_kms__WEBPACK_IMPORTED_MODULE_3__/* ["default"].init */ .A.init(instance);
-            },
-            sharedServices: async instance => {
-                instance.authenticate = _cocreate_authenticate__WEBPACK_IMPORTED_MODULE_4__/* ["default"] */ .A.init(instance);
-                instance.authorize = _cocreate_authorize__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .Ay;
-                instance.api = await _cocreate_api__WEBPACK_IMPORTED_MODULE_6__/* ["default"].init */ .Ay.init(instance);
-                instance.workflow = await _cocreate_workflows__WEBPACK_IMPORTED_MODULE_7__/* ["default"].init */ .Ay.init(instance);
-            },
-            primaryServices: async instance => {
-                instance.autoscaler = await _cocreate_autoscaler__WEBPACK_IMPORTED_MODULE_8__/* ["default"].init */ .Ay.init(instance);
-            },
-            workerTelemetry: async instance => {
-                instance.telemetry = await _cocreate_telemetry__WEBPACK_IMPORTED_MODULE_9__/* ["default"] */ .A.init(instance);
-                instance.usage = await _cocreate_usage__WEBPACK_IMPORTED_MODULE_10__/* ["default"] */ .Ay.init(instance);
-            },
-            workerServices: async instance => {
-                instance.tls = await _cocreate_tls__WEBPACK_IMPORTED_MODULE_11__/* ["default"].init */ .Ay.init(instance);
-                instance.files = await _cocreate_file_server__WEBPACK_IMPORTED_MODULE_12__/* ["default"].init */ .A.init(instance);
-                instance.mcp = await _cocreate_mcp__WEBPACK_IMPORTED_MODULE_13__/* ["default"].init */ .A.init(instance);
-            },
-            workerEdge: async instance => {
-                instance.socket = new _cocreate_socket__WEBPACK_IMPORTED_MODULE_14__/* .SocketServer */ .$e(instance);
-            },
-            primaryReady: async () => {
-                await Promise.resolve(/* import() */).then(() => (__webpack_require__(6651)));
-            },
-            workerReady: async instance => {
-                const Users = await Promise.resolve(/* import() */).then(() => (__webpack_require__(6884)));
-                await Users.init(instance);
-            }
-        };
-
-        // Cluster resolves configuration and role, then invokes each initializer at its existing dependency point.
-        await _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.init();
-    } catch (error) {
-        console.error('[@cocreate/server] Critical error during server bootstrap:', error);
-        process.exit(1);
-    }
-}
-
-boot();
-
+/******/ 
+/******/ // startup
+/******/ // Load entry module and return exports
+/******/ // This entry module used 'module' so it can't be inlined
+/******/ let __webpack_exports__ = __webpack_require__(2173);
+/******/ __webpack_exports__ = await __webpack_exports__;
+/******/ 
