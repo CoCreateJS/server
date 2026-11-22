@@ -380,7 +380,9 @@ async function saveConfig(filePath, content) {
     const targetPath = node_path__WEBPACK_IMPORTED_MODULE_1__["default"].isAbsolute(filePath) ? filePath : node_path__WEBPACK_IMPORTED_MODULE_1__["default"].resolve(process.cwd(), filePath);
     const outputString = `export default ${JSON.stringify(content, null, 2)};
 `;
-    node_fs__WEBPACK_IMPORTED_MODULE_0__["default"].writeFileSync(targetPath, outputString, "utf8");
+    node_fs__WEBPACK_IMPORTED_MODULE_0__["default"].mkdirSync(node_path__WEBPACK_IMPORTED_MODULE_1__["default"].dirname(targetPath), { recursive: true, mode: 448 });
+    node_fs__WEBPACK_IMPORTED_MODULE_0__["default"].writeFileSync(targetPath, outputString, { encoding: "utf8", mode: 384 });
+    node_fs__WEBPACK_IMPORTED_MODULE_0__["default"].chmodSync(targetPath, 384);
   } catch (error) {
     console.error(`[@cocreate/config] Failed to save configuration at ${filePath}:`, error.message);
   }
@@ -395,11 +397,13 @@ async function saveConfig(filePath, content) {
   clearLocalStorage: () => {
   },
   getGlobalConfig: async () => {
-    const globalConfigPath = node_path__WEBPACK_IMPORTED_MODULE_1__["default"].resolve(node_os__WEBPACK_IMPORTED_MODULE_2__["default"].homedir(), "CoCreate.config.js");
-    return await loadConfig(globalConfigPath);
+    const globalConfigPath = node_path__WEBPACK_IMPORTED_MODULE_1__["default"].join(node_os__WEBPACK_IMPORTED_MODULE_2__["default"].homedir(), ".cocreate", "config.js");
+    if (node_fs__WEBPACK_IMPORTED_MODULE_0__["default"].existsSync(globalConfigPath)) return await loadConfig(globalConfigPath);
+    const legacyConfigPath = node_path__WEBPACK_IMPORTED_MODULE_1__["default"].join(node_os__WEBPACK_IMPORTED_MODULE_2__["default"].homedir(), "CoCreate.config.js");
+    return await loadConfig(legacyConfigPath);
   },
   setGlobalConfig: async (config) => {
-    const globalConfigPath = node_path__WEBPACK_IMPORTED_MODULE_1__["default"].resolve(node_os__WEBPACK_IMPORTED_MODULE_2__["default"].homedir(), "CoCreate.config.js");
+    const globalConfigPath = node_path__WEBPACK_IMPORTED_MODULE_1__["default"].join(node_os__WEBPACK_IMPORTED_MODULE_2__["default"].homedir(), ".cocreate", "config.js");
     await saveConfig(globalConfigPath, config);
   },
   getEnv: (key) => {

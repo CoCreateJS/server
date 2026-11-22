@@ -23,8 +23,9 @@ chmod 755 "$INSTALL_DIR/node"
 printf 'organization_id=%s\\nserver_id=%s\\ncluster_id=%s\\nhost=%s\\n' \\
   "$ORGANIZATION_ID" "$SERVER_ID" "$CLUSTER_ID" "$HOST" > /etc/cocreatews.environment
 printf '%s' "$STORAGE_BASE64" | base64 --decode > /etc/cocreatews/storage.json
-printf '%s' "$BOOTSTRAP_CONFIG_BASE64" | base64 --decode > /root/CoCreate.config.js
-chmod 600 /etc/cocreatews.environment /etc/cocreatews/storage.json /root/CoCreate.config.js
+install -d -m 700 /root/.cocreate
+printf '%s' "$BOOTSTRAP_CONFIG_BASE64" | base64 --decode > /root/.cocreate/config.js
+chmod 600 /etc/cocreatews.environment /etc/cocreatews/storage.json /root/.cocreate/config.js
 
 exec "$INSTALL_DIR/node" "$INSTALL_DIR/startup.js"
 `;
