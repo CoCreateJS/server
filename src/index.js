@@ -39,7 +39,29 @@ try {
     server.host = host || null;
     server.organization_id = organization_id || null;
 
-    server.db = await db.init(server);
+    server.db = await db.init(server, {
+        forward: async request => {
+            const response = await server.send({
+                method: 'db.forward',
+                request,
+                master: true,
+                broadcast: false
+            });
+            if (!response || response.success === false || response.error) {
+                throw new Error(response?.error || 'Primary database request failed.');
+            }
+            return response.result;
+        }
+    });
+    if (server.isPrimary) {
+        server.on('db.forward', async payload => {
+            try {
+                return { uuid: payload.uuid, result: await server.db.send(payload.request) };
+            } catch (error) {
+                return { uuid: payload.uuid, success: false, error: error.message || String(error) };
+            }
+        });
+    }
     server.crud = await crud.init(server);
     server.kms = await kms.init(server);
 
@@ -68,15 +90,6 @@ try {
 
     await server.init();
 
-    if (server.isWorker) {
-        server.http.listen(80, () => {
-            console.log(`[@cocreate/cluster] [WORKER ${server.workerId}] HTTP listening on ${80}`);
-        });
-
-        server.https.listen(443, () => {
-            console.log(`[@cocreate/cluster] [WORKER ${server.workerId}] HTTPS listening on ${443}`);
-        });
-    }
 } catch (error) {
     console.error('[@cocreate/server] Critical error during server bootstrap:', error);
     process.exit(1);

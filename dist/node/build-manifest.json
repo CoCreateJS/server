@@ -1,0 +1,130 @@
+{
+  "builtAt": "2026-11-22T16:08:01.796Z",
+  "package": "@cocreate/server",
+  "packageVersion": "2.0.0",
+  "node": "v24.18.0",
+  "platform": "linux",
+  "arch": "x64",
+  "commit": "328a7f59934cee4039b51e3f5b8c2e09ad6fe612",
+  "repositories": {
+    "modules.cluster": {
+      "package": "@cocreate/cluster",
+      "version": "3.0.1",
+      "commit": "f1eda7f1af7fb5bef467660417194238100dc437"
+    },
+    "modules.autoscaler": {
+      "package": "@cocreate/autoscaler",
+      "version": "2.1.2",
+      "commit": "534cb5920d82e4ff9921cd29e0012337418934f9"
+    },
+    "modules.telemetry": {
+      "package": "@cocreate/telemetry",
+      "version": "2.0.3",
+      "commit": "aa9550cc3ac16b59c44e4e95c8852f7a93174f6d"
+    },
+    "modules.crud": {
+      "package": "@cocreate/crud",
+      "version": "2.0.4",
+      "commit": "d3dc7f86d0350063351f8dd44558ff7bbda87b43"
+    },
+    "modules.tls": {
+      "package": "@cocreate/tls",
+      "version": "2.0.2",
+      "commit": "3e0fd532216b607b76094f4b0c1d63b8e4ba1276"
+    },
+    "modules.authenticate": {
+      "package": "@cocreate/authenticate",
+      "version": "2.0.2",
+      "commit": "b2b489285822e1284cc53c1f83e5d3dbaea86d18"
+    },
+    "modules.authorize": {
+      "package": "@cocreate/authorize",
+      "version": "2.1.2",
+      "commit": "df132065043166338837ea6ea49cca50627218d8"
+    },
+    "modules.socket": {
+      "package": "@cocreate/socket",
+      "version": "3.0.1",
+      "commit": "487a6dbec5ed2580175c22ab43ba2856a36606d1"
+    },
+    "modules.file": {
+      "package": "@cocreate/file",
+      "version": "2.0.2",
+      "commit": "77ff167d8a9ba4c7e6b70d90ca4a3094f33e1d36"
+    },
+    "modules.sitemap": {
+      "package": "@cocreate/sitemap",
+      "version": "2.0.2",
+      "commit": "50d763c173a0bc702fc2d09f1c4969cf94b98176"
+    },
+    "modules.cron": {
+      "package": "@cocreate/cron",
+      "version": "2.0.2",
+      "commit": "b618fa5cb030dd2be8fab5a1244fb6a74fc30a02"
+    },
+    "modules.usage": {
+      "package": "@cocreate/usage",
+      "version": "2.0.3",
+      "commit": "bc1c0ac7c133746a9a49e66b540428ae8f080e57"
+    },
+    "modules.config": {
+      "package": "@cocreate/config",
+      "version": "2.0.2",
+      "commit": "ce14f90c2d09946aa94a205a6edd860fce80caad"
+    },
+    "modules.api": {
+      "package": "@cocreate/api",
+      "version": "2.1.2",
+      "commit": "5f4b24e740b51d21f493a21dd1bd4e949170893b"
+    },
+    "modules.lazy-loader": {
+      "package": "@cocreate/lazy-loader",
+      "version": "2.0.2",
+      "commit": "2d164044b45379a69100eb081354d0290e504352"
+    },
+    "modules.notification": {
+      "package": "@cocreate/notification",
+      "version": "2.0.3",
+      "commit": "aee0859d730d94ad31ef78504db239cce24e1cdd"
+    },
+    "modules.organizations": {
+      "package": "@cocreate/organizations",
+      "version": "3.0.2",
+      "commit": "fbb6233fa9c6015e186da698ab4513a6a5a9bf9f"
+    },
+    "modules.users": {
+      "package": "@cocreate/users",
+      "version": "2.0.3",
+      "commit": "de00a931fa85105cd72a0d6b6c02f244fe11d419"
+    },
+    "modules.workflows": {
+      "package": "@cocreate/workflows",
+      "version": "1.1.2",
+      "commit": "6086d11fab8fe5a580cf36ed0a4d3b8177076d6a"
+    },
+    "modules.utils": {
+      "package": "@cocreate/utils",
+      "version": "2.0.3",
+      "commit": "5c16120ed1f9aef91aa243b5a513958d071e727e"
+    },
+    "modules.cli": {
+      "package": "@cocreate/cli",
+      "version": "2.1.2",
+      "commit": "70291e40035b97af7dc6ff12fd377bb41acfb80e"
+    }
+  },
+  "files": {
+    "index.js": {
+      "bytes": 1849019,
+      "sha256": "182476a67dd398ffe84c1eb7dd4c9e8eef407ebd93196fbd78aafa08de60f204"
+    },
+    "package.json": {
+      "bytes": 42,
+      "sha256": "609158e6c5fbc237939fa3ddf7faab80ab690bdc0c8d584414a885130103c4e8"
+    },
+    "startup.js": {
+      "bytes": 3471,
+      "sha256": "6da728061d7878dce3f0a6d560ee1bf00e1ca53f2e0ff96ab18d0536b9e291cc"
+    }
+  }
+}

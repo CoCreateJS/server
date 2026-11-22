@@ -12,15 +12,29 @@ export default {
 
     telemetry: {
         "enabled": true,
-        "collectionInterval": 1000,
-        "writeInterval": 240000,
-        "retentionDays": 30,
-        "broadcast": false,
-        "scaleUpMemoryThreshold": 85,
-        "safetyLimits": {
-            "cordonMemoryThreshold": 90,
-            "cordonCpuThreshold": 90
+        "interval": 1000,
+        "flush": {
+            "interval": 240000,
+            "memory": [
+                { "on": 75, "off": 60 },
+                { "on": 85, "off": 80 },
+                { "on": 90, "off": 85 }
+            ]
+        },
+        "retentionDays": 30
+    },
+
+    socket: {
+        defer: {
+            memory: { on: 85, off: 80 },
+            duration: 3000
         }
+    },
+
+    state: {
+        enabled: true,
+        proxy: { memory: { on: 75, off: 60 } },
+        cordon: { memory: { on: 90, off: 85 } }
     },
 
     // Horizontal scaling configuration
