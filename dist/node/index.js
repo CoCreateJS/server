@@ -15815,7 +15815,7 @@ async function collectTerminatingServers(server) {
     if (!server.cluster_id) throw new Error('Server inventory cleanup requires a cluster ID.');
     const response = await server.crud.send({
         method: 'object.read', array: 'servers',
-        filter: { query: { cluster_id: server.cluster_id, 'master.status': 'terminating' }, limit: 0 },
+        filter: { query: { cluster_id: server.cluster_id, 'primary.status': 'terminating' }, limit: 0 },
         organization_id: server.organization_id, host: server.host
     });
     if (failed(response) || !Array.isArray(response.object)) {
@@ -16377,9 +16377,9 @@ async function resolveClusterConfig(targetCluster) {
 }
 
 /**
- * Calculates running-master capacity and tracks departing masters separately for coordination.
+ * Calculates running-primary capacity and tracks departing primaries separately for coordination.
  *
- * @param {Object} [query={}] - Optional query filters to merge with default master status
+ * @param {Object} [query={}] - Optional query filters to merge with default primary status
  * @returns {Promise<Object>} Cluster snapshot including averages and raw active servers array
  * @private
  * @environment server
@@ -16390,7 +16390,7 @@ async function getClusterDetails(query = {}, currentSample) {
         array: 'servers',
         filter: {
             query: {
-                'master.status': { $in: ['running', 'draining', 'terminating'] },
+                'primary.status': { $in: ['running', 'draining', 'terminating'] },
                 ...query,
                 cluster_id: server.cluster_id
             }
@@ -16401,12 +16401,12 @@ async function getClusterDetails(query = {}, currentSample) {
 
     if (readResponse?.error?.length) throw new Error('Unable to read active cluster servers.');
     const clusterServers = readResponse?.object || [];
-    const activeServers = clusterServers.filter(item => item.master.status === 'running');
-    const removingServers = clusterServers.filter(item => ['draining', 'terminating'].includes(item.master.status));
+    const activeServers = clusterServers.filter(item => item.primary.status === 'running');
+    const removingServers = clusterServers.filter(item => ['draining', 'terminating'].includes(item.primary.status));
     const pendingResponse = await server.crud.send({
         method: 'object.read',
         array: 'servers',
-        filter: { query: { cluster_id: server.cluster_id, 'master.status': 'provisioning' }, limit: 0 },
+        filter: { query: { cluster_id: server.cluster_id, 'primary.status': 'provisioning' }, limit: 0 },
         organization_id: server.organization_id,
         host: server.host
     });
@@ -16612,7 +16612,7 @@ async function determineScaleOutTarget(clientLocations, activeServers) {
     if (!isAutoscalingEnabled()) throw new Error("Autoscaling is disabled.");
     if (!server.cluster_id) throw new Error("Autoscaling requires a cluster ID.");
     const currentServers = (activeServers ?? (await getClusterDetails()).servers)
-        .filter(item => item.master.status === 'running');
+        .filter(item => item.primary.status === 'running');
     const isGeoEnabled = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_4__/* .getValueFromObject */ .r)(autoscaleConfig, 'geoScale.enabled');
     const sheddingThreshold = (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_4__/* .getValueFromObject */ .r)(autoscaleConfig, 'geoScale.sheddingThreshold');
     if (isGeoEnabled === true && !Number.isFinite(Number(sheddingThreshold))) {
@@ -16638,7 +16638,7 @@ async function determineDeployment(coordinates, activeServers = [], configuratio
             ...region, provider: api.name, providerType: api.provider, apiId: api._id
         }))
     );
-    const currentServers = activeServers.filter(item => item.master.status === 'running');
+    const currentServers = activeServers.filter(item => item.primary.status === 'running');
     const geoTarget = (0,_geoScaling_js__WEBPACK_IMPORTED_MODULE_5__/* .selectPlacement */ .cP)(coordinates, { cloudProviders, autoscaleConfig: placementConfig });
     const cloudRegion = geoTarget?.nearestCloudRegion;
     if (!cloudRegion) throw new Error('No configured region matches the enabled cluster providers.');
@@ -16876,13 +16876,13 @@ function checkScaleInCapacity(snapshot, candidateId, observedAfter) {
     return { ok: true };
 }
 
-async function setMasterStatus(serverId, status) {
+async function setPrimaryStatus(serverId, status) {
     const payload = {
         method: 'object.update',
         array: 'servers',
         object: {
             _id: serverId,
-            'master.status': status
+            'primary.status': status
         },
         organization_id: server.organization_id,
         host: server.host
@@ -16905,7 +16905,7 @@ async function sendDrain(serverId, value) {
     if (String(serverId) === String(server.id) && server.isWorker) {
         await server.state.drain(value);
     } else {
-        await server.send({ method: 'drain', server: serverId, broadcast: true, master: false, value });
+        await server.send({ method: 'drain', server: serverId, broadcast: true, primary: false, value });
     }
 }
 
@@ -16989,7 +16989,7 @@ async function scaleIn(targetServer, options) {
     const startedAt = new Date().toISOString();
     let draining = false;
     try {
-        await setMasterStatus(candidateServer._id, 'draining');
+        await setPrimaryStatus(candidateServer._id, 'draining');
         // A partial delivery can still reach the target when dispatch throws.
         // Restore service if draining or the capacity observation fails before termination.
         draining = true;
@@ -17016,15 +17016,15 @@ async function scaleIn(targetServer, options) {
             }
         }
         try {
-            await setMasterStatus(candidateServer._id, 'running');
+            await setPrimaryStatus(candidateServer._id, 'running');
         } catch (stateError) {
-            console.error('[@cocreate/autoscaler] Could not restore master status:', stateError);
+            console.error('[@cocreate/autoscaler] Could not restore primary status:', stateError);
         }
         throw error;
     }
 
     // Commit retirement before provider dispatch so normal State saves preserve it.
-    await setMasterStatus(candidateServer._id, 'terminating');
+    await setPrimaryStatus(candidateServer._id, 'terminating');
     console.log(`[@cocreate/autoscaler] [SCALE-IN] Sending termination request for node [${deploymentId}] through workflow.deleteOrganizationServer.`);
     let response;
     let terminationError;
@@ -17058,8 +17058,8 @@ async function scaleIn(targetServer, options) {
         });
     }
 
-    if (terminationError) await setMasterStatus(candidateServer._id, 'failed');
-    server.state.shutdown({ server: candidateServer._id, master: true, organization_id: server.organization_id });
+    if (terminationError) await setPrimaryStatus(candidateServer._id, 'failed');
+    server.state.shutdown({ server: candidateServer._id, primary: true, organization_id: server.organization_id });
     if (terminationError) throw terminationError;
     return response;
 }
@@ -17275,7 +17275,7 @@ function watchStartup(serverId) {
             if (!response || response.error?.length || response.success === false || !Array.isArray(response.object)) throw new Error('Unable to read startup state.');
             const record = response.object.find(record => String(record._id) === serverId);
             const reported = record && (
-                (typeof record.master?.status === 'string' && record.master.status !== 'provisioning') ||
+                (typeof record.primary?.status === 'string' && record.primary.status !== 'provisioning') ||
                 Object.entries(record).some(([key, value]) => /^worker\d+$/.test(key) && typeof value?.status === 'string')
             );
             // TODO: Notify the platform and consider at most one replacement.
@@ -17312,7 +17312,7 @@ async function init(serverInstance) {
     clearInterval(cleanupTimer);
     cleanupTimer = (0,_cleanup_js__WEBPACK_IMPORTED_MODULE_1__/* .startServerCleanup */ .Gu)(server);
 
-    console.log("[@cocreate/autoscaler] [MASTER] Autoscaler service initialized successfully.");
+    console.log("[@cocreate/autoscaler] [PRIMARY] Autoscaler service initialized successfully.");
 
     return {
         config: autoscaleConfig,
@@ -17331,7 +17331,7 @@ async function init(serverInstance) {
 })));
 
 /**
- * Decentralized, masterless P2P autoscaling engine for CoCreate Server. Executes autonomous horizontal and vertical multi-cloud adjustments driven by real-time tenant telemetry.
+ * Peer-to-peer autoscaling engine for CoCreate Server. Executes autonomous horizontal and vertical multi-cloud adjustments driven by real-time tenant telemetry.
  *
  * @module autoscaler
  * @environment server
@@ -18306,7 +18306,7 @@ class CoCreateServer {
             } else {
                 this.id = process.env.SERVER_ID || (0,_cocreate_utils__WEBPACK_IMPORTED_MODULE_4__/* .ObjectId */ .V)().toString();
                 await _cocreate_config__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .A.prompt({ server_id: { value: this.id } });
-                console.log(`[@cocreate/cluster] [MASTER] Generated & persisted new Server ID: ${this.id}`);
+                console.log(`[@cocreate/cluster] [PRIMARY] Generated & persisted new Server ID: ${this.id}`);
             }
             process.env.SERVER_ID = this.id || "";
         } else {
@@ -18325,7 +18325,7 @@ class CoCreateServer {
         if (!this.isPrimary) await this.cluster.init(this);
 
         if (this.isPrimary) {
-            console.log(`[@cocreate/cluster] [MASTER] Orchestrator running with PID: ${process.pid} (Server ID: ${this.id})`);
+            console.log(`[@cocreate/cluster] [PRIMARY] Orchestrator running with PID: ${process.pid} (Server ID: ${this.id})`);
             const response = await this.crud.send({
                 method: 'object.read', array: 'servers',
                 filter: { query: { _id: this.id }, limit: 1 },
@@ -18346,7 +18346,7 @@ class CoCreateServer {
             });
             await this.cluster.init(this);
 
-            // Reset logs array for a fresh logging session on master startup
+            // Reset logs array for a fresh logging session on primary startup
             await this.crud.send(this.state.getServerObject({ logs: [] }));
 
             // Replace the persisted worker profile before the new workers start.
@@ -18358,7 +18358,7 @@ class CoCreateServer {
 
             this.repository = await _repository_index_js__WEBPACK_IMPORTED_MODULE_14__/* ["default"].init */ .A.init(this);
 
-            if (await this.workers.setupMasterCluster()) {
+            if (await this.workers.setupPrimaryCluster()) {
                 return this;
             }
         }
@@ -19352,7 +19352,7 @@ async function ensureRepositoryPaths(settings, projectRoot) {
 
 /* unused harmony export init */
 /* harmony import */ var node_cluster__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8698);
-/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(419);
+/* harmony import */ var _cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8152);
 /* harmony import */ var _cocreate_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3690);
 /* harmony import */ var _cocreate_coson__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9032);
 /********************************************************************************
@@ -19379,13 +19379,13 @@ async function ensureRepositoryPaths(settings, projectRoot) {
 
 
 const presenceEvents = ['orgConnected', 'orgDisconnected'];
-const masterControls = ['restart', 'reboot', 'shutdown'];
+const primaryControls = ['restart', 'reboot', 'shutdown'];
 const workerControls = ['cordon', 'shed', 'drain'];
 const missingId = value => value == null || value === '';
 const includesTarget = (target, id) => target === undefined ||
     (Array.isArray(target) ? target : [target]).some(value => String(value) === String(id));
 const organizationDelivery = payload => Boolean(payload.organization_id &&
-    !presenceEvents.includes(payload.method) && !masterControls.includes(payload.method) &&
+    !presenceEvents.includes(payload.method) && !primaryControls.includes(payload.method) &&
     !workerControls.includes(payload.method));
 
 /** IPC owns request/reply correlation; callers always receive the envelope. */
@@ -19442,7 +19442,7 @@ function init(server, pendingPromises) {
                 return Promise.resolve(server.socket.send({ ...payload })).then(() => payload);
             }
         } else if (execute && payload.method &&
-            (!server.isPrimary || payload.master !== false)) {
+            (!server.isPrimary || payload.primary !== false)) {
             return server.emitAsync(payload.method, payload);
         }
         return payload;
@@ -19453,6 +19453,12 @@ function init(server, pendingPromises) {
             updateOrganizationWorker(payload);
             return payload;
         }
+        const isCrudMethod = /\.(create|read|update|delete)$/.test(payload.method);
+        const isCrudMutation = /\.(create|update|delete)$/.test(payload.method);
+        if (isCrudMethod && Array.isArray(payload.awareness) && payload.success !== false && !payload.error &&
+            payload.serverId === server.id && payload.workerId != null) {
+            (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_1__/* .addAwareness */ .p2)(server.workers.awareness, payload.organization_id, payload.awareness, payload.workerId);
+        }
         // Queue local work: synchronous eviction must not remove remote routes first.
         const local = Promise.resolve().then(() =>
             fromWorker && payload.serverId === server.id && payload.workerId === server.workerId
@@ -19462,17 +19468,19 @@ function init(server, pendingPromises) {
         const targetsOtherNodes = payload.server === undefined ||
             (Array.isArray(payload.server) ? payload.server : [payload.server])
                 .some(id => String(id) !== String(server.id));
-        if (!Array.isArray(payload.distributionKeys) && payload.serverId === server.id && targetsOtherNodes &&
+        if (payload.serverId === server.id && targetsOtherNodes &&
             (payload.organization_id || payload.server !== undefined || payload.cluster !== undefined)) {
             server.cluster.send(payload);
         }
 
-        const distributionTargets = Array.isArray(payload.distributionKeys)
-            ? (0,_cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_1__/* .getDistribution */ .f)(server.workers.distribution, payload.distributionKeys) : undefined;
-        const workers = targetsThisNode && !(payload.master === true && masterControls.includes(payload.method))
+        const awarenessTargets = isCrudMutation && Array.isArray(payload.awareness)
+            ? (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_1__/* .getAwareness */ .Af)(server.workers.awareness, payload.organization_id, payload.awareness) : undefined;
+        const localReadResponse = fromWorker && isCrudMethod && payload.method.endsWith('.read') &&
+            payload.serverId === server.id && payload.workerId != null;
+        const workers = targetsThisNode && !localReadResponse && !(payload.primary === true && primaryControls.includes(payload.method))
             ? [...server.workers.values()].filter(worker => {
                 if (!includesTarget(payload.worker, worker.id)) return false;
-                if (distributionTargets && (!/\.(create|update|delete)$/.test(payload.method) || !distributionTargets.has(worker.id))) return false;
+                if (awarenessTargets && !awarenessTargets.has(worker.id)) return false;
                 if (organizationDelivery(payload)) {
                     return organizationWorkers.get(payload.organization_id)?.has(worker.id) &&
                         !(payload.serverId === server.id && payload.workerId === worker.id);
@@ -19484,7 +19492,7 @@ function init(server, pendingPromises) {
             const targeted = new Set(workers.map(worker => worker.id));
             const active = [...server.workers.values()].some(worker => !targeted.has(worker.id) &&
                 worker.isListening && !worker.isCordoned && !worker.isDraining);
-            if (!active) server.state.evaluateMasterFallback();
+            if (!active) server.state.evaluatePrimaryFallback();
         }
 
         const replies = await Promise.all([local, ...workers.map(worker => {
@@ -19748,7 +19756,7 @@ class ServerMeshInbound {
 
         await new Promise((resolve) => {
             this.secureMeshServer.listen(this.meshPort, '0.0.0.0', () => {
-                console.log(`[@cocreate/server-mesh/inbound] [MASTER] Inbound mesh listening on 0.0.0.0:${this.meshPort}`);
+                console.log(`[@cocreate/server-mesh/inbound] [PRIMARY] Inbound mesh listening on 0.0.0.0:${this.meshPort}`);
                 resolve();
             });
         });
@@ -19848,7 +19856,7 @@ class ServerMeshInbound {
                     method: 'mesh.inbound',
                     broadcast: payload.broadcast ?? true,
                     worker: payload.worker,
-                    master: false,
+                    primary: false,
                     data: payload.data
                 });
             } catch (err) {
@@ -19940,10 +19948,11 @@ class ServerMeshInbound {
 /* unused harmony exports ServerMesh, serverMesh */
 /* harmony import */ var node_events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2849);
 /* harmony import */ var node_crypto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2561);
-/* harmony import */ var _cocreate_coson__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9032);
-/* harmony import */ var _cocreate_socket_transport__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2852);
-/* harmony import */ var _inbound_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7464);
-/* harmony import */ var _outbound_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8785);
+/* harmony import */ var _cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8152);
+/* harmony import */ var _cocreate_coson__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9032);
+/* harmony import */ var _cocreate_socket_transport__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2852);
+/* harmony import */ var _inbound_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7464);
+/* harmony import */ var _outbound_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8785);
 /********************************************************************************
  * Copyright (C) 2023 CoCreate and Contributors.
  *
@@ -19966,6 +19975,7 @@ class ServerMeshInbound {
 
 
 
+
 /**
  * ServerMesh orchestrates multi-tenant routing, unified IPC event forwarding,
  * shared active connection pools, and coordinates ServerMeshInbound and ServerMeshOutbound.
@@ -19978,8 +19988,8 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         this.server = null;
 
         // Sub-module transport managers
-        this.inboundManager = new _inbound_js__WEBPACK_IMPORTED_MODULE_4__/* .ServerMeshInbound */ .O(this);
-        this.outboundManager = new _outbound_js__WEBPACK_IMPORTED_MODULE_5__/* .ServerMeshOutbound */ .b(this);
+        this.inboundManager = new _inbound_js__WEBPACK_IMPORTED_MODULE_5__/* .ServerMeshInbound */ .O(this);
+        this.outboundManager = new _outbound_js__WEBPACK_IMPORTED_MODULE_6__/* .ServerMeshOutbound */ .b(this);
 
         // Shared Connection & Multi-tenant Routing Tables
         this.activeConnections = new Map(); // organization_id/serverId -> Network Socket
@@ -19987,6 +19997,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         this.pendingPeerFailures = new Map(); // retained until the workflow confirms persistence
         this.messageQueues = new Map(); // transport scope/server ID -> encoded FIFO
         this.organizations = new Map();     // organization_id -> Network Socket[]
+        this.awareness = new Map(); // organization_id -> reference UUID -> peer server IDs
 
         this.isClosed = false;
         this.handleServerEvent = this.handleServerEvent.bind(this);
@@ -20029,9 +20040,12 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
     }
 
     peerDisconnected(socket) {
-        if (!socket.isControlSocket || !socket.serverId || socket.distributionDisconnected) return;
+        if (!socket.isControlSocket || !socket.serverId || socket.peerDisconnectEmitted) return;
         if (this.controlSockets.some(peer => peer !== socket && peer.serverId === socket.serverId && peer.readyState === 1)) return;
-        socket.distributionDisconnected = true;
+        socket.peerDisconnectEmitted = true;
+        for (const organization_id of [...this.awareness.keys()]) {
+            (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_2__/* .removeAwareness */ .UE)(this.awareness, organization_id, socket.serverId);
+        }
         this.emit('peerDisconnected', { nodeId: socket.serverId });
     }
 
@@ -20046,6 +20060,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         if (!organization_id || !this.server?.isPrimary) return;
         this.outboundManager.closeOrganization(organization_id);
         this.inboundManager.closeOrganization(organization_id);
+        (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_2__/* .clearAwareness */ .Zx)(this.awareness, organization_id);
         const sockets = this.organizations.get(organization_id);
         if (!sockets) return;
         this.organizations.delete(organization_id);
@@ -20091,7 +20106,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         await this.inboundManager.init(this.server);
         await this.outboundManager.init(this.server);
 
-        console.log(`[@cocreate/server-mesh] [MASTER] Initialized server mesh layer for node ${this.server.id || 'unassigned'}`);
+        console.log(`[@cocreate/server-mesh] [PRIMARY] Initialized server mesh layer for node ${this.server.id || 'unassigned'}`);
         return this;
     }
 
@@ -20193,7 +20208,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
             this.server.send({
                 ...payload,
                 organization_id,
-                master: false,
+                primary: false,
                 status: 'received'
             });
         });
@@ -20215,7 +20230,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
                     this.server.send({
                         method: 'mesh.inbound',
                         broadcast: true,
-                        master: false,
+                        primary: false,
                         data: message
                     });
                 } catch (err) {
@@ -20237,16 +20252,16 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         let message;
         let complete;
         try {
-            complete = (0,_cocreate_socket_transport__WEBPACK_IMPORTED_MODULE_3__/* .receiveSocketSegment */ .kB)(ws, rawData, isBinary);
+            complete = (0,_cocreate_socket_transport__WEBPACK_IMPORTED_MODULE_4__/* .receiveSocketSegment */ .kB)(ws, rawData, isBinary);
             if (!complete) return;
             message = complete.legacy
-                ? (0,_cocreate_coson__WEBPACK_IMPORTED_MODULE_2__/* .decode */ .D4)(complete.legacy, { operators: false })
-                : (0,_cocreate_coson__WEBPACK_IMPORTED_MODULE_2__/* .decodeSegments */ .FY)(complete, { operators: false });
+                ? (0,_cocreate_coson__WEBPACK_IMPORTED_MODULE_3__/* .decode */ .D4)(complete.legacy, { operators: false })
+                : (0,_cocreate_coson__WEBPACK_IMPORTED_MODULE_3__/* .decodeSegments */ .FY)(complete, { operators: false });
         } catch (err) {
             console.error('[@cocreate/server-mesh] Invalid peer message:', err.message);
             return;
         } finally {
-            if (complete) (0,_cocreate_socket_transport__WEBPACK_IMPORTED_MODULE_3__/* .releaseSocketSegments */ .PB)(ws, complete);
+            if (complete) (0,_cocreate_socket_transport__WEBPACK_IMPORTED_MODULE_4__/* .releaseSocketSegments */ .PB)(ws, complete);
         }
 
         if (!message || typeof message !== 'object') return;
@@ -20264,6 +20279,11 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
 
         const method = message.method;
         if (!method) return;
+
+        if (message.organization_id && Array.isArray(message.awareness) &&
+            /\.(create|read|update|delete)$/.test(method) && ws.serverId) {
+            (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_2__/* .addAwareness */ .p2)(this.awareness, message.organization_id, message.awareness, ws.serverId);
+        }
 
         if (method === 'orgRegistered') {
             this.handleOrganizationRegistration(message, ws);
@@ -20286,7 +20306,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         } else if (message.organization_id) {
             this.server.send({
                 ...message,
-                master: false,
+                primary: false,
                 status: 'received'
             });
         } else {
@@ -20348,13 +20368,19 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
             const availableSockets = payload.organization_id
                 ? this.organizations.get(payload.organization_id) || []
                 : this.controlSockets;
+            const awarenessTargets = payload.organization_id && Array.isArray(payload.awareness) &&
+                /\.(create|update|delete)$/.test(payload.method)
+                ? (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_2__/* .getAwareness */ .Af)(this.awareness, payload.organization_id, payload.awareness) : undefined;
             const targets = serverTargets === undefined
-                ? availableSockets
+                ? awarenessTargets
+                    ? availableSockets.filter(socket => awarenessTargets.has(socket.serverId))
+                    : availableSockets
                 : availableSockets.filter(socket => {
                     const servers = Array.isArray(serverTargets)
                         ? serverTargets
                         : [serverTargets];
-                    return servers.includes(socket.serverId);
+                    return servers.some(serverId => String(serverId) === String(socket.serverId)) &&
+                        (!awarenessTargets || awarenessTargets.has(socket.serverId));
                 });
 
             const uniqueSockets = Array.from(new Set(targets));
@@ -20374,7 +20400,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         const targetSockets = Array.isArray(sockets) ? sockets : [sockets];
 
         if (this.isClosed) return;
-        const frame = (0,_cocreate_coson__WEBPACK_IMPORTED_MODULE_2__/* .encodeSegments */ .Lf)(data, { operators: false });
+        const frame = (0,_cocreate_coson__WEBPACK_IMPORTED_MODULE_3__/* .encodeSegments */ .Lf)(data, { operators: false });
         const peers = new Set();
         for (const socket of targetSockets) {
             if (!socket) continue;
@@ -20385,7 +20411,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
             if (key === undefined) {
                 try {
                     if (socket.readyState === 1) {
-                        void (0,_cocreate_socket_transport__WEBPACK_IMPORTED_MODULE_3__/* .sendSocketSegments */ .Ad)(socket, frame).catch(err => {
+                        void (0,_cocreate_socket_transport__WEBPACK_IMPORTED_MODULE_4__/* .sendSocketSegments */ .Ad)(socket, frame).catch(err => {
                             console.error('[@cocreate/server-mesh] Anonymous socket send failed:', err.message);
                         });
                     }
@@ -20414,7 +20440,7 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         socket.meshSending = true;
         try {
             while (queue.length && socket.readyState === 1) {
-                await (0,_cocreate_socket_transport__WEBPACK_IMPORTED_MODULE_3__/* .sendSocketSegments */ .Ad)(socket, queue[0].frame);
+                await (0,_cocreate_socket_transport__WEBPACK_IMPORTED_MODULE_4__/* .sendSocketSegments */ .Ad)(socket, queue[0].frame);
                 queue.shift();
             }
         } catch (err) {
@@ -20509,6 +20535,9 @@ class ServerMesh extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter {
         for (const [orgId, sockets] of this.organizations.entries()) {
             const index = sockets.indexOf(ws);
             if (index !== -1) sockets.splice(index, 1);
+            if (index !== -1 && !sockets.some(peer => peer.serverId === ws.serverId && peer.readyState === 1)) {
+                (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_2__/* .removeAwareness */ .UE)(this.awareness, orgId, ws.serverId);
+            }
             if ((index !== -1 || orgId === ws.organization_id) && sockets.length === 0 &&
                 !this.server?.organizationWorkers?.has(orgId) &&
                 ![...this.outboundManager.retryTimers.keys()].some(key => key.startsWith(`${orgId}:`)) &&
@@ -20689,7 +20718,7 @@ class ServerMeshOutbound {
             array: 'servers',
             filter: {
                 query: {
-                    _id: { $lt: this.server.id }, 'master.status': 'running',
+                    _id: { $lt: this.server.id }, 'primary.status': 'running',
                     ...(!ownOrganization && { tenant_organization_id: organization_id })
                 },
                 sort: { _id: 1 },
@@ -20862,7 +20891,7 @@ class ServerMeshOutbound {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   MX: () => (/* binding */ loadStateConfig)
 /* harmony export */ });
-/* unused harmony exports runShutdownHandlers, shutdownWorker, getServerObject, save, cordon, shed, drain, proxy, restart, reboot, shutdown, triggerGlobalShutdown, evaluateMasterFallback, init */
+/* unused harmony exports runShutdownHandlers, shutdownWorker, getServerObject, save, cordon, shed, drain, proxy, restart, reboot, shutdown, triggerGlobalShutdown, evaluatePrimaryFallback, init */
 /* harmony import */ var node_http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9316);
 /* harmony import */ var node_https__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(965);
 /* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6564);
@@ -20934,7 +20963,7 @@ function runShutdownHandlers(reason) {
     return pending;
 }
 
-/** Worker signals, application restarts, and master shutdown messages share cleanup. */
+/** Worker signals, application restarts, and primary shutdown messages share cleanup. */
 function shutdownWorker(reason) {
     if (server.state?.workerShutdownPromise) return server.state.workerShutdownPromise;
     if (server.state) server.state.isShuttingDown = true;
@@ -21031,13 +21060,13 @@ async function applyTelemetryState(data = {}) {
 }
 
 /**
- * Registers process signal handlers (SIGINT, SIGTERM, SIGBREAK) and master/worker IPC event bindings.
+ * Registers process signal handlers (SIGINT, SIGTERM, SIGBREAK) and primary/worker IPC event bindings.
  */
 function setupSignalHandlers() {
     if (server?.isPrimary) {
         ['SIGINT', 'SIGTERM', 'SIGBREAK'].forEach((signal) => {
             process.on(signal, () => {
-                console.log(`\n[@cocreate/cluster] [MASTER] Received ${signal}. Orchestrating graceful shutdown...`);
+                console.log(`\n[@cocreate/cluster] [PRIMARY] Received ${signal}. Orchestrating graceful shutdown...`);
                 triggerGlobalShutdown(signal);
             });
         });
@@ -21050,8 +21079,8 @@ function setupSignalHandlers() {
         });
 
         server?.on('shutdown', async () => {
-            console.log(`[@cocreate/cluster] [WORKER ${server?.workerId}] Instructed by master to shutdown. Draining...`);
-            await shutdownWorker('MASTER_SHUTDOWN');
+            console.log(`[@cocreate/cluster] [WORKER ${server?.workerId}] Instructed by primary to shutdown. Draining...`);
+            await shutdownWorker('PRIMARY_SHUTDOWN');
         });
     }
 }
@@ -21135,14 +21164,14 @@ async function save(overrideStatus) {
             (Array.isArray(current.error) ? current.error.length : current.error)) {
             throw new Error('Unable to read server status before saving state.');
         }
-        const master = current.object?.[0]?.master;
-        const recoveringMeshFailure = master?.status === 'failed' && master.failure?.source === 'mesh' &&
+        const primary = current.object?.[0]?.primary;
+        const recoveringMeshFailure = primary?.status === 'failed' && primary.failure?.source === 'mesh' &&
             server.isPrimary && !server.state?.isShuttingDown && (!overrideStatus || overrideStatus === 'running');
-        if (master?.status === 'terminating' || (master?.status === 'failed' && !recoveringMeshFailure)) return;
+        if (primary?.status === 'terminating' || (primary?.status === 'failed' && !recoveringMeshFailure)) return;
     }
     if (server?.isPrimary) {
-        const masterStatus = overrideStatus || (server.state?.isShuttingDown ? 'stopped' : 'running');
-        const isPrimaryStopped = masterStatus === 'stopped';
+        const primaryStatus = overrideStatus || (server.state?.isShuttingDown ? 'stopped' : 'running');
+        const isPrimaryStopped = primaryStatus === 'stopped';
 
         const payloadData = {
             ip: server.ip,
@@ -21150,12 +21179,12 @@ async function save(overrideStatus) {
             status: (server.state?.status || 'RUNNING').toLowerCase(), // OS level status: 'running', 'rebooting', 'stopped'
             totalWorkers: server.workers.size,
             deployment: server.deployment,
-            master: isPrimaryStopped ? {
+            primary: isPrimaryStopped ? {
                 pid: null,
                 status: 'stopped'
             } : {
                 pid: process.pid,
-                status: masterStatus
+                status: primaryStatus
             }
         };
 
@@ -21169,7 +21198,7 @@ async function save(overrideStatus) {
                 isDraining: false
             } : {
                 pid: process.pid,
-                status: masterStatus,
+                status: primaryStatus,
                 isCordoned: server.state?.isCordon || server.state?.isCordoned || false,
                 isShedding: server.state?.isShedding || false,
                 isDraining: server.state?.isDraining || false
@@ -21233,14 +21262,14 @@ async function cordon(value = true, internalCall = false) {
             server.send({ method: 'worker_state_change', isCordoned: isCordon });
         }
     } else {
-        evaluateMasterFallback();
+        evaluatePrimaryFallback();
     }
 
     if (server.isPrimary && !internalCall) {
         await save();
     }
     
-    const processLabel = server.isPrimary ? `[MASTER] (${process.pid})` : `[WORKER] ${process.pid} (ID: ${server.workerId})`;
+    const processLabel = server.isPrimary ? `[PRIMARY] (${process.pid})` : `[WORKER] ${process.pid} (ID: ${server.workerId})`;
     console.log(`[@cocreate/cluster] ${processLabel} isCordon updated to: ${server?.state?.isCordon}`);
 }
 
@@ -21295,7 +21324,7 @@ async function shed(arg, internalCall = false) {
         await save();
     }
 
-    const processLabel = server.isPrimary ? `Master (${process.pid})` : `Worker ${process.pid} (ID: ${server.workerId})`;
+    const processLabel = server.isPrimary ? `Primary (${process.pid})` : `Worker ${process.pid} (ID: ${server.workerId})`;
     console.log(`[@cocreate/cluster] ${processLabel} isShedding updated to: ${server?.state?.isShedding}`);
 }
 
@@ -21338,7 +21367,7 @@ async function drain(value = true, internalCall = false) {
         await save();
     }
 
-    const processLabel = server.isPrimary ? `Master (${process.pid})` : `Worker ${process.pid} (ID: ${server.workerId})`;
+    const processLabel = server.isPrimary ? `Primary (${process.pid})` : `Worker ${process.pid} (ID: ${server.workerId})`;
     console.log(`[@cocreate/cluster] ${processLabel} isDraining updated to: ${server?.state?.isDraining}`);
 }
 
@@ -21355,7 +21384,7 @@ async function proxy(value = true, internalCall = false) {
 }
 
 /**
- * Triggers a process restart across master or worker processes.
+ * Triggers a process restart across primary or worker processes.
  * 
  * @param {Object} [payload={}] - Payload options
  * @param {boolean} [fromEvent=false] - Event trigger flag
@@ -21369,12 +21398,12 @@ async function restart(payload = {}, fromEvent = false) {
     }
 
     if (server.isPrimary) {
-        if (payload && (payload.isPrimary || payload.master)) {
-            console.log(`[@cocreate/cluster] [MASTER] App restart commanded. Triggering global graceful shutdown...`);
+        if (payload && (payload.isPrimary || payload.primary)) {
+            console.log(`[@cocreate/cluster] [PRIMARY] App restart commanded. Triggering global graceful shutdown...`);
             triggerGlobalShutdown('API_RESTART');
         }
     } else {
-        if (payload && (payload.isPrimary || payload.master)) return;
+        if (payload && (payload.isPrimary || payload.primary)) return;
 
         console.log(`[@cocreate/cluster] [WORKER ${server.workerId}] Restart triggered. Commencing drain...`);
         await save('restarting');
@@ -21383,7 +21412,7 @@ async function restart(payload = {}, fromEvent = false) {
 }
 
 /**
- * Triggers an OS kernel reboot sequence on the master node.
+ * Triggers an OS kernel reboot sequence on the primary node.
  * 
  * @param {Object} [payload={}] - Payload options
  * @param {boolean} [fromEvent=false] - Event trigger flag
@@ -21392,14 +21421,14 @@ function reboot(payload = {}, fromEvent = false) {
     if (!fromEvent) {
         const sendPayload = (payload && typeof payload === 'object') ? payload : {};
         sendPayload.method = 'reboot';
-        if (!server.isPrimary) sendPayload.master = true;
+        if (!server.isPrimary) sendPayload.primary = true;
         if (server.send) server.send(sendPayload);
         return;
     }
 
     if (!server.isPrimary) return;
 
-    console.log(`[@cocreate/cluster] [MASTER] OS Reboot requested. Commencing graceful shutdown before kernel reboot...`);
+    console.log(`[@cocreate/cluster] [PRIMARY] OS Reboot requested. Commencing graceful shutdown before kernel reboot...`);
     if (server.state) server.state.status = 'REBOOTING';
     
     if (server.cluster) {
@@ -21408,7 +21437,7 @@ function reboot(payload = {}, fromEvent = false) {
     save();
 
     triggerGlobalShutdown('OS_REBOOT', () => {
-        console.log(`[@cocreate/cluster] [MASTER] Executing OS Reboot: sudo reboot`);
+        console.log(`[@cocreate/cluster] [PRIMARY] Executing OS Reboot: sudo reboot`);
         (0,node_child_process__WEBPACK_IMPORTED_MODULE_2__.exec)('sudo reboot', (err) => {
             if (err) {
                 console.error("[@cocreate/cluster] Failed to execute sudo reboot:", err.message);
@@ -21419,7 +21448,7 @@ function reboot(payload = {}, fromEvent = false) {
 }
 
 /**
- * Triggers an OS poweroff sequence on the master node.
+ * Triggers an OS poweroff sequence on the primary node.
  * 
  * @param {Object} [payload={}] - Payload options
  * @param {boolean} [fromEvent=false] - Event trigger flag
@@ -21428,18 +21457,18 @@ function shutdown(payload = {}, fromEvent = false) {
     if (!fromEvent) {
         const sendPayload = (payload && typeof payload === 'object') ? payload : {};
         sendPayload.method = 'shutdown';
-        if (!server.isPrimary) sendPayload.master = true;
+        if (!server.isPrimary) sendPayload.primary = true;
         if (server.send) server.send(sendPayload);
         return;
     }
 
     if (!server.isPrimary) return;
 
-    console.log(`[@cocreate/cluster] [MASTER] OS Shutdown requested. Commencing graceful shutdown before VM poweroff...`);
+    console.log(`[@cocreate/cluster] [PRIMARY] OS Shutdown requested. Commencing graceful shutdown before VM poweroff...`);
     if (server.state) server.state.status = 'STOPPED';
 
     triggerGlobalShutdown('OS_SHUTDOWN', () => {
-        console.log(`[@cocreate/cluster] [MASTER] Executing OS Poweroff: sudo poweroff`);
+        console.log(`[@cocreate/cluster] [PRIMARY] Executing OS Poweroff: sudo poweroff`);
         (0,node_child_process__WEBPACK_IMPORTED_MODULE_2__.exec)('sudo poweroff', (err) => {
             if (err) {
                 console.error("[@cocreate/cluster] Failed to execute sudo poweroff:", err.message);
@@ -21459,7 +21488,7 @@ async function triggerGlobalShutdown(reason, completionCallback) {
     if (!server.isPrimary || server.state?.isShuttingDown) return;
     const shutdownDeadline = Date.now() + stateConfig.shutdownTimeoutMs;
 
-    console.log(`\n[@cocreate/cluster] [MASTER] Commencing Global Shutdown Sequence (Reason: ${reason})...`);
+    console.log(`\n[@cocreate/cluster] [PRIMARY] Commencing Global Shutdown Sequence (Reason: ${reason})...`);
     
     if (server.state) {
         server.state.isShuttingDown = true;
@@ -21493,7 +21522,7 @@ async function triggerGlobalShutdown(reason, completionCallback) {
                 server.cluster.close(reason);
             }
             if (server.state) server.state.isMeshClosed = true;
-            console.log("[@cocreate/cluster] [MASTER] Mesh closed successfully.");
+            console.log("[@cocreate/cluster] [PRIMARY] Mesh closed successfully.");
         }, stateConfig.meshCloseDelayMs);
     }
 
@@ -21522,7 +21551,7 @@ async function triggerGlobalShutdown(reason, completionCallback) {
     // Step 3: Safety timeout
     if (server.state) {
         server.state.primaryShutdownTimeout = setTimeout(async () => {
-            console.error(`[@cocreate/cluster] [MASTER] Shutdown Timeout exceeded (${stateConfig.shutdownTimeoutMs / 1000}s). Forcing process exit.`);
+            console.error(`[@cocreate/cluster] [PRIMARY] Shutdown Timeout exceeded (${stateConfig.shutdownTimeoutMs / 1000}s). Forcing process exit.`);
             await finalizeShutdown();
             if (typeof completionCallback === 'function') completionCallback();
             else process.exit(1);
@@ -21535,7 +21564,7 @@ async function triggerGlobalShutdown(reason, completionCallback) {
     }
     
     if (server.workers && server.workers.size === 0) {
-        console.log("[@cocreate/cluster] [MASTER] No active workers detected. Concluding shutdown.");
+        console.log("[@cocreate/cluster] [PRIMARY] No active workers detected. Concluding shutdown.");
         await finalizeShutdown();
         if (typeof completionCallback === 'function') setTimeout(completionCallback, 1000);
         else setTimeout(() => process.exit(0), 1000);
@@ -21543,9 +21572,9 @@ async function triggerGlobalShutdown(reason, completionCallback) {
 }
 
 /**
- * Evaluates active worker states and activates/deactivates emergency master fallback HTTP server.
+ * Evaluates active worker states and activates/deactivates emergency primary fallback HTTP server.
  */
-function evaluateMasterFallback() {
+function evaluatePrimaryFallback() {
     if (!server?.isPrimary) return;
 
     const workersList = server.workers ? Array.from(server.workers.values()) : [];
@@ -21575,7 +21604,7 @@ function evaluateMasterFallback() {
                 fallbackHttpsServer.listen(HTTPS_PORT, BIND_IP);
             }
             
-            console.log(`[@cocreate/cluster] [MASTER] All workers cordoned/down. Master fallback active (500 mode).`);
+            console.log(`[@cocreate/cluster] [PRIMARY] All workers cordoned/down. Primary fallback active (500 mode).`);
         }
     } else {
         if (fallbackHttpServer) {
@@ -21585,7 +21614,7 @@ function evaluateMasterFallback() {
                 fallbackHttpsServer.close();
                 fallbackHttpsServer = null;
             }
-            console.log(`[@cocreate/cluster] [MASTER] Workers active. Deactivating Master fallback.`);
+            console.log(`[@cocreate/cluster] [PRIMARY] Workers active. Deactivating Primary fallback.`);
         }
     }
 }
@@ -21596,7 +21625,7 @@ async function handleWorkerListening(payload) {
     const worker = server.workers?.setListening(payload.workerId, payload.state);
     if (!worker) return;
 
-    evaluateMasterFallback();
+    evaluatePrimaryFallback();
     const workersReady = server.workers.size > 0 &&
         [...server.workers.values()].every(item => item.isListening);
     if (!workersReady) return;
@@ -21606,7 +21635,7 @@ async function handleWorkerListening(payload) {
         await server.repository?.publish();
     } catch (error) {
         console.error(
-            '[@cocreate/cluster] Failed to publish master readiness or initial repository data:',
+            '[@cocreate/cluster] Failed to publish primary readiness or initial repository data:',
             error.message
         );
     }
@@ -21663,7 +21692,7 @@ async function init(serverInstance) {
         reboot,
         shutdown,
         triggerGlobalShutdown,
-        evaluateMasterFallback
+        evaluatePrimaryFallback
     };
 }
 
@@ -21695,7 +21724,7 @@ async function loadPeers(server) {
             method: 'object.read',
             array: 'servers',
             filter: {
-                query: { 'master.status': 'running' },
+                query: { 'primary.status': 'running' },
                 sort: { _id: 1 },
                 limit: 0
             },
@@ -21874,7 +21903,8 @@ async function init(server) {
 /* harmony import */ var node_events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2849);
 /* harmony import */ var node_cluster__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8698);
 /* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6674);
-/* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3521);
+/* harmony import */ var _cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8152);
+/* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3521);
 /********************************************************************************
  * Copyright (C) 2026 CoCreate and Contributors.
  *
@@ -21892,6 +21922,7 @@ async function init(server) {
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  *
  ********************************************************************************/
+
 
 
 
@@ -21923,7 +21954,7 @@ class Workers extends Map {
         this.server = server;
         this.isPrimary = node_cluster__WEBPACK_IMPORTED_MODULE_1__["default"].isPrimary;
         this.pendingPromises = new Map();
-        this.distribution = new Map();
+        this.awareness = new Map();
         this.workerId = this.isPrimary ? null : (parseInt(process.env.WORKER_ID, 10) || 1);
     }
 
@@ -21978,7 +22009,7 @@ class Workers extends Map {
     }
 
     async #handleWorkerExit(worker, code, signal) {
-        console.log(`[@cocreate/cluster] [MASTER] Worker ${worker.process.pid} exited (Code: ${code}, Signal: ${signal})`);
+        console.log(`[@cocreate/cluster] [PRIMARY] Worker ${worker.process.pid} exited (Code: ${code}, Signal: ${signal})`);
 
         let deadWorkerId = null;
         for (let [id, w] of this.entries()) {
@@ -21991,8 +22022,12 @@ class Workers extends Map {
 
         if (deadWorkerId === null) return;
 
-        if (this.server.state?.evaluateMasterFallback) {
-            this.server.state.evaluateMasterFallback();
+        for (const organization_id of [...this.awareness.keys()]) {
+            (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_3__/* .removeAwareness */ .UE)(this.awareness, organization_id, deadWorkerId);
+        }
+
+        if (this.server.state?.evaluatePrimaryFallback) {
+            this.server.state.evaluatePrimaryFallback();
         }
 
         if (deadWorkerId && this.server.crud) {
@@ -22015,10 +22050,10 @@ class Workers extends Map {
 
         if (state?.isShuttingDown || state?.isDraining || isCordoned) {
             this.#environments.delete(deadWorkerId);
-            console.log(`[@cocreate/cluster] [MASTER] Worker ${worker.process.pid} removed. Active workers remaining: ${this.size}`);
+            console.log(`[@cocreate/cluster] [PRIMARY] Worker ${worker.process.pid} removed. Active workers remaining: ${this.size}`);
 
             if (this.size === 0) {
-                console.log("[@cocreate/cluster] [MASTER] All workers successfully drained.");
+                console.log("[@cocreate/cluster] [PRIMARY] All workers successfully drained.");
                 if (state?.isShuttingDown) await state.finalizeShutdown?.();
                 if (typeof this.server.state.shutdownCompletionCallback === 'function') {
                     this.server.state.shutdownCompletionCallback();
@@ -22039,7 +22074,7 @@ class Workers extends Map {
                 this.#environments.delete(targetId);
                 return;
             }
-            console.log(`[@cocreate/cluster] [MASTER] Respawning Worker ${targetId}...`);
+            console.log(`[@cocreate/cluster] [PRIMARY] Respawning Worker ${targetId}...`);
             this.#spawn(targetId, this.#environments.get(targetId));
         }, 2000));
     }
@@ -22082,13 +22117,13 @@ class Workers extends Map {
         if (this.#deleting.has(workerId)) return;
         this.#deleting.add(workerId);
         record.isListening = false;
-        this.server.state?.evaluateMasterFallback?.();
+        this.server.state?.evaluatePrimaryFallback?.();
         const stop = () => record.process.kill('SIGTERM');
         if (typeof this.server.send !== 'function') {
             stop();
             return;
         }
-        this.server.send({ method: 'shutdown', master: false, worker: workerId, server: this.server.id })
+        this.server.send({ method: 'shutdown', primary: false, worker: workerId, server: this.server.id })
             .catch(stop);
     }
 
@@ -22112,7 +22147,7 @@ class Workers extends Map {
             SERVER_DEPLOYMENT: JSON.stringify(this.server.deployment || {}),
         });
         worker.on('error', error => {
-            console.error(`[@cocreate/cluster] [MASTER] Error on Worker ${workerId}:`, error.message);
+            console.error(`[@cocreate/cluster] [PRIMARY] Error on Worker ${workerId}:`, error.message);
         });
         const record = {
             id: workerId,
@@ -22139,16 +22174,16 @@ class Workers extends Map {
     }
 
     /**
-     * Initializes master cluster forks and listens for exit signals.
+     * Initializes primary cluster forks and listens for exit signals.
  * @private
  * @environment server
  */
-    async setupMasterCluster() {
+    async setupPrimaryCluster() {
         if (!this.server.state)
-            this.server.state = await _state_js__WEBPACK_IMPORTED_MODULE_3__/* ["default"].init */ .Ay.init(this.server);
+            this.server.state = await _state_js__WEBPACK_IMPORTED_MODULE_4__/* ["default"].init */ .Ay.init(this.server);
         if (!this.isPrimary || this.isWorker) return false;
 
-        console.log(`[@cocreate/cluster] [MASTER] Orchestrator creating ${this.#config.workers} workers.`);
+        console.log(`[@cocreate/cluster] [PRIMARY] Orchestrator creating ${this.#config.workers} workers.`);
 
         for (let i = 0; i < this.#config.workers; i++) this.#spawn(i + 1);
         return true;
@@ -26241,9 +26276,11 @@ function identity(root, value) {
 
 async function crud({ db, roots }, request) {
     const response = { ...request }
+    delete response.awareness
+    const awareness = new Set()
     const changed = new Set()
     function result(success, error) {
-        const output = { ...response, success, ...(error ? { error: [error.message] } : {}) }
+        const output = { ...response, awareness: [...awareness], success, ...(error ? { error: [error.message] } : {}) }
         Object.defineProperty(output, persistenceChanges, { value: changed })
         return output
     }
@@ -26257,6 +26294,11 @@ async function crud({ db, roots }, request) {
         if (action === 'create' && filter) throw Error('Filters are not supported for create')
         if (filter && (filter.sort?.length || filter.search !== undefined)) throw Error('sort/search not implemented')
         const output = response[root] = []
+        function addResult(leaf, includeParent = false) {
+            output.push(leaf)
+            if (typeof leaf?.uuid === 'string' && leaf.uuid) awareness.add(leaf.uuid)
+            if (includeParent && typeof leaf?.parent === 'string') awareness.add(leaf.parent)
+        }
         const canCreateParents = action === 'create' || action === 'update' && request.upsert
         let resolved
         function resolve() {
@@ -26282,7 +26324,7 @@ async function crud({ db, roots }, request) {
 
         if (action === 'create') {
             if (!inputs.length) roots.validateTarget(root)
-            for (const input of inputs) output.push(create(input))
+            for (const input of inputs) addResult(create(input), true)
             return result(true)
         }
 
@@ -26303,7 +26345,8 @@ async function crud({ db, roots }, request) {
             const start = filter.startingIndex ?? filter.index ?? 0
             const limit = filter.limit ?? 50
             if (!Number.isSafeInteger(start) || start < 0 || !Number.isSafeInteger(limit) || limit < 0) throw Error('invalid pagination')
-            resolve()
+            const scope = resolve()
+            if (!scope.missing && typeof scope.parent?.uuid === 'string') awareness.add(scope.parent.uuid)
             const matches = select(filter.query ?? {}, limit === 0 ? Infinity : start + limit).slice(start)
             for (const leaf of matches) if (!targets.has(leaf)) targets.set(leaf, inputs[0] ?? {})
         }
@@ -26313,22 +26356,24 @@ async function crud({ db, roots }, request) {
             delete response.updated
             const updates = response.$update = []
             if (replay && targets.size !== inputs.length) throw Error('missing or duplicate replay target')
-            if (!targets.size && request.upsert && inputs.length === 1) output.push(create(inputs[0]))
+            if (!targets.size && request.upsert && inputs.length === 1) addResult(create(inputs[0]), true)
             else {
                 if (!filter && !replay && !inputs.some(input => identity(root, input))) throw Error(`${root}.update requires identity or filter`)
                 if (!targets.size && !filter && (!replay || inputs.length)) throw Error(`${root} not found`)
                 for (const [leaf, input] of targets) {
                     const result = (0,_update_js__WEBPACK_IMPORTED_MODULE_0__/* .update */ .y)(leaf, input, replay ? undefined : request.$update)
                     if (result.mutation) { updates.push(result.mutation); changed.add(leaf) }
-                    output.push(result.object)
+                    addResult(result.object, true)
                 }
             }
-        } else if (action === 'read') output.push(...targets.keys())
+        } else if (action === 'read') {
+            for (const leaf of targets.keys()) addResult(leaf)
+        }
         else {
             for (const leaf of targets.keys()) {
                 await leaf.delete()
                 changed.add(leaf)
-                output.push(leaf)
+                addResult(leaf, true)
             }
         }
         return result(true)
@@ -30975,7 +31020,7 @@ async function loadLogConfig() {
 }
 
 /**
- * Attaches IPC event listeners on the master process to receive logs from workers.
+ * Attaches IPC event listeners on the primary process to receive logs from workers.
  */
 function setupIPCListeners() {
     if (server?.isPrimary) {
@@ -31038,7 +31083,7 @@ function unpatchConsole() {
 }
 
 /**
- * Dispatches a log entry from either master or worker process.
+ * Dispatches a log entry from either primary or worker process.
  *
  * @param {string} level - Log severity level ('info', 'warn', 'error')
  * @param {string} message - Formatted log message text
@@ -31047,7 +31092,7 @@ function unpatchConsole() {
 function log(level = 'info', message = '', metadata = null) {
     if (isLoggingInternal) return;
 
-    const sourceWorker = server?.isPrimary ? 'master' : (server?.workerId || 1);
+    const sourceWorker = server?.isPrimary ? 'primary' : (server?.workerId || 1);
 
     const logEntry = {
         timestamp: Date.now(),
@@ -31058,7 +31103,7 @@ function log(level = 'info', message = '', metadata = null) {
     };
 
     if (!server?.isPrimary) {
-        // Worker Process: Relay log entry to Master Orchestrator over IPC
+        // Worker Process: Relay log entry to Primary Orchestrator over IPC
         if (typeof server?.send === 'function') {
             server.send({
                 method: 'server.log',
@@ -31075,7 +31120,7 @@ function log(level = 'info', message = '', metadata = null) {
             }
         }
     } else {
-        // Master Process: Append directly to local log queue
+        // Primary Process: Append directly to local log queue
         enqueueLog(logEntry);
     }
 }
@@ -31105,7 +31150,7 @@ function enqueueLog(logEntry) {
 }
 
 /**
- * Configures interval timer for periodic buffer flushing on the master node.
+ * Configures interval timer for periodic buffer flushing on the primary node.
  */
 function setupFlushTimer() {
     if (!server?.isPrimary) return;
@@ -31135,7 +31180,7 @@ async function save() {
         const pendingLogs = [...logQueue];
         logQueue = [];
 
-        // Maintain capped ring buffer of recent logs on Master
+        // Maintain capped ring buffer of recent logs on Primary
         recentLogs = [...recentLogs, ...pendingLogs].slice(-logConfig.maxLogs);
 
         // Persist updated log ring buffer to the server object in DB
@@ -34147,10 +34192,10 @@ function createServerClusterTool({ server }) {
             }
 
             const workerOperations = new Set(['cordon', 'shed', 'drain']);
-            const masterOperations = new Set(['reboot', 'shutdown']);
+            const primaryOperations = new Set(['reboot', 'shutdown']);
             const supported = new Set([
               ...workerOperations,
-              ...masterOperations,
+              ...primaryOperations,
               'restart'
             ]);
             if (!supported.has(operation)) {
@@ -34177,8 +34222,8 @@ function createServerClusterTool({ server }) {
               payload.value = value !== false;
             }
             if (operation === 'shed') payload.organizations = organizations;
-            if (masterOperations.has(operation) || (operation === 'restart' && worker == null)) {
-              payload.master = true;
+            if (primaryOperations.has(operation) || (operation === 'restart' && worker == null)) {
+              payload.primary = true;
             }
 
             await server.send(payload);
@@ -35023,16 +35068,16 @@ function createBuiltInTools(server, { mcpPath = '/mcp' } = {}) {
                 if (action === 'control') {
                     if (!args.serverId) throw new Error('serverId is required for cluster control.');
                     const workerOperations = new Set(['cordon', 'shed', 'drain']);
-                    const masterOperations = new Set(['reboot', 'shutdown']);
+                    const primaryOperations = new Set(['reboot', 'shutdown']);
                     const operation = args.operation;
-                    if (![...workerOperations, ...masterOperations, 'restart'].includes(operation)) throw new Error(`Unsupported server control operation: ${operation}`);
+                    if (![...workerOperations, ...primaryOperations, 'restart'].includes(operation)) throw new Error(`Unsupported server control operation: ${operation}`);
                     if (workerOperations.has(operation) && args.worker == null) throw new Error(`worker is required for ${operation}.`);
                     if (operation === 'shed' && args.organizations === undefined) throw new Error('organizations is required for shed.');
                     const payload = { method: operation, server: args.serverId, organization_id: context.organization_id };
                     if (args.worker != null) payload.worker = args.worker;
                     if (operation === 'cordon' || operation === 'drain') payload.value = args.value !== false;
                     if (operation === 'shed') payload.organizations = args.organizations;
-                    if (masterOperations.has(operation) || (operation === 'restart' && args.worker == null)) payload.master = true;
+                    if (primaryOperations.has(operation) || (operation === 'restart' && args.worker == null)) payload.primary = true;
                     const authorized = await authorize(server, context, payload);
                     await server.send(authorized);
                     return { success: true, action, operation, payload: authorized };
@@ -37258,7 +37303,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ws__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1276);
 /* harmony import */ var node_url__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9061);
 /* harmony import */ var _cocreate_config__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9683);
-/* harmony import */ var _cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(419);
+/* harmony import */ var _cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8152);
 /* harmony import */ var _cocreate_utils_segments__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3067);
 /* harmony import */ var _cocreate_coson__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(9032);
 /* harmony import */ var _transport_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(2852);
@@ -37335,13 +37380,7 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
         this.organizationBalances = new Map();
         this.clients = new Map();
         this.sockets = new Map();
-        this.distribution = new Map();
-        server.on('db.distribution.set', payload => {
-            // Socket messages always carry top-level organization identity; DB controls do not.
-            if (payload.organization_id || payload.serverId !== this.serverId) return;
-            this.setDistribution(payload.data);
-            return { ...payload, success: true };
-        });
+        this.awareness = new Map();
         this.users = new Map();
 
         // Extract isolated helper properties directly from the server instance
@@ -37698,20 +37737,28 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
         }
     }
 
-    setDistribution({ organization_id, clientId, distribution } = {}) {
-        if (!this.organizations.get(organization_id)?.clients?.has(clientId)) return;
-        this.distribution ||= new Map();
-        (0,_cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_4__/* .addDistribution */ .E)(this.distribution, distribution, clientId);
+    setAwareness(socket, references) {
+        if (!socket?.organization_id || !socket?.clientId || this.sockets.get(socket.id) !== socket) return;
+        (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_4__/* .addAwareness */ .p2)(this.awareness, socket.organization_id, references, socket.clientId);
     }
 
-    getDistributionClients(data) {
+    registerAwareness(data) {
+        if (!Array.isArray(data.awareness) || data.success === false || data.error) return;
+        const socket = this.sockets.get(data.socketId);
+        if (!socket || socket.organization_id !== data.organization_id || socket.clientId !== data.clientId) return;
+        if (data.serverId && data.serverId !== this.serverId) return;
+        if (data.workerId != null && this.workerId != null && String(data.workerId) !== String(this.workerId)) return;
+        this.setAwareness(socket, data.awareness);
+    }
+
+    getAwarenessClients(data) {
         const clients = new Map();
         const organization = this.organizations.get(data.organization_id);
         const origin = (!data.serverId || data.serverId === this.serverId) &&
             (data.workerId == null || this.workerId == null || String(data.workerId) === String(this.workerId)) &&
             this.sockets.get(data.socketId);
         const clientIds = /\.(create|update|delete)$/.test(data.method)
-            ? (0,_cocreate_utils_distribution__WEBPACK_IMPORTED_MODULE_4__/* .getDistribution */ .f)(this.distribution, data.distributionKeys) : new Set();
+            ? (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_4__/* .getAwareness */ .Af)(this.awareness, data.organization_id, data.awareness) : new Set();
         if (origin && origin.organization_id === data.organization_id) clientIds.add(origin.clientId);
         for (const clientId of clientIds) {
             const sockets = [...organization?.clients?.get(clientId)?.values() ?? []];
@@ -37724,7 +37771,7 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
 
     getClients(data) {
         try {
-            if (Array.isArray(data.distributionKeys)) return this.getDistributionClients(data);
+            if (Array.isArray(data.awareness)) return this.getAwarenessClients(data);
             if (data.broadcast === "false") data.broadcast = false;
 
             const clients = new Map();
@@ -37803,6 +37850,7 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
 
                 if (clientSocketsMap.size === 0) {
                     organization.clients.delete(clientId);
+                    (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_4__/* .removeAwareness */ .UE)(this.awareness, organization_id, clientId);
                 }
 
                 if (organization.clients.size === 0) {
@@ -37906,6 +37954,8 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
 
             const org = this.organizations.get(orgId);
             if (!org) continue;
+
+            (0,_cocreate_utils_awareness__WEBPACK_IMPORTED_MODULE_4__/* .clearAwareness */ .Zx)(this.awareness, orgId);
 
             console.log(`[@cocreate/socket] Evicting organization instantly (Shedding/Drain): ${orgId}`);
 
@@ -38099,8 +38149,7 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
             delete data.serverId;
             delete data.cluster;
             delete data.clusterId;
-            delete data.distributionKeys;
-            delete data.distribution;
+            delete data.awareness;
             // Storage authorization may change organization_id; replies still belong to this connection.
             data.replyOrganizationId = organization_id;
 
@@ -38210,6 +38259,7 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
     async send(data, options = { operators: false }) {
         data = { ...data };
         delete data.replyOrganizationId;
+        this.registerAwareness(data);
 
         if (data.method === 'organization.balance') {
             this.setOrganizationBalance(data, { propagate: false });
@@ -38291,7 +38341,7 @@ class SocketServer extends node_events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter
         if (cleanData.filter?.query) {
             cleanData.filter = { ...cleanData.filter, query: { ...cleanData.filter.query } };
         }
-        if (Array.isArray(data.distributionKeys)) cleanData.broadcastClient = true;
+        if (Array.isArray(data.awareness)) cleanData.broadcastClient = true;
 
         if (
             cleanData.filter &&
@@ -39336,7 +39386,7 @@ const KEY_PATH = node_path__WEBPACK_IMPORTED_MODULE_3__["default"].join(process.
 
 function logPrefix() {
     const workerId = server?.workerId || process.env.WORKER_ID;
-    return `[@cocreate/tls] ${workerId ? `[WORKER ${workerId}]` : '[MASTER]'}`;
+    return `[@cocreate/tls] ${workerId ? `[WORKER ${workerId}]` : '[PRIMARY]'}`;
 }
 
 // In-flight request deduplication map (domain -> Promise)
@@ -40514,14 +40564,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let server = null;                               // Reference to the main CoCreateServer instance
-let platformOrgId = 'platform';                 // Master platform organization ID
+let platformOrgId = 'platform';                 // Platform organization ID
 let isRunning = false;                          // Service execution flag
 let listenersBound = false;                     // Process event listener guard
 let usageConfig = {};                           // In-memory configuration registry
 
 function logPrefix() {
     const workerId = server?.workerId || process.env.WORKER_ID;
-    return `[@cocreate/usage] ${workerId ? `[WORKER ${workerId}]` : '[MASTER]'}`;
+    return `[@cocreate/usage] ${workerId ? `[WORKER ${workerId}]` : '[PRIMARY]'}`;
 }
 
 // Default configuration settings
@@ -41593,7 +41643,7 @@ async function saveToLedgerDatabase(organization_id, stats) {
             method: 'object.create',
             array: 'servers_bandwidth',
             object: {
-                organization_id: platformOrgId,   // Master platform workspace
+                organization_id: platformOrgId,   // Platform workspace
                 organization: organization_id,       // Client tenant who generated the bandwidth
                 ingressBytes: stats.ingressBytes,
                 egressBytes: stats.egressBytes,
@@ -41792,7 +41842,7 @@ function privateRequest(data) {
     for (const field of [
         "socketId", "clientId", "uuid", "frameId", "replyOrganizationId",
         "broadcast", "broadcastClient", "broadcastSender", "subscription", "subscriptionKeys",
-        "server", "worker", "cluster", "master", "serverId", "workerId", "clusterId", "response"
+        "server", "worker", "cluster", "primary", "serverId", "workerId", "clusterId", "response"
     ]) delete envelope[field];
     return envelope;
 }
@@ -43171,6 +43221,56 @@ function setAttributeNames(attributes, overWrite) {
 
 /***/ },
 
+/***/ 8152
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Af: () => (/* binding */ getAwareness),
+/* harmony export */   UE: () => (/* binding */ removeAwareness),
+/* harmony export */   Zx: () => (/* binding */ clearAwareness),
+/* harmony export */   p2: () => (/* binding */ addAwareness)
+/* harmony export */ });
+/** Add recipients to an organization-scoped, process-local awareness index. */
+function addAwareness(awareness, organization_id, references, recipient) {
+    if (organization_id == null || organization_id === '' || recipient == null) return
+    let byReference = awareness.get(organization_id)
+    if (!byReference) awareness.set(organization_id, byReference = new Map())
+    for (const reference of references ?? []) {
+        if (typeof reference !== 'string' || !reference) continue
+        let recipients = byReference.get(reference)
+        if (!recipients) byReference.set(reference, recipients = new Set())
+        recipients.add(recipient)
+    }
+}
+
+/** Return the distinct recipients aware of any reference in one organization. */
+function getAwareness(awareness, organization_id, references) {
+    const recipients = new Set()
+    const byReference = awareness.get(organization_id)
+    for (const reference of references ?? [])
+        for (const recipient of byReference?.get(reference) ?? []) recipients.add(recipient)
+    return recipients
+}
+
+/** Remove one recipient's awareness from an organization and prune empty entries. */
+function removeAwareness(awareness, organization_id, recipient) {
+    const byReference = awareness.get(organization_id)
+    if (!byReference) return
+    for (const [reference, recipients] of byReference) {
+        recipients.delete(recipient)
+        if (!recipients.size) byReference.delete(reference)
+    }
+    if (!byReference.size) awareness.delete(organization_id)
+}
+
+/** Remove an organization and all recipient awareness stored under it. */
+function clearAwareness(awareness, organization_id) {
+    awareness.delete(organization_id)
+}
+
+
+/***/ },
+
 /***/ 2428
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
@@ -44174,33 +44274,6 @@ function sortData(data, sort) {
         }
         return 0;
     });
-}
-
-
-/***/ },
-
-/***/ 419
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   E: () => (/* binding */ addDistribution),
-/* harmony export */   f: () => (/* binding */ getDistribution)
-/* harmony export */ });
-/** Add recipients to a process-local distribution map. References never grant access. */
-function addDistribution(distribution, references, recipient) {
-    if (recipient === undefined || recipient === null) return
-    for (const reference of references ?? []) {
-        if (typeof reference !== 'string') continue
-        if (!distribution.has(reference)) distribution.set(reference, new Set())
-        distribution.get(reference).add(recipient)
-    }
-}
-
-function getDistribution(distribution, references) {
-    const recipients = new Set()
-    for (const reference of references ?? [])
-        for (const recipient of distribution?.get(reference) ?? []) recipients.add(recipient)
-    return recipients
 }
 
 
@@ -46557,7 +46630,7 @@ function createSandbox(payload, workflowDefinition, workflowName, organization_i
 			// Nested work returns to its caller without inheriting client reply destinations.
 			for (const field of ["socketId", "clientId", "uuid", "frameId", "replyOrganizationId",
 				"broadcast", "broadcastClient", "broadcastSender", "subscription", "subscriptionKeys",
-				"server", "worker", "cluster", "master", "serverId", "workerId", "clusterId", "response"]) {
+				"server", "worker", "cluster", "primary", "serverId", "workerId", "clusterId", "response"]) {
 				delete child[field];
 			}
 			const result = await execute(child);
@@ -47942,7 +48015,7 @@ try {
             const response = await _cocreate_cluster__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Ay.send({
                 method: 'db.forward',
                 request,
-                master: true,
+                primary: true,
                 broadcast: false
             });
             if (!response || response.success === false || response.error) {
