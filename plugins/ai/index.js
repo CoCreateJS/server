@@ -442,80 +442,86 @@ async function saveConfig(filePath, content) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   O: () => (/* binding */ dotNotationToObject)
 /* harmony export */ });
+const numericIndex = /^\d+$/;
+const groupSelector = /^\w$/;
+const bracketSegments = /* @__PURE__ */ new Map();
+const bracketSegmentLimit = 128;
+function parseBracketSegment(segment) {
+  const cached = bracketSegments.get(segment);
+  if (cached) return cached;
+  const bracket = segment.indexOf("[");
+  if (bracket < 0) return;
+  const selector = segment.slice(bracket + 1, -1);
+  const indexed = selector !== "" && numericIndex.test(selector);
+  if (selector && !indexed && !groupSelector.test(selector)) return;
+  const key = segment.slice(0, bracket);
+  if (key === "__proto__") throw new TypeError("Invalid object path");
+  const parsed = { key, selector, indexed };
+  if (bracketSegments.size === bracketSegmentLimit)
+    bracketSegments.delete(bracketSegments.keys().next().value);
+  bracketSegments.set(segment, parsed);
+  return parsed;
+}
+function ownValue(object, key) {
+  return Object.hasOwn(object, key) ? object[key] : void 0;
+}
+function writeLeaf(object, key, value) {
+  if (key === "__proto__") throw new TypeError("Invalid object path");
+  if (value === void 0) delete object[key];
+  else object[key] = value;
+}
 function dotNotationToObject(data = {}, obj = {}) {
   try {
-    data ??= {};
     obj ??= {};
-    let arrayGroup = {};
-    for (const key of Object.keys(data)) {
-      let value = data[key];
-      let newObject = obj;
-      let oldObject = new Object(obj);
-      let keys = key.split(".");
-      let length = keys.length - 1;
-      for (let i = 0; i < keys.length; i++) {
-        if (keys[i].endsWith("]")) {
-          if (keys[i].endsWith("[]")) {
-            let baseKey = keys[i].slice(0, -2);
-            if (!Array.isArray(newObject[baseKey])) {
-              newObject[baseKey] = [];
-            }
-            if (length == i) {
-              if (Array.isArray(value)) {
-                newObject[baseKey].push(...value);
-              } else {
-                newObject[baseKey].push(value);
-              }
-            }
-          } else if (/\[([0-9]+)\]/g.test(keys[i])) {
-            let [k, index] = keys[i].split("[");
-            index = index.slice(0, -1);
-            if (!Array.isArray(newObject[k])) {
-              newObject[k] = [];
-            }
-            if (length == i) {
-              if (value === void 0) {
-                newObject[k].splice(index, 1);
-              } else {
-                newObject[k][index] = value;
-              }
-            } else {
-              newObject[k][index] = oldObject[k][index] || {};
-              newObject = newObject[k][index];
-              oldObject = oldObject[k][index];
-            }
-          } else if (/\[\w\]/g.test(keys[i])) {
-            let [k, group] = keys[i].split("[");
-            group = group.slice(0, -1);
-            if (!Array.isArray(newObject[k])) {
-              newObject[k] = [];
-            }
-            let index;
-            if (arrayGroup[keys.slice(0, i + 1).join(".")]) {
-              index = arrayGroup[keys.slice(0, i + 1).join(".")];
-            } else {
-              index = newObject[k].length;
-              arrayGroup[keys.slice(0, i + 1).join(".")] = index;
-              newObject[k][index] = {};
-            }
-            if (length == i) {
-              newObject[k][index] = value;
-            } else {
-              newObject = newObject[k][index];
-            }
+    let groups;
+    for (const path of Object.keys(data ?? {})) {
+      const value = data[path];
+      if (!path.includes(".") && !path.endsWith("]")) {
+        writeLeaf(obj, path, value);
+        continue;
+      }
+      const segments = path.split(".");
+      const last = segments.length - 1;
+      let parent = obj;
+      for (let i = 0; i <= last; i++) {
+        const segment = segments[i];
+        if (!segment.endsWith("]")) {
+          if (i === last) {
+            writeLeaf(parent, segment, value);
+          } else {
+            if (segment === "__proto__") throw new TypeError("Invalid object path");
+            parent = ownValue(parent, segment) || (parent[segment] = {});
+          }
+          continue;
+        }
+        const parsed = parseBracketSegment(segment);
+        if (!parsed) continue;
+        const { key, selector, indexed } = parsed;
+        let array = ownValue(parent, key);
+        if (!Array.isArray(array)) array = parent[key] = [];
+        if (!selector) {
+          if (i === last) {
+            if (Array.isArray(value)) array.push(...value);
+            else array.push(value);
+          }
+        } else if (indexed) {
+          if (i === last) {
+            if (value === void 0) array.splice(selector, 1);
+            else array[selector] = value;
+          } else {
+            parent = ownValue(array, selector) || (array[selector] = {});
           }
         } else {
-          if (length == i) {
-            if (value === void 0) {
-              delete newObject[keys[i]];
-            } else {
-              newObject[keys[i]] = value;
-            }
-          } else {
-            newObject[keys[i]] = oldObject[keys[i]] || {};
-            newObject = newObject[keys[i]];
-            oldObject = oldObject[keys[i]];
+          groups ??= /* @__PURE__ */ new Map();
+          const group = segments.slice(0, i + 1).join(".");
+          let index = groups.get(group);
+          if (index === void 0) {
+            index = array.length;
+            groups.set(group, index);
+            array[index] = {};
           }
+          if (i === last) array[index] = value;
+          else parent = array[index];
         }
       }
     }
@@ -535,21 +541,42 @@ function dotNotationToObject(data = {}, obj = {}) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   r: () => (/* binding */ getValueFromObject)
 /* harmony export */ });
+const pathCache = /* @__PURE__ */ new Map();
+const pathCacheLimit = 128;
+function readPath(path) {
+  const cached = pathCache.get(path);
+  if (cached) return cached;
+  let normalized = path.includes("[") ? path.replace(/\[(\d+)\]/g, ".$1") : path;
+  if (normalized[0] === ".") normalized = normalized.slice(1);
+  const keys = normalized.split(".");
+  if (pathCache.size === pathCacheLimit) pathCache.clear();
+  pathCache.set(path, keys);
+  return keys;
+}
+function missingKey(key, throwError) {
+  if (throwError) throw new Error("Key not found in object: " + key);
+}
 function getValueFromObject(object = {}, path = "", throwError = false) {
   try {
-    if (!Array.isArray(object) && !Object.keys(object).length || !path) {
+    if (object == null || typeof object !== "object" || !path) {
       if (throwError) throw new Error("Invalid input to getValueFromObject");
       return;
     }
-    path = path.replace(/\[(\d+)\]/g, ".$1").replace(/^\./, "");
-    let data = object, subpath = path.split(".");
-    for (let i = 0; i < subpath.length; i++) {
-      if (throwError && !(subpath[i] in data))
-        throw new Error("Key not found in object: " + subpath[i]);
-      data = data[subpath[i]];
-      if (!data) break;
+    if (typeof path !== "string") {
+      path = path.replace(/\[(\d+)\]/g, ".$1");
     }
-    return data;
+    if (!path.includes(".") && !path.includes("[")) {
+      if (Object.hasOwn(object, path)) return object[path];
+      return missingKey(path, throwError);
+    }
+    const keys = readPath(path);
+    let value = object;
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (value == null || typeof value !== "object" && typeof value !== "function" || !Object.hasOwn(value, key)) return missingKey(key, throwError);
+      value = value[key];
+    }
+    return value;
   } catch (error) {
     if (throwError) throw error;
   }

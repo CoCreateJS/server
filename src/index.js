@@ -44,7 +44,7 @@ try {
             const response = await server.send({
                 method: 'db.forward',
                 request,
-                master: true,
+                primary: true,
                 broadcast: false
             });
             if (!response || response.success === false || response.error) {

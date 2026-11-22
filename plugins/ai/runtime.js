@@ -8607,80 +8607,86 @@ async function saveConfig(filePath, content) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   O: () => (/* binding */ dotNotationToObject)
 /* harmony export */ });
+const numericIndex = /^\d+$/;
+const groupSelector = /^\w$/;
+const bracketSegments = /* @__PURE__ */ new Map();
+const bracketSegmentLimit = 128;
+function parseBracketSegment(segment) {
+  const cached = bracketSegments.get(segment);
+  if (cached) return cached;
+  const bracket = segment.indexOf("[");
+  if (bracket < 0) return;
+  const selector = segment.slice(bracket + 1, -1);
+  const indexed = selector !== "" && numericIndex.test(selector);
+  if (selector && !indexed && !groupSelector.test(selector)) return;
+  const key = segment.slice(0, bracket);
+  if (key === "__proto__") throw new TypeError("Invalid object path");
+  const parsed = { key, selector, indexed };
+  if (bracketSegments.size === bracketSegmentLimit)
+    bracketSegments.delete(bracketSegments.keys().next().value);
+  bracketSegments.set(segment, parsed);
+  return parsed;
+}
+function ownValue(object, key) {
+  return Object.hasOwn(object, key) ? object[key] : void 0;
+}
+function writeLeaf(object, key, value) {
+  if (key === "__proto__") throw new TypeError("Invalid object path");
+  if (value === void 0) delete object[key];
+  else object[key] = value;
+}
 function dotNotationToObject(data = {}, obj = {}) {
   try {
-    data ??= {};
     obj ??= {};
-    let arrayGroup = {};
-    for (const key of Object.keys(data)) {
-      let value = data[key];
-      let newObject = obj;
-      let oldObject = new Object(obj);
-      let keys = key.split(".");
-      let length = keys.length - 1;
-      for (let i = 0; i < keys.length; i++) {
-        if (keys[i].endsWith("]")) {
-          if (keys[i].endsWith("[]")) {
-            let baseKey = keys[i].slice(0, -2);
-            if (!Array.isArray(newObject[baseKey])) {
-              newObject[baseKey] = [];
-            }
-            if (length == i) {
-              if (Array.isArray(value)) {
-                newObject[baseKey].push(...value);
-              } else {
-                newObject[baseKey].push(value);
-              }
-            }
-          } else if (/\[([0-9]+)\]/g.test(keys[i])) {
-            let [k, index] = keys[i].split("[");
-            index = index.slice(0, -1);
-            if (!Array.isArray(newObject[k])) {
-              newObject[k] = [];
-            }
-            if (length == i) {
-              if (value === void 0) {
-                newObject[k].splice(index, 1);
-              } else {
-                newObject[k][index] = value;
-              }
-            } else {
-              newObject[k][index] = oldObject[k][index] || {};
-              newObject = newObject[k][index];
-              oldObject = oldObject[k][index];
-            }
-          } else if (/\[\w\]/g.test(keys[i])) {
-            let [k, group] = keys[i].split("[");
-            group = group.slice(0, -1);
-            if (!Array.isArray(newObject[k])) {
-              newObject[k] = [];
-            }
-            let index;
-            if (arrayGroup[keys.slice(0, i + 1).join(".")]) {
-              index = arrayGroup[keys.slice(0, i + 1).join(".")];
-            } else {
-              index = newObject[k].length;
-              arrayGroup[keys.slice(0, i + 1).join(".")] = index;
-              newObject[k][index] = {};
-            }
-            if (length == i) {
-              newObject[k][index] = value;
-            } else {
-              newObject = newObject[k][index];
-            }
+    let groups;
+    for (const path of Object.keys(data ?? {})) {
+      const value = data[path];
+      if (!path.includes(".") && !path.endsWith("]")) {
+        writeLeaf(obj, path, value);
+        continue;
+      }
+      const segments = path.split(".");
+      const last = segments.length - 1;
+      let parent = obj;
+      for (let i = 0; i <= last; i++) {
+        const segment = segments[i];
+        if (!segment.endsWith("]")) {
+          if (i === last) {
+            writeLeaf(parent, segment, value);
+          } else {
+            if (segment === "__proto__") throw new TypeError("Invalid object path");
+            parent = ownValue(parent, segment) || (parent[segment] = {});
+          }
+          continue;
+        }
+        const parsed = parseBracketSegment(segment);
+        if (!parsed) continue;
+        const { key, selector, indexed } = parsed;
+        let array = ownValue(parent, key);
+        if (!Array.isArray(array)) array = parent[key] = [];
+        if (!selector) {
+          if (i === last) {
+            if (Array.isArray(value)) array.push(...value);
+            else array.push(value);
+          }
+        } else if (indexed) {
+          if (i === last) {
+            if (value === void 0) array.splice(selector, 1);
+            else array[selector] = value;
+          } else {
+            parent = ownValue(array, selector) || (array[selector] = {});
           }
         } else {
-          if (length == i) {
-            if (value === void 0) {
-              delete newObject[keys[i]];
-            } else {
-              newObject[keys[i]] = value;
-            }
-          } else {
-            newObject[keys[i]] = oldObject[keys[i]] || {};
-            newObject = newObject[keys[i]];
-            oldObject = oldObject[keys[i]];
+          groups ??= /* @__PURE__ */ new Map();
+          const group = segments.slice(0, i + 1).join(".");
+          let index = groups.get(group);
+          if (index === void 0) {
+            index = array.length;
+            groups.set(group, index);
+            array[index] = {};
           }
+          if (i === last) array[index] = value;
+          else parent = array[index];
         }
       }
     }
@@ -8700,21 +8706,42 @@ function dotNotationToObject(data = {}, obj = {}) {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   r: () => (/* binding */ getValueFromObject)
 /* harmony export */ });
+const pathCache = /* @__PURE__ */ new Map();
+const pathCacheLimit = 128;
+function readPath(path) {
+  const cached = pathCache.get(path);
+  if (cached) return cached;
+  let normalized = path.includes("[") ? path.replace(/\[(\d+)\]/g, ".$1") : path;
+  if (normalized[0] === ".") normalized = normalized.slice(1);
+  const keys = normalized.split(".");
+  if (pathCache.size === pathCacheLimit) pathCache.clear();
+  pathCache.set(path, keys);
+  return keys;
+}
+function missingKey(key, throwError) {
+  if (throwError) throw new Error("Key not found in object: " + key);
+}
 function getValueFromObject(object = {}, path = "", throwError = false) {
   try {
-    if (!Array.isArray(object) && !Object.keys(object).length || !path) {
+    if (object == null || typeof object !== "object" || !path) {
       if (throwError) throw new Error("Invalid input to getValueFromObject");
       return;
     }
-    path = path.replace(/\[(\d+)\]/g, ".$1").replace(/^\./, "");
-    let data = object, subpath = path.split(".");
-    for (let i = 0; i < subpath.length; i++) {
-      if (throwError && !(subpath[i] in data))
-        throw new Error("Key not found in object: " + subpath[i]);
-      data = data[subpath[i]];
-      if (!data) break;
+    if (typeof path !== "string") {
+      path = path.replace(/\[(\d+)\]/g, ".$1");
     }
-    return data;
+    if (!path.includes(".") && !path.includes("[")) {
+      if (Object.hasOwn(object, path)) return object[path];
+      return missingKey(path, throwError);
+    }
+    const keys = readPath(path);
+    let value = object;
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (value == null || typeof value !== "object" && typeof value !== "function" || !Object.hasOwn(value, key)) return missingKey(key, throwError);
+      value = value[key];
+    }
+    return value;
   } catch (error) {
     if (throwError) throw error;
   }
@@ -8915,20 +8942,19 @@ var __webpack_import_meta__ = Object.assign(Object.create(import.meta), import.m
 /* harmony import */ var _tools_api_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3501);
 /* harmony import */ var _tools_send_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(6843);
 /* harmony import */ var _tools_socket_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(8332);
-/* harmony import */ var _tools_storage_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(8192);
-/* harmony import */ var _tools_servers_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(3889);
-/* harmony import */ var _tools_errors_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(626);
-/* harmony import */ var _tools_routes_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(1819);
-/* harmony import */ var _tools_autoscaler_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(7942);
-/* harmony import */ var _tools_history_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(7505);
-/* harmony import */ var _tools_coc_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(8354);
-/* harmony import */ var _tools_git_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(4257);
-/* harmony import */ var _tools_command_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(9364);
-/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(4374);
-/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(7936);
-/* harmony import */ var _lifecycle_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(8793);
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(9170);
-/* harmony import */ var _credentials_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(5435);
+/* harmony import */ var _tools_servers_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(3889);
+/* harmony import */ var _tools_errors_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(626);
+/* harmony import */ var _tools_routes_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(1819);
+/* harmony import */ var _tools_autoscaler_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(7942);
+/* harmony import */ var _tools_history_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(7505);
+/* harmony import */ var _tools_coc_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(8354);
+/* harmony import */ var _tools_git_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(4257);
+/* harmony import */ var _tools_command_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(9364);
+/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(4374);
+/* harmony import */ var _workspace_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(7936);
+/* harmony import */ var _lifecycle_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(8793);
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(9170);
+/* harmony import */ var _credentials_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(5435);
 
 
 
@@ -8953,8 +8979,7 @@ var __webpack_import_meta__ = Object.assign(Object.create(import.meta), import.m
 
 
 
-
-let aiLogPrefix = "[@cocreate/ai] [MASTER]";
+let aiLogPrefix = "[@cocreate/ai] [PRIMARY]";
 function logAiLifecycle(event, data = {}, details = {}) {
   const ai = data.ai ?? {};
   console.info(`${aiLogPrefix} ${event}`, {
@@ -9093,7 +9118,7 @@ const requiredToolConfigs = {
 };
 async function init(server, options = {}, resolvedConfig) {
   const workerId = server?.workerId || process.env.WORKER_ID;
-  aiLogPrefix = `[@cocreate/ai] ${workerId ? `[WORKER ${workerId}]` : "[MASTER]"}`;
+  aiLogPrefix = `[@cocreate/ai] ${workerId ? `[WORKER ${workerId}]` : "[PRIMARY]"}`;
   const aiConfig = resolvedConfig || await (0,_config_js__WEBPACK_IMPORTED_MODULE_5__/* .resolveAIConfig */ .Pw)(server, options);
   const {
     enabled: aiEnabled,
@@ -9127,7 +9152,7 @@ async function init(server, options = {}, resolvedConfig) {
     return response.object?.[0];
   }
   try {
-    defaultInstructions = await (0,_context_js__WEBPACK_IMPORTED_MODULE_20__/* .loadDefaultInstructions */ .n)({
+    defaultInstructions = await (0,_context_js__WEBPACK_IMPORTED_MODULE_19__/* .loadDefaultInstructions */ .n)({
       crud,
       organization_id: server.organization_id
     });
@@ -9138,11 +9163,11 @@ async function init(server, options = {}, resolvedConfig) {
     console.warn(`${aiLogPrefix} Default AI instructions could not be loaded.`, error.message);
   }
   function getBaseSystemMessage(organization_id) {
-    const local = allowLocalFileSystem && (0,_platform_js__WEBPACK_IMPORTED_MODULE_23__/* .isPlatformOrganization */ .dk)(server, organization_id);
+    const local = allowLocalFileSystem && (0,_platform_js__WEBPACK_IMPORTED_MODULE_22__/* .isPlatformOrganization */ .dk)(server, organization_id);
     const instructions = defaultInstructions.get("default");
     return [
       instructions?.instructions ?? instructions?.content,
-      `Runtime context: storageTarget=${(0,_platform_js__WEBPACK_IMPORTED_MODULE_23__/* .projectStorageTarget */ .Us)(server, organization_id, void 0, defaultStorageTarget)}, localFsEnabled=${local}${local ? `, repository=${(0,_workspace_js__WEBPACK_IMPORTED_MODULE_21__/* .getRepositoryWorkspace */ .IT)(server) ?? "unavailable"}` : ""}, publicPath=${publicPath}.`
+      `Runtime context: storageTarget=${(0,_platform_js__WEBPACK_IMPORTED_MODULE_22__/* .projectStorageTarget */ .Us)(server, organization_id, void 0, defaultStorageTarget)}, localFsEnabled=${local}${local ? `, repository=${(0,_workspace_js__WEBPACK_IMPORTED_MODULE_20__/* .getRepositoryWorkspace */ .IT)(server) ?? "unavailable"}` : ""}, publicPath=${publicPath}.`
     ].filter(Boolean).join("\n\n");
   }
   function configureTool(tool) {
@@ -9172,7 +9197,7 @@ async function init(server, options = {}, resolvedConfig) {
   const organizationLocks = /* @__PURE__ */ new Map();
   const organizationGenerations = /* @__PURE__ */ new Map();
   const activeOrganizationRequests = /* @__PURE__ */ new Map();
-  const lifecycle = (0,_lifecycle_js__WEBPACK_IMPORTED_MODULE_22__/* .createLifecycle */ .R)({ server, quiesce: async () => {
+  const lifecycle = (0,_lifecycle_js__WEBPACK_IMPORTED_MODULE_21__/* .createLifecycle */ .R)({ server, quiesce: async () => {
     for (const queue of conversationQueues.values()) {
       queue.paused = true;
       queue.items.length = 0;
@@ -9425,8 +9450,8 @@ async function init(server, options = {}, resolvedConfig) {
       const credentialId = (0,node_crypto__WEBPACK_IMPORTED_MODULE_1__.createHash)("sha256").update(provider.key).digest("hex");
       const clientKey = isCopilot ? `copilot:${organization_id}:${provider.profile._id}:${credentialId}` : `custom-provider-runtime:${organization_id}`;
       if (clients.has(clientKey)) return clients.get(clientKey);
-      const useProjectWorkspace = allowLocalFileSystem && (0,_platform_js__WEBPACK_IMPORTED_MODULE_23__/* .isPlatformOrganization */ .dk)(server, organization_id);
-      const directories = await (0,_workspace_js__WEBPACK_IMPORTED_MODULE_21__/* .createRuntimeDirectories */ .sU)(server, organization_id, { useRepository: useProjectWorkspace });
+      const useProjectWorkspace = allowLocalFileSystem && (0,_platform_js__WEBPACK_IMPORTED_MODULE_22__/* .isPlatformOrganization */ .dk)(server, organization_id);
+      const directories = await (0,_workspace_js__WEBPACK_IMPORTED_MODULE_20__/* .createRuntimeDirectories */ .sU)(server, organization_id, { useRepository: useProjectWorkspace });
       const { workingDirectory, baseDirectory } = directories;
       try {
         if ((organizationGenerations.get(organization_id) ?? 0) !== evictionGeneration) {
@@ -9492,21 +9517,20 @@ async function init(server, options = {}, resolvedConfig) {
     allowUnconfirmedLocalWrite
   });
   const socketTool = (0,_tools_socket_js__WEBPACK_IMPORTED_MODULE_10__/* .createSocketTool */ .m)({ server });
-  const storageTool = (0,_tools_storage_js__WEBPACK_IMPORTED_MODULE_11__/* .createStorageTool */ ._)({ server });
-  const serverClusterTool = (0,_tools_servers_js__WEBPACK_IMPORTED_MODULE_12__/* .createServerClusterTool */ .S)({ server });
-  const routeTool = (0,_tools_routes_js__WEBPACK_IMPORTED_MODULE_14__/* .createRouteTool */ .Q)({ server });
-  const autoscalerTool = (0,_tools_autoscaler_js__WEBPACK_IMPORTED_MODULE_15__/* .createAutoscalerTool */ .m)({ server });
-  const cocTool = (0,_tools_coc_js__WEBPACK_IMPORTED_MODULE_17__/* .createCocTool */ .Y)({
+  const serverClusterTool = (0,_tools_servers_js__WEBPACK_IMPORTED_MODULE_11__/* .createServerClusterTool */ .S)({ server });
+  const routeTool = (0,_tools_routes_js__WEBPACK_IMPORTED_MODULE_13__/* .createRouteTool */ .Q)({ server });
+  const autoscalerTool = (0,_tools_autoscaler_js__WEBPACK_IMPORTED_MODULE_14__/* .createAutoscalerTool */ .m)({ server });
+  const cocTool = (0,_tools_coc_js__WEBPACK_IMPORTED_MODULE_16__/* .createCocTool */ .Y)({
     server,
     allowLocalFileSystem,
     allowUnconfirmedLocalWrite
   });
-  const gitTool = (0,_tools_git_js__WEBPACK_IMPORTED_MODULE_18__/* .createGitTool */ .P)({
+  const gitTool = (0,_tools_git_js__WEBPACK_IMPORTED_MODULE_17__/* .createGitTool */ .P)({
     server,
     allowLocalFileSystem,
     allowUnconfirmedLocalWrite
   });
-  const commandTool = (0,_tools_command_js__WEBPACK_IMPORTED_MODULE_19__/* .createCommandTool */ .m)({
+  const commandTool = (0,_tools_command_js__WEBPACK_IMPORTED_MODULE_18__/* .createCommandTool */ .m)({
     server,
     enabled: allowPlatformCommands,
     timeout: platformCommandTimeout,
@@ -9515,7 +9539,6 @@ async function init(server, options = {}, resolvedConfig) {
   const sharedToolTemplates = [
     ...fileToolsModule.tools,
     socketTool,
-    storageTool,
     serverClusterTool,
     routeTool,
     autoscalerTool,
@@ -9801,11 +9824,11 @@ ${prompt}`;
         `Provider "${selectedProviderId ?? "undefined"}" is not configured.`
       );
     }
-    const credentialRequirements = (0,_credentials_js__WEBPACK_IMPORTED_MODULE_24__/* .getCredentialRequirements */ .y$)(
+    const credentialRequirements = (0,_credentials_js__WEBPACK_IMPORTED_MODULE_23__/* .getCredentialRequirements */ .y$)(
       providerConfig,
       selectedProviderId
     );
-    const hasAllCredentials = (profile) => (0,_credentials_js__WEBPACK_IMPORTED_MODULE_24__/* .getMissingCredentialKeys */ .Cu)(profile, credentialRequirements.keys).length === 0;
+    const hasAllCredentials = (profile) => (0,_credentials_js__WEBPACK_IMPORTED_MODULE_23__/* .getMissingCredentialKeys */ .Cu)(profile, credentialRequirements.keys).length === 0;
     const providerResponse = await crud.send({
       method: "object.read",
       array: "apis",
@@ -9845,7 +9868,7 @@ ${prompt}`;
         `No active API configuration found for provider "${selectedProviderId}".`
       );
     }
-    const missingCredentialKeys = (0,_credentials_js__WEBPACK_IMPORTED_MODULE_24__/* .getMissingCredentialKeys */ .Cu)(
+    const missingCredentialKeys = (0,_credentials_js__WEBPACK_IMPORTED_MODULE_23__/* .getMissingCredentialKeys */ .Cu)(
       apiProfile,
       credentialRequirements.keys
     );
@@ -9853,7 +9876,7 @@ ${prompt}`;
       ...providerConfig,
       url: apiProfile.url,
       profile: apiProfile,
-      key: (0,_credentials_js__WEBPACK_IMPORTED_MODULE_24__/* .getCredentialValue */ .lR)(apiProfile, providerConfig.apiKeyKey || "key")
+      key: (0,_credentials_js__WEBPACK_IMPORTED_MODULE_23__/* .getCredentialValue */ .lR)(apiProfile, providerConfig.apiKeyKey || "key")
     };
     const selectedModel = modelName ?? selectedProvider.models.default;
     if (!prompt) throw new Error("Prompt is required");
@@ -10115,7 +10138,7 @@ ${historyPrompt}` : historyPrompt;
       organization_id,
       host
     }));
-    const historyTool = configureTool((0,_tools_history_js__WEBPACK_IMPORTED_MODULE_16__/* .createHistoryTool */ .D)({
+    const historyTool = configureTool((0,_tools_history_js__WEBPACK_IMPORTED_MODULE_15__/* .createHistoryTool */ .D)({
       crud,
       organization_id,
       host,
@@ -10133,7 +10156,7 @@ ${historyPrompt}` : historyPrompt;
           };
         }
         const [providerId, providerConfig2] = requestedProvider;
-        const requirements = (0,_credentials_js__WEBPACK_IMPORTED_MODULE_24__/* .getCredentialRequirements */ .y$)(providerConfig2, providerId);
+        const requirements = (0,_credentials_js__WEBPACK_IMPORTED_MODULE_23__/* .getCredentialRequirements */ .y$)(providerConfig2, providerId);
         const response = await crud.send({
           method: "object.read",
           array: "apis",
@@ -10203,7 +10226,7 @@ ${historyPrompt}` : historyPrompt;
       host,
       user_id,
       clientId,
-      storageTarget: (0,_platform_js__WEBPACK_IMPORTED_MODULE_23__/* .projectStorageTarget */ .Us)(server, organization_id, storageTarget, defaultStorageTarget),
+      storageTarget: (0,_platform_js__WEBPACK_IMPORTED_MODULE_22__/* .projectStorageTarget */ .Us)(server, organization_id, storageTarget, defaultStorageTarget),
       confirmLocalWrite: confirmLocalWrite === true
     };
     const getToolStatus = (tool, payload) => {
@@ -10262,8 +10285,8 @@ ${historyPrompt}` : historyPrompt;
       historyTool,
       credentialTool,
       instructionsTool,
-      ...sharedToolTemplates.filter((tool) => (0,_platform_js__WEBPACK_IMPORTED_MODULE_23__/* .isToolAvailable */ .gk)(server, organization_id, tool.name)).map((tool) => bindTool(tool, toolContext))
-    ].filter((tool) => tool && (0,_platform_js__WEBPACK_IMPORTED_MODULE_23__/* .isToolAvailable */ .gk)(server, organization_id, tool.name)).map((tool) => ({
+      ...sharedToolTemplates.filter((tool) => (0,_platform_js__WEBPACK_IMPORTED_MODULE_22__/* .isToolAvailable */ .gk)(server, organization_id, tool.name)).map((tool) => bindTool(tool, toolContext))
+    ].filter((tool) => tool && (0,_platform_js__WEBPACK_IMPORTED_MODULE_22__/* .isToolAvailable */ .gk)(server, organization_id, tool.name)).map((tool) => ({
       ...tool,
       handler: (payload = {}) => lifecycle.track(async () => {
         const showProgress = tool.name !== "request_api_credential";
@@ -10283,7 +10306,7 @@ ${historyPrompt}` : historyPrompt;
         }
         try {
           const result = await tool.handler(payload);
-          (0,_tools_errors_js__WEBPACK_IMPORTED_MODULE_13__/* .assertToolResult */ .wb)(result, tool.name);
+          (0,_tools_errors_js__WEBPACK_IMPORTED_MODULE_12__/* .assertToolResult */ .wb)(result, tool.name);
           if (tool.name === "crud" && payload.method === "object.read" && payload.array === "apps" && Array.isArray(result?.object)) {
             rememberApps(result.object);
           }
@@ -10335,7 +10358,7 @@ ${historyPrompt}` : historyPrompt;
               status: "progress",
               conversation_id: activeConversationId,
               user_message_id,
-              message: (0,_tools_errors_js__WEBPACK_IMPORTED_MODULE_13__/* .getRecoveryStatus */ .c)(tool.name, error)
+              message: (0,_tools_errors_js__WEBPACK_IMPORTED_MODULE_12__/* .getRecoveryStatus */ .c)(tool.name, error)
             }
           });
           throw error;
@@ -10362,13 +10385,13 @@ ${historyPrompt}` : historyPrompt;
       ...sessionProvider ? { provider: sessionProvider } : {},
       tools,
       availableTools: new _github_copilot_sdk__WEBPACK_IMPORTED_MODULE_0__/* .ToolSet */ .Z2().addCustom("*"),
-      onPermissionRequest: (0,_platform_js__WEBPACK_IMPORTED_MODULE_23__/* .createPermissionHandler */ .cM)(server, organization_id, tools),
+      onPermissionRequest: (0,_platform_js__WEBPACK_IMPORTED_MODULE_22__/* .createPermissionHandler */ .cM)(server, organization_id, tools),
       systemMessage: {
         mode: "append",
         content: `${baseSystemMessage}
 - Active provider: ${selectedProviderId}
 - Active model: ${selectedModel}
-- Execution profile: ${(0,_platform_js__WEBPACK_IMPORTED_MODULE_23__/* .isPlatformOrganization */ .dk)(server, organization_id) ? "platform (local tools subject to server configuration)" : "organization (chat and scoped database/API tools; local files, Git, and CLI unavailable)"}
+- Execution profile: ${(0,_platform_js__WEBPACK_IMPORTED_MODULE_22__/* .isPlatformOrganization */ .dk)(server, organization_id) ? "platform (local tools subject to server configuration)" : "organization (chat and scoped database/API tools; local files, Git, and CLI unavailable)"}
 
 ${systemMessage ?? ""}`.trim()
       }
@@ -11130,7 +11153,6 @@ const platformTools = /* @__PURE__ */ new Set([
   "coc",
   "execute_command",
   "request_server_file",
-  "manage_server_storage",
   "manage_server_routes",
   "manage_server_autoscaler",
   "manage_server_cluster",
@@ -12694,10 +12716,10 @@ function createServerClusterTool({ server }) {
             return { success: false, error: '"serverId" is required for control actions.' };
           }
           const workerOperations = /* @__PURE__ */ new Set(["cordon", "shed", "drain"]);
-          const masterOperations = /* @__PURE__ */ new Set(["reboot", "shutdown"]);
+          const primaryOperations = /* @__PURE__ */ new Set(["reboot", "shutdown"]);
           const supported = /* @__PURE__ */ new Set([
             ...workerOperations,
-            ...masterOperations,
+            ...primaryOperations,
             "restart"
           ]);
           if (!supported.has(operation)) {
@@ -12722,8 +12744,8 @@ function createServerClusterTool({ server }) {
             payload.value = value !== false;
           }
           if (operation === "shed") payload.organizations = organizations;
-          if (masterOperations.has(operation) || operation === "restart" && worker == null) {
-            payload.master = true;
+          if (primaryOperations.has(operation) || operation === "restart" && worker == null) {
+            payload.primary = true;
           }
           await server.send(payload);
           return { success: true, action: "control", operation, payload };
@@ -12762,42 +12784,6 @@ function createSocketTool({ server }) {
       };
       await server.send(payload);
       return payload;
-    }
-  };
-}
-
-
-/***/ },
-
-/***/ 8192
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   _: () => (/* binding */ createStorageTool)
-/* harmony export */ });
-/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9170);
-
-function createStorageTool({ server }) {
-  const storage = server.storage;
-  return {
-    name: "manage_server_storage",
-    handler: async ({ action, key, value }, context = {}) => {
-      const denied = (0,_platform_js__WEBPACK_IMPORTED_MODULE_0__/* .platformAccessError */ .gi)(server, context?.organization_id);
-      if (denied) return denied;
-      switch (action) {
-        case "get":
-          return storage.get(key);
-        case "set":
-          return storage.set(key, value);
-        case "delete":
-          return storage.delete(key);
-        case "size":
-          return storage.size();
-        case "clear":
-          return storage.clear();
-        default:
-          throw new Error(`Unsupported storage action: ${action}`);
-      }
     }
   };
 }
