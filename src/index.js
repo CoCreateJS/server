@@ -82,10 +82,10 @@ try {
         server.usage = await (await import('@cocreate/usage')).default.init(server);
         server.tls = await (await import('@cocreate/tls')).default.init(server);
         server.files = await (await import('@cocreate/file/server')).default.init(server);
-        server.mcp = await (await import('@cocreate/mcp')).default.init(server);
         server.socket = new (await import('@cocreate/socket')).SocketServer(server);
         await (await import('@cocreate/users')).init(server);
-
+        server.agent = await (await import('@cocreate/agent')).default.init(server);
+        server.mcp = await (await import('@cocreate/mcp')).default.init(server);
     }
 
     await server.init();

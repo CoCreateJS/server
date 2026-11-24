@@ -60,6 +60,7 @@
     "@cocreate/cron": "^2.0.1",
     "@cocreate/crud": "^2.0.4",
     "@cocreate/db": "^1.0.0",
+    "@cocreate/agent": "^0.0.0",
     "@cocreate/file": "^2.0.1",
     "@cocreate/kms": "^1.1.0",
     "@cocreate/mcp": "^0.1.0",
