@@ -142,119 +142,6 @@ export default {
             path: "../modules/usage",
             repo: "github.com/CoCreateJS/usage.git"
         },
-
-        // --- Database & Storage Modules ---
-        "amazon-redshift": {
-            import: "@cocreate/amazon-redshift",
-            path: "../storages/amazon-redshift",
-            repo: "github.com/cocreatejs/CoCreate-amazon-redshift.git"
-        },
-        auroradb: {
-            import: "@cocreate/auroradb",
-            path: "../storages/auroradb",
-            repo: "github.com/cocreatejs/CoCreate-auroradb.git"
-        },
-        cockroachdb: {
-            import: "@cocreate/cockroachdb",
-            path: "../storages/cockroachdb",
-            repo: "github.com/cocreatejs/CoCreate-cockroachdb.git"
-        },
-        cosmosdb: {
-            import: "@cocreate/cosmosdb",
-            path: "../storages/cosmosdb",
-            repo: "github.com/cocreatejs/CoCreate-cosmosdb.git"
-        },
-        documentdb: {
-            import: "@cocreate/documentdb",
-            path: "../storages/documentdb",
-            repo: "github.com/cocreatejs/CoCreate-documentdb.git"
-        },
-        dqlite: {
-            import: "@cocreate/dqlite",
-            path: "../storages/dqlite",
-            repo: "github.com/cocreatejs/CoCreate-dqlite.git"
-        },
-        dynamodb: {
-            import: "@cocreate/dynamodb",
-            path: "../storages/dynamodb",
-            repo: "github.com/cocreatejs/CoCreate-dynamodb.git"
-        },
-        ferretdb: {
-            import: "@cocreate/ferretdb",
-            path: "../storages/ferretdb",
-            repo: "github.com/cocreatejs/CoCreate-ferretdb.git"
-        },
-        firestore: {
-            import: "@cocreate/firestore",
-            path: "../storages/firestore",
-            repo: "github.com/cocreatejs/CoCreate-firestore.git"
-        },
-        mariadb: {
-            import: "@cocreate/mariadb",
-            path: "../storages/mariadb",
-            repo: "github.com/cocreatejs/CoCreate-mariadb.git"
-        },
-        mongodb: {
-            import: "@cocreate/mongodb",
-            path: "../storages/mongodb",
-            repo: "github.com/cocreatejs/CoCreate-mongodb.git"
-        },
-        mysql: {
-            import: "@cocreate/mysql",
-            path: "../storages/mysql",
-            repo: "github.com/cocreatejs/CoCreate-mysql.git"
-        },
-        oracledb: {
-            import: "@cocreate/oracledb",
-            path: "../storages/oracledb",
-            repo: "github.com/cocreatejs/CoCreate-oracledb.git"
-        },
-        planetscale: {
-            import: "@cocreate/planetscale",
-            path: "../storages/planetscale",
-            repo: "github.com/cocreatejs/CoCreate-planetscale.git"
-        },
-        postgresql: {
-            import: "@cocreate/postgresql",
-            path: "../storages/postgresql",
-            repo: "github.com/cocreatejs/CoCreate-postgresql.git"
-        },
-        rqlite: {
-            import: "@cocreate/rqlite",
-            path: "../storages/rqlite",
-            repo: "github.com/cocreatejs/CoCreate-rqlite.git"
-        },
-        qdrant: {
-            import: "@cocreate/qdrant",
-            path: "../storages/qdrant",
-            repo: "github.com/cocreatejs/CoCreate-qdrant.git"
-        },
-        sqlite: {
-            import: "@cocreate/sqlite",
-            path: "../storages/sqlite",
-            repo: "github.com/cocreatejs/CoCreate-sqlite.git"
-        },
-        tidb: {
-            import: "@cocreate/tidb",
-            path: "../storages/tidb",
-            repo: "github.com/cocreatejs/CoCreate-tidb.git"
-        },
-        timescaledb: {
-            import: "@cocreate/timescaledb",
-            path: "../storages/timescaledb",
-            repo: "github.com/cocreatejs/CoCreate-timescaledb.git"
-        },
-        turso: {
-            import: "@cocreate/turso",
-            path: "../storages/turso",
-            repo: "github.com/cocreatejs/CoCreate-turso.git"
-        },
-        yugabytedb: {
-            import: "@cocreate/yugabytedb",
-            path: "../storages/yugabytedb",
-            repo: "github.com/cocreatejs/CoCreate-yugabytedb.git"
-        },
-
         // --- Standard Client/Server Modules ---
         config: {
             import: "@cocreate/config",
@@ -265,6 +152,16 @@ export default {
             import: "@cocreate/api",
             path: "../modules/api",
             repo: "github.com/cocreatejs/CoCreate-api.git"
+        },
+        agent: {
+            import: "@cocreate/agent",
+            path: "../modules/agent",
+            repo: "github.com/CoCreateJS/agent.git"
+        },
+        mcp: {
+            import: "@cocreate/mcp",
+            path: "../modules/mcp",
+            repo: "github.com/CoCreateJS/mcp.git"
         },
         "lazy-loader": {
             import: "@cocreate/lazy-loader",
@@ -286,10 +183,10 @@ export default {
             path: "../modules/users",
             repo: "github.com/cocreatejs/CoCreate-users.git"
         },
-        workflows: {
-            import: "@cocreate/workflows",
-            path: "../modules/workflows",
-            repo: "github.com/CoCreateJS/CoCreate-workflows.git"
+        workflow: {
+            import: "@cocreate/workflow",
+            path: "../modules/workflow",
+            repo: "github.com/CoCreateJS/workflow.git"
         },
         utils: {
             import: "@cocreate/utils",

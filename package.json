@@ -50,7 +50,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@cocreate/ast": "^1.0.0",
+    "@cocreate/evaluate": "^1.0.0",
     "@cocreate/ai": "^1.0.0",
     "@cocreate/api": "^2.1.1",
     "@cocreate/authenticate": "^2.0.1",
@@ -70,7 +70,7 @@
     "@cocreate/tls": "^2.0.1",
     "@cocreate/usage": "^2.0.2",
     "@cocreate/users": "^2.0.2",
-    "@cocreate/workflows": "^1.1.1"
+    "@cocreate/workflow": "^1.1.1"
   },
   "devDependencies": {
     "@cocreate/cli": "^2.1.1",
